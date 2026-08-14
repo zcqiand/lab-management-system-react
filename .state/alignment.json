@@ -2,9 +2,9 @@
   "schema": 1,
   "project": "lab-management-system-react",
   "functions": {
-    "modules": 6,
-    "features": 24,
-    "items": 58
+    "modules": 7,
+    "features": 27,
+    "items": 62
   },
   "warnings_total": 0,
   "warnings": {},
@@ -600,6 +600,48 @@
       "name": "参数界面维护 + link",
       "status": "规划",
       "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M98.F01.I01": {
+      "name": "BackendSwitcher 下拉（4-backend：msw/aspnetcore/springboot/nextjs）",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": [
+        "src\\components\\app\\backend-switcher.tsx"
+      ]
+    },
+    "M98.F01.I02": {
+      "name": "持久化 baseUrl 到 localStorage",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M98.F02.I01": {
+      "name": "axios 拦截器（baseUrl + Authorization）注入",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M98.F03.I01": {
+      "name": "orval 生成的 endpoints 函数存在性校验（endpoints-smoke.test.ts）",
+      "status": "规划",
+      "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],

@@ -1,13 +1,14 @@
 // Runtime backend-switching singleton (module-level, not Context).
-// Lab family: msw / aspnetcore / springboot 三模式运行时切换，不进 env / vite proxy。
+// Lab family: msw / aspnetcore / springboot / nextjs 四模式运行时切换，不进 env / vite proxy。
 // React Context 只是它的视图层：mount 时 hydrate，change 时 snapshot 写 localStorage。
 
-export type BackendMode = "msw" | "aspnetcore" | "springboot";
+export type BackendMode = "msw" | "aspnetcore" | "springboot" | "nextjs";
 
 const DEFAULT_BASE_URLS: Readonly<Record<BackendMode, string>> = {
   msw: "", // 同源，service worker 拦截
   aspnetcore: "http://localhost:5000",
   springboot: "http://localhost:8080",
+  nextjs: "", // 同源，lab-management-system-nextjs 的 Next.js API routes
 };
 
 let currentBackend: BackendMode = "msw";
