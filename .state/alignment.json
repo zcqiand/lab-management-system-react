@@ -2,9 +2,9 @@
   "schema": 1,
   "project": "lab-management-system-react",
   "functions": {
-    "modules": 5,
-    "features": 17,
-    "items": 47
+    "modules": 6,
+    "features": 24,
+    "items": 58
   },
   "warnings_total": 0,
   "warnings": {},
@@ -316,36 +316,6 @@
       "tests": [],
       "entry": []
     },
-    "M04.F05.I01": {
-      "name": "技术要求列表（多维过滤）",
-      "status": "规划",
-      "type": "页面",
-      "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
-      "entry": []
-    },
-    "M04.F05.I02": {
-      "name": "新建/编辑技术要求",
-      "status": "规划",
-      "type": "按钮",
-      "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
-      "entry": []
-    },
-    "M04.F05.I03": {
-      "name": "删除技术要求（引用保护）",
-      "status": "规划",
-      "type": "按钮",
-      "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
-      "entry": []
-    },
     "M04.F06.I01": {
       "name": "型号列表（按专项过滤 + 拖拽排序）",
       "status": "规划",
@@ -484,6 +454,152 @@
       "name": "仪表盘统计",
       "status": "规划",
       "type": "查询",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F01.I01": {
+      "name": "检测专项列表 + CRUD",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::inspection specialty endpoint generated"
+      ],
+      "entry": []
+    },
+    "M06.F02.I01": {
+      "name": "检测项目列表（按专项过滤）",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F02.I02": {
+      "name": "项目↔专项/参数关联",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F03.I01": {
+      "name": "检测参数列表 + CRUD",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F03.I02": {
+      "name": "参数↔标准关联",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F04.I01": {
+      "name": "检测标准列表（状态过滤）",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F04.I02": {
+      "name": "标准 CRUD",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::inspection standard create endpoint generated"
+      ],
+      "entry": []
+    },
+    "M06.F05.I01": {
+      "name": "计算规则维护",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F06.I01": {
+      "name": "技术要求列表（多维过滤）",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F06.I02": {
+      "name": "新建/编辑技术要求",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F06.I03": {
+      "name": "删除技术要求（引用保护）",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F07.I01": {
+      "name": "报告名称列表 + extFields 模板",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::report name endpoint generated"
+      ],
+      "entry": []
+    },
+    "M06.F07.I02": {
+      "name": "报告名称↔标准/参数关联",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M06.F08.I01": {
+      "name": "参数界面维护 + link",
+      "status": "规划",
+      "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],

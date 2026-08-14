@@ -10,6 +10,36 @@ export interface AssignTaskRequest {
   plannedTestDate?: string;
 }
 
+export type CalculationAlgorithmType = typeof CalculationAlgorithmType[keyof typeof CalculationAlgorithmType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const CalculationAlgorithmType = {
+  simple_avg: 'simple_avg',
+  compressive_strength: 'compressive_strength',
+  flexural_strength: 'flexural_strength',
+  steel_tensile: 'steel_tensile',
+  formula: 'formula',
+  manual: 'manual',
+  auto_calc_ratio: 'auto_calc_ratio',
+} as const;
+
+export interface CalculationRule {
+  inspectionObjectCode: string;
+  inspectionParameterCode: string;
+  testingStandardCode?: string;
+  reportNameCode?: string;
+  algorithmType: CalculationAlgorithmType;
+  specimenCount: number;
+  formula?: string;
+  conditions?: string;
+  roundingRule?: string;
+  remark?: string;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Contract {
   id: string;
   contractCode: string;
@@ -42,6 +72,20 @@ export const ContractStatus = {
   archived: 'archived',
 } as const;
 
+export interface CreateCalculationRuleRequest {
+  inspectionObjectCode: string;
+  inspectionParameterCode: string;
+  testingStandardCode?: string;
+  reportNameCode?: string;
+  algorithmType?: CalculationAlgorithmType;
+  specimenCount?: number;
+  formula?: string;
+  conditions?: string;
+  roundingRule?: string;
+  remark?: string;
+  sortOrder?: number;
+}
+
 export interface CreateCatalogEntryRequest {
   code: string;
   inspectionObjectCode?: string;
@@ -68,6 +112,72 @@ export interface CreateContractRequest {
   contactPhone?: string;
   entrustedDate?: string;
   status?: ContractStatus;
+}
+
+export interface CreateInspectionObjectRequest {
+  code: string;
+  inspectionSpecialtyCode: string;
+  sourceProjectNo: string;
+  sourceProjectName: string;
+  name: string;
+  isOptionalForQualification?: boolean;
+  isOfficial?: boolean;
+  enabled?: boolean;
+  sortOrder?: number;
+}
+
+export interface CreateInspectionParameterRequest {
+  code: string;
+  name: string;
+  rawName: string;
+  canonicalName: string;
+  methodText?: string;
+  aliases?: string[];
+  unit?: string;
+  sourceType?: InspectionParameterSourceType;
+  sortOrder?: number;
+}
+
+export interface CreateInspectionReportNameRequest {
+  code: string;
+  name: string;
+  fullName?: string;
+  templatePath?: string;
+  summaryName?: string;
+  extFields?: ExtFieldDef[];
+  description?: string;
+  sortOrder?: number;
+}
+
+export interface CreateInspectionSpecialtyRequest {
+  code: string;
+  officialNo: string;
+  name: string;
+  isOfficial?: boolean;
+  enabled?: boolean;
+  sortOrder?: number;
+}
+
+export interface CreateInspectionStandardRequest {
+  code: string;
+  name: string;
+  version?: string;
+  status?: InspectionStandardStatus;
+  sourceDocumentId?: string;
+  sourceHash?: string;
+  sortOrder?: number;
+}
+
+export type CreateParamInterfaceRequestConfig = {[key: string]: unknown};
+
+export interface CreateParamInterfaceRequest {
+  code: string;
+  name?: string;
+  componentPath: string;
+  description?: string;
+  isOfficial?: boolean;
+  sortOrder?: number;
+  config?: CreateParamInterfaceRequestConfig;
 }
 
 export type CreateSampleReceiptRequestTestParameters = {[key: string]: unknown};
@@ -194,6 +304,36 @@ export interface ErrorResponse {
   details?: ErrorResponseDetails;
 }
 
+export interface ExtFieldDef {
+  key: string;
+  label: string;
+  type: ExtFieldDefType;
+  required?: boolean;
+  options?: string[];
+  tag?: string;
+  source?: ExtFieldDefSource;
+}
+
+export type ExtFieldDefSource = typeof ExtFieldDefSource[keyof typeof ExtFieldDefSource];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ExtFieldDefSource = {
+  sample: 'sample',
+  receipt: 'receipt',
+} as const;
+
+export type ExtFieldDefType = typeof ExtFieldDefType[keyof typeof ExtFieldDefType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ExtFieldDefType = {
+  text: 'text',
+  number: 'number',
+  date: 'date',
+  select: 'select',
+} as const;
+
 export type FlowAction = typeof FlowAction[keyof typeof FlowAction];
 
 
@@ -272,6 +412,56 @@ export interface InspectionModel {
   updatedAt: string;
 }
 
+export interface InspectionObject {
+  code: string;
+  inspectionSpecialtyCode: string;
+  sourceProjectNo: string;
+  sourceProjectName: string;
+  name: string;
+  isOptionalForQualification: boolean;
+  isOfficial: boolean;
+  enabled: boolean;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InspectionParameter {
+  code: string;
+  name: string;
+  rawName: string;
+  canonicalName: string;
+  methodText?: string;
+  aliases: string[];
+  unit?: string;
+  sourceType: InspectionParameterSourceType;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type InspectionParameterSourceType = typeof InspectionParameterSourceType[keyof typeof InspectionParameterSourceType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const InspectionParameterSourceType = {
+  official: 'official',
+  custom: 'custom',
+} as const;
+
+export interface InspectionReportName {
+  code: string;
+  name: string;
+  fullName?: string;
+  templatePath?: string;
+  summaryName?: string;
+  extFields?: ExtFieldDef[];
+  description?: string;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface InspectionSpec {
   code: string;
   inspectionObjectCode?: string;
@@ -281,6 +471,48 @@ export interface InspectionSpec {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface InspectionSpecialty {
+  code: string;
+  officialNo: string;
+  name: string;
+  isOfficial: boolean;
+  enabled: boolean;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InspectionStandard {
+  code: string;
+  name: string;
+  version?: string;
+  status: InspectionStandardStatus;
+  sourceDocumentId?: string;
+  sourceHash?: string;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type InspectionStandardRole = typeof InspectionStandardRole[keyof typeof InspectionStandardRole];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const InspectionStandardRole = {
+  TESTING: 'TESTING',
+  JUDGMENT: 'JUDGMENT',
+} as const;
+
+export type InspectionStandardStatus = typeof InspectionStandardStatus[keyof typeof InspectionStandardStatus];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const InspectionStandardStatus = {
+  active: 'active',
+  superseded: 'superseded',
+  draft: 'draft',
+} as const;
 
 export interface LoginRequest {
   username: string;
@@ -301,9 +533,62 @@ export interface MenuNode {
   children?: MenuNode[];
 }
 
+export interface ObjectParameterLink {
+  inspectionObjectCode: string;
+  inspectionParameterCode: string;
+  qualificationLevel: QualificationLevel;
+  sourcePage?: number;
+  remark?: string;
+}
+
+export interface ObjectReportNameLink {
+  inspectionObjectCode: string;
+  reportNameCode: string;
+  remark?: string;
+}
+
+export interface ObjectStandardLink {
+  inspectionObjectCode: string;
+  inspectionStandardCode: string;
+  role: InspectionStandardRole;
+  remark?: string;
+}
+
+export type ParamInterfaceConfig = {[key: string]: unknown};
+
+export interface ParamInterface {
+  code: string;
+  name?: string;
+  componentPath: string;
+  description?: string;
+  isOfficial?: boolean;
+  sortOrder: number;
+  config?: ParamInterfaceConfig;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ParamInterfaceLinkConfig = {[key: string]: unknown};
+
+export interface ParamInterfaceLink {
+  inspectionParameterCode: string;
+  paramInterfaceCode: string;
+  reportNameCode?: string;
+  config?: ParamInterfaceLinkConfig;
+}
+
 export interface PermissionSet {
   permissions: string[];
 }
+
+export type QualificationLevel = typeof QualificationLevel[keyof typeof QualificationLevel];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const QualificationLevel = {
+  QUALIFIED: 'QUALIFIED',
+  RESTRICTED: 'RESTRICTED',
+} as const;
 
 export type ReceiptResult = typeof ReceiptResult[keyof typeof ReceiptResult];
 
@@ -317,6 +602,19 @@ export const ReceiptResult = {
 
 export interface RefreshTokenRequest {
   refreshToken: string;
+}
+
+export interface ReportNameParameterLink {
+  reportNameCode: string;
+  inspectionParameterCode: string;
+  remark?: string;
+}
+
+export interface ReportNameStandardLink {
+  reportNameCode: string;
+  inspectionStandardCode: string;
+  role: InspectionStandardRole;
+  remark?: string;
 }
 
 export type RequirementComparison = typeof RequirementComparison[keyof typeof RequirementComparison];
@@ -439,6 +737,12 @@ export interface SampleReceipt {
   updatedAt: string;
 }
 
+export interface SpecialtyObjectLink {
+  inspectionSpecialtyCode: string;
+  inspectionObjectCode: string;
+  remark?: string;
+}
+
 export interface SsoCallbackRequest {
   code: string;
   state: string;
@@ -447,6 +751,11 @@ export interface SsoCallbackRequest {
 export interface SsoRedirect {
   authorizeUrl: string;
   state: string;
+}
+
+export interface StandardParameterLink {
+  inspectionStandardCode: string;
+  inspectionParameterCode: string;
 }
 
 export interface SummaryColumn {
@@ -503,6 +812,18 @@ export interface TestRecord {
   updatedAt: string;
 }
 
+export interface UpdateCalculationRuleRequest {
+  testingStandardCode?: string;
+  reportNameCode?: string;
+  algorithmType?: CalculationAlgorithmType;
+  specimenCount?: number;
+  formula?: string;
+  conditions?: string;
+  roundingRule?: string;
+  remark?: string;
+  sortOrder?: number;
+}
+
 export interface UpdateCatalogEntryRequest {
   inspectionObjectCode?: string;
   name?: string;
@@ -528,6 +849,66 @@ export interface UpdateContractRequest {
   contactPhone?: string;
   entrustedDate?: string;
   status?: ContractStatus;
+}
+
+export interface UpdateInspectionObjectRequest {
+  inspectionSpecialtyCode?: string;
+  sourceProjectNo?: string;
+  sourceProjectName?: string;
+  name?: string;
+  isOptionalForQualification?: boolean;
+  isOfficial?: boolean;
+  enabled?: boolean;
+  sortOrder?: number;
+}
+
+export interface UpdateInspectionParameterRequest {
+  name?: string;
+  rawName?: string;
+  canonicalName?: string;
+  methodText?: string;
+  aliases?: string[];
+  unit?: string;
+  sourceType?: InspectionParameterSourceType;
+  sortOrder?: number;
+}
+
+export interface UpdateInspectionReportNameRequest {
+  name?: string;
+  fullName?: string;
+  templatePath?: string;
+  summaryName?: string;
+  extFields?: ExtFieldDef[];
+  description?: string;
+  sortOrder?: number;
+}
+
+export interface UpdateInspectionSpecialtyRequest {
+  officialNo?: string;
+  name?: string;
+  isOfficial?: boolean;
+  enabled?: boolean;
+  sortOrder?: number;
+}
+
+export interface UpdateInspectionStandardRequest {
+  name?: string;
+  version?: string;
+  status?: InspectionStandardStatus;
+  sourceDocumentId?: string;
+  sourceHash?: string;
+  sortOrder?: number;
+}
+
+export type UpdateParamInterfaceRequestConfig = {[key: string]: unknown};
+
+export interface UpdateParamInterfaceRequest {
+  name?: string;
+  componentPath?: string;
+  description?: string;
+  isOfficial?: boolean;
+  sortOrder?: number;
+  config?: UpdateParamInterfaceRequestConfig;
 }
 
 export type UpdateSampleReceiptRequestTestParameters = {[key: string]: unknown};
@@ -630,6 +1011,11 @@ export type AuthSsoAuthorizeParams = {
 redirect: string;
 };
 
+export type CalculationRulesListCalculationRulesParams = {
+inspectionObjectCode?: string;
+inspectionParameterCode?: string;
+};
+
 export type CatalogListBrandsParams = {
 inspectionObjectCode?: string;
 keyword?: string;
@@ -664,6 +1050,45 @@ export type ContractsListContracts200 = {
   total: number;
 };
 
+export type InspectionDictionaryUnlinkObjectParameterBody = {
+  inspectionObjectCode: string;
+  inspectionParameterCode: string;
+};
+
+export type InspectionDictionaryUnlinkObjectStandardBody = {
+  inspectionObjectCode: string;
+  inspectionStandardCode: string;
+  role: InspectionStandardRole;
+};
+
+export type InspectionDictionaryListObjectsParams = {
+inspectionSpecialtyCode?: string;
+keyword?: string;
+};
+
+export type InspectionDictionaryListParametersParams = {
+keyword?: string;
+sourceType?: InspectionParameterSourceType;
+};
+
+export type InspectionDictionaryListSpecialtiesParams = {
+keyword?: string;
+};
+
+export type InspectionDictionaryListStandardsParams = {
+keyword?: string;
+status?: InspectionStandardStatus;
+};
+
+export type ParamInterfacesListParamInterfacesParams = {
+keyword?: string;
+};
+
+export type ParamInterfacesUnlinkParamInterfaceBody = {
+  inspectionParameterCode: string;
+  paramInterfaceCode: string;
+};
+
 export type ReceiptsListReceiptsParams = {
 page?: number;
 pageSize?: number;
@@ -690,6 +1115,26 @@ export type ReportFlowListFlowQueue200 = {
   page: number;
   pageSize: number;
   total: number;
+};
+
+export type ReportNamesListReportNamesParams = {
+keyword?: string;
+};
+
+export type ReportNamesUnlinkObjectReportNameBody = {
+  inspectionObjectCode: string;
+  reportNameCode: string;
+};
+
+export type ReportNamesUnlinkReportNameParameterBody = {
+  reportNameCode: string;
+  inspectionParameterCode: string;
+};
+
+export type ReportNamesUnlinkReportNameStandardBody = {
+  reportNameCode: string;
+  inspectionStandardCode: string;
+  role: InspectionStandardRole;
 };
 
 export type SamplesListSamplesParams = {

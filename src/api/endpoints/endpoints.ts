@@ -34,6 +34,8 @@ import type {
   AssignTaskRequest,
   AuthLogoutBody,
   AuthSsoAuthorizeParams,
+  CalculationRule,
+  CalculationRulesListCalculationRulesParams,
   CatalogListBrandsParams,
   CatalogListGradesParams,
   CatalogListModelsParams,
@@ -41,8 +43,15 @@ import type {
   Contract,
   ContractsListContracts200,
   ContractsListContractsParams,
+  CreateCalculationRuleRequest,
   CreateCatalogEntryRequest,
   CreateContractRequest,
+  CreateInspectionObjectRequest,
+  CreateInspectionParameterRequest,
+  CreateInspectionReportNameRequest,
+  CreateInspectionSpecialtyRequest,
+  CreateInspectionStandardRequest,
+  CreateParamInterfaceRequest,
   CreateSampleReceiptRequest,
   CreateSampleRequest,
   CreateTechnicalRequirementRequest,
@@ -54,24 +63,50 @@ import type {
   FlowActionResult,
   FlowHistoryEntry,
   InspectionBrand,
+  InspectionDictionaryListObjectsParams,
+  InspectionDictionaryListParametersParams,
+  InspectionDictionaryListSpecialtiesParams,
+  InspectionDictionaryListStandardsParams,
+  InspectionDictionaryUnlinkObjectParameterBody,
+  InspectionDictionaryUnlinkObjectStandardBody,
   InspectionGrade,
   InspectionModel,
+  InspectionObject,
+  InspectionParameter,
+  InspectionReportName,
   InspectionSpec,
+  InspectionSpecialty,
+  InspectionStandard,
   LoginRequest,
   LoginResponse,
   MenuNode,
+  ObjectParameterLink,
+  ObjectReportNameLink,
+  ObjectStandardLink,
+  ParamInterface,
+  ParamInterfaceLink,
+  ParamInterfacesListParamInterfacesParams,
+  ParamInterfacesUnlinkParamInterfaceBody,
   PermissionSet,
   ReceiptsListReceipts200,
   ReceiptsListReceiptsParams,
   RefreshTokenRequest,
   ReportFlowListFlowQueue200,
   ReportFlowListFlowQueueParams,
+  ReportNameParameterLink,
+  ReportNameStandardLink,
+  ReportNamesListReportNamesParams,
+  ReportNamesUnlinkObjectReportNameBody,
+  ReportNamesUnlinkReportNameParameterBody,
+  ReportNamesUnlinkReportNameStandardBody,
   Sample,
   SampleReceipt,
   SamplesListSamples200,
   SamplesListSamplesParams,
+  SpecialtyObjectLink,
   SsoCallbackRequest,
   SsoRedirect,
+  StandardParameterLink,
   SummaryData,
   SummaryGetReportSummaryParams,
   TechnicalRequirement,
@@ -80,8 +115,15 @@ import type {
   TestRecordsListTestRecords200,
   TestRecordsListTestRecordsParams,
   TestRecordsSetVerdictBody,
+  UpdateCalculationRuleRequest,
   UpdateCatalogEntryRequest,
   UpdateContractRequest,
+  UpdateInspectionObjectRequest,
+  UpdateInspectionParameterRequest,
+  UpdateInspectionReportNameRequest,
+  UpdateInspectionSpecialtyRequest,
+  UpdateInspectionStandardRequest,
+  UpdateParamInterfaceRequest,
   UpdateSampleReceiptRequest,
   UpdateSampleRequest,
   UpdateTechnicalRequirementRequest,
@@ -654,6 +696,355 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       > => {
 
       const mutationOptions = getAuthSsoCallbackMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const calculationRulesListCalculationRules = (
+    params?: CalculationRulesListCalculationRulesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CalculationRule[]>> => {
+    
+    
+    return axios.default.get(
+      `/api/calculation-rules`,{
+    ...options,
+        params: {...params, ...options?.params},}
+    );
+  }
+
+
+
+
+export const getCalculationRulesListCalculationRulesQueryKey = (params?: CalculationRulesListCalculationRulesParams,) => {
+    return [
+    `/api/calculation-rules`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getCalculationRulesListCalculationRulesQueryOptions = <TData = Awaited<ReturnType<typeof calculationRulesListCalculationRules>>, TError = AxiosError<ErrorResponse>>(params?: CalculationRulesListCalculationRulesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationRulesListCalculationRules>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCalculationRulesListCalculationRulesQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof calculationRulesListCalculationRules>>> = ({ signal }) => calculationRulesListCalculationRules(params, { signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof calculationRulesListCalculationRules>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CalculationRulesListCalculationRulesQueryResult = NonNullable<Awaited<ReturnType<typeof calculationRulesListCalculationRules>>>
+export type CalculationRulesListCalculationRulesQueryError = AxiosError<ErrorResponse>
+
+
+export function useCalculationRulesListCalculationRules<TData = Awaited<ReturnType<typeof calculationRulesListCalculationRules>>, TError = AxiosError<ErrorResponse>>(
+ params: undefined |  CalculationRulesListCalculationRulesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationRulesListCalculationRules>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof calculationRulesListCalculationRules>>,
+          TError,
+          Awaited<ReturnType<typeof calculationRulesListCalculationRules>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCalculationRulesListCalculationRules<TData = Awaited<ReturnType<typeof calculationRulesListCalculationRules>>, TError = AxiosError<ErrorResponse>>(
+ params?: CalculationRulesListCalculationRulesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationRulesListCalculationRules>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof calculationRulesListCalculationRules>>,
+          TError,
+          Awaited<ReturnType<typeof calculationRulesListCalculationRules>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCalculationRulesListCalculationRules<TData = Awaited<ReturnType<typeof calculationRulesListCalculationRules>>, TError = AxiosError<ErrorResponse>>(
+ params?: CalculationRulesListCalculationRulesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationRulesListCalculationRules>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCalculationRulesListCalculationRules<TData = Awaited<ReturnType<typeof calculationRulesListCalculationRules>>, TError = AxiosError<ErrorResponse>>(
+ params?: CalculationRulesListCalculationRulesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationRulesListCalculationRules>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCalculationRulesListCalculationRulesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+export const calculationRulesCreateCalculationRule = (
+    createCalculationRuleRequest: CreateCalculationRuleRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CalculationRule>> => {
+    
+    
+    return axios.default.post(
+      `/api/calculation-rules`,
+      createCalculationRuleRequest,options
+    );
+  }
+
+
+
+export const getCalculationRulesCreateCalculationRuleMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculationRulesCreateCalculationRule>>, TError,{data: CreateCalculationRuleRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof calculationRulesCreateCalculationRule>>, TError,{data: CreateCalculationRuleRequest}, TContext> => {
+
+const mutationKey = ['calculationRulesCreateCalculationRule'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof calculationRulesCreateCalculationRule>>, {data: CreateCalculationRuleRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  calculationRulesCreateCalculationRule(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CalculationRulesCreateCalculationRuleMutationResult = NonNullable<Awaited<ReturnType<typeof calculationRulesCreateCalculationRule>>>
+    export type CalculationRulesCreateCalculationRuleMutationBody = CreateCalculationRuleRequest
+    export type CalculationRulesCreateCalculationRuleMutationError = AxiosError<ErrorResponse>
+
+    export const useCalculationRulesCreateCalculationRule = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculationRulesCreateCalculationRule>>, TError,{data: CreateCalculationRuleRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof calculationRulesCreateCalculationRule>>,
+        TError,
+        {data: CreateCalculationRuleRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getCalculationRulesCreateCalculationRuleMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const calculationRulesGetCalculationRule = (
+    inspectionObjectCode: string,
+    inspectionParameterCode: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CalculationRule>> => {
+    
+    
+    return axios.default.get(
+      `/api/calculation-rules/${inspectionObjectCode}/${inspectionParameterCode}`,options
+    );
+  }
+
+
+
+
+export const getCalculationRulesGetCalculationRuleQueryKey = (inspectionObjectCode?: string,
+    inspectionParameterCode?: string,) => {
+    return [
+    `/api/calculation-rules/${inspectionObjectCode}/${inspectionParameterCode}`
+    ] as const;
+    }
+
+    
+export const getCalculationRulesGetCalculationRuleQueryOptions = <TData = Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>, TError = AxiosError<ErrorResponse>>(inspectionObjectCode: string,
+    inspectionParameterCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getCalculationRulesGetCalculationRuleQueryKey(inspectionObjectCode,inspectionParameterCode);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>> = ({ signal }) => calculationRulesGetCalculationRule(inspectionObjectCode,inspectionParameterCode, { signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(inspectionObjectCode && inspectionParameterCode), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type CalculationRulesGetCalculationRuleQueryResult = NonNullable<Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>>
+export type CalculationRulesGetCalculationRuleQueryError = AxiosError<ErrorResponse>
+
+
+export function useCalculationRulesGetCalculationRule<TData = Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>, TError = AxiosError<ErrorResponse>>(
+ inspectionObjectCode: string,
+    inspectionParameterCode: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>,
+          TError,
+          Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCalculationRulesGetCalculationRule<TData = Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>, TError = AxiosError<ErrorResponse>>(
+ inspectionObjectCode: string,
+    inspectionParameterCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>,
+          TError,
+          Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useCalculationRulesGetCalculationRule<TData = Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>, TError = AxiosError<ErrorResponse>>(
+ inspectionObjectCode: string,
+    inspectionParameterCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useCalculationRulesGetCalculationRule<TData = Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>, TError = AxiosError<ErrorResponse>>(
+ inspectionObjectCode: string,
+    inspectionParameterCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationRulesGetCalculationRule>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getCalculationRulesGetCalculationRuleQueryOptions(inspectionObjectCode,inspectionParameterCode,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+export const calculationRulesUpdateCalculationRule = (
+    inspectionObjectCode: string,
+    inspectionParameterCode: string,
+    updateCalculationRuleRequest: UpdateCalculationRuleRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CalculationRule>> => {
+    
+    
+    return axios.default.put(
+      `/api/calculation-rules/${inspectionObjectCode}/${inspectionParameterCode}`,
+      updateCalculationRuleRequest,options
+    );
+  }
+
+
+
+export const getCalculationRulesUpdateCalculationRuleMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculationRulesUpdateCalculationRule>>, TError,{inspectionObjectCode: string;inspectionParameterCode: string;data: UpdateCalculationRuleRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof calculationRulesUpdateCalculationRule>>, TError,{inspectionObjectCode: string;inspectionParameterCode: string;data: UpdateCalculationRuleRequest}, TContext> => {
+
+const mutationKey = ['calculationRulesUpdateCalculationRule'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof calculationRulesUpdateCalculationRule>>, {inspectionObjectCode: string;inspectionParameterCode: string;data: UpdateCalculationRuleRequest}> = (props) => {
+          const {inspectionObjectCode,inspectionParameterCode,data} = props ?? {};
+
+          return  calculationRulesUpdateCalculationRule(inspectionObjectCode,inspectionParameterCode,data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CalculationRulesUpdateCalculationRuleMutationResult = NonNullable<Awaited<ReturnType<typeof calculationRulesUpdateCalculationRule>>>
+    export type CalculationRulesUpdateCalculationRuleMutationBody = UpdateCalculationRuleRequest
+    export type CalculationRulesUpdateCalculationRuleMutationError = AxiosError<ErrorResponse>
+
+    export const useCalculationRulesUpdateCalculationRule = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculationRulesUpdateCalculationRule>>, TError,{inspectionObjectCode: string;inspectionParameterCode: string;data: UpdateCalculationRuleRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof calculationRulesUpdateCalculationRule>>,
+        TError,
+        {inspectionObjectCode: string;inspectionParameterCode: string;data: UpdateCalculationRuleRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getCalculationRulesUpdateCalculationRuleMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const calculationRulesDeleteCalculationRule = (
+    inspectionObjectCode: string,
+    inspectionParameterCode: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/calculation-rules/${inspectionObjectCode}/${inspectionParameterCode}`,options
+    );
+  }
+
+
+
+export const getCalculationRulesDeleteCalculationRuleMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculationRulesDeleteCalculationRule>>, TError,{inspectionObjectCode: string;inspectionParameterCode: string}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof calculationRulesDeleteCalculationRule>>, TError,{inspectionObjectCode: string;inspectionParameterCode: string}, TContext> => {
+
+const mutationKey = ['calculationRulesDeleteCalculationRule'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof calculationRulesDeleteCalculationRule>>, {inspectionObjectCode: string;inspectionParameterCode: string}> = (props) => {
+          const {inspectionObjectCode,inspectionParameterCode} = props ?? {};
+
+          return  calculationRulesDeleteCalculationRule(inspectionObjectCode,inspectionParameterCode,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CalculationRulesDeleteCalculationRuleMutationResult = NonNullable<Awaited<ReturnType<typeof calculationRulesDeleteCalculationRule>>>
+    
+    export type CalculationRulesDeleteCalculationRuleMutationError = AxiosError<ErrorResponse>
+
+    export const useCalculationRulesDeleteCalculationRule = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculationRulesDeleteCalculationRule>>, TError,{inspectionObjectCode: string;inspectionParameterCode: string}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof calculationRulesDeleteCalculationRule>>,
+        TError,
+        {inspectionObjectCode: string;inspectionParameterCode: string},
+        TContext
+      > => {
+
+      const mutationOptions = getCalculationRulesDeleteCalculationRuleMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }
@@ -2018,6 +2409,1926 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(mutationOptions, queryClient);
     }
     
+export const inspectionDictionaryLinkObjectParameter = (
+    objectParameterLink: ObjectParameterLink, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.post(
+      `/api/inspection/links/object-parameter`,
+      objectParameterLink,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryLinkObjectParameterMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryLinkObjectParameter>>, TError,{data: ObjectParameterLink}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryLinkObjectParameter>>, TError,{data: ObjectParameterLink}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryLinkObjectParameter'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryLinkObjectParameter>>, {data: ObjectParameterLink}> = (props) => {
+          const {data} = props ?? {};
+
+          return  inspectionDictionaryLinkObjectParameter(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryLinkObjectParameterMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryLinkObjectParameter>>>
+    export type InspectionDictionaryLinkObjectParameterMutationBody = ObjectParameterLink
+    export type InspectionDictionaryLinkObjectParameterMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryLinkObjectParameter = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryLinkObjectParameter>>, TError,{data: ObjectParameterLink}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryLinkObjectParameter>>,
+        TError,
+        {data: ObjectParameterLink},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryLinkObjectParameterMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryUnlinkObjectParameter = (
+    inspectionDictionaryUnlinkObjectParameterBody: InspectionDictionaryUnlinkObjectParameterBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/inspection/links/object-parameter`,{data:
+      inspectionDictionaryUnlinkObjectParameterBody, ...options}
+    );
+  }
+
+
+
+export const getInspectionDictionaryUnlinkObjectParameterMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUnlinkObjectParameter>>, TError,{data: InspectionDictionaryUnlinkObjectParameterBody}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUnlinkObjectParameter>>, TError,{data: InspectionDictionaryUnlinkObjectParameterBody}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryUnlinkObjectParameter'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryUnlinkObjectParameter>>, {data: InspectionDictionaryUnlinkObjectParameterBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  inspectionDictionaryUnlinkObjectParameter(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryUnlinkObjectParameterMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryUnlinkObjectParameter>>>
+    export type InspectionDictionaryUnlinkObjectParameterMutationBody = InspectionDictionaryUnlinkObjectParameterBody
+    export type InspectionDictionaryUnlinkObjectParameterMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryUnlinkObjectParameter = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUnlinkObjectParameter>>, TError,{data: InspectionDictionaryUnlinkObjectParameterBody}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryUnlinkObjectParameter>>,
+        TError,
+        {data: InspectionDictionaryUnlinkObjectParameterBody},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryUnlinkObjectParameterMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryLinkObjectStandard = (
+    objectStandardLink: ObjectStandardLink, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.post(
+      `/api/inspection/links/object-standard`,
+      objectStandardLink,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryLinkObjectStandardMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryLinkObjectStandard>>, TError,{data: ObjectStandardLink}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryLinkObjectStandard>>, TError,{data: ObjectStandardLink}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryLinkObjectStandard'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryLinkObjectStandard>>, {data: ObjectStandardLink}> = (props) => {
+          const {data} = props ?? {};
+
+          return  inspectionDictionaryLinkObjectStandard(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryLinkObjectStandardMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryLinkObjectStandard>>>
+    export type InspectionDictionaryLinkObjectStandardMutationBody = ObjectStandardLink
+    export type InspectionDictionaryLinkObjectStandardMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryLinkObjectStandard = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryLinkObjectStandard>>, TError,{data: ObjectStandardLink}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryLinkObjectStandard>>,
+        TError,
+        {data: ObjectStandardLink},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryLinkObjectStandardMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryUnlinkObjectStandard = (
+    inspectionDictionaryUnlinkObjectStandardBody: InspectionDictionaryUnlinkObjectStandardBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/inspection/links/object-standard`,{data:
+      inspectionDictionaryUnlinkObjectStandardBody, ...options}
+    );
+  }
+
+
+
+export const getInspectionDictionaryUnlinkObjectStandardMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUnlinkObjectStandard>>, TError,{data: InspectionDictionaryUnlinkObjectStandardBody}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUnlinkObjectStandard>>, TError,{data: InspectionDictionaryUnlinkObjectStandardBody}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryUnlinkObjectStandard'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryUnlinkObjectStandard>>, {data: InspectionDictionaryUnlinkObjectStandardBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  inspectionDictionaryUnlinkObjectStandard(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryUnlinkObjectStandardMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryUnlinkObjectStandard>>>
+    export type InspectionDictionaryUnlinkObjectStandardMutationBody = InspectionDictionaryUnlinkObjectStandardBody
+    export type InspectionDictionaryUnlinkObjectStandardMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryUnlinkObjectStandard = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUnlinkObjectStandard>>, TError,{data: InspectionDictionaryUnlinkObjectStandardBody}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryUnlinkObjectStandard>>,
+        TError,
+        {data: InspectionDictionaryUnlinkObjectStandardBody},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryUnlinkObjectStandardMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryLinkSpecialtyObject = (
+    specialtyObjectLink: SpecialtyObjectLink, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.post(
+      `/api/inspection/links/specialty-object`,
+      specialtyObjectLink,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryLinkSpecialtyObjectMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryLinkSpecialtyObject>>, TError,{data: SpecialtyObjectLink}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryLinkSpecialtyObject>>, TError,{data: SpecialtyObjectLink}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryLinkSpecialtyObject'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryLinkSpecialtyObject>>, {data: SpecialtyObjectLink}> = (props) => {
+          const {data} = props ?? {};
+
+          return  inspectionDictionaryLinkSpecialtyObject(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryLinkSpecialtyObjectMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryLinkSpecialtyObject>>>
+    export type InspectionDictionaryLinkSpecialtyObjectMutationBody = SpecialtyObjectLink
+    export type InspectionDictionaryLinkSpecialtyObjectMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryLinkSpecialtyObject = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryLinkSpecialtyObject>>, TError,{data: SpecialtyObjectLink}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryLinkSpecialtyObject>>,
+        TError,
+        {data: SpecialtyObjectLink},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryLinkSpecialtyObjectMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryUnlinkSpecialtyObject = (
+    specialtyObjectLink: SpecialtyObjectLink, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/inspection/links/specialty-object`,{data:
+      specialtyObjectLink, ...options}
+    );
+  }
+
+
+
+export const getInspectionDictionaryUnlinkSpecialtyObjectMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUnlinkSpecialtyObject>>, TError,{data: SpecialtyObjectLink}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUnlinkSpecialtyObject>>, TError,{data: SpecialtyObjectLink}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryUnlinkSpecialtyObject'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryUnlinkSpecialtyObject>>, {data: SpecialtyObjectLink}> = (props) => {
+          const {data} = props ?? {};
+
+          return  inspectionDictionaryUnlinkSpecialtyObject(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryUnlinkSpecialtyObjectMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryUnlinkSpecialtyObject>>>
+    export type InspectionDictionaryUnlinkSpecialtyObjectMutationBody = SpecialtyObjectLink
+    export type InspectionDictionaryUnlinkSpecialtyObjectMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryUnlinkSpecialtyObject = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUnlinkSpecialtyObject>>, TError,{data: SpecialtyObjectLink}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryUnlinkSpecialtyObject>>,
+        TError,
+        {data: SpecialtyObjectLink},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryUnlinkSpecialtyObjectMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryLinkStandardParameter = (
+    standardParameterLink: StandardParameterLink, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.post(
+      `/api/inspection/links/standard-parameter`,
+      standardParameterLink,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryLinkStandardParameterMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryLinkStandardParameter>>, TError,{data: StandardParameterLink}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryLinkStandardParameter>>, TError,{data: StandardParameterLink}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryLinkStandardParameter'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryLinkStandardParameter>>, {data: StandardParameterLink}> = (props) => {
+          const {data} = props ?? {};
+
+          return  inspectionDictionaryLinkStandardParameter(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryLinkStandardParameterMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryLinkStandardParameter>>>
+    export type InspectionDictionaryLinkStandardParameterMutationBody = StandardParameterLink
+    export type InspectionDictionaryLinkStandardParameterMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryLinkStandardParameter = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryLinkStandardParameter>>, TError,{data: StandardParameterLink}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryLinkStandardParameter>>,
+        TError,
+        {data: StandardParameterLink},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryLinkStandardParameterMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryUnlinkStandardParameter = (
+    standardParameterLink: StandardParameterLink, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/inspection/links/standard-parameter`,{data:
+      standardParameterLink, ...options}
+    );
+  }
+
+
+
+export const getInspectionDictionaryUnlinkStandardParameterMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUnlinkStandardParameter>>, TError,{data: StandardParameterLink}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUnlinkStandardParameter>>, TError,{data: StandardParameterLink}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryUnlinkStandardParameter'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryUnlinkStandardParameter>>, {data: StandardParameterLink}> = (props) => {
+          const {data} = props ?? {};
+
+          return  inspectionDictionaryUnlinkStandardParameter(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryUnlinkStandardParameterMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryUnlinkStandardParameter>>>
+    export type InspectionDictionaryUnlinkStandardParameterMutationBody = StandardParameterLink
+    export type InspectionDictionaryUnlinkStandardParameterMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryUnlinkStandardParameter = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUnlinkStandardParameter>>, TError,{data: StandardParameterLink}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryUnlinkStandardParameter>>,
+        TError,
+        {data: StandardParameterLink},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryUnlinkStandardParameterMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryListObjects = (
+    params?: InspectionDictionaryListObjectsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionObject[]>> => {
+    
+    
+    return axios.default.get(
+      `/api/inspection/objects`,{
+    ...options,
+        params: {...params, ...options?.params},}
+    );
+  }
+
+
+
+
+export const getInspectionDictionaryListObjectsQueryKey = (params?: InspectionDictionaryListObjectsParams,) => {
+    return [
+    `/api/inspection/objects`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getInspectionDictionaryListObjectsQueryOptions = <TData = Awaited<ReturnType<typeof inspectionDictionaryListObjects>>, TError = AxiosError<ErrorResponse>>(params?: InspectionDictionaryListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListObjects>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getInspectionDictionaryListObjectsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof inspectionDictionaryListObjects>>> = ({ signal }) => inspectionDictionaryListObjects(params, { signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListObjects>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type InspectionDictionaryListObjectsQueryResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryListObjects>>>
+export type InspectionDictionaryListObjectsQueryError = AxiosError<ErrorResponse>
+
+
+export function useInspectionDictionaryListObjects<TData = Awaited<ReturnType<typeof inspectionDictionaryListObjects>>, TError = AxiosError<ErrorResponse>>(
+ params: undefined |  InspectionDictionaryListObjectsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListObjects>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof inspectionDictionaryListObjects>>,
+          TError,
+          Awaited<ReturnType<typeof inspectionDictionaryListObjects>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useInspectionDictionaryListObjects<TData = Awaited<ReturnType<typeof inspectionDictionaryListObjects>>, TError = AxiosError<ErrorResponse>>(
+ params?: InspectionDictionaryListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListObjects>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof inspectionDictionaryListObjects>>,
+          TError,
+          Awaited<ReturnType<typeof inspectionDictionaryListObjects>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useInspectionDictionaryListObjects<TData = Awaited<ReturnType<typeof inspectionDictionaryListObjects>>, TError = AxiosError<ErrorResponse>>(
+ params?: InspectionDictionaryListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListObjects>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useInspectionDictionaryListObjects<TData = Awaited<ReturnType<typeof inspectionDictionaryListObjects>>, TError = AxiosError<ErrorResponse>>(
+ params?: InspectionDictionaryListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListObjects>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getInspectionDictionaryListObjectsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+export const inspectionDictionaryCreateObject = (
+    createInspectionObjectRequest: CreateInspectionObjectRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionObject>> => {
+    
+    
+    return axios.default.post(
+      `/api/inspection/objects`,
+      createInspectionObjectRequest,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryCreateObjectMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryCreateObject>>, TError,{data: CreateInspectionObjectRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryCreateObject>>, TError,{data: CreateInspectionObjectRequest}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryCreateObject'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryCreateObject>>, {data: CreateInspectionObjectRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  inspectionDictionaryCreateObject(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryCreateObjectMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryCreateObject>>>
+    export type InspectionDictionaryCreateObjectMutationBody = CreateInspectionObjectRequest
+    export type InspectionDictionaryCreateObjectMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryCreateObject = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryCreateObject>>, TError,{data: CreateInspectionObjectRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryCreateObject>>,
+        TError,
+        {data: CreateInspectionObjectRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryCreateObjectMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryUpdateObject = (
+    code: string,
+    updateInspectionObjectRequest: UpdateInspectionObjectRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionObject>> => {
+    
+    
+    return axios.default.put(
+      `/api/inspection/objects/${code}`,
+      updateInspectionObjectRequest,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryUpdateObjectMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUpdateObject>>, TError,{code: string;data: UpdateInspectionObjectRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUpdateObject>>, TError,{code: string;data: UpdateInspectionObjectRequest}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryUpdateObject'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryUpdateObject>>, {code: string;data: UpdateInspectionObjectRequest}> = (props) => {
+          const {code,data} = props ?? {};
+
+          return  inspectionDictionaryUpdateObject(code,data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryUpdateObjectMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryUpdateObject>>>
+    export type InspectionDictionaryUpdateObjectMutationBody = UpdateInspectionObjectRequest
+    export type InspectionDictionaryUpdateObjectMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryUpdateObject = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUpdateObject>>, TError,{code: string;data: UpdateInspectionObjectRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryUpdateObject>>,
+        TError,
+        {code: string;data: UpdateInspectionObjectRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryUpdateObjectMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryDeleteObject = (
+    code: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/inspection/objects/${code}`,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryDeleteObjectMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryDeleteObject>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryDeleteObject>>, TError,{code: string}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryDeleteObject'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryDeleteObject>>, {code: string}> = (props) => {
+          const {code} = props ?? {};
+
+          return  inspectionDictionaryDeleteObject(code,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryDeleteObjectMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryDeleteObject>>>
+    
+    export type InspectionDictionaryDeleteObjectMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryDeleteObject = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryDeleteObject>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryDeleteObject>>,
+        TError,
+        {code: string},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryDeleteObjectMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryListParameters = (
+    params?: InspectionDictionaryListParametersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionParameter[]>> => {
+    
+    
+    return axios.default.get(
+      `/api/inspection/parameters`,{
+    ...options,
+        params: {...params, ...options?.params},}
+    );
+  }
+
+
+
+
+export const getInspectionDictionaryListParametersQueryKey = (params?: InspectionDictionaryListParametersParams,) => {
+    return [
+    `/api/inspection/parameters`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getInspectionDictionaryListParametersQueryOptions = <TData = Awaited<ReturnType<typeof inspectionDictionaryListParameters>>, TError = AxiosError<ErrorResponse>>(params?: InspectionDictionaryListParametersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListParameters>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getInspectionDictionaryListParametersQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof inspectionDictionaryListParameters>>> = ({ signal }) => inspectionDictionaryListParameters(params, { signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListParameters>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type InspectionDictionaryListParametersQueryResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryListParameters>>>
+export type InspectionDictionaryListParametersQueryError = AxiosError<ErrorResponse>
+
+
+export function useInspectionDictionaryListParameters<TData = Awaited<ReturnType<typeof inspectionDictionaryListParameters>>, TError = AxiosError<ErrorResponse>>(
+ params: undefined |  InspectionDictionaryListParametersParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListParameters>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof inspectionDictionaryListParameters>>,
+          TError,
+          Awaited<ReturnType<typeof inspectionDictionaryListParameters>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useInspectionDictionaryListParameters<TData = Awaited<ReturnType<typeof inspectionDictionaryListParameters>>, TError = AxiosError<ErrorResponse>>(
+ params?: InspectionDictionaryListParametersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListParameters>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof inspectionDictionaryListParameters>>,
+          TError,
+          Awaited<ReturnType<typeof inspectionDictionaryListParameters>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useInspectionDictionaryListParameters<TData = Awaited<ReturnType<typeof inspectionDictionaryListParameters>>, TError = AxiosError<ErrorResponse>>(
+ params?: InspectionDictionaryListParametersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListParameters>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useInspectionDictionaryListParameters<TData = Awaited<ReturnType<typeof inspectionDictionaryListParameters>>, TError = AxiosError<ErrorResponse>>(
+ params?: InspectionDictionaryListParametersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListParameters>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getInspectionDictionaryListParametersQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+export const inspectionDictionaryCreateParameter = (
+    createInspectionParameterRequest: CreateInspectionParameterRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionParameter>> => {
+    
+    
+    return axios.default.post(
+      `/api/inspection/parameters`,
+      createInspectionParameterRequest,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryCreateParameterMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryCreateParameter>>, TError,{data: CreateInspectionParameterRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryCreateParameter>>, TError,{data: CreateInspectionParameterRequest}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryCreateParameter'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryCreateParameter>>, {data: CreateInspectionParameterRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  inspectionDictionaryCreateParameter(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryCreateParameterMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryCreateParameter>>>
+    export type InspectionDictionaryCreateParameterMutationBody = CreateInspectionParameterRequest
+    export type InspectionDictionaryCreateParameterMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryCreateParameter = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryCreateParameter>>, TError,{data: CreateInspectionParameterRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryCreateParameter>>,
+        TError,
+        {data: CreateInspectionParameterRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryCreateParameterMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryUpdateParameter = (
+    code: string,
+    updateInspectionParameterRequest: UpdateInspectionParameterRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionParameter>> => {
+    
+    
+    return axios.default.put(
+      `/api/inspection/parameters/${code}`,
+      updateInspectionParameterRequest,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryUpdateParameterMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUpdateParameter>>, TError,{code: string;data: UpdateInspectionParameterRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUpdateParameter>>, TError,{code: string;data: UpdateInspectionParameterRequest}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryUpdateParameter'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryUpdateParameter>>, {code: string;data: UpdateInspectionParameterRequest}> = (props) => {
+          const {code,data} = props ?? {};
+
+          return  inspectionDictionaryUpdateParameter(code,data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryUpdateParameterMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryUpdateParameter>>>
+    export type InspectionDictionaryUpdateParameterMutationBody = UpdateInspectionParameterRequest
+    export type InspectionDictionaryUpdateParameterMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryUpdateParameter = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUpdateParameter>>, TError,{code: string;data: UpdateInspectionParameterRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryUpdateParameter>>,
+        TError,
+        {code: string;data: UpdateInspectionParameterRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryUpdateParameterMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryDeleteParameter = (
+    code: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/inspection/parameters/${code}`,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryDeleteParameterMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryDeleteParameter>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryDeleteParameter>>, TError,{code: string}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryDeleteParameter'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryDeleteParameter>>, {code: string}> = (props) => {
+          const {code} = props ?? {};
+
+          return  inspectionDictionaryDeleteParameter(code,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryDeleteParameterMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryDeleteParameter>>>
+    
+    export type InspectionDictionaryDeleteParameterMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryDeleteParameter = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryDeleteParameter>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryDeleteParameter>>,
+        TError,
+        {code: string},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryDeleteParameterMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryListSpecialties = (
+    params?: InspectionDictionaryListSpecialtiesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionSpecialty[]>> => {
+    
+    
+    return axios.default.get(
+      `/api/inspection/specialties`,{
+    ...options,
+        params: {...params, ...options?.params},}
+    );
+  }
+
+
+
+
+export const getInspectionDictionaryListSpecialtiesQueryKey = (params?: InspectionDictionaryListSpecialtiesParams,) => {
+    return [
+    `/api/inspection/specialties`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getInspectionDictionaryListSpecialtiesQueryOptions = <TData = Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>, TError = AxiosError<ErrorResponse>>(params?: InspectionDictionaryListSpecialtiesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getInspectionDictionaryListSpecialtiesQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>> = ({ signal }) => inspectionDictionaryListSpecialties(params, { signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type InspectionDictionaryListSpecialtiesQueryResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>>
+export type InspectionDictionaryListSpecialtiesQueryError = AxiosError<ErrorResponse>
+
+
+export function useInspectionDictionaryListSpecialties<TData = Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>, TError = AxiosError<ErrorResponse>>(
+ params: undefined |  InspectionDictionaryListSpecialtiesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>,
+          TError,
+          Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useInspectionDictionaryListSpecialties<TData = Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>, TError = AxiosError<ErrorResponse>>(
+ params?: InspectionDictionaryListSpecialtiesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>,
+          TError,
+          Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useInspectionDictionaryListSpecialties<TData = Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>, TError = AxiosError<ErrorResponse>>(
+ params?: InspectionDictionaryListSpecialtiesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useInspectionDictionaryListSpecialties<TData = Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>, TError = AxiosError<ErrorResponse>>(
+ params?: InspectionDictionaryListSpecialtiesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListSpecialties>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getInspectionDictionaryListSpecialtiesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+export const inspectionDictionaryCreateSpecialty = (
+    createInspectionSpecialtyRequest: CreateInspectionSpecialtyRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionSpecialty>> => {
+    
+    
+    return axios.default.post(
+      `/api/inspection/specialties`,
+      createInspectionSpecialtyRequest,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryCreateSpecialtyMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryCreateSpecialty>>, TError,{data: CreateInspectionSpecialtyRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryCreateSpecialty>>, TError,{data: CreateInspectionSpecialtyRequest}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryCreateSpecialty'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryCreateSpecialty>>, {data: CreateInspectionSpecialtyRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  inspectionDictionaryCreateSpecialty(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryCreateSpecialtyMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryCreateSpecialty>>>
+    export type InspectionDictionaryCreateSpecialtyMutationBody = CreateInspectionSpecialtyRequest
+    export type InspectionDictionaryCreateSpecialtyMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryCreateSpecialty = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryCreateSpecialty>>, TError,{data: CreateInspectionSpecialtyRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryCreateSpecialty>>,
+        TError,
+        {data: CreateInspectionSpecialtyRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryCreateSpecialtyMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryUpdateSpecialty = (
+    code: string,
+    updateInspectionSpecialtyRequest: UpdateInspectionSpecialtyRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionSpecialty>> => {
+    
+    
+    return axios.default.put(
+      `/api/inspection/specialties/${code}`,
+      updateInspectionSpecialtyRequest,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryUpdateSpecialtyMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUpdateSpecialty>>, TError,{code: string;data: UpdateInspectionSpecialtyRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUpdateSpecialty>>, TError,{code: string;data: UpdateInspectionSpecialtyRequest}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryUpdateSpecialty'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryUpdateSpecialty>>, {code: string;data: UpdateInspectionSpecialtyRequest}> = (props) => {
+          const {code,data} = props ?? {};
+
+          return  inspectionDictionaryUpdateSpecialty(code,data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryUpdateSpecialtyMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryUpdateSpecialty>>>
+    export type InspectionDictionaryUpdateSpecialtyMutationBody = UpdateInspectionSpecialtyRequest
+    export type InspectionDictionaryUpdateSpecialtyMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryUpdateSpecialty = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUpdateSpecialty>>, TError,{code: string;data: UpdateInspectionSpecialtyRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryUpdateSpecialty>>,
+        TError,
+        {code: string;data: UpdateInspectionSpecialtyRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryUpdateSpecialtyMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryDeleteSpecialty = (
+    code: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/inspection/specialties/${code}`,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryDeleteSpecialtyMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryDeleteSpecialty>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryDeleteSpecialty>>, TError,{code: string}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryDeleteSpecialty'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryDeleteSpecialty>>, {code: string}> = (props) => {
+          const {code} = props ?? {};
+
+          return  inspectionDictionaryDeleteSpecialty(code,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryDeleteSpecialtyMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryDeleteSpecialty>>>
+    
+    export type InspectionDictionaryDeleteSpecialtyMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryDeleteSpecialty = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryDeleteSpecialty>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryDeleteSpecialty>>,
+        TError,
+        {code: string},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryDeleteSpecialtyMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryListStandards = (
+    params?: InspectionDictionaryListStandardsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionStandard[]>> => {
+    
+    
+    return axios.default.get(
+      `/api/inspection/standards`,{
+    ...options,
+        params: {...params, ...options?.params},}
+    );
+  }
+
+
+
+
+export const getInspectionDictionaryListStandardsQueryKey = (params?: InspectionDictionaryListStandardsParams,) => {
+    return [
+    `/api/inspection/standards`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getInspectionDictionaryListStandardsQueryOptions = <TData = Awaited<ReturnType<typeof inspectionDictionaryListStandards>>, TError = AxiosError<ErrorResponse>>(params?: InspectionDictionaryListStandardsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListStandards>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getInspectionDictionaryListStandardsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof inspectionDictionaryListStandards>>> = ({ signal }) => inspectionDictionaryListStandards(params, { signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListStandards>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type InspectionDictionaryListStandardsQueryResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryListStandards>>>
+export type InspectionDictionaryListStandardsQueryError = AxiosError<ErrorResponse>
+
+
+export function useInspectionDictionaryListStandards<TData = Awaited<ReturnType<typeof inspectionDictionaryListStandards>>, TError = AxiosError<ErrorResponse>>(
+ params: undefined |  InspectionDictionaryListStandardsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListStandards>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof inspectionDictionaryListStandards>>,
+          TError,
+          Awaited<ReturnType<typeof inspectionDictionaryListStandards>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useInspectionDictionaryListStandards<TData = Awaited<ReturnType<typeof inspectionDictionaryListStandards>>, TError = AxiosError<ErrorResponse>>(
+ params?: InspectionDictionaryListStandardsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListStandards>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof inspectionDictionaryListStandards>>,
+          TError,
+          Awaited<ReturnType<typeof inspectionDictionaryListStandards>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useInspectionDictionaryListStandards<TData = Awaited<ReturnType<typeof inspectionDictionaryListStandards>>, TError = AxiosError<ErrorResponse>>(
+ params?: InspectionDictionaryListStandardsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListStandards>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useInspectionDictionaryListStandards<TData = Awaited<ReturnType<typeof inspectionDictionaryListStandards>>, TError = AxiosError<ErrorResponse>>(
+ params?: InspectionDictionaryListStandardsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof inspectionDictionaryListStandards>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getInspectionDictionaryListStandardsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+export const inspectionDictionaryCreateStandard = (
+    createInspectionStandardRequest: CreateInspectionStandardRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionStandard>> => {
+    
+    
+    return axios.default.post(
+      `/api/inspection/standards`,
+      createInspectionStandardRequest,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryCreateStandardMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryCreateStandard>>, TError,{data: CreateInspectionStandardRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryCreateStandard>>, TError,{data: CreateInspectionStandardRequest}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryCreateStandard'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryCreateStandard>>, {data: CreateInspectionStandardRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  inspectionDictionaryCreateStandard(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryCreateStandardMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryCreateStandard>>>
+    export type InspectionDictionaryCreateStandardMutationBody = CreateInspectionStandardRequest
+    export type InspectionDictionaryCreateStandardMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryCreateStandard = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryCreateStandard>>, TError,{data: CreateInspectionStandardRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryCreateStandard>>,
+        TError,
+        {data: CreateInspectionStandardRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryCreateStandardMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryUpdateStandard = (
+    code: string,
+    updateInspectionStandardRequest: UpdateInspectionStandardRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionStandard>> => {
+    
+    
+    return axios.default.put(
+      `/api/inspection/standards/${code}`,
+      updateInspectionStandardRequest,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryUpdateStandardMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUpdateStandard>>, TError,{code: string;data: UpdateInspectionStandardRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUpdateStandard>>, TError,{code: string;data: UpdateInspectionStandardRequest}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryUpdateStandard'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryUpdateStandard>>, {code: string;data: UpdateInspectionStandardRequest}> = (props) => {
+          const {code,data} = props ?? {};
+
+          return  inspectionDictionaryUpdateStandard(code,data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryUpdateStandardMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryUpdateStandard>>>
+    export type InspectionDictionaryUpdateStandardMutationBody = UpdateInspectionStandardRequest
+    export type InspectionDictionaryUpdateStandardMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryUpdateStandard = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryUpdateStandard>>, TError,{code: string;data: UpdateInspectionStandardRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryUpdateStandard>>,
+        TError,
+        {code: string;data: UpdateInspectionStandardRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryUpdateStandardMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const inspectionDictionaryDeleteStandard = (
+    code: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/inspection/standards/${code}`,options
+    );
+  }
+
+
+
+export const getInspectionDictionaryDeleteStandardMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryDeleteStandard>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryDeleteStandard>>, TError,{code: string}, TContext> => {
+
+const mutationKey = ['inspectionDictionaryDeleteStandard'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof inspectionDictionaryDeleteStandard>>, {code: string}> = (props) => {
+          const {code} = props ?? {};
+
+          return  inspectionDictionaryDeleteStandard(code,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InspectionDictionaryDeleteStandardMutationResult = NonNullable<Awaited<ReturnType<typeof inspectionDictionaryDeleteStandard>>>
+    
+    export type InspectionDictionaryDeleteStandardMutationError = AxiosError<ErrorResponse>
+
+    export const useInspectionDictionaryDeleteStandard = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof inspectionDictionaryDeleteStandard>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof inspectionDictionaryDeleteStandard>>,
+        TError,
+        {code: string},
+        TContext
+      > => {
+
+      const mutationOptions = getInspectionDictionaryDeleteStandardMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const paramInterfacesListParamInterfaces = (
+    params?: ParamInterfacesListParamInterfacesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ParamInterface[]>> => {
+    
+    
+    return axios.default.get(
+      `/api/param-interfaces`,{
+    ...options,
+        params: {...params, ...options?.params},}
+    );
+  }
+
+
+
+
+export const getParamInterfacesListParamInterfacesQueryKey = (params?: ParamInterfacesListParamInterfacesParams,) => {
+    return [
+    `/api/param-interfaces`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getParamInterfacesListParamInterfacesQueryOptions = <TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError = AxiosError<ErrorResponse>>(params?: ParamInterfacesListParamInterfacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getParamInterfacesListParamInterfacesQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>> = ({ signal }) => paramInterfacesListParamInterfaces(params, { signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ParamInterfacesListParamInterfacesQueryResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>>
+export type ParamInterfacesListParamInterfacesQueryError = AxiosError<ErrorResponse>
+
+
+export function useParamInterfacesListParamInterfaces<TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError = AxiosError<ErrorResponse>>(
+ params: undefined |  ParamInterfacesListParamInterfacesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+          TError,
+          Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useParamInterfacesListParamInterfaces<TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError = AxiosError<ErrorResponse>>(
+ params?: ParamInterfacesListParamInterfacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+          TError,
+          Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useParamInterfacesListParamInterfaces<TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError = AxiosError<ErrorResponse>>(
+ params?: ParamInterfacesListParamInterfacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useParamInterfacesListParamInterfaces<TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError = AxiosError<ErrorResponse>>(
+ params?: ParamInterfacesListParamInterfacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getParamInterfacesListParamInterfacesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+export const paramInterfacesCreateParamInterface = (
+    createParamInterfaceRequest: CreateParamInterfaceRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ParamInterface>> => {
+    
+    
+    return axios.default.post(
+      `/api/param-interfaces`,
+      createParamInterfaceRequest,options
+    );
+  }
+
+
+
+export const getParamInterfacesCreateParamInterfaceMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>, TError,{data: CreateParamInterfaceRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>, TError,{data: CreateParamInterfaceRequest}, TContext> => {
+
+const mutationKey = ['paramInterfacesCreateParamInterface'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>, {data: CreateParamInterfaceRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  paramInterfacesCreateParamInterface(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ParamInterfacesCreateParamInterfaceMutationResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>>
+    export type ParamInterfacesCreateParamInterfaceMutationBody = CreateParamInterfaceRequest
+    export type ParamInterfacesCreateParamInterfaceMutationError = AxiosError<ErrorResponse>
+
+    export const useParamInterfacesCreateParamInterface = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>, TError,{data: CreateParamInterfaceRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>,
+        TError,
+        {data: CreateParamInterfaceRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getParamInterfacesCreateParamInterfaceMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const paramInterfacesLinkParamInterface = (
+    paramInterfaceLink: ParamInterfaceLink, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.post(
+      `/api/param-interfaces/links`,
+      paramInterfaceLink,options
+    );
+  }
+
+
+
+export const getParamInterfacesLinkParamInterfaceMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>, TError,{data: ParamInterfaceLink}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>, TError,{data: ParamInterfaceLink}, TContext> => {
+
+const mutationKey = ['paramInterfacesLinkParamInterface'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>, {data: ParamInterfaceLink}> = (props) => {
+          const {data} = props ?? {};
+
+          return  paramInterfacesLinkParamInterface(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ParamInterfacesLinkParamInterfaceMutationResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>>
+    export type ParamInterfacesLinkParamInterfaceMutationBody = ParamInterfaceLink
+    export type ParamInterfacesLinkParamInterfaceMutationError = AxiosError<ErrorResponse>
+
+    export const useParamInterfacesLinkParamInterface = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>, TError,{data: ParamInterfaceLink}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>,
+        TError,
+        {data: ParamInterfaceLink},
+        TContext
+      > => {
+
+      const mutationOptions = getParamInterfacesLinkParamInterfaceMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const paramInterfacesUnlinkParamInterface = (
+    paramInterfacesUnlinkParamInterfaceBody: ParamInterfacesUnlinkParamInterfaceBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/param-interfaces/links`,{data:
+      paramInterfacesUnlinkParamInterfaceBody, ...options}
+    );
+  }
+
+
+
+export const getParamInterfacesUnlinkParamInterfaceMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>, TError,{data: ParamInterfacesUnlinkParamInterfaceBody}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>, TError,{data: ParamInterfacesUnlinkParamInterfaceBody}, TContext> => {
+
+const mutationKey = ['paramInterfacesUnlinkParamInterface'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>, {data: ParamInterfacesUnlinkParamInterfaceBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  paramInterfacesUnlinkParamInterface(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ParamInterfacesUnlinkParamInterfaceMutationResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>>
+    export type ParamInterfacesUnlinkParamInterfaceMutationBody = ParamInterfacesUnlinkParamInterfaceBody
+    export type ParamInterfacesUnlinkParamInterfaceMutationError = AxiosError<ErrorResponse>
+
+    export const useParamInterfacesUnlinkParamInterface = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>, TError,{data: ParamInterfacesUnlinkParamInterfaceBody}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>,
+        TError,
+        {data: ParamInterfacesUnlinkParamInterfaceBody},
+        TContext
+      > => {
+
+      const mutationOptions = getParamInterfacesUnlinkParamInterfaceMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const paramInterfacesGetParamInterface = (
+    code: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ParamInterface>> => {
+    
+    
+    return axios.default.get(
+      `/api/param-interfaces/${code}`,options
+    );
+  }
+
+
+
+
+export const getParamInterfacesGetParamInterfaceQueryKey = (code?: string,) => {
+    return [
+    `/api/param-interfaces/${code}`
+    ] as const;
+    }
+
+    
+export const getParamInterfacesGetParamInterfaceQueryOptions = <TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError = AxiosError<ErrorResponse>>(code: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getParamInterfacesGetParamInterfaceQueryKey(code);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>> = ({ signal }) => paramInterfacesGetParamInterface(code, { signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(code), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ParamInterfacesGetParamInterfaceQueryResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>>
+export type ParamInterfacesGetParamInterfaceQueryError = AxiosError<ErrorResponse>
+
+
+export function useParamInterfacesGetParamInterface<TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError = AxiosError<ErrorResponse>>(
+ code: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+          TError,
+          Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useParamInterfacesGetParamInterface<TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError = AxiosError<ErrorResponse>>(
+ code: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+          TError,
+          Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useParamInterfacesGetParamInterface<TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError = AxiosError<ErrorResponse>>(
+ code: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useParamInterfacesGetParamInterface<TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError = AxiosError<ErrorResponse>>(
+ code: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getParamInterfacesGetParamInterfaceQueryOptions(code,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+export const paramInterfacesUpdateParamInterface = (
+    code: string,
+    updateParamInterfaceRequest: UpdateParamInterfaceRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ParamInterface>> => {
+    
+    
+    return axios.default.put(
+      `/api/param-interfaces/${code}`,
+      updateParamInterfaceRequest,options
+    );
+  }
+
+
+
+export const getParamInterfacesUpdateParamInterfaceMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>, TError,{code: string;data: UpdateParamInterfaceRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>, TError,{code: string;data: UpdateParamInterfaceRequest}, TContext> => {
+
+const mutationKey = ['paramInterfacesUpdateParamInterface'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>, {code: string;data: UpdateParamInterfaceRequest}> = (props) => {
+          const {code,data} = props ?? {};
+
+          return  paramInterfacesUpdateParamInterface(code,data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ParamInterfacesUpdateParamInterfaceMutationResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>>
+    export type ParamInterfacesUpdateParamInterfaceMutationBody = UpdateParamInterfaceRequest
+    export type ParamInterfacesUpdateParamInterfaceMutationError = AxiosError<ErrorResponse>
+
+    export const useParamInterfacesUpdateParamInterface = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>, TError,{code: string;data: UpdateParamInterfaceRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>,
+        TError,
+        {code: string;data: UpdateParamInterfaceRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getParamInterfacesUpdateParamInterfaceMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const paramInterfacesDeleteParamInterface = (
+    code: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/param-interfaces/${code}`,options
+    );
+  }
+
+
+
+export const getParamInterfacesDeleteParamInterfaceMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>, TError,{code: string}, TContext> => {
+
+const mutationKey = ['paramInterfacesDeleteParamInterface'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>, {code: string}> = (props) => {
+          const {code} = props ?? {};
+
+          return  paramInterfacesDeleteParamInterface(code,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ParamInterfacesDeleteParamInterfaceMutationResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>>
+    
+    export type ParamInterfacesDeleteParamInterfaceMutationError = AxiosError<ErrorResponse>
+
+    export const useParamInterfacesDeleteParamInterface = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>,
+        TError,
+        {code: string},
+        TContext
+      > => {
+
+      const mutationOptions = getParamInterfacesDeleteParamInterfaceMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export const receiptsListReceipts = (
     params?: ReceiptsListReceiptsParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<ReceiptsListReceipts200>> => {
@@ -2639,6 +4950,682 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       > => {
 
       const mutationOptions = getReceiptsAssignTaskMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const reportNamesListReportNames = (
+    params?: ReportNamesListReportNamesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionReportName[]>> => {
+    
+    
+    return axios.default.get(
+      `/api/report-names`,{
+    ...options,
+        params: {...params, ...options?.params},}
+    );
+  }
+
+
+
+
+export const getReportNamesListReportNamesQueryKey = (params?: ReportNamesListReportNamesParams,) => {
+    return [
+    `/api/report-names`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getReportNamesListReportNamesQueryOptions = <TData = Awaited<ReturnType<typeof reportNamesListReportNames>>, TError = AxiosError<ErrorResponse>>(params?: ReportNamesListReportNamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof reportNamesListReportNames>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getReportNamesListReportNamesQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof reportNamesListReportNames>>> = ({ signal }) => reportNamesListReportNames(params, { signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof reportNamesListReportNames>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ReportNamesListReportNamesQueryResult = NonNullable<Awaited<ReturnType<typeof reportNamesListReportNames>>>
+export type ReportNamesListReportNamesQueryError = AxiosError<ErrorResponse>
+
+
+export function useReportNamesListReportNames<TData = Awaited<ReturnType<typeof reportNamesListReportNames>>, TError = AxiosError<ErrorResponse>>(
+ params: undefined |  ReportNamesListReportNamesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof reportNamesListReportNames>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof reportNamesListReportNames>>,
+          TError,
+          Awaited<ReturnType<typeof reportNamesListReportNames>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useReportNamesListReportNames<TData = Awaited<ReturnType<typeof reportNamesListReportNames>>, TError = AxiosError<ErrorResponse>>(
+ params?: ReportNamesListReportNamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof reportNamesListReportNames>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof reportNamesListReportNames>>,
+          TError,
+          Awaited<ReturnType<typeof reportNamesListReportNames>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useReportNamesListReportNames<TData = Awaited<ReturnType<typeof reportNamesListReportNames>>, TError = AxiosError<ErrorResponse>>(
+ params?: ReportNamesListReportNamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof reportNamesListReportNames>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useReportNamesListReportNames<TData = Awaited<ReturnType<typeof reportNamesListReportNames>>, TError = AxiosError<ErrorResponse>>(
+ params?: ReportNamesListReportNamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof reportNamesListReportNames>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getReportNamesListReportNamesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+export const reportNamesCreateReportName = (
+    createInspectionReportNameRequest: CreateInspectionReportNameRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionReportName>> => {
+    
+    
+    return axios.default.post(
+      `/api/report-names`,
+      createInspectionReportNameRequest,options
+    );
+  }
+
+
+
+export const getReportNamesCreateReportNameMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesCreateReportName>>, TError,{data: CreateInspectionReportNameRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof reportNamesCreateReportName>>, TError,{data: CreateInspectionReportNameRequest}, TContext> => {
+
+const mutationKey = ['reportNamesCreateReportName'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reportNamesCreateReportName>>, {data: CreateInspectionReportNameRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  reportNamesCreateReportName(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReportNamesCreateReportNameMutationResult = NonNullable<Awaited<ReturnType<typeof reportNamesCreateReportName>>>
+    export type ReportNamesCreateReportNameMutationBody = CreateInspectionReportNameRequest
+    export type ReportNamesCreateReportNameMutationError = AxiosError<ErrorResponse>
+
+    export const useReportNamesCreateReportName = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesCreateReportName>>, TError,{data: CreateInspectionReportNameRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reportNamesCreateReportName>>,
+        TError,
+        {data: CreateInspectionReportNameRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getReportNamesCreateReportNameMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const reportNamesLinkObjectReportName = (
+    objectReportNameLink: ObjectReportNameLink, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.post(
+      `/api/report-names/links/object`,
+      objectReportNameLink,options
+    );
+  }
+
+
+
+export const getReportNamesLinkObjectReportNameMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesLinkObjectReportName>>, TError,{data: ObjectReportNameLink}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof reportNamesLinkObjectReportName>>, TError,{data: ObjectReportNameLink}, TContext> => {
+
+const mutationKey = ['reportNamesLinkObjectReportName'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reportNamesLinkObjectReportName>>, {data: ObjectReportNameLink}> = (props) => {
+          const {data} = props ?? {};
+
+          return  reportNamesLinkObjectReportName(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReportNamesLinkObjectReportNameMutationResult = NonNullable<Awaited<ReturnType<typeof reportNamesLinkObjectReportName>>>
+    export type ReportNamesLinkObjectReportNameMutationBody = ObjectReportNameLink
+    export type ReportNamesLinkObjectReportNameMutationError = AxiosError<ErrorResponse>
+
+    export const useReportNamesLinkObjectReportName = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesLinkObjectReportName>>, TError,{data: ObjectReportNameLink}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reportNamesLinkObjectReportName>>,
+        TError,
+        {data: ObjectReportNameLink},
+        TContext
+      > => {
+
+      const mutationOptions = getReportNamesLinkObjectReportNameMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const reportNamesUnlinkObjectReportName = (
+    reportNamesUnlinkObjectReportNameBody: ReportNamesUnlinkObjectReportNameBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/report-names/links/object`,{data:
+      reportNamesUnlinkObjectReportNameBody, ...options}
+    );
+  }
+
+
+
+export const getReportNamesUnlinkObjectReportNameMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesUnlinkObjectReportName>>, TError,{data: ReportNamesUnlinkObjectReportNameBody}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof reportNamesUnlinkObjectReportName>>, TError,{data: ReportNamesUnlinkObjectReportNameBody}, TContext> => {
+
+const mutationKey = ['reportNamesUnlinkObjectReportName'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reportNamesUnlinkObjectReportName>>, {data: ReportNamesUnlinkObjectReportNameBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  reportNamesUnlinkObjectReportName(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReportNamesUnlinkObjectReportNameMutationResult = NonNullable<Awaited<ReturnType<typeof reportNamesUnlinkObjectReportName>>>
+    export type ReportNamesUnlinkObjectReportNameMutationBody = ReportNamesUnlinkObjectReportNameBody
+    export type ReportNamesUnlinkObjectReportNameMutationError = AxiosError<ErrorResponse>
+
+    export const useReportNamesUnlinkObjectReportName = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesUnlinkObjectReportName>>, TError,{data: ReportNamesUnlinkObjectReportNameBody}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reportNamesUnlinkObjectReportName>>,
+        TError,
+        {data: ReportNamesUnlinkObjectReportNameBody},
+        TContext
+      > => {
+
+      const mutationOptions = getReportNamesUnlinkObjectReportNameMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const reportNamesLinkReportNameParameter = (
+    reportNameParameterLink: ReportNameParameterLink, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.post(
+      `/api/report-names/links/parameter`,
+      reportNameParameterLink,options
+    );
+  }
+
+
+
+export const getReportNamesLinkReportNameParameterMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesLinkReportNameParameter>>, TError,{data: ReportNameParameterLink}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof reportNamesLinkReportNameParameter>>, TError,{data: ReportNameParameterLink}, TContext> => {
+
+const mutationKey = ['reportNamesLinkReportNameParameter'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reportNamesLinkReportNameParameter>>, {data: ReportNameParameterLink}> = (props) => {
+          const {data} = props ?? {};
+
+          return  reportNamesLinkReportNameParameter(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReportNamesLinkReportNameParameterMutationResult = NonNullable<Awaited<ReturnType<typeof reportNamesLinkReportNameParameter>>>
+    export type ReportNamesLinkReportNameParameterMutationBody = ReportNameParameterLink
+    export type ReportNamesLinkReportNameParameterMutationError = AxiosError<ErrorResponse>
+
+    export const useReportNamesLinkReportNameParameter = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesLinkReportNameParameter>>, TError,{data: ReportNameParameterLink}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reportNamesLinkReportNameParameter>>,
+        TError,
+        {data: ReportNameParameterLink},
+        TContext
+      > => {
+
+      const mutationOptions = getReportNamesLinkReportNameParameterMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const reportNamesUnlinkReportNameParameter = (
+    reportNamesUnlinkReportNameParameterBody: ReportNamesUnlinkReportNameParameterBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/report-names/links/parameter`,{data:
+      reportNamesUnlinkReportNameParameterBody, ...options}
+    );
+  }
+
+
+
+export const getReportNamesUnlinkReportNameParameterMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesUnlinkReportNameParameter>>, TError,{data: ReportNamesUnlinkReportNameParameterBody}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof reportNamesUnlinkReportNameParameter>>, TError,{data: ReportNamesUnlinkReportNameParameterBody}, TContext> => {
+
+const mutationKey = ['reportNamesUnlinkReportNameParameter'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reportNamesUnlinkReportNameParameter>>, {data: ReportNamesUnlinkReportNameParameterBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  reportNamesUnlinkReportNameParameter(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReportNamesUnlinkReportNameParameterMutationResult = NonNullable<Awaited<ReturnType<typeof reportNamesUnlinkReportNameParameter>>>
+    export type ReportNamesUnlinkReportNameParameterMutationBody = ReportNamesUnlinkReportNameParameterBody
+    export type ReportNamesUnlinkReportNameParameterMutationError = AxiosError<ErrorResponse>
+
+    export const useReportNamesUnlinkReportNameParameter = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesUnlinkReportNameParameter>>, TError,{data: ReportNamesUnlinkReportNameParameterBody}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reportNamesUnlinkReportNameParameter>>,
+        TError,
+        {data: ReportNamesUnlinkReportNameParameterBody},
+        TContext
+      > => {
+
+      const mutationOptions = getReportNamesUnlinkReportNameParameterMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const reportNamesLinkReportNameStandard = (
+    reportNameStandardLink: ReportNameStandardLink, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.post(
+      `/api/report-names/links/standard`,
+      reportNameStandardLink,options
+    );
+  }
+
+
+
+export const getReportNamesLinkReportNameStandardMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesLinkReportNameStandard>>, TError,{data: ReportNameStandardLink}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof reportNamesLinkReportNameStandard>>, TError,{data: ReportNameStandardLink}, TContext> => {
+
+const mutationKey = ['reportNamesLinkReportNameStandard'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reportNamesLinkReportNameStandard>>, {data: ReportNameStandardLink}> = (props) => {
+          const {data} = props ?? {};
+
+          return  reportNamesLinkReportNameStandard(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReportNamesLinkReportNameStandardMutationResult = NonNullable<Awaited<ReturnType<typeof reportNamesLinkReportNameStandard>>>
+    export type ReportNamesLinkReportNameStandardMutationBody = ReportNameStandardLink
+    export type ReportNamesLinkReportNameStandardMutationError = AxiosError<ErrorResponse>
+
+    export const useReportNamesLinkReportNameStandard = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesLinkReportNameStandard>>, TError,{data: ReportNameStandardLink}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reportNamesLinkReportNameStandard>>,
+        TError,
+        {data: ReportNameStandardLink},
+        TContext
+      > => {
+
+      const mutationOptions = getReportNamesLinkReportNameStandardMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const reportNamesUnlinkReportNameStandard = (
+    reportNamesUnlinkReportNameStandardBody: ReportNamesUnlinkReportNameStandardBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/report-names/links/standard`,{data:
+      reportNamesUnlinkReportNameStandardBody, ...options}
+    );
+  }
+
+
+
+export const getReportNamesUnlinkReportNameStandardMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesUnlinkReportNameStandard>>, TError,{data: ReportNamesUnlinkReportNameStandardBody}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof reportNamesUnlinkReportNameStandard>>, TError,{data: ReportNamesUnlinkReportNameStandardBody}, TContext> => {
+
+const mutationKey = ['reportNamesUnlinkReportNameStandard'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reportNamesUnlinkReportNameStandard>>, {data: ReportNamesUnlinkReportNameStandardBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  reportNamesUnlinkReportNameStandard(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReportNamesUnlinkReportNameStandardMutationResult = NonNullable<Awaited<ReturnType<typeof reportNamesUnlinkReportNameStandard>>>
+    export type ReportNamesUnlinkReportNameStandardMutationBody = ReportNamesUnlinkReportNameStandardBody
+    export type ReportNamesUnlinkReportNameStandardMutationError = AxiosError<ErrorResponse>
+
+    export const useReportNamesUnlinkReportNameStandard = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesUnlinkReportNameStandard>>, TError,{data: ReportNamesUnlinkReportNameStandardBody}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reportNamesUnlinkReportNameStandard>>,
+        TError,
+        {data: ReportNamesUnlinkReportNameStandardBody},
+        TContext
+      > => {
+
+      const mutationOptions = getReportNamesUnlinkReportNameStandardMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const reportNamesGetReportName = (
+    code: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionReportName>> => {
+    
+    
+    return axios.default.get(
+      `/api/report-names/${code}`,options
+    );
+  }
+
+
+
+
+export const getReportNamesGetReportNameQueryKey = (code?: string,) => {
+    return [
+    `/api/report-names/${code}`
+    ] as const;
+    }
+
+    
+export const getReportNamesGetReportNameQueryOptions = <TData = Awaited<ReturnType<typeof reportNamesGetReportName>>, TError = AxiosError<ErrorResponse>>(code: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof reportNamesGetReportName>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getReportNamesGetReportNameQueryKey(code);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof reportNamesGetReportName>>> = ({ signal }) => reportNamesGetReportName(code, { signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(code), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof reportNamesGetReportName>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ReportNamesGetReportNameQueryResult = NonNullable<Awaited<ReturnType<typeof reportNamesGetReportName>>>
+export type ReportNamesGetReportNameQueryError = AxiosError<ErrorResponse>
+
+
+export function useReportNamesGetReportName<TData = Awaited<ReturnType<typeof reportNamesGetReportName>>, TError = AxiosError<ErrorResponse>>(
+ code: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof reportNamesGetReportName>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof reportNamesGetReportName>>,
+          TError,
+          Awaited<ReturnType<typeof reportNamesGetReportName>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useReportNamesGetReportName<TData = Awaited<ReturnType<typeof reportNamesGetReportName>>, TError = AxiosError<ErrorResponse>>(
+ code: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof reportNamesGetReportName>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof reportNamesGetReportName>>,
+          TError,
+          Awaited<ReturnType<typeof reportNamesGetReportName>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useReportNamesGetReportName<TData = Awaited<ReturnType<typeof reportNamesGetReportName>>, TError = AxiosError<ErrorResponse>>(
+ code: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof reportNamesGetReportName>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useReportNamesGetReportName<TData = Awaited<ReturnType<typeof reportNamesGetReportName>>, TError = AxiosError<ErrorResponse>>(
+ code: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof reportNamesGetReportName>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getReportNamesGetReportNameQueryOptions(code,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+export const reportNamesUpdateReportName = (
+    code: string,
+    updateInspectionReportNameRequest: UpdateInspectionReportNameRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<InspectionReportName>> => {
+    
+    
+    return axios.default.put(
+      `/api/report-names/${code}`,
+      updateInspectionReportNameRequest,options
+    );
+  }
+
+
+
+export const getReportNamesUpdateReportNameMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesUpdateReportName>>, TError,{code: string;data: UpdateInspectionReportNameRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof reportNamesUpdateReportName>>, TError,{code: string;data: UpdateInspectionReportNameRequest}, TContext> => {
+
+const mutationKey = ['reportNamesUpdateReportName'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reportNamesUpdateReportName>>, {code: string;data: UpdateInspectionReportNameRequest}> = (props) => {
+          const {code,data} = props ?? {};
+
+          return  reportNamesUpdateReportName(code,data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReportNamesUpdateReportNameMutationResult = NonNullable<Awaited<ReturnType<typeof reportNamesUpdateReportName>>>
+    export type ReportNamesUpdateReportNameMutationBody = UpdateInspectionReportNameRequest
+    export type ReportNamesUpdateReportNameMutationError = AxiosError<ErrorResponse>
+
+    export const useReportNamesUpdateReportName = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesUpdateReportName>>, TError,{code: string;data: UpdateInspectionReportNameRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reportNamesUpdateReportName>>,
+        TError,
+        {code: string;data: UpdateInspectionReportNameRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getReportNamesUpdateReportNameMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const reportNamesDeleteReportName = (
+    code: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    
+    
+    return axios.default.delete(
+      `/api/report-names/${code}`,options
+    );
+  }
+
+
+
+export const getReportNamesDeleteReportNameMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesDeleteReportName>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof reportNamesDeleteReportName>>, TError,{code: string}, TContext> => {
+
+const mutationKey = ['reportNamesDeleteReportName'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reportNamesDeleteReportName>>, {code: string}> = (props) => {
+          const {code} = props ?? {};
+
+          return  reportNamesDeleteReportName(code,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReportNamesDeleteReportNameMutationResult = NonNullable<Awaited<ReturnType<typeof reportNamesDeleteReportName>>>
+    
+    export type ReportNamesDeleteReportNameMutationError = AxiosError<ErrorResponse>
+
+    export const useReportNamesDeleteReportName = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportNamesDeleteReportName>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reportNamesDeleteReportName>>,
+        TError,
+        {code: string},
+        TContext
+      > => {
+
+      const mutationOptions = getReportNamesDeleteReportNameMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }
