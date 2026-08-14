@@ -1,0 +1,494 @@
+{
+  "schema": 1,
+  "project": "lab-management-system-react",
+  "functions": {
+    "modules": 5,
+    "features": 17,
+    "items": 47
+  },
+  "warnings_total": 0,
+  "warnings": {},
+  "unreachable_shipped": [],
+  "function_map": {
+    "M01.F04.I01": {
+      "name": "动态菜单下发（GET /auth/menus）",
+      "status": "规划",
+      "type": "查询",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F04.I02": {
+      "name": "动态权限集（GET /auth/permissions）",
+      "status": "规划",
+      "type": "查询",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F04.I03": {
+      "name": "路由守卫（未登录/无权限拦截）",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F05.I01": {
+      "name": "用户名+密码登录",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::auth login endpoint generated"
+      ],
+      "entry": []
+    },
+    "M01.F05.I02": {
+      "name": "Token 注入与失效跳登录",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F05.I03": {
+      "name": "SSO 授权码流（authorize + callback）",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M01.F05.I04": {
+      "name": "登出",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M02.F01.I01": {
+      "name": "合同列表（三态过滤）",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::contract list endpoint generated"
+      ],
+      "entry": []
+    },
+    "M02.F01.I02": {
+      "name": "新建/编辑合同",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M02.F01.I03": {
+      "name": "删除合同",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F01.I01": {
+      "name": "接样单列表（flowStatus 三态过滤）",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::receipt list endpoint generated"
+      ],
+      "entry": []
+    },
+    "M03.F01.I02": {
+      "name": "新建/编辑接样单",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F01.I03": {
+      "name": "删除接样单",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F01.I04": {
+      "name": "提交接样单（receiving → task_assignment）",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F02.I01": {
+      "name": "任务分配队列",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F02.I02": {
+      "name": "安排/取消检测人员与计划日期",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F03.I01": {
+      "name": "样品 + 检测数据录入页",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F03.I02": {
+      "name": "保存检测记录",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F03.I03": {
+      "name": "人工改判 verdict",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F05.I01": {
+      "name": "审核队列（review 阶段）",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F05.I02": {
+      "name": "审核通过/驳回（submit/return）",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F06.I01": {
+      "name": "批准队列（approval 阶段）",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F06.I02": {
+      "name": "批准/驳回",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F07.I01": {
+      "name": "发放队列（issuance 阶段）",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F07.I02": {
+      "name": "发放（生成报告编号）",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F08.I01": {
+      "name": "归档队列（archived 阶段）",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F08.I02": {
+      "name": "归档完成",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F09.I01": {
+      "name": "接样单详情页",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F09.I02": {
+      "name": "流程历史时间线",
+      "status": "规划",
+      "type": "查询",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M03.F09.I03": {
+      "name": "报告预览",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F05.I01": {
+      "name": "技术要求列表（多维过滤）",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F05.I02": {
+      "name": "新建/编辑技术要求",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F05.I03": {
+      "name": "删除技术要求（引用保护）",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F06.I01": {
+      "name": "型号列表（按专项过滤 + 拖拽排序）",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F06.I02": {
+      "name": "新建/编辑型号",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F06.I03": {
+      "name": "删除型号（引用保护）",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F07.I01": {
+      "name": "规格列表",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F07.I02": {
+      "name": "新建/编辑规格",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F07.I03": {
+      "name": "删除规格",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F08.I01": {
+      "name": "等级列表",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F08.I02": {
+      "name": "新建/编辑等级",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F08.I03": {
+      "name": "删除等级",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F09.I01": {
+      "name": "牌号列表",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::brand list endpoint generated"
+      ],
+      "entry": []
+    },
+    "M04.F09.I02": {
+      "name": "新建/编辑牌号",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M04.F09.I03": {
+      "name": "删除牌号",
+      "status": "规划",
+      "type": "按钮",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M05.F01.I01": {
+      "name": "报告汇总表（按报告类别汇总）",
+      "status": "规划",
+      "type": "查询",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::summary endpoint generated"
+      ],
+      "entry": []
+    },
+    "M05.F01.I02": {
+      "name": "仪表盘统计",
+      "status": "规划",
+      "type": "查询",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    }
+  }
+}
