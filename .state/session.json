@@ -1,30 +1,31 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "Sprint 2 Batch 2A 双仓 3 码表式页（合同/报告名称/参数界面）镜像完成；下一步 react 先行 Batch 2B-1 流程线 3 页：ReceiptsPage(M03.F01) + ReceiptDetailPage(M03.F09) + TaskAssignmentPage(M03.F02)",
+  "current_task": "Sprint 2 Batch 2B-1 双仓 3 流程页（接样/详情/任务分配）镜像完成；下一步 react 先行 Batch 2B-2 data-entry（M03.F03，nextjs REF 12 个模型卡 + 报告预览，体量大可拆 sub-batch）",
   "done": [
-    "Sprint 2 Batch 2A：src/features/contracts/ContractsList.tsx + src/pages/ContractsPage.tsx（Dialog 自实现 + ConfirmModal；status select + keyword 搜索；data-fn M02.F01.I01-I03 + @entry I02）",
-    "Sprint 2 Batch 2A：src/features/report-names/ReportNameList.tsx + page wrapper（单 Tab 简化版 + extFields JSON textarea；F07↔标准/参数关联 I02 留规划；data-fn M06.F07.I01）",
-    "Sprint 2 Batch 2A：src/features/param-interfaces/ParamInterfaceList.tsx + page wrapper（主表 CRUD；关联参数 link 端点已铺；data-fn M06.F08.I01）",
-    "Sprint 2 Batch 2A：tests/features/{contracts,report-names,param-interfaces}/* 9 fnTest 全绿（3 仓 × 3 I：列表穿透 + 新建开弹窗 + 删除开确认弹窗）",
-    "Sprint 2 Batch 2A：App.tsx 3 路由 placeholder → lazy 真页 import",
-    "Sprint 2 Batch 2A：function-tree.md M02.F01.I01-I03 + M06.F07.I01 + M06.F08.I01 规划→已上线（同 commit 落地）",
-    "Sprint 2 Batch 2A：gate L0-L5 全绿 99 功能条目 34 软告警（17 + 17 = Batch 1 24 + 新增 10；与 Batch 1 同型设计债）",
-    "Sprint 2 Batch 2A：commit c57b04c（react 指针 2a62036 → c57b04c）"
+    "Sprint 2 Batch 2B-1：src/features/receipts/ReceiptsList.tsx + src/pages/ReceiptsPage.tsx（Dialog 自实现 + ConfirmModal；flowStatus 三态过滤 + keyword；data-fn M03.F01.I01-I04 + @entry I01/I02）",
+    "Sprint 2 Batch 2B-1：src/features/receipts/ReceiptDetail.tsx + src/pages/ReceiptDetailPage.tsx（react-router useParams；详情字段表 + 流程历史时间线 + 报告预览占位弹窗；data-fn M03.F09.I01-I03 + @entry I01/I02）",
+    "Sprint 2 Batch 2B-1：src/features/task-assignment/TaskAssignmentList.tsx + src/pages/TaskAssignmentPage.tsx（按 flowStatus=task_assignment 过滤；安排 Dialog 走 assigneeName + plannedTestDate → PUT /receipts/:id；data-fn M03.F02.I01/I02 + @entry I01）",
+    "Sprint 2 Batch 2B-1：tests/features/{receipts,task-assignment}/* 9 fnTest 全绿（列表穿透 + 新建开弹窗 + 删除开确认弹窗 + submit 调 /api/receipts/flow + ReceiptDetail 路由化 MemoryRouter）",
+    "Sprint 2 Batch 2B-1：App.tsx receipts/receipts/:id/task-assignment 3 路由 placeholder → lazy 真页 import",
+    "Sprint 2 Batch 2B-1：function-tree.md M03.F01/F02/F09 共 3 F + 9 I 规划→已上线（同 commit 落地）",
+    "Sprint 2 Batch 2B-1：gate L0-L5 全绿 99 功能条目 52 软告警（Batch 2A 34 + Batch 2B-1 新增 18；同型设计债）",
+    "Sprint 2 Batch 2B-1：commit 44e5788（react 指针 c57b04c → 44e5788）"
   ],
-  "next": "1) Batch 2B-1 react 仓先写 3 流程页：src/features/receipts/ReceiptsList.tsx (M03.F01.I01-I04: list + flowStatus 三态过滤 + submit 按钮推进状态机) + src/features/receipts/ReceiptDetail.tsx (M03.F09.I01-I03: 详情 + flow 历史时间线 + 报告预览) + src/features/task-assignment/TaskAssignmentList.tsx (M03.F02.I01-I02: 队列 + assignee 弹窗)；2) 4 page wrapper + App.tsx lazy + fnTest 每页 3-4 条；3) 跑 react gate → 绿 → commit；4) vue 仓镜像 Batch 2B-1；5) Batch 2B-2 单独做 data-entry（M03.F03，nextjs REF 12 个模型卡 + 报告预览 + extFields 弹窗，体量大建议拆 sub-batch）",
+  "next": "1) Batch 2B-2 react 仓先写 data-entry 1 个 DefaultParamCard + 1 个具体 Card（推荐 CementCompressCard）做样本，下批补齐 11 个模型卡 + ReportPreviewModal（M03.F03.I01 + M03.F09.I03 弹窗回填）；2) gate → 绿 → commit；3) vue 仓镜像；4) 后续 batch 接 M03 报告 4 阶段（review/approval/issuance/archived 共 4 F + 8 I），仍走 react 先行 + vue 镜像模式",
   "open_questions": [
-    "M03 流程状态机走 /api/receipts/flow POST — installShapeAdapters 已含完整 8 阶流转 + withdraw 仅限本人 + flowHistory push；组件直接调 res.data.results，msw 主 handler 是 no-op 已被适配层覆盖",
-    "data-entry 的 12 个模型卡（水泥抗压/抗折/混凝土/钢筋力学数值/钢筋焊接弯曲/钢筋焊接拉伸/土工击实/土工击实度/颗粒级配 7+12 筛孔/默认）建议先做 1 个 DefaultParamCard + 1 个具体 Card（CementCompressCard）做样本，下批补齐；M06.F08.I01 已上线但 link 关联可能下批才做",
-    "M02.F01.I02 / M06.F07.I01 / M06.F08.I01 多 F 共享按钮 data-fn 撞名 — Batch 2A 单 F 用 dialog 内按钮 + header 按钮双挂 data-fn 的方式已绿，Batch 2B 流程页按钮（如「提交」「安排」）继续这种模式"
+    "ReceiptDetail 报告预览按钮占位（Batch 2B-1 仅留 hook + 占位文字「Batch 2B-2 data-entry 镜像完整 ReportPreviewModal 时回填」）；msw 无 /api/org-info handler 所以 ReportPreviewModal 也 catch 兜底为 null（react 同行为），Batch 2B-2 需要单独跑通",
+    "ReceiptsList 新建弹窗内 contractId 写死 'placeholder-contract' + receivedBy='current-user' 是测试占位（react 仓无 auth context 全局用户）；REF Batch 2A 用 contractStore 拉真实合同下拉；Batch 2B-2 可以补合同下拉或保持占位（占位不影响 gate，但 L5 design mapping 软告警会增）",
+    "data-fn 撞名模式（每行 提交 + 编辑 + 删除 三 data-fn + 每行 详情 link）继续保留，Batch 2B-1 I02 用 dialog 内 + header 按钮双挂，没踩坑"
   ],
   "dont": [
-    "data-fn 用 {xxx} JSX 表达式（react L5 静态解析吃不到字面量）— 用静态字符串或 @entry 注释；Batch 1 坑：CategoryDictList 4 F 必须一次列全 4 @entry",
-    "screen.getByText 跨多 text-node 拼接字符串（如 '确认删除合同 HT-2026-001'）会 FAIL — 改 screen.getByRole('heading', { name: '删除合同' }) 拿单一节点；Batch 2A 3 个删除测试全踩过",
-    "L5 已上线但无 UI 入口会硬 fail（不是软告警）— 写完代码立刻确认每个 I 是否挂了 data-fn/@entry，否则回退 开发中；Batch 2A M02.F01.I03 漏 data-fn → L5 fail，回退后补 data-fn=\"M02.F01.I03\" 才绿",
-    "测试不用 resetFixtures() + installShapeAdapters(server) + 自己的 http.get 覆盖 — 适配层 already 包了 report-names/inspection-param-interfaces 主表为 {items,total}，不用再装；只有 contracts 需要自己装（msw 主 handler 已支持但要走 tenantId filter）"
+    "data-fn 用 {xxx} JSX 表达式（react L5 静态解析吃不到字面量）— 用静态字符串或 @entry 注释",
+    "screen.getByText 跨多 text-node 拼接字符串会 FAIL — 改 screen.getByRole('heading', { name: '删除合同' }) 拿单一节点",
+    "L5 已上线但无 UI 入口会硬 fail（不是软告警）— 写完代码立刻确认每个 I 是否挂了 data-fn/@entry",
+    "测试 msw handler + installShapeAdapters 路径不要换 — Batch 2A/2B-1 验证 installShapeAdapters 已含完整 8 阶流转 + flowHistory push",
+    "M03.F02.I03 / I04（取消任务/批量提交）跳 I-level 不实现 — function tree 没列，react 仓 @entry 注释不挂（nextjs REF 标的但 tree-change 不批）；下一批如果需要再走 /tree-change 提案"
   ],
-  "last_gate_passed_at": "2026-08-17T23:30+08:00",
+  "last_gate_passed_at": "2026-08-17T23:50+08:00",
   "active_branch": "master",
   "ahead_of_origin": "0"
 }
