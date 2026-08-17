@@ -92,7 +92,11 @@ export const BACKEND_REGISTRY_DEFAULT: BackendRegistry = {
       label: "MSW Mock",
       baseUrl: "",
       authHeader: "Authorization",
-      features: { sso: false, realDb: false },
+      // msw 后端 SSO handler 已实现（handlers-extra.ts /auth/sso/authorize +
+      // /auth/sso/callback，callback 返回 mock-jwt），前端 LoginPage 检测到
+      // sso: true 自动跳 saas /login。saas dev server 不在 3000 时用
+      // `SAAS_BASE_URL` 环境变量覆写。
+      features: { sso: true, realDb: false },
     },
     {
       id: "nextjs",
