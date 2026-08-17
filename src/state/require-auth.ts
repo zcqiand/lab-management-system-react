@@ -2,9 +2,10 @@
 //
 // 规则：
 //   - idle / anonymous → 重定向 /login（带 from 回跳参数）
-//   - awaiting_tenant → 重定向 /select-tenant（先选租户再进业务页）
+//   - awaiting_tenant → 重定向 /login（选租户页已移除，M00.F02 保持规划）
 //   - authenticated + requiredPermissions 缺权 → 拦在 /403
 
+// @entry M01.F04.I03
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/state/auth-context";
@@ -30,7 +31,9 @@ export function useRequireAuth(options: RequireAuthOptions = {}): {
       return;
     }
     if (state.kind === "awaiting_tenant") {
-      navigate("/select-tenant", { replace: true });
+      // 2026-08-18 认证收口：选租户页已随登录表单一并移除（对齐 nextjs，
+      // M00.F02 保持规划）。多租户会话暂时拦在 /login（由 saas 侧预选租户）。
+      navigate("/login", { replace: true });
       return;
     }
     const missing = required.filter((p) => !state.value.permissions.includes(p));

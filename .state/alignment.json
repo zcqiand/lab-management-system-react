@@ -4,11 +4,17 @@
   "functions": {
     "modules": 8,
     "features": 29,
-    "items": 62
+    "items": 63
   },
-  "warnings_total": 110,
+  "warnings_total": 125,
   "warnings": {
     "已上线但无设计映射": [
+      "M01.F04.I01",
+      "M01.F04.I02",
+      "M01.F04.I03",
+      "M01.F05.I02",
+      "M01.F05.I03",
+      "M01.F05.I04",
       "M02.F01.I01",
       "M02.F01.I02",
       "M02.F01.I03",
@@ -16,6 +22,7 @@
       "M03.F01.I02",
       "M03.F01.I03",
       "M03.F01.I04",
+      "M03.F01.I07",
       "M03.F02.I01",
       "M03.F02.I02",
       "M03.F03.I01",
@@ -64,12 +71,19 @@
       "M98.F03.I01"
     ],
     "已上线但无测试引用": [
+      "M03.F01.I07",
       "M98.F01.I01",
       "M98.F01.I02",
       "M98.F02.I01",
       "M98.F03.I01"
     ],
     "已上线但不在任何流程且非孤儿白名单": [
+      "M01.F04.I01",
+      "M01.F04.I02",
+      "M01.F04.I03",
+      "M01.F05.I02",
+      "M01.F05.I03",
+      "M01.F05.I04",
       "M02.F01.I01",
       "M02.F01.I02",
       "M02.F01.I03",
@@ -77,6 +91,7 @@
       "M03.F01.I02",
       "M03.F01.I03",
       "M03.F01.I04",
+      "M03.F01.I07",
       "M03.F02.I01",
       "M03.F02.I02",
       "M03.F03.I01",
@@ -129,19 +144,22 @@
   "function_map": {
     "M01.F04.I01": {
       "name": "动态菜单下发（GET /auth/menus）",
-      "status": "规划",
+      "status": "已上线",
       "type": "查询",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/sidebar-nav.dom.test.tsx::侧边栏按菜单树下发渲染：锚点 + 分组 + 页面项",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/sidebar-nav.dom.test.tsx::菜单项是可点按钮，点击触发导航回调"
+      ],
       "entry": [
         "src\\components\\app\\sidebar-nav.tsx"
       ]
     },
     "M01.F04.I02": {
       "name": "动态权限集（GET /auth/permissions）",
-      "status": "规划",
+      "status": "已上线",
       "type": "查询",
       "requirements": [],
       "flows": [],
@@ -150,11 +168,13 @@
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::authenticated 态拉取 /auth/permissions 并供 hasPermission 判断",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::非 authenticated 态 hasPermission 恒 false"
       ],
-      "entry": []
+      "entry": [
+        "src\\state\\auth-context.tsx"
+      ]
     },
     "M01.F04.I03": {
       "name": "路由守卫（未登录/无权限拦截）",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -163,13 +183,15 @@
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/require-auth.dom.test.tsx::anonymous 访问受守卫路由 → 跳 /login 带 from 回跳",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/require-auth.dom.test.tsx::authenticated 权限齐 → allowed=true 留在原地",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/require-auth.dom.test.tsx::authenticated 缺权限 → 拦在 /403",
-        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/require-auth.dom.test.tsx::awaiting_tenant 访问受守卫路由 → 跳 /select-tenant"
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/require-auth.dom.test.tsx::awaiting_tenant 访问受守卫路由 → 拦在 /login（选租户页已移除，M00.F02 保持规划）"
       ],
-      "entry": []
+      "entry": [
+        "src\\state\\require-auth.ts"
+      ]
     },
     "M01.F05.I01": {
       "name": "用户名+密码登录",
-      "status": "规划",
+      "status": "已废弃",
       "type": "页面",
       "requirements": [],
       "flows": [],
@@ -183,7 +205,7 @@
     },
     "M01.F05.I02": {
       "name": "Token 注入与失效跳登录",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -199,17 +221,21 @@
     },
     "M01.F05.I03": {
       "name": "SSO 授权码流（authorize + callback）",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/auth/loginPageSso.dom.test.tsx::阶段 1：?token= 直达 → 存 localStorage + /me 建会话 → 进业务页",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/auth/loginPageSso.dom.test.tsx::阶段 2：?code=&state= → POST sso/callback 换 token → setSession 进业务页",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/auth/loginPageSso.dom.test.tsx::阶段 3：无回调参数 → authorize 拿 authorizeUrl → 跳 saas"
+      ],
       "entry": []
     },
     "M01.F05.I04": {
       "name": "登出",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
@@ -321,6 +347,18 @@
         "src\\features\\receipts\\ReceiptsList.tsx"
       ]
     },
+    "M03.F01.I07": {
+      "name": "接样单 ext 字段补录",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": [
+        "src\\features\\data-entry\\SampleExtFieldsModal.tsx"
+      ]
+    },
     "M03.F02.I01": {
       "name": "任务分配队列",
       "status": "已上线",
@@ -357,7 +395,34 @@
       "flows": [],
       "designs": [],
       "tests": [
-        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/dataEntryPage.dom.test.tsx::数据录入：渲染标题 + 列表行（fixtures 真数据穿透）"
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/cementStrength.dom.test.tsx::CementCompressCard readOnly：输入吞掉 onChange",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/cementStrength.dom.test.tsx::CementCompressCard 渲染 6 个破坏荷载输入框",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/cementStrength.dom.test.tsx::CementFlexuralCard 渲染 3 个破坏荷载 + 抗折强度列",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/cementStrength.dom.test.tsx::水泥胶砂强度：抗压 Rc=F/A（16kN → 10.0；80kN → 50.0 MPa）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/cementStrength.dom.test.tsx::水泥胶砂强度：抗折 Rf=1.5·F·L/b³（2kN → 4.7 MPa）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/concreteCards.dom.test.tsx::ConcreteCompressCard readOnly：输入吞掉 onChange",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/concreteCards.dom.test.tsx::ConcreteCompressCard 渲染 3 个破坏荷载输入框（specimenCount=3）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/concreteCards.dom.test.tsx::ConcretePermeabilityCard readOnly：禁用输入",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/concreteCards.dom.test.tsx::ConcretePermeabilityCard 渲染 6 个试件行（specimenCount=6）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/dataEntryPage.dom.test.tsx::数据录入：渲染标题 + 列表行（fixtures 真数据穿透）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/particleGradation.dom.test.tsx::ParticleGradationCard gravel=true 切换到 12 筛孔",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/particleGradation.dom.test.tsx::ParticleGradationCard readOnly：禁用输入",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/particleGradation.dom.test.tsx::ParticleGradationCard 渲染 2 样品 × 7 筛孔 + 平均行",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarMech.dom.test.tsx::RebarMechNumericCard readOnly：禁用输入",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarMech.dom.test.tsx::RebarMechNumericCard tensile_strength：2 组 + 公称直径输入",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarMech.dom.test.tsx::rebar-mechanics：meanOf 算术平均",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarMech.dom.test.tsx::rebar-mechanics：tensile_strength 算子（R = 4000·F/(π·d²)）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarMech.dom.test.tsx::rebar-mechanics：强屈比 ratioTensileOverYield",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarMech.dom.test.tsx::rebar-mechanics：超强比 ratioMeasuredOverSpec",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarWelding.dom.test.tsx::RebarWeldingBendCard 渲染 3 行弯曲角度 + 整体评定",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarWelding.dom.test.tsx::RebarWeldingTensileCard readOnly：输入禁用",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarWelding.dom.test.tsx::RebarWeldingTensileCard 渲染 3 行 + 共享规格 Φ22",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarWelding.dom.test.tsx::rebar-welding：meanOfSpecimen 算术平均",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarWelding.dom.test.tsx::rebar-welding：parseBendRecord 默认 90°+ 合格",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarWelding.dom.test.tsx::rebar-welding：parseTensileRecord 反序列化",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarWelding.dom.test.tsx::rebar-welding：抗拉 Rm=4000·F/(π·d²)（Φ22）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/soilCards.dom.test.tsx::SoilCompactionCard 渲染 5 组（默认 pointCount=5）+ GB/T 50123-2019 标识",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/soilCards.dom.test.tsx::SoilCompactionDegreeCard 渲染 6 行（默认 rowCount=6）+ 最大干密度输入"
       ],
       "entry": [
         "src\\features\\data-entry\\DataEntryPage.tsx"
@@ -371,7 +436,16 @@
       "flows": [],
       "designs": [],
       "tests": [
-        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/dataEntryPage.dom.test.tsx::数据录入：弹窗内「保存检测记录」按钮可见（M03.F03.I02 data-fn 锚点）"
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/cementStrength.dom.test.tsx::CementCompressCard 有技术要求：录入均值达标 → 自动判合格",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/concreteCards.dom.test.tsx::ConcreteCompressCard 录入荷载 → onChange 上报代表值 JSON",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/concreteCards.dom.test.tsx::ConcretePermeabilityCard 6 件全未渗 → 抗渗等级显示「—」",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/dataEntryPage.dom.test.tsx::数据录入：弹窗内「保存检测记录」按钮可见（M03.F03.I02 data-fn 锚点）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/particleGradation.dom.test.tsx::ParticleGradationCard 录入分计筛余 → onChange 上报累计筛余 JSON",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarMech.dom.test.tsx::RebarMechNumericCard 录入最大力 + 直径 → 强度 + 均值上屏",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarWelding.dom.test.tsx::RebarWeldingBendCard 整体评定：3 件全合格 → 合格",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/rebarWelding.dom.test.tsx::RebarWeldingTensileCard 录入最大荷重 → 抗拉强度自动算出（只读）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/soilCards.dom.test.tsx::SoilCompactionCard 录入含水率 + 干密度 → 最大干密度上屏",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/soilCards.dom.test.tsx::SoilCompactionDegreeCard 录入湿密度 + 含水率 → 干密度 + 压实度上屏"
       ],
       "entry": [
         "src\\features\\data-entry\\DataEntryPage.tsx"
@@ -385,10 +459,14 @@
       "flows": [],
       "designs": [],
       "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/cementStrength.dom.test.tsx::CementCompressCard 无技术要求：回退手选单项评定",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/dataEntryPage.dom.test.tsx::数据录入：行内「录入结果」按钮（人工改判 verdict 入口）"
       ],
       "entry": [
-        "src\\features\\data-entry\\DataEntryPage.tsx"
+        "src\\features\\data-entry\\DataEntryPage.tsx",
+        "src\\features\\data-entry\\models\\ParticleGradationCard.tsx",
+        "src\\features\\data-entry\\models\\SoilCompactionCard.tsx",
+        "src\\features\\data-entry\\models\\SoilCompactionDegreeCard.tsx"
       ]
     },
     "M03.F05.I01": {
@@ -542,7 +620,6 @@
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptDetail.dom.test.tsx::接样单详情：报告预览按钮开弹窗"
       ],
       "entry": [
-        "src\\features\\data-entry\\ReportPreviewModal.tsx",
         "src\\features\\receipts\\ReceiptDetail.tsx"
       ]
     },

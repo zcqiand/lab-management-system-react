@@ -1,7 +1,8 @@
 // App — react-router 路由入口（Sprint 2 Batch 0）。
 //
 // 结构：
-//   /login, /select-tenant     公共页（不带 AppShell）
+//   /login                     公共页（SSO orchestrator，不带 AppShell；2026-08-18
+//                              认证收口对齐 nextjs：砍表单+选租户页，登录委托 saas）
 //   /                          AppShell（layout route，守卫在 AppShell 内层）+ 22 条业务子路由
 //   *                          兜底 404
 //
@@ -12,7 +13,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppShell } from "@/components/app/app-shell";
 import { LoginPage } from "@/pages/LoginPage";
-import { SelectTenantPage } from "@/pages/SelectTenantPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { BadPathRedirect } from "@/components/app/bad-path-redirect";
 import { Suspense, lazy } from "react";
@@ -62,7 +62,6 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/select-tenant" element={<SelectTenantPage />} />
         <Route element={<AppShell />}>
           <Route index element={<DashboardPage />} />
           {/* 基础数据（Batch 1：models/specifications/grades/brands） */}

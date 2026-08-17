@@ -131,6 +131,7 @@ function invalidatePermissions(): void {
   writeKey(TOKEN_STORAGE_KEYS.permissionsCache, null);
 }
 
+// @entry M01.F04.I02
 async function fetchPermissions(token: string): Promise<string[]> {
   if (permissionsCache && Date.now() - permissionsCache.fetchedAt < PERMISSIONS_TTL_MS) {
     return permissionsCache.value;

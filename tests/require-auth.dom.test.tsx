@@ -63,7 +63,6 @@ function renderGuard(permissions?: string[]): ReturnType<typeof render> {
         <Routes>
           <Route path="/secret" element={<GuardProbe permissions={permissions} />} />
           <Route path="/login" element={<div data-testid="login-page">login</div>} />
-          <Route path="/select-tenant" element={<div data-testid="select-tenant-page">tenant</div>} />
           <Route path="/403" element={<div data-testid="forbidden-page">403</div>} />
         </Routes>
         <TestLocation />
@@ -96,14 +95,14 @@ describe("useRequireAuth 路由守卫", () => {
     expect(screen.getByTestId("login-page")).toBeTruthy();
   });
 
-  fnTest(["M01.F04.I03"], "awaiting_tenant 访问受守卫路由 → 跳 /select-tenant", async () => {
+  fnTest(["M01.F04.I03"], "awaiting_tenant 访问受守卫路由 → 拦在 /login（选租户页已移除，M00.F02 保持规划）", async () => {
     // login 多租户（无记忆租户）→ awaiting_tenant（此路径不发 permissions 请求）
     queue.push({ status: 200, data: { token: "t2", refreshToken: "r2", user: USER, tenants: [TENANT_A, TENANT_B] } });
     await __testActions.login({ username: "admin", password: "x" });
     renderGuard();
     await flush();
-    expect(screen.getByTestId("test-location").textContent).toBe("/select-tenant");
-    expect(screen.getByTestId("select-tenant-page")).toBeTruthy();
+    expect(screen.getByTestId("test-location").textContent).toBe("/login");
+    expect(screen.getByTestId("login-page")).toBeTruthy();
   });
 
   fnTest(["M01.F04.I03"], "authenticated 缺权限 → 拦在 /403", async () => {
