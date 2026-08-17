@@ -1,31 +1,31 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "Sprint 2 Batch 2B-2 双仓数据录入 + 2 模型卡 + ReportPreviewModal 升级镜像完成；下一步 react 先行 M03 报告 4 阶段（review/approval/issuance/archived 共 4 F + 8 I）",
+  "current_task": "Sprint 2 Batch 2B-3 M03 报告 4 阶段（review/approval/issuance/archived 共 4 F + 8 I）双仓镜像完成；M03 流程线 8 阶段全部落地，下一步走 M06 检测能力 10 组件（specialties/objects/standards/parameters/calculation-rules/technical-requirements）",
   "done": [
-    "Sprint 2 Batch 2B-2：src/features/data-entry/DataEntryPage.tsx + src/pages/DataEntryPage.tsx（Dialog 自实现；M03.F03.I01 列表 + flowStatus='data_entry' 过滤 + EntryModal 弹窗；M03.F03.I02 保存按钮 POST/PUT /api/test-records；M03.F03.I03 行内「录入结果」按钮）",
-    "Sprint 2 Batch 2B-2：src/features/data-entry/models/{DefaultParamCard,CementCompressCard}.tsx + cement-strength.ts（12 模型卡落 1：CementCompressCard 6 试件荷载 → 抗压强度 MPa → 平均值，简版算法不带 ±10% 剔除均值）+ types.ts + registry.ts",
-    "Sprint 2 Batch 2B-2：src/features/data-entry/ReportPreviewModal.tsx（升级 Batch 2B-1 占位：字段表 + 类别 + 检测参数列表，react 仓无 /templates 静态资源跳 docx 渲染）",
-    "Sprint 2 Batch 2B-2：src/features/receipts/ReceiptDetail.tsx 升级引用 ReportPreviewModal（M03.F09.I03 锚点不变）",
-    "Sprint 2 Batch 2B-2：App.tsx data-entry 路由 placeholder → lazy 真页 import",
-    "Sprint 2 Batch 2B-2：tests/features/data-entry/dataEntryPage.dom.test.tsx 3 fnTest 全绿（列表穿透 + 录入结果开弹窗 + 保存按钮可见）",
-    "Sprint 2 Batch 2B-2：function-tree.md M03.F03 + I01/I02/I03 共 1 F + 3 I 规划→已上线（同 commit 落地）",
-    "Sprint 2 Batch 2B-2：gate L0-L5 全绿 99 功能条目 52 软告警（Batch 2B-1 52 + Batch 2B-2 新增 0 — 同 4 条软告警持续滚动）"
+    "Sprint 2 Batch 2B-3：src/features/reports/ReportPhasePage.tsx（共享阶段页：stage + submitLabel + i01DataFn + i02DataFn；列表按 flowStatus 过滤 + 多选 + 「{submitLabel}（N）」批量按钮 + 行内「退回」Dialog 调 /api/receipts/flow action=return）",
+    "Sprint 2 Batch 2B-3：src/pages/{ReportReview,ReportApprove,ReportIssue,ReportArchive}Page.tsx（4 薄包装各传一组 stage/submitLabel/data-fn）",
+    "Sprint 2 Batch 2B-3：App.tsx report-review/report-approve/report-issue/report-archive 4 路由 placeholder → lazy 真页 import",
+    "Sprint 2 Batch 2B-3：tests/features/reports/reportPhasePage.dom.test.tsx 8 fnTest 全绿（4 页 × 2 I：I01 列表穿透 + I02 submit 按钮可见）",
+    "Sprint 2 Batch 2B-3：function-tree.md M03.F05/F06/F07/F08 共 4 F + 8 I 规划→已上线（同 commit 落地）",
+    "Sprint 2 Batch 2B-3：gate L0-L5 全绿 99 功能条目 58 软告警（Batch 2B-2 52 + Batch 2B-3 新增 6 — 同 4 条软告警持续滚动）",
+    "Sprint 2 Batch 2B-3：commit d2df8ae（react 指针 478f1c0 → d2df8ae）",
+    "Sprint 2 Batch 2B-3 M03 流程线总进度（8 阶段 = 6 仓页 + 1 详情 + 1 数据录入）：receiving + task_assignment + data_entry + review + approval + issuance + archived + completed 全链路上线（详情 + 数据录入走 Batch 2B-1/2B-2）"
   ],
-  "next": "1) Sprint 2 Batch 2B-3 react 仓写 M03 报告 4 阶段（review/approval/issuance/archived 共 4 F + 8 I），每阶段 1 列表页 + 1 提交/退回按钮；2) vue 仓镜像；3) 继续补 11 个模型卡（concrete-compress / concrete-permeability / cement-flexural / rebar-welding-tensile / rebar-welding-bend / rebar-mech-numeric / particle-gradation / soil-compaction / soil-compaction-degree + 综合比值卡）随 M06 落地一并下沉",
+  "next": "1) Sprint 2 Batch 2B-4 react 仓做 M06 检测能力（specialties/objects/standards/parameters/calculation-rules/technical-requirements 共 6 F + 10 I）— installShapeAdapters Batch 2A 已铺 wrapDict + 5 路由 + 复合键路由，react 仓只需写 6 薄页；2) vue 仓镜像；3) 仍剩余 11 个模型卡（concrete-compress / concrete-permeability / cement-flexural / rebar-welding-tensile / rebar-welding-bend / rebar-mech-numeric / particle-gradation / soil-compaction / soil-compaction-degree + 综合比值卡）随 M06 落地一并下沉",
   "open_questions": [
-    "M03.F09.I03 报告预览 Batch 2B-2 升级版仍是简化版（react 仓无 docx 模板/渲染；vue 仓同），shared 算法域 + 模板 JSON 下沉后 Batch 2B-N 补完整体 docxtemplater + docx-preview 链路",
-    "M03.F03.I03 已被 gate 警告「已上线但无测试引用」（Batch 2B-2 测试路径走的是 rowAction 入口，等价于「录入结果」按钮；与 nextjs REF I03 的 rowAction 同型），待 Batch 2B-3 补单测可消",
-    "cement-strength 简版算法不带 ±10% 剔除均值（完整版在 nextjs REF src/features/data-entry/models/cement-strength.ts；shared 算法域模块待下沉），测试通过靠 fixture 已知荷载 + 默认 area=1600 算期望均值"
+    "M03 流程线 8 阶段全链路上线，但 completed 终态页未单独开（详情页已完成显示「已归档」+ 历史时间线走最后一阶 archived）— 后续如果需要批量完成操作页可加",
+    "Report 4 阶段「退回」按钮的 Dialog reason 字段是可选（即便 msw handler 不会持久 reason，只记 flowHistory），保留 UI 占位供后续批次补",
+    "M03.F07.I02 「发放（生成报告编号）」data-fn 锚点已在按钮上挂，但完整 reportCode 生成逻辑在 msw handler（POST /api/receipts/flow action=submit + to=issuance 时自动 issuedAt=now），react 仓 UI 不重复生成"
   ],
   "dont": [
-    "data-fn 用 {xxx} JSX 表达式（react L5 静态解析吃不到字面量）— 用静态字符串或 @entry 注释",
-    "screen.getByText 跨多 text-node 拼接字符串会 FAIL",
-    "L5 已上线但无 UI 入口会硬 fail（不是软告警）— 写完代码立刻确认每个 I 是否挂了 data-fn/@entry",
-    "react 仓 M03.F03.I03 不要绑「保存」按钮（避免与 I02 data-fn 撞名），按 row 入口绑「M03.F03.I03」，header 弹窗按钮绑「M03.F03.I02」（与 Batch 2B-1 模式同）",
-    "vue 仓模型卡组件类型不要 import '@/types/...' — 跨 SFC 共享类型放 models/ 子目录（与 react 仓一致）"
+    "data-fn 用 {xxx} JSX 表达式（react L5 静态解析吃不到字面量）— 用静态字符串或",
+    "L5 已上线但无 UI 入口会硬 fail（不是软告警）— 写完代码立刻确认每个 I 是否挂了 data-fn/",
+    "测试 msw handler + installShapeAdapters 路径不要换 — Batch 2A/2B-1/2B-2/2B-3 验证 installShapeAdapters 已含完整 8 阶流转 + flowHistory push + 计算规则/技术要求复合键路由",
+    "react 仓 ReportPhasePage 4 页不要绑同名 data-fn — i01 绑表格行，i02 绑批量按钮（与 M03.F03 / M03.F01 行内+header 双挂模式同）",
+    "M03.F02.I03/I04 / M03.F05.I03/I04 / M03.F06.I03 等跳 I-level 不实现 — function tree 没列，react 仓 @entry 注释不挂"
   ],
-  "last_gate_passed_at": "2026-08-17T24:30+08:00",
+  "last_gate_passed_at": "2026-08-17T25:30+08:00",
   "active_branch": "master",
   "ahead_of_origin": "0"
 }
