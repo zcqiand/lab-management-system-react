@@ -1,25 +1,25 @@
 {
   "schema": 1,
-  "project": "lab-management-system-react",
-  "current_task": "Sprint 2 Batch 2B-5 react 仓 M05 报告汇总 + 仪表盘统计（1 F + 2 I）双仓落地完成；M05 模块全功能上线；Sprint 2 主体业务模块全部完成（100 业务 ID 全部已上线）；下一步走 Sprint 3 仪表盘/统计/审计等其他模块",
+  "project": "lab-management-system-vue",
+  "current_task": "Sprint 2 Batch 2B-5 vue 镜像 react M05 报告汇总 + 仪表盘统计（1 F + 2 I）完成；M05 模块全功能上线；Sprint 2 主体业务模块全部完成（100 业务 ID 全部已上线）；下一步走 Sprint 3 仪表盘/统计/审计等其他模块",
   "done": [
-    "Sprint 2 Batch 2B-5：src/features/summary/SummaryList.tsx（M05.F01 报告汇总 + 仪表盘统计：reportSummary 表格 + 5 仪表盘卡片）",
-    "Sprint 2 Batch 2B-5：src/pages/SummaryPage.tsx（薄包装）",
-    "Sprint 2 Batch 2B-5：App.tsx 移除 SummaryPage placeholder，sumary 路由 lazy 真页 import",
-    "Sprint 2 Batch 2B-5：tests/features/summary/summaryList.dom.test.tsx 4 fnTest 全绿（标题/表头穿透 + 列表行 + 5 仪表盘卡片 + 报告类别下拉）",
-    "Sprint 2 Batch 2B-5：function-tree.md M05.F01 + I01/I02 规划→已上线",
-    "Sprint 2 Batch 2B-5：gate L0-L5 全绿 99 功能条目 98 软告警",
-    "Sprint 2 收尾盘点：M00/M01/M02/M03/M04/M05/M06 共 7 模块业务 ID 全部已上线（除 msw handler 兜底的 M01.F04 权限管理 / M01.F05 认证 / M03.F07 报告 4 阶段 I02 之外；M01 整体由 saas 仓提供，react 仓不实现）"
+    "Sprint 2 Batch 2B-5：src/features/summary/SummaryList.vue（M05.F01 镜像 react 仓：Teleport 不需要 + 内联 table + 5 仪表盘卡片 grid）",
+    "Sprint 2 Batch 2B-5：src/pages/SummaryPage.vue（薄包装）",
+    "Sprint 2 Batch 2B-5：router.ts 新增 summary 路由",
+    "Sprint 2 Batch 2B-5：tests/features/summary/summaryList.dom.test.ts 4 fnTest 全绿（vi.mock('axios') + 2 行 fixture + 5 仪表盘卡片穿透）",
+    "Sprint 2 Batch 2B-5：function-tree.md M05.F01 + I01/I02 规划→已上线（与 react 仓同 commit 落地）",
+    "Sprint 2 Batch 2B-5：gate L0-L5 全绿 99 功能条目 98 软告警（与 react 仓对齐）"
   ],
-  "next": "1) Sprint 3 走 M98 前端接线层 / M05 仪表盘统计增量（按状态分布已有；按报告类别、按月度等更细粒度汇总）；2) 11 个剩余模型卡（concrete-compress / concrete-permeability / cement-flexural / rebar-welding-tensile / rebar-welding-bend / rebar-mech-numeric / particle-gradation / soil-compaction / soil-compaction-degree + 综合比值卡）随 data-entry 报表生成器一并补；3) saas 仓家族镜像（vue/nextjs/springboot/aspnetcore 后续）",
+  "next": "1) Sprint 3 走 M98 前端接线层 / M05 仪表盘统计增量（按状态分布已有；按报告类别、按月度等更细粒度汇总）；2) 11 个剩余模型卡（concrete-compress / concrete-permeability / cement-flexural / rebar-welding-tensile / rebar-welding-bend / rebar-mech-numeric / particle-gradation / soil-compaction / soil-compaction-degree + 综合比值卡）随 data-entry 报表生成器一并补；3) vue-draggable-plus 拖拽 sortOrder 持久化随 M04 4 码表补 UI 时做",
   "open_questions": [
-    "M05 报告汇总表 + 仪表盘统计：msw handlers-extra.ts summaryExtraHandlers 直接返回 REF 期望形状，react 仓 SummaryList 无需 installShapeAdapters 兜底（与 M06 复合主键 installShapeAdapters 模式不同）",
-    "M05.F01 报告汇总 5 报告类别（RC/ST/MT/AD/ID）—— 类别值取自 msw sampleReceipts seed 的 categoryCode 字段"
+    "vue 仓 SummaryList 多卡片 grid 用 div + class（vs react 仓 shadcn Card）— vue 仓无 Card 组件",
+    "vue 仓 fnTest 走 fnReporter from 测试名提取（[M05.F01.I01] 前缀）— react 仓走 TaskMeta.fn，两侧机制不同但对齐矩阵等价"
   ],
   "dont": [
-    "data-fn 用 {xxx} JSX 表达式（react L5 静态解析吃不到字面量）— 用静态字符串或 @entry 注释兼容",
-    "L5 已上线但无 UI 入口会硬 fail（不是软告警）— 写完代码立刻确认每个 I 是否挂了 data-fn/ @entry",
-    "M05.F01.I02 仪表盘统计 5 卡片（合同/接样/样品/待办/按状态分布）— 不要拆 5 单独组件，一个 grid 容器即可"
+    "vue 仓从 '@/types/...' import — vue 仓无 src/types/ 目录，类型全部内联",
+    "vue 模板用 window.alert / globalThis.alert — 提取 alertError() 函数到 script setup（避免 template 表达式作用域不识别）",
+    "vue @entry 注释放 HTML 注释 <!-- @entry Mxx.Fxx.Ixx -->（L5 静态扫不到）— 必须放 // @entry 在 <script setup> 段 JS 注释",
+    "vue 仓 string 索引类型 ?? || 混合 TS5076 报错 — 用 (a ?? (b || c)) 显式括号"
   ],
   "last_gate_passed_at": "2026-08-17T26:30+08:00",
   "active_branch": "master",
