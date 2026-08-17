@@ -1,66 +1,79 @@
-// AppShell — 业务页统一骨架（sidebar + 顶栏 BackendSwitcher + 内容区）。
-// Sprint 1 只装配；sidebar 菜单内容 Sprint 2 随 26 页镜像填充。
+// AppShell — sidebar (left) + content (right) 业务页骨架（layout route）。
+//
+// nextjs 仓 app-shell.tsx 的镜像（Sprint 2 Batch 0），差异：
+//   - 菜单从 saas 拉取 → 静态 MENU_TREE（menus.ts）
+//   - 守卫：nextjs 在 (console)/layout.tsx 做 !token → /login；react 仓把
+//     useRequireAuth 提升到这里（包 Outlet），22 条业务子路由不再各自守卫
+//   - header 的 token 显示走 auth FSM（lab.accessToken 契约 key）
+// 内容是 <Outlet />（react-router layout route），切页只换 Outlet 子树，
+// 侧栏稳定不重挂（等价 nextjs 把 AppShell 收敛到 route group layout）。
 
-import type { ReactNode } from "react";
-import { Outlet } from "react-router-dom";
-import { FlaskConical, LogOut, LayoutDashboard } from "lucide-react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SidebarNav, type NavItem } from "@/components/app/sidebar-nav";
+import { SidebarNav } from "@/components/app/sidebar-nav";
+import { APP_CODE, APP_NAME, MENU_TREE } from "@/components/app/menus";
 import { BackendSwitcher } from "@/components/app/backend-switcher";
 import { useAuth } from "@/state/auth-context";
-
-// Sprint 1：只有仪表盘一项。菜单树数据源（GET /auth/menus）Sprint 2 接。
-const NAV: NavItem[] = [
-  { label: "仪表盘", path: "/", icon: "dashboard" },
-];
-
-const NAV_ICONS: Record<string, ReactNode> = {
-  dashboard: <LayoutDashboard className="size-4" />,
-};
+import { useRequireAuth } from "@/state/require-auth";
 
 export function AppShell() {
   const { state, logout } = useAuth();
+  const { checking } = useRequireAuth();
+  const navigate = useNavigate();
+
+  const token =
+    state.kind === "authenticated" ? (state.value.tokenExpiresAt > 0 ? "ok" : null) : null;
   const displayName =
     state.kind === "authenticated" || state.kind === "awaiting_tenant"
       ? (state.value.user.displayName ?? state.value.user.username)
       : "";
-  const tenantName = state.kind === "authenticated" ? state.value.tenant.name : "";
+
+  if (checking) return null; // guard effect 已触发跳转，渲染空避免闪烁
 
   return (
-    <div className="flex h-screen">
-      <aside className="border-r bg-sidebar flex w-60 flex-col">
-        <div className="flex items-center gap-2 border-b px-4 py-4">
-          <FlaskConical className="text-primary size-5" />
-          <span className="font-semibold">实验室管理系统</span>
-        </div>
-        <SidebarNav items={NAV} icons={NAV_ICONS} />
-        <div className="mt-auto border-t p-3">
-          <SidebarNav
-            items={[
-              {
-                label: "退出登录",
-                action: "logout",
-                icon: "logout",
-              } as NavItem,
-            ]}
-            icons={{ logout: <LogOut className="size-4" /> }}
-            onAction={() => void logout()}
-          />
-        </div>
-      </aside>
-      <div className="flex flex-1 flex-col">
-        <header className="border-b flex h-14 items-center justify-between px-4">
-          <div className="text-muted-foreground text-sm">
-            {tenantName ? `${tenantName} · ${displayName}` : displayName}
+    <div className="min-h-screen flex bg-slate-50">
+      <SidebarNav
+        menus={MENU_TREE}
+        appCode={APP_CODE}
+        appName={APP_NAME}
+        footerExtras={<BackendSwitcher />}
+        version={`lab-management-system-react · appCode=${APP_CODE}`}
+      />
+      <main className="flex-1 flex flex-col min-w-0">
+        <header className="h-14 bg-white border-b flex items-center px-6 gap-4">
+          <h1 className="text-base font-semibold" data-testid="appshell-app-name">
+            {APP_NAME}
+          </h1>
+          <div className="ml-auto flex items-center gap-3 text-xs text-slate-500">
+            {displayName && (
+              <span className="font-mono">
+                用户=<span className="text-slate-900 font-medium">{displayName}</span>
+              </span>
+            )}
+            <span data-testid="appshell-auth-state">{state.kind}</span>
+            {state.kind === "authenticated" ? (
+              <Button
+                variant="outline"
+                size="sm"
+                data-fn="M01.F05.I04"
+                data-testid="logout-button"
+                onClick={() => {
+                  void logout();
+                  void navigate("/login");
+                }}
+              >
+                <LogOut className="h-4 w-4 mr-1" />
+                登出
+              </Button>
+            ) : null}
+            {token === null && state.kind !== "authenticated" ? null : null}
           </div>
-          <BackendSwitcher />
         </header>
-        <main className="flex-1 overflow-auto p-6">
+        <section className="flex-1 overflow-auto p-6">
           <Outlet />
-        </main>
-      </div>
+        </section>
+      </main>
     </div>
   );
 }
-
-export { Button };

@@ -21,7 +21,7 @@ export interface AuthContext {
 export type AuthHeaderKind = typeof AuthHeaderKind[keyof typeof AuthHeaderKind];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthHeaderKind = {
   Authorization: 'Authorization',
   'X-Auth-Token': 'X-Auth-Token',
@@ -35,7 +35,7 @@ export type AuthState = AuthStateIdle | AuthStateAnonymous | AuthStateAwaitingTe
 export type AuthStateAnonymousKind = typeof AuthStateAnonymousKind[keyof typeof AuthStateAnonymousKind];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateAnonymousKind = {
   anonymous: 'anonymous',
 } as const;
@@ -43,7 +43,7 @@ export const AuthStateAnonymousKind = {
 export type AuthStateAnonymousValueKind = typeof AuthStateAnonymousValueKind[keyof typeof AuthStateAnonymousValueKind];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateAnonymousValueKind = {
   anonymous: 'anonymous',
 } as const;
@@ -60,7 +60,7 @@ export interface AuthStateAnonymous {
 export type AuthStateAuthenticatedKind = typeof AuthStateAuthenticatedKind[keyof typeof AuthStateAuthenticatedKind];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateAuthenticatedKind = {
   authenticated: 'authenticated',
 } as const;
@@ -68,7 +68,7 @@ export const AuthStateAuthenticatedKind = {
 export type AuthStateAuthenticatedValueKind = typeof AuthStateAuthenticatedValueKind[keyof typeof AuthStateAuthenticatedValueKind];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateAuthenticatedValueKind = {
   authenticated: 'authenticated',
 } as const;
@@ -90,7 +90,7 @@ export interface AuthStateAuthenticated {
 export type AuthStateAwaitingTenantKind = typeof AuthStateAwaitingTenantKind[keyof typeof AuthStateAwaitingTenantKind];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateAwaitingTenantKind = {
   awaiting_tenant: 'awaiting_tenant',
 } as const;
@@ -98,7 +98,7 @@ export const AuthStateAwaitingTenantKind = {
 export type AuthStateAwaitingTenantValueKind = typeof AuthStateAwaitingTenantValueKind[keyof typeof AuthStateAwaitingTenantValueKind];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateAwaitingTenantValueKind = {
   awaiting_tenant: 'awaiting_tenant',
 } as const;
@@ -117,7 +117,7 @@ export interface AuthStateAwaitingTenant {
 export type AuthStateIdleKind = typeof AuthStateIdleKind[keyof typeof AuthStateIdleKind];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateIdleKind = {
   idle: 'idle',
 } as const;
@@ -125,7 +125,7 @@ export const AuthStateIdleKind = {
 export type AuthStateIdleValueKind = typeof AuthStateIdleValueKind[keyof typeof AuthStateIdleValueKind];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateIdleValueKind = {
   idle: 'idle',
 } as const;
@@ -173,7 +173,7 @@ export interface BackendFeatures {
 export type BackendId = typeof BackendId[keyof typeof BackendId];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const BackendId = {
   msw: 'msw',
   nextjs: 'nextjs',
@@ -194,7 +194,7 @@ export interface BackendRegistry {
 export type CalculationAlgorithmType = typeof CalculationAlgorithmType[keyof typeof CalculationAlgorithmType];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CalculationAlgorithmType = {
   simple_avg: 'simple_avg',
   compressive_strength: 'compressive_strength',
@@ -248,7 +248,7 @@ export interface Contract {
 export type ContractStatus = typeof ContractStatus[keyof typeof ContractStatus];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ContractStatus = {
   active: 'active',
   archived: 'archived',
@@ -503,7 +503,7 @@ export interface ExtFieldDef {
 export type ExtFieldDefSource = typeof ExtFieldDefSource[keyof typeof ExtFieldDefSource];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ExtFieldDefSource = {
   sample: 'sample',
   receipt: 'receipt',
@@ -512,7 +512,7 @@ export const ExtFieldDefSource = {
 export type ExtFieldDefType = typeof ExtFieldDefType[keyof typeof ExtFieldDefType];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ExtFieldDefType = {
   text: 'text',
   number: 'number',
@@ -523,7 +523,7 @@ export const ExtFieldDefType = {
 export type FlowAction = typeof FlowAction[keyof typeof FlowAction];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const FlowAction = {
   submit: 'submit',
   return: 'return',
@@ -556,7 +556,7 @@ export interface FlowHistoryEntry {
 export type FlowStatus = typeof FlowStatus[keyof typeof FlowStatus];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const FlowStatus = {
   receiving: 'receiving',
   task_assignment: 'task_assignment',
@@ -638,7 +638,7 @@ export interface InspectionParameter {
 export type InspectionParameterSourceType = typeof InspectionParameterSourceType[keyof typeof InspectionParameterSourceType];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const InspectionParameterSourceType = {
   official: 'official',
   custom: 'custom',
@@ -694,7 +694,7 @@ export interface InspectionStandard {
 export type InspectionStandardRole = typeof InspectionStandardRole[keyof typeof InspectionStandardRole];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const InspectionStandardRole = {
   TESTING: 'TESTING',
   JUDGMENT: 'JUDGMENT',
@@ -703,7 +703,7 @@ export const InspectionStandardRole = {
 export type InspectionStandardStatus = typeof InspectionStandardStatus[keyof typeof InspectionStandardStatus];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const InspectionStandardStatus = {
   active: 'active',
   superseded: 'superseded',
@@ -788,7 +788,7 @@ export interface PermissionSet {
 export type QualificationLevel = typeof QualificationLevel[keyof typeof QualificationLevel];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const QualificationLevel = {
   QUALIFIED: 'QUALIFIED',
   RESTRICTED: 'RESTRICTED',
@@ -797,7 +797,7 @@ export const QualificationLevel = {
 export type ReceiptResult = typeof ReceiptResult[keyof typeof ReceiptResult];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ReceiptResult = {
   pass: 'pass',
   fail: 'fail',
@@ -824,7 +824,7 @@ export interface ReportNameStandardLink {
 export type RequirementComparison = typeof RequirementComparison[keyof typeof RequirementComparison];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RequirementComparison = {
   '≥': '≥',
   '≤': '≤',
@@ -836,7 +836,7 @@ export const RequirementComparison = {
 export type RequirementJudgmentMode = typeof RequirementJudgmentMode[keyof typeof RequirementJudgmentMode];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RequirementJudgmentMode = {
   automatic: 'automatic',
   manual: 'manual',
@@ -845,7 +845,7 @@ export const RequirementJudgmentMode = {
 export type RequirementValueType = typeof RequirementValueType[keyof typeof RequirementValueType];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RequirementValueType = {
   numeric: 'numeric',
   string: 'string',
@@ -857,7 +857,7 @@ export const RequirementValueType = {
 export type RequirementVerificationStatus = typeof RequirementVerificationStatus[keyof typeof RequirementVerificationStatus];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RequirementVerificationStatus = {
   draft: 'draft',
   reviewed: 'reviewed',
@@ -1028,7 +1028,7 @@ export interface TestRecord {
 export type TokenStorageKeysAccessToken = typeof TokenStorageKeysAccessToken[keyof typeof TokenStorageKeysAccessToken];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TokenStorageKeysAccessToken = {
   labaccessToken: 'lab.accessToken',
 } as const;
@@ -1039,7 +1039,7 @@ export const TokenStorageKeysAccessToken = {
 export type TokenStorageKeysRefreshToken = typeof TokenStorageKeysRefreshToken[keyof typeof TokenStorageKeysRefreshToken];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TokenStorageKeysRefreshToken = {
   labrefreshToken: 'lab.refreshToken',
 } as const;
@@ -1050,7 +1050,7 @@ export const TokenStorageKeysRefreshToken = {
 export type TokenStorageKeysActiveTenantId = typeof TokenStorageKeysActiveTenantId[keyof typeof TokenStorageKeysActiveTenantId];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TokenStorageKeysActiveTenantId = {
   labactiveTenantId: 'lab.activeTenantId',
 } as const;
@@ -1061,7 +1061,7 @@ export const TokenStorageKeysActiveTenantId = {
 export type TokenStorageKeysActiveBackend = typeof TokenStorageKeysActiveBackend[keyof typeof TokenStorageKeysActiveBackend];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TokenStorageKeysActiveBackend = {
   labactiveBackend: 'lab.activeBackend',
 } as const;
@@ -1072,7 +1072,7 @@ export const TokenStorageKeysActiveBackend = {
 export type TokenStorageKeysPermissionsCache = typeof TokenStorageKeysPermissionsCache[keyof typeof TokenStorageKeysPermissionsCache];
 
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TokenStorageKeysPermissionsCache = {
   labpermissions: 'lab.permissions',
 } as const;

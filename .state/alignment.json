@@ -18,7 +18,9 @@
       "flows": [],
       "designs": [],
       "tests": [],
-      "entry": []
+      "entry": [
+        "src\\components\\app\\sidebar-nav.tsx"
+      ]
     },
     "M01.F04.I02": {
       "name": "动态权限集（GET /auth/permissions）",
@@ -40,7 +42,12 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/require-auth.dom.test.tsx::anonymous 访问受守卫路由 → 跳 /login 带 from 回跳",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/require-auth.dom.test.tsx::authenticated 权限齐 → allowed=true 留在原地",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/require-auth.dom.test.tsx::authenticated 缺权限 → 拦在 /403",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/require-auth.dom.test.tsx::awaiting_tenant 访问受守卫路由 → 跳 /select-tenant"
+      ],
       "entry": []
     },
     "M01.F05.I01": {
@@ -69,7 +76,9 @@
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::onChange 契约：状态转移触发订阅 + unsub 停止",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::token 失效（me 401 + refresh 401）→ 退 anonymous + 清 token"
       ],
-      "entry": []
+      "entry": [
+        "src\\api\\legacy-client.ts"
+      ]
     },
     "M01.F05.I03": {
       "name": "SSO 授权码流（authorize + callback）",
@@ -91,7 +100,9 @@
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::logout → anonymous + 全部持久化 key 清空"
       ],
-      "entry": []
+      "entry": [
+        "src\\components\\app\\app-shell.tsx"
+      ]
     },
     "M02.F01.I01": {
       "name": "合同列表（三态过滤）",
