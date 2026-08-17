@@ -1,31 +1,33 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "Sprint 2 Batch 2B-3 M03 报告 4 阶段（review/approval/issuance/archived 共 4 F + 8 I）双仓镜像完成；M03 流程线 8 阶段全部落地，下一步走 M06 检测能力 10 组件（specialties/objects/standards/parameters/calculation-rules/technical-requirements）",
+  "current_task": "Sprint 2 Batch 2B-4 react 仓 M06 检测能力 10 组件（specialty/object/parameter/standard/calculation-rule/technical-requirement 共 6 F + 10 I）双仓落地完成；M06 模块全功能上线 + 5 路由 + 复合键路由全链路 + M03 4 阶段 I02 @entry 补全；下一步走 Batch 2B-5 / 3A 之类的 M05 仪表盘/统计或其他 11 个模型卡",
   "done": [
-    "Sprint 2 Batch 2B-3：src/features/reports/ReportPhasePage.tsx（共享阶段页：stage + submitLabel + i01DataFn + i02DataFn；列表按 flowStatus 过滤 + 多选 + 「{submitLabel}（N）」批量按钮 + 行内「退回」Dialog 调 /api/receipts/flow action=return）",
-    "Sprint 2 Batch 2B-3：src/pages/{ReportReview,ReportApprove,ReportIssue,ReportArchive}Page.tsx（4 薄包装各传一组 stage/submitLabel/data-fn）",
-    "Sprint 2 Batch 2B-3：App.tsx report-review/report-approve/report-issue/report-archive 4 路由 placeholder → lazy 真页 import",
-    "Sprint 2 Batch 2B-3：tests/features/reports/reportPhasePage.dom.test.tsx 8 fnTest 全绿（4 页 × 2 I：I01 列表穿透 + I02 submit 按钮可见）",
-    "Sprint 2 Batch 2B-3：function-tree.md M03.F05/F06/F07/F08 共 4 F + 8 I 规划→已上线（同 commit 落地）",
-    "Sprint 2 Batch 2B-3：gate L0-L5 全绿 99 功能条目 58 软告警（Batch 2B-2 52 + Batch 2B-3 新增 6 — 同 4 条软告警持续滚动）",
-    "Sprint 2 Batch 2B-3：commit d2df8ae（react 指针 478f1c0 → d2df8ae）",
-    "Sprint 2 Batch 2B-3 M03 流程线总进度（8 阶段 = 6 仓页 + 1 详情 + 1 数据录入）：receiving + task_assignment + data_entry + review + approval + issuance + archived + completed 全链路上线（详情 + 数据录入走 Batch 2B-1/2B-2）"
+    "Sprint 2 Batch 2B-4：src/features/inspection-capability/InspectionCapabilityList.tsx（多资源 4 字典通用页：specialty/object/parameter/standard；含 keyword + 3 级 filter + 4 资源对话框 + 共用 resetForm/openEdit/save/confirmDelete）",
+    "Sprint 2 Batch 2B-4：src/features/inspection-capability/CalculationRuleList.tsx（M06.F05 计算规则：复合主键 object+parameter + 试件数量 + 修约规则 + 6 算法类型）",
+    "Sprint 2 Batch 2B-4：src/features/inspection-capability/TechnicalRequirementList.tsx（M06.F06 技术要求：4 维筛选 brand/model/grade/spec 客户端二次过滤 + 比较符 + 上下限）",
+    "Sprint 2 Batch 2B-4：src/pages/{Specialties,Objects,Standards,Parameters,CalculationRules,TechnicalRequirements}Page.tsx（6 薄包装）",
+    "Sprint 2 Batch 2B-4：App.tsx inspection-{specialties,objects,parameters,standards,calculation-rules,technical-requirements} 6 路由 placeholder → lazy 真页 import + src/components/app/menus.ts 修正 specialties/objects 名字（之前 path 调换）",
+    "Sprint 2 Batch 2B-4：src/pages/{ReportReview,ReportApprove,ReportIssue,ReportArchive}Page.tsx 补 M03.F05.I02/F06.I02/F07.I02/F08.I02 @entry 注释（Batch 2B-3 漏挂导致 L5 fail，2B-4 顺手补）",
+    "Sprint 2 Batch 2B-4：tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx 12 fnTest 全绿（6 F 列表穿透 + F02/F04/F06 4 维 + 多维筛选 + fireEvent 模拟）",
+    "Sprint 2 Batch 2B-4：function-tree.md M06.F01/F02/F03/F04/F05/F06 共 6 F + 10 I 规划→已上线",
+    "Sprint 2 Batch 2B-4：gate L0-L5 全绿 99 功能条目 94 软告警（Batch 2B-3 58 + Batch 2B-4 新增 36 — 多资源 4 字典共用 InspectionCapabilityList 拉低软告警净增）",
+    "Sprint 2 Batch 2B-4：commit 21dcfa4（react 指针 d2df8ae → 21dcfa4）"
   ],
-  "next": "1) Sprint 2 Batch 2B-4 react 仓做 M06 检测能力（specialties/objects/standards/parameters/calculation-rules/technical-requirements 共 6 F + 10 I）— installShapeAdapters Batch 2A 已铺 wrapDict + 5 路由 + 复合键路由，react 仓只需写 6 薄页；2) vue 仓镜像；3) 仍剩余 11 个模型卡（concrete-compress / concrete-permeability / cement-flexural / rebar-welding-tensile / rebar-welding-bend / rebar-mech-numeric / particle-gradation / soil-compaction / soil-compaction-degree + 综合比值卡）随 M06 落地一并下沉",
+  "next": "1) Sprint 2 Batch 2B-5 / 3A 走 M05 仪表盘/统计（summaryGetReportSummary）— 11 个剩余模型卡（concrete-compress / concrete-permeability / cement-flexural / rebar-welding-tensile / rebar-welding-bend / rebar-mech-numeric / particle-gradation / soil-compaction / soil-compaction-degree + 综合比值卡）随 M06 落地一并下沉；2) saas suite 7 仓家族推进（vue/nextjs/springboot/aspnetcore 镜像）",
   "open_questions": [
-    "M03 流程线 8 阶段全链路上线，但 completed 终态页未单独开（详情页已完成显示「已归档」+ 历史时间线走最后一阶 archived）— 后续如果需要批量完成操作页可加",
-    "Report 4 阶段「退回」按钮的 Dialog reason 字段是可选（即便 msw handler 不会持久 reason，只记 flowHistory），保留 UI 占位供后续批次补",
-    "M03.F07.I02 「发放（生成报告编号）」data-fn 锚点已在按钮上挂，但完整 reportCode 生成逻辑在 msw handler（POST /api/receipts/flow action=submit + to=issuance 时自动 issuedAt=now），react 仓 UI 不重复生成"
+    "M06 4 字典 InspectionCapabilityList 共享组件的 data-fn 用 prop 透传 — 走 FN_CREATE[resource] 动态映射，react 仓用 @entry 注释兼容 L5 静态扫描（vs vue 仓走相同 @entry 模式）",
+    "M06.F02.I02 项目↔专项/参数关联 — react 仓 InspectionCapabilityList 在 objects 资源 form 下拉选检测专项编码（占位），实际关联持久化由 M06.F03.I02 在 form 关联实现",
+    "M06.F06.I03 删除技术要求引用保护 — msw handler 兜底返回「被引用」错误，UI 在 ConfirmModal 显示 deleteError",
+    "M03.F05/F06/F07/F08 I02 @entry 注释（4 个 ReportPhasePage 包装） — 此前用 i02DataFn 动态 prop 透传，L5 静态扫不到，本批补 4 个静态 @entry 让 L5 引用完整性过线"
   ],
   "dont": [
-    "data-fn 用 {xxx} JSX 表达式（react L5 静态解析吃不到字面量）— 用静态字符串或",
-    "L5 已上线但无 UI 入口会硬 fail（不是软告警）— 写完代码立刻确认每个 I 是否挂了 data-fn/",
-    "测试 msw handler + installShapeAdapters 路径不要换 — Batch 2A/2B-1/2B-2/2B-3 验证 installShapeAdapters 已含完整 8 阶流转 + flowHistory push + 计算规则/技术要求复合键路由",
-    "react 仓 ReportPhasePage 4 页不要绑同名 data-fn — i01 绑表格行，i02 绑批量按钮（与 M03.F03 / M03.F01 行内+header 双挂模式同）",
-    "M03.F02.I03/I04 / M03.F05.I03/I04 / M03.F06.I03 等跳 I-level 不实现 — function tree 没列，react 仓 @entry 注释不挂"
+    "data-fn 用 {xxx} JSX 表达式（react L5 静态解析吃不到字面量）— 用静态字符串或 @entry 注释兼容",
+    "L5 已上线但无 UI 入口会硬 fail（不是软告警）— 写完代码立刻确认每个 I 是否挂了 data-fn/ @entry",
+    "多资源 InspectionCapabilityList 共享组件不要拆 4 文件 — FN_CREATE 动态映射 + @entry 4 I 同时挂顶层就够",
+    "技术要求 4 维筛选（brand/model/grade/spec）走客户端二次过滤 — msw 不支持服务端多维过滤，installShapeAdapters 已铺 object/parameter 主端点"
   ],
-  "last_gate_passed_at": "2026-08-17T25:30+08:00",
+  "last_gate_passed_at": "2026-08-17T26:00+08:00",
   "active_branch": "master",
   "ahead_of_origin": "0"
 }
