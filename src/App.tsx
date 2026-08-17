@@ -9,20 +9,22 @@
 // Batch 3 检测能力 → Batch 4 数据录入/报告/汇总）。未落地批次先挂
 // EmptyState 占位（route 已占坑，侧栏点进去不 404）。
 
-import { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppShell } from "@/components/app/app-shell";
 import { LoginPage } from "@/pages/LoginPage";
 import { SelectTenantPage } from "@/pages/SelectTenantPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { EmptyState } from "@/components/app/empty-state";
+import { Suspense, lazy } from "react";
+
+// -- Batch 1：基础数据码表 4 页（真页面）---------------------------------------
+const ModelsPage = lazy(() => import("@/pages/ModelsPage"));
+const SpecificationsPage = lazy(() => import("@/pages/SpecificationsPage"));
+const GradesPage = lazy(() => import("@/pages/GradesPage"));
+const BrandsPage = lazy(() => import("@/pages/BrandsPage"));
 
 // -- 业务页（Sprint 2 逐批替换为真页面 lazy import）---------------------------
 
-const ModelsPage = placeholder("型号维护");
-const SpecificationsPage = placeholder("规格维护");
-const GradesPage = placeholder("等级维护");
-const BrandsPage = placeholder("牌号维护");
 const ContractsPage = placeholder("合同管理");
 const ReportNamesPage = placeholder("报告名称维护");
 const ParamInterfacesPage = placeholder("参数界面维护");

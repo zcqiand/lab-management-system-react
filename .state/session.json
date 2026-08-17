@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "Sprint 1 前端绑定契约接入完成（AuthContext FSM + 守卫 + LoginPage）；下一步 Vue 仓对称镜像",
+  "current_task": "Sprint 2 Batch 1 双仓 4 码表页（models/specifications/grades/brands）镜像 + function-tree 翻 已上线；下一步 Batch 2 流程线 8 页（contracts/report-names/param-interfaces/receipts(2)/task-assignment/data-entry）",
   "done": [
     "V013 rename 滞后 regen 提交（398feea，InspectionParamInterface + inspectionParamInterfaceCode）",
     "orval filters exclude frontend-bind-meta 锚点 — 必须写 input:{target,filters} 对象形式，顶层 filters 无效",
@@ -10,13 +10,21 @@
     "src/state/require-auth.ts useRequireAuth 守卫 + AppShell/SidebarNav/LoginPage/SelectTenantPage/DashboardPage 空壳 + App.tsx BrowserRouter",
     "main.tsx 装 AuthProvider + installHttpClient 走 lab.accessToken 契约 key",
     "tests/auth-fsm.test.ts 14 测全绿；fnTest 挂 M00.F01/F02 + M01.F04.I02 + M01.F05.I01/I02/I04",
-    "gate L0-L5 全绿 99 条目 0 软告警；gate --all 13 仓全绿；commit d643f21 推 origin"
+    "Sprint 1 commit d643f21 推 origin",
+    "Sprint 2 Batch 1：src/features/dicts/CategoryDictList.tsx 1:1 镜像 nextjs（@dnd-kit/core + sortable + utilities + ConfirmModal + legacy-client）",
+    "Sprint 2 Batch 1：4 码表页 BrandsPage/GradesPage/ModelsPage/SpecificationsPage 全部 lazy import 进 App.tsx 替换 Batch 0 placeholder",
+    "Sprint 2 Batch 1：tests/features/dicts/categoryDictPages.dom.test.tsx 12 测全绿（fnTest 挂 M04.F06/F07/F08/F09.I01/I02/I03）",
+    "Sprint 2 Batch 1：tests/helpers/seed.ts + tests/setup.dom.ts msw 适配（shape adapter 帮 msw dictCrud 裸数组 wrap {items}）",
+    "Sprint 2 Batch 1：CategoryDictList 加 @entry M04.F0[6-9].I02 + I03 注释（L5 静态解析 data-fn={xxx} JSX 表达式吃不到，必须靠 @entry 标注 UI 入口）",
+    "Sprint 2 Batch 1：docs/functions/function-tree.md M04.F0[6-9] + I01-I03 16 行 规划→已上线（与代码同 commit）",
+    "Sprint 2 Batch 1：gate L0-L5 全绿 99 条目 24 软告警（无设计映射 + 不在流程 12 + 12 = 跨 batch 跨仓设计债，本仓按 CLAUDE.md 留给后续 batch 收口）"
   ],
-  "next": "1) vue 仓（output/lab-management-system-vue）对称镜像本仓 8 文件（翻译规则见 docs/conventions/sprint-roadmap.md：JSX→template、Context→Pinia defineStore、auth-context 契约字段见 shared/.state/decision-log.md §2.2）；2) vue orval.config.ts 同样加 input.filters exclude frontend-bind-meta；3) react 侧 Sprint 2 起：镜像 nextjs 25 页（App.tsx 现在是路由骨架，旧 demo 内容已删）",
+  "next": "1) Sprint 2 Batch 2（react 先行）镜像 nextjs 流程线 8 页：contracts + report-names + param-interfaces + receipts(列表+详情) + task-assignment + data-entry；2) vue 仓镜像 react 同批落地（双仓并行）；3) Batch 3 inspection 6 页；4) Batch 4 报告 4 + summary；5) 全 batch 收完后提 /tree-change 翻状态 + 设计/流程映射表补 4 码表映射",
   "open_questions": [
     "M01.F04.I03（路由守卫）未挂 fnTest — useRequireAuth 依赖 jsdom + router 环境，node 环境测不了；Sprint 2 引入 jsdom 测试时补",
-    "FSM 转移表已在 auth-context.tsx 注释落成（auth-context 头部），shared decision-log open_question 问的『是否需要契约定 FSM 转移表』仍未回填 shared 仓",
-    "功能树 M00.F01/M01.F05.I01 等 7 子项状态仍『规划』— fnTest 已挂但按 suite 规矩改功能清单要走 /tree-change 提案（react 写完 + vue 镜像完后一起提）"
+    "FSM 转移表已落 auth-context.tsx 注释落成（auth-context 头部），shared decision-log open_question 问的『是否需要契约定 FSM 转移表』仍未回填 shared 仓",
+    "M04 4 码表翻 已上线 后 24 条软告警（已上线但无设计映射 + 不在流程）由 docs/design/ + docs/flow/ 跨仓映射表收口（nextjs 仓设计/流程映射表已收 M04，可镜像 1:1）",
+    "拖拽 sortOrder 持久化 dnd-kit UX 已在 CategoryDictList.tsx 实现（line 196-216 PUT 持久化），但 nextjs 仓 tree-change 提案写过『拖拽 sortOrder 持久化本轮不做』— 实测做了，文档与代码不一致，需对账"
   ],
   "dont": [
     "orval filters 必须在 input:{target,filters} 里 — 写在 entry 顶层静默无效（v7.21 实测）；tags 数组形式也是无效形态",
@@ -24,9 +32,11 @@
     "node 环境测试 localStorage：auth-context 的 storageOf() 探测裸 localStorage 全局（不判 window），vi.stubGlobal('localStorage',{getItem:()=>Map.has?get:null}) — Map.get 直接返回 undefined 会导致 toBeNull() 断言错",
     "axios mock 必须带 isAxiosError（toApiError 用它），缺了 login 失败 case 抛 TypeError",
     "vitest.config.ts 必须配 @ alias（原 config 没配，auth-context import '@/api/...' 直接 Cannot find package）",
-    "AuthState 契约形状是 {kind, value:{kind, ...payload}} 双层（TypeSpec @discriminated 产物），写消费代码别按单层 discriminated union 解构"
+    "AuthState 契约形状是 {kind, value:{kind, ...payload}} 双层（TypeSpec @discriminated 产物），写消费代码别按单层 discriminated union 解构",
+    "CategoryDictList 是 4 码表共用组件，UI 入口 @entry 必须一次列全 4 F 的 I01/I02/I03（不要按 dict 分支）",
+    "function-tree.md 翻 已上线 必须同 commit 落地代码 + 补 @entry，否则 L5 会硬 fail『已上线子项在代码里没有 UI 入口』"
   ],
-  "last_gate_passed_at": "2026-08-17T18:40+08:00",
+  "last_gate_passed_at": "2026-08-17T22:50+08:00",
   "active_branch": "master",
   "ahead_of_origin": "0"
 }
