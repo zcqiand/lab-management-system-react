@@ -3,6 +3,7 @@ import { ReportPhasePage } from "@/features/reports/ReportPhasePage";
 
 export default function ReportReviewPage() {
   // @entry M03.F05.I01 审核队列
+  // @entry M03.F05.I02 审核通过/驳回按钮（i02DataFn 透传 ReportPhasePage）
   return (
     <ReportPhasePage
       title="报告审核"

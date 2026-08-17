@@ -3,6 +3,7 @@ import { ReportPhasePage } from "@/features/reports/ReportPhasePage";
 
 export default function ReportIssuePage() {
   // @entry M03.F07.I01 发放队列
+  // @entry M03.F07.I02 发放按钮（i02DataFn 透传 ReportPhasePage）
   return (
     <ReportPhasePage
       title="报告发放"

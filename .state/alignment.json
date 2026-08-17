@@ -6,7 +6,7 @@
     "features": 29,
     "items": 62
   },
-  "warnings_total": 58,
+  "warnings_total": 94,
   "warnings": {
     "已上线但无设计映射": [
       "M02.F01.I01",
@@ -21,6 +21,14 @@
       "M03.F03.I01",
       "M03.F03.I02",
       "M03.F03.I03",
+      "M03.F05.I01",
+      "M03.F05.I02",
+      "M03.F06.I01",
+      "M03.F06.I02",
+      "M03.F07.I01",
+      "M03.F07.I02",
+      "M03.F08.I01",
+      "M03.F08.I02",
       "M03.F09.I01",
       "M03.F09.I02",
       "M03.F09.I03",
@@ -36,6 +44,16 @@
       "M04.F09.I01",
       "M04.F09.I02",
       "M04.F09.I03",
+      "M06.F01.I01",
+      "M06.F02.I01",
+      "M06.F02.I02",
+      "M06.F03.I01",
+      "M06.F04.I01",
+      "M06.F04.I02",
+      "M06.F05.I01",
+      "M06.F06.I01",
+      "M06.F06.I02",
+      "M06.F06.I03",
       "M06.F07.I01",
       "M06.F08.I01"
     ],
@@ -52,6 +70,14 @@
       "M03.F03.I01",
       "M03.F03.I02",
       "M03.F03.I03",
+      "M03.F05.I01",
+      "M03.F05.I02",
+      "M03.F06.I01",
+      "M03.F06.I02",
+      "M03.F07.I01",
+      "M03.F07.I02",
+      "M03.F08.I01",
+      "M03.F08.I02",
       "M03.F09.I01",
       "M03.F09.I02",
       "M03.F09.I03",
@@ -67,6 +93,16 @@
       "M04.F09.I01",
       "M04.F09.I02",
       "M04.F09.I03",
+      "M06.F01.I01",
+      "M06.F02.I01",
+      "M06.F02.I02",
+      "M06.F03.I01",
+      "M06.F04.I01",
+      "M06.F04.I02",
+      "M06.F05.I01",
+      "M06.F06.I01",
+      "M06.F06.I02",
+      "M06.F06.I03",
       "M06.F07.I01",
       "M06.F08.I01"
     ]
@@ -339,7 +375,7 @@
     },
     "M03.F05.I01": {
       "name": "审核队列（review 阶段）",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
@@ -353,7 +389,7 @@
     },
     "M03.F05.I02": {
       "name": "审核通过/驳回（submit/return）",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
@@ -361,11 +397,13 @@
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告审核：「审核通过」按钮 data-fn 可见"
       ],
-      "entry": []
+      "entry": [
+        "src\\pages\\ReportReviewPage.tsx"
+      ]
     },
     "M03.F06.I01": {
       "name": "批准队列（approval 阶段）",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
@@ -379,7 +417,7 @@
     },
     "M03.F06.I02": {
       "name": "批准/驳回",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
@@ -387,11 +425,13 @@
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告批准：「批准」按钮 data-fn 可见"
       ],
-      "entry": []
+      "entry": [
+        "src\\pages\\ReportApprovePage.tsx"
+      ]
     },
     "M03.F07.I01": {
       "name": "发放队列（issuance 阶段）",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
@@ -405,7 +445,7 @@
     },
     "M03.F07.I02": {
       "name": "发放（生成报告编号）",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
@@ -413,11 +453,13 @@
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告发放：「发放」按钮 data-fn 可见"
       ],
-      "entry": []
+      "entry": [
+        "src\\pages\\ReportIssuePage.tsx"
+      ]
     },
     "M03.F08.I01": {
       "name": "归档队列（archived 阶段）",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
@@ -431,7 +473,7 @@
     },
     "M03.F08.I02": {
       "name": "归档完成",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
@@ -439,7 +481,9 @@
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告归档：「归档完成」按钮 data-fn 可见"
       ],
-      "entry": []
+      "entry": [
+        "src\\pages\\ReportArchivePage.tsx"
+      ]
     },
     "M03.F09.I01": {
       "name": "接样单详情页",
@@ -677,45 +721,62 @@
     },
     "M06.F01.I01": {
       "name": "检测专项列表 + CRUD",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],
       "tests": [
-        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::inspection specialty endpoint generated"
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::inspection specialty endpoint generated",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F01 新建按钮存在 + 编码列显示官方序号",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F01 渲染标题 + 列表行（fixtures 真数据穿透）"
       ],
-      "entry": []
+      "entry": [
+        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
+      ]
     },
     "M06.F02.I01": {
       "name": "检测项目列表（按专项过滤）",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F02 新建按钮存在 + 行内编辑/删除按钮",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F02 渲染标题 + 检测专项筛选下拉"
+      ],
+      "entry": [
+        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
+      ]
     },
     "M06.F02.I02": {
       "name": "项目↔专项/参数关联",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F02 新建按钮存在 + 行内编辑/删除按钮"
+      ],
+      "entry": [
+        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
+      ]
     },
     "M06.F03.I01": {
       "name": "检测参数列表 + CRUD",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F03 渲染标题 + 3 级筛选下拉（专项/项目/标准）"
+      ],
+      "entry": [
+        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
+      ]
     },
     "M06.F03.I02": {
       "name": "参数↔标准关联",
@@ -729,65 +790,92 @@
     },
     "M06.F04.I01": {
       "name": "检测标准列表（状态过滤）",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F04 新建按钮存在 + 标准编码列显示",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F04 渲染标题 + 列表行"
+      ],
+      "entry": [
+        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
+      ]
     },
     "M06.F04.I02": {
       "name": "标准 CRUD",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
       "designs": [],
       "tests": [
-        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::inspection standard create endpoint generated"
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::inspection standard create endpoint generated",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F04 新建按钮存在 + 标准编码列显示"
       ],
-      "entry": []
+      "entry": [
+        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
+      ]
     },
     "M06.F05.I01": {
       "name": "计算规则维护",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F05 新建按钮 + 行内编辑/删除按钮",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F05 渲染标题 + 列表行（复合主键 fixtures）"
+      ],
+      "entry": [
+        "src\\features\\inspection-capability\\CalculationRuleList.tsx"
+      ]
     },
     "M06.F06.I01": {
       "name": "技术要求列表（多维过滤）",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F06 4 维筛选输入可达（fireEvent 模拟）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F06 列表渲染（fixtures 穿透）+ 新建按钮",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F06 渲染标题 + 4 维筛选（牌号/型号/等级/规格）"
+      ],
+      "entry": [
+        "src\\features\\inspection-capability\\TechnicalRequirementList.tsx"
+      ]
     },
     "M06.F06.I02": {
       "name": "新建/编辑技术要求",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F06 列表渲染（fixtures 穿透）+ 新建按钮"
+      ],
+      "entry": [
+        "src\\features\\inspection-capability\\TechnicalRequirementList.tsx"
+      ]
     },
     "M06.F06.I03": {
       "name": "删除技术要求（引用保护）",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F06 列表渲染（fixtures 穿透）+ 新建按钮"
+      ],
+      "entry": [
+        "src\\features\\inspection-capability\\TechnicalRequirementList.tsx"
+      ]
     },
     "M06.F07.I01": {
       "name": "报告名称列表 + extFields 模板",

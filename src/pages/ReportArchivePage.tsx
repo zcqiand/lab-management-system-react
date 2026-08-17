@@ -3,6 +3,7 @@ import { ReportPhasePage } from "@/features/reports/ReportPhasePage";
 
 export default function ReportArchivePage() {
   // @entry M03.F08.I01 归档队列
+  // @entry M03.F08.I02 归档完成按钮（i02DataFn 透传 ReportPhasePage）
   return (
     <ReportPhasePage
       title="报告归档"

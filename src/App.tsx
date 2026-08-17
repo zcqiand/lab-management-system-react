@@ -35,12 +35,15 @@ const ReceiptsPage = lazy(() => import("@/pages/ReceiptsPage"));
 const ReceiptDetailPage = lazy(() => import("@/pages/ReceiptDetailPage"));
 const TaskAssignmentPage = lazy(() => import("@/pages/TaskAssignmentPage"));
 const DataEntryPage = lazy(() => import("@/pages/DataEntryPage"));
-const InspectionObjectsPage = placeholder("检测专项");
-const InspectionStandardsPage = placeholder("检测标准");
-const InspectionParametersPage = placeholder("检测参数");
-const InspectionSpecialtiesPage = placeholder("检测项目");
-const InspectionTechnicalRequirementsPage = placeholder("技术要求");
-const InspectionCalculationRulesPage = placeholder("计算规则");
+
+// -- Batch 2B-4：M06 检测能力 6 薄页（specialty/object/parameter/standard/
+//    calculation-rule/technical-requirement）——多资源 1 共享组件 + 2 复合键页 ---
+const SpecialtiesPage = lazy(() => import("@/pages/SpecialtiesPage"));
+const ObjectsPage = lazy(() => import("@/pages/ObjectsPage"));
+const StandardsPage = lazy(() => import("@/pages/StandardsPage"));
+const ParametersPage = lazy(() => import("@/pages/ParametersPage"));
+const CalculationRulesPage = lazy(() => import("@/pages/CalculationRulesPage"));
+const TechnicalRequirementsPage = lazy(() => import("@/pages/TechnicalRequirementsPage"));
 // -- Batch 2B-3：报告 4 阶段（review/approval/issuance/archived）-------------------------
 const ReportIssuePage = lazy(() => import("@/pages/ReportIssuePage"));
 const ReportReviewPage = lazy(() => import("@/pages/ReportReviewPage"));
@@ -109,28 +112,28 @@ export default function App() {
             path="data-entry"
             element={<RouteSuspense><DataEntryPage /></RouteSuspense>}
           />
-          {/* 检测能力（Batch 3） */}
+          {/* 检测能力（Batch 4：M06.F01-F06 6 薄页） */}
           <Route
-            path="inspection-objects"
-            element={<RouteSuspense><InspectionObjectsPage /></RouteSuspense>}
+            path="inspection-specialties"
+            element={<RouteSuspense><SpecialtiesPage /></RouteSuspense>}
           />
           <Route
             path="inspection-standards"
-            element={<RouteSuspense><InspectionStandardsPage /></RouteSuspense>}
+            element={<RouteSuspense><StandardsPage /></RouteSuspense>}
           />
           <Route
             path="inspection-parameters"
-            element={<RouteSuspense><InspectionParametersPage /></RouteSuspense>}
+            element={<RouteSuspense><ParametersPage /></RouteSuspense>}
           />
           <Route
-            path="inspection-specialties"
-            element={<RouteSuspense><InspectionSpecialtiesPage /></RouteSuspense>}
+            path="inspection-objects"
+            element={<RouteSuspense><ObjectsPage /></RouteSuspense>}
           />
           <Route
             path="inspection-technical-requirements"
             element={
               <RouteSuspense>
-                <InspectionTechnicalRequirementsPage />
+                <TechnicalRequirementsPage />
               </RouteSuspense>
             }
           />
@@ -138,7 +141,7 @@ export default function App() {
             path="inspection-calculation-rules"
             element={
               <RouteSuspense>
-                <InspectionCalculationRulesPage />
+                <CalculationRulesPage />
               </RouteSuspense>
             }
           />
