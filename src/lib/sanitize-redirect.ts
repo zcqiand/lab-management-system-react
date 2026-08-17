@@ -5,14 +5,26 @@
 // lab 收到 `http://localhost:5173/undefined` 路由 404）。
 //
 // 规则：
-//   - null / undefined / 空串 / 字面量 "undefined" / "null" → "/"
+//   - null / undefined / 空串 → "/"
+//   - 整串是字面量 "undefined" / "null" → "/"
 //   - 非 "/" 开头的相对路径（避免 saas 把 redirect 拼成外部 URL）→ "/"
 //   - 含 "//" 的（协议相对 URL //evil.com）→ "/"
+//   - 任意 path 段是字面量 "undefined" / "null" / "NaN" / "false" / "true"（saas 把 ${redirect} 渲染成 undefined
+//     拼到路径里，路径段形式 "/undefined/data-entry" 等）→ "/"
 //   - 通过校验：原样返回（登录成功后回跳）
 
+const BAD_PATH_SEGMENTS = new Set(["undefined", "null", "NaN", "false", "true"]);
+
 export function sanitizeRedirect(from: string | null | undefined): string {
-  if (!from || from === "undefined" || from === "null") return "/";
+  if (!from) return "/";
+  if (from === "undefined" || from === "null") return "/";
   if (!from.startsWith("/")) return "/";
   if (from.startsWith("//")) return "/";
+  // 检查 path segment 是否含字面量 undefined/null（saas 模板插值产生的 /undefined/... 形式）
+  const segments = from.split("/").filter(Boolean);
+  if (segments.some((s) => BAD_PATH_SEGMENTS.has(s))) return "/";
   return from;
 }
+
+/** 暴露 BAD 名单供 BadPathRedirect 共用 */
+export { BAD_PATH_SEGMENTS };

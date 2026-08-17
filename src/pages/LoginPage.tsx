@@ -17,6 +17,7 @@ import { useBackend } from "@/state/backend-context";
 import { BACKEND_REGISTRY_DEFAULT } from "@/api/contracts";
 import { authSsoAuthorize } from "@/api/endpoints/endpoints";
 import { sanitizeRedirect } from "@/lib/sanitize-redirect";
+import { clearSsoBroken } from "@/components/app/bad-path-redirect";
 
 export function LoginPage() {
   const { state, login } = useAuth();
@@ -41,6 +42,17 @@ export function LoginPage() {
   useEffect(() => {
     if (!ssoEnabled) return;
     if (state.kind !== "anonymous" && state.kind !== "idle") return;
+    // SSO loop break: BadPathRedirect 抓到 /undefined 等字面量路径时会设
+    // sessionStorage flag。saas post-login 拼接 `${redirect}` 渲染成 "undefined"
+    // 时会出现 ping-pong：lab 跳 saas → saas 跳回 /undefined → BadPathRedirect
+    // → / → useRequireAuth → /login?from=/ → 又跳 saas …。这里读到 flag 后
+    // 跳过 SSO，直接显示本地表单让用户走账号密码兜底。
+    if (typeof window !== "undefined" && sessionStorage.getItem("lab.sso.broken")) {
+      setSsoError(
+        "检测到 SSO 重定向环（saas 端返回 /undefined 字面量），已切到本地账号密码登录",
+      );
+      return;
+    }
     let cancelled = false;
     const from = params.get("from");
     const redirect = sanitizeRedirect(from);
@@ -78,6 +90,8 @@ export function LoginPage() {
       setError("用户名或密码错误");
       return;
     }
+    // 登录成功 → 清掉 SSO broken flag（让下次会话能重试 SSO，如果 saas 已修）
+    clearSsoBroken();
     // FSM 已推进：单租户 → authenticated，多租户 → awaiting_tenant
     // navigate 由 guard/redirect 处理，这里兜底回 from
     navigate(sanitizeRedirect(params.get("from")), { replace: true });

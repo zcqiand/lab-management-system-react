@@ -67,4 +67,25 @@ describe("sanitizeRedirect", () => {
       );
     });
   });
+
+  describe("path 段含字面量 undefined/null（saas 模板插值 bug）→ /", () => {
+    it("/undefined → /", () => {
+      expect(sanitizeRedirect("/undefined")).toBe("/");
+    });
+    it("/undefined/data-entry → /", () => {
+      expect(sanitizeRedirect("/undefined/data-entry")).toBe("/");
+    });
+    it("/null/receipts → /", () => {
+      expect(sanitizeRedirect("/null/receipts")).toBe("/");
+    });
+    it("/NaN → /", () => {
+      expect(sanitizeRedirect("/NaN")).toBe("/");
+    });
+    it("/true/something → /", () => {
+      expect(sanitizeRedirect("/true/something")).toBe("/");
+    });
+    it("/data-entry/undefined/something → /（中间段）", () => {
+      expect(sanitizeRedirect("/data-entry/undefined/something")).toBe("/");
+    });
+  });
 });

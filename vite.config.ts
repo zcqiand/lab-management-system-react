@@ -9,7 +9,7 @@ const devPort = Number(process.env.VITE_DEV_PORT ?? '5173') || 5173
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  resolve: { alias: { '@': path.resolve(__dirname, './src') } },
+  resolve: { alias: { '@': path.resolve(import.meta.dirname, './src') } },
   server: {
     port: devPort,
     open: true,
