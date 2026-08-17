@@ -30,15 +30,15 @@ describe("M98 backend switcher (4-backend)", () => {
     expect(ALL_MODES).toHaveLength(4);
   });
 
-  it("DEFAULT_BASE_URLS has 'nextjs' same-origin ('')", () => {
-    expect(BACKEND_DEFAULT_BASE_URLS.nextjs).toBe("");
+  it("DEFAULT_BASE_URLS has 'nextjs' default :3001 (跨 origin)", () => {
+    expect(BACKEND_DEFAULT_BASE_URLS.nextjs).toBe("http://localhost:3001");
     expect(BACKEND_DEFAULT_BASE_URLS.msw).toBe("");
   });
 
-  it("setBackend('nextjs') updates getBaseUrl() to ''", () => {
+  it("setBackend('nextjs') updates getBaseUrl() to :3001", () => {
     setBackend("nextjs");
     expect(getBackend()).toBe("nextjs");
-    expect(getBaseUrl()).toBe("");
+    expect(getBaseUrl()).toBe("http://localhost:3001");
   });
 
   it("setBackend('aspnetcore') updates getBaseUrl() to localhost:5000", () => {

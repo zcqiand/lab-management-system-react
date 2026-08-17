@@ -15,7 +15,7 @@
 | `VITE_DEV_PORT` | `5173` | vite dev server 端口（同时 `process.env.VITE_DEV_PORT` 走 vite.config.ts） |
 | `VITE_DEFAULT_BACKEND` | `msw` | 启动激活后端（`msw` / `nextjs` / `aspnetcore` / `springboot`） |
 | `VITE_BACKEND_URL_MSW` | `""`（同源） | MSW mock 后端 baseUrl |
-| `VITE_BACKEND_URL_NEXTJS` | `""`（同源） | Next.js API routes baseUrl |
+| `VITE_BACKEND_URL_NEXTJS` | `http://localhost:3001` | Next.js API routes baseUrl（lab-react 在 :5173，nextjs 在 :3001，跨 origin 必须填绝对地址） |
 | `VITE_BACKEND_URL_ASPNETCORE` | `http://localhost:5000` | ASP.NET Core 后端 baseUrl |
 | `VITE_BACKEND_URL_SPRINGBOOT` | `http://localhost:8080` | Spring Boot 后端 baseUrl |
 | `VITE_SAAS_BASE_URL` | `http://localhost:3000` | SSO 跳转 saas 地址（前端用） |
