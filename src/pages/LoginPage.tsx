@@ -15,13 +15,15 @@ import { useAuth } from "@/state/auth-context";
 import { isErrorResponse } from "@/state/auth-context";
 import { useBackend } from "@/state/backend-context";
 import { BACKEND_REGISTRY_DEFAULT } from "@/api/contracts";
-import { authSsoAuthorize } from "@/api/endpoints/endpoints";
+import { authSsoAuthorize, authSsoCallback } from "@/api/endpoints/endpoints";
 import { sanitizeRedirect } from "@/lib/sanitize-redirect";
 import { clearSsoBroken } from "@/components/app/bad-path-redirect";
+import { TOKEN_STORAGE_KEYS } from "@/api/contracts";
+import type { LoginResponse } from "@/api/endpoints/endpoints.schemas";
 
 export function LoginPage() {
-  const { state, login } = useAuth();
-  const { backend } = useBackend();
+  const { state, login, setSession } = useAuth();
+  const { backend, baseUrl } = useBackend();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const [username, setUsername] = useState("");
@@ -54,6 +56,73 @@ export function LoginPage() {
       return;
     }
     let cancelled = false;
+
+    // 阶段 1：saas 跳回 lab 的 URL 带 ?token=...&state=...（已换 token）→
+    // 存到 localStorage + GET msw /api/auth/me 拿 user/tenants → setSession 跳业务页。
+    // 这是 saas 端的"已经经过 callback 换取 token 直接带过来"模式（lab-nextjs 约定）。
+    const tokenFromSaas = params.get("token");
+    if (tokenFromSaas) {
+      try {
+        localStorage.setItem(TOKEN_STORAGE_KEYS.accessToken, tokenFromSaas);
+        clearSsoBroken();
+        // msw /api/auth/me 返回 { user, tenants, currentTenantId }（msw DEMO_USER
+        // 永远是 admin，与 saas 端 alice 不同——msw token 与 saas token 在 lab auth
+        // state 里是两个不相关的轨道；本场景 lab state 走 msw admin 即可）
+        fetch(`${baseUrl}/api/auth/me`, {
+          headers: { Authorization: `Bearer ${tokenFromSaas}` },
+        })
+          .then((r) => (r.ok ? r.json() : Promise.reject(r)))
+          .then((data: { user: LoginResponse["user"]; tenants: LoginResponse["tenants"]; currentTenantId?: string }) => {
+            void setSession({
+              accessToken: tokenFromSaas,
+              user: data.user,
+              tenants: data.tenants,
+            }).then(() => {
+              params.delete("token");
+              params.delete("state");
+              const cleanSearch = params.toString();
+              navigate(
+                sanitizeRedirect(params.get("from")) + (cleanSearch ? `?${cleanSearch}` : ""),
+                { replace: true },
+              );
+            });
+          })
+          .catch((err) => {
+            console.error("[lab/login] /api/auth/me failed:", err);
+            setSsoError(`token 已在 localStorage 但 /me 失败（${backend}）：${(err as Error).message ?? "unknown"}`);
+          });
+        return;
+      } catch (err) {
+        console.error("[lab/login] token 持久化失败", err);
+      }
+    }
+
+    // 阶段 2：saas 给的是 ?code=&state=（未换 token）→ POST msw /api/auth/sso/callback 换 mock-jwt
+    const code = params.get("code");
+    const stateParam = params.get("state");
+    if (code && stateParam) {
+      authSsoCallback({ code, state: stateParam }, { baseURL: baseUrl })
+        .then((resp) => {
+          const data = resp.data as LoginResponse;
+          if (data.token) {
+            clearSsoBroken();
+            // LoginResponse 用 `token`，setSession 入口叫 `accessToken` —— 映射
+            void setSession({ accessToken: data.token, user: data.user, tenants: data.tenants }).then(() => {
+              navigate(sanitizeRedirect(params.get("from")), { replace: true });
+            });
+          } else {
+            setSsoError("code 换 token 失败：响应无 token");
+          }
+        })
+        .catch((err) => {
+          setSsoError(
+            `code 换 token 失败（${(err as Error).message ?? "unknown"}）`,
+          );
+        });
+      return;
+    }
+
+    // 阶段 3：没有 saas 回调参数 → 调 authorize 让 saas 跳过来
     const from = params.get("from");
     const redirect = sanitizeRedirect(from);
     authSsoAuthorize({ redirect })
@@ -70,7 +139,7 @@ export function LoginPage() {
     return () => {
       cancelled = true;
     };
-  }, [ssoEnabled, state.kind, params]);
+  }, [ssoEnabled, state.kind, params, baseUrl, navigate, setSession, backend]);
 
   // 已登录访问 /login → 直接回业务页
   if (state.kind === "authenticated") {
@@ -87,7 +156,16 @@ export function LoginPage() {
     const resp = await login({ username, password });
     setSubmitting(false);
     if (isErrorResponse(resp)) {
-      setError("用户名或密码错误");
+      // 区分真实 401 INVALID_CREDENTIALS 与网络失败 / backend 不可达。
+      // 老版本硬编码 "用户名或密码错误" 让用户猜不到原因是后后端没起。
+      // 现在显示 ErrorResponse.message（如 "Invalid username or password" /
+      // "Network Error" / "Request failed with status code 404"），帮用户诊断
+      // 是真的密码错还是后后端（nextjs :3001 / springboot :8080 / aspnetcore :5000）没起。
+      const isCredentialsErr = resp.code === "INVALID_CREDENTIALS";
+      const message = isCredentialsErr
+        ? "用户名或密码错误"
+        : `${resp.code}：${resp.message || "未知错误"}（请确认激活后端 dev server 在跑；当前 backend=${backend}）`;
+      setError(message);
       return;
     }
     // 登录成功 → 清掉 SSO broken flag（让下次会话能重试 SSO，如果 saas 已修）

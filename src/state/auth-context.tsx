@@ -189,6 +189,35 @@ async function doLogin(req: LoginRequest): Promise<LoginResponse | ErrorResponse
   }
 }
 
+/**
+ * 直接 setSession（不走 /api/auth/login）：
+ * saas post-login 跳回 lab 时带 ?token=...&state=...，把 token 写 localStorage +
+ * 推到 authenticated 态。这是 SSO callback 路径，与本地账号密码 login 并列。
+ *
+ * 取 partial LoginResponse：saas 已经换好 token 的话只带 token + user + tenants
+ * （缺 refreshToken / currentTenantId 时用 readKey 兜底）。
+ */
+async function doSetSession(
+  partial: { accessToken: string; refreshToken?: string; user?: LoginResponse["user"]; tenants?: LoginResponse["tenants"] },
+): Promise<void> {
+  // refreshToken / user / tenants 兜底
+  const refreshToken =
+    partial.refreshToken ?? readKey(TOKEN_STORAGE_KEYS.refreshToken);
+  const user = partial.user;
+  const tenants = partial.tenants ?? [];
+  if (!refreshToken || !user) {
+    throw new Error("setSession requires accessToken + user + refreshToken");
+  }
+  // 优先单租户直进 authenticated；多租户走 awaiting_tenant。settleLogin 内部判断。
+  const fullResp: LoginResponse = {
+    token: partial.accessToken,
+    refreshToken,
+    user,
+    tenants,
+  };
+  await settleLogin(fullResp);
+}
+
 async function doLogout(): Promise<void> {
   const token = readKey(TOKEN_STORAGE_KEYS.accessToken);
   if (token) {
@@ -292,6 +321,10 @@ export async function hydrateAuth(): Promise<void> {
 export interface AuthContextValue {
   state: AuthState;
   login: (req: LoginRequest) => Promise<LoginResponse | ErrorResponse>;
+  /** 直接 setSession：SSO 跳回带 ?token= 时用（不走 /api/auth/login） */
+  setSession: (
+    partial: Partial<LoginResponse> & { accessToken: string },
+  ) => Promise<void>;
   logout: () => Promise<void>;
   refresh: () => Promise<LoginResponse | ErrorResponse>;
   switchTenant: (
@@ -320,6 +353,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       state,
       login: doLogin,
+      setSession: doSetSession,
       logout: doLogout,
       refresh: doRefresh,
       switchTenant: doSwitchTenant,
