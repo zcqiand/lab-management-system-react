@@ -30,9 +30,10 @@ const ContractsPage = lazy(() => import("@/pages/ContractsPage"));
 const ReportNamesPage = lazy(() => import("@/pages/ReportNamesPage"));
 const ParamInterfacesPage = lazy(() => import("@/pages/ParamInterfacesPage"));
 
-const ReceiptsPage = placeholder("接样管理");
-const ReceiptDetailPage = placeholder("接样单详情");
-const TaskAssignmentPage = placeholder("任务分配");
+// -- Batch 2B：流程线 3 页（真页面）-------------------------------------------
+const ReceiptsPage = lazy(() => import("@/pages/ReceiptsPage"));
+const ReceiptDetailPage = lazy(() => import("@/pages/ReceiptDetailPage"));
+const TaskAssignmentPage = lazy(() => import("@/pages/TaskAssignmentPage"));
 const DataEntryPage = placeholder("数据录入");
 const InspectionObjectsPage = placeholder("检测专项");
 const InspectionStandardsPage = placeholder("检测标准");

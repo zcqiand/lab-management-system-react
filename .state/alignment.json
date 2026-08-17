@@ -6,12 +6,21 @@
     "features": 29,
     "items": 62
   },
-  "warnings_total": 34,
+  "warnings_total": 52,
   "warnings": {
     "已上线但无设计映射": [
       "M02.F01.I01",
       "M02.F01.I02",
       "M02.F01.I03",
+      "M03.F01.I01",
+      "M03.F01.I02",
+      "M03.F01.I03",
+      "M03.F01.I04",
+      "M03.F02.I01",
+      "M03.F02.I02",
+      "M03.F09.I01",
+      "M03.F09.I02",
+      "M03.F09.I03",
       "M04.F06.I01",
       "M04.F06.I02",
       "M04.F06.I03",
@@ -31,6 +40,15 @@
       "M02.F01.I01",
       "M02.F01.I02",
       "M02.F01.I03",
+      "M03.F01.I01",
+      "M03.F01.I02",
+      "M03.F01.I03",
+      "M03.F01.I04",
+      "M03.F02.I01",
+      "M03.F02.I02",
+      "M03.F09.I01",
+      "M03.F09.I02",
+      "M03.F09.I03",
       "M04.F06.I01",
       "M04.F06.I02",
       "M04.F06.I03",
@@ -188,65 +206,88 @@
     },
     "M03.F01.I01": {
       "name": "接样单列表（flowStatus 三态过滤）",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],
       "tests": [
-        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::receipt list endpoint generated"
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::receipt list endpoint generated",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptsList.dom.test.tsx::接样管理：渲染标题 + 列表行（fixtures 真数据穿透）"
       ],
-      "entry": []
+      "entry": [
+        "src\\features\\receipts\\ReceiptsList.tsx"
+      ]
     },
     "M03.F01.I02": {
       "name": "新建/编辑接样单",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptsList.dom.test.tsx::接样管理：新建按钮开弹窗"
+      ],
+      "entry": [
+        "src\\features\\receipts\\ReceiptsList.tsx"
+      ]
     },
     "M03.F01.I03": {
       "name": "删除接样单",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptsList.dom.test.tsx::接样管理：行内删除按钮开确认弹窗"
+      ],
+      "entry": [
+        "src\\features\\receipts\\ReceiptsList.tsx"
+      ]
     },
     "M03.F01.I04": {
       "name": "提交接样单（receiving → task_assignment）",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptsList.dom.test.tsx::接样管理：提交按钮调 POST /api/receipts/flow 推进 receiving → task_assignment"
+      ],
+      "entry": [
+        "src\\features\\receipts\\ReceiptsList.tsx"
+      ]
     },
     "M03.F02.I01": {
       "name": "任务分配队列",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/task-assignment/taskAssignmentList.dom.test.tsx::任务分配：渲染标题 + 列表行（fixtures 真数据穿透）"
+      ],
+      "entry": [
+        "src\\features\\task-assignment\\TaskAssignmentList.tsx"
+      ]
     },
     "M03.F02.I02": {
       "name": "安排/取消检测人员与计划日期",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/task-assignment/taskAssignmentList.dom.test.tsx::任务分配：安排按钮开弹窗"
+      ],
+      "entry": [
+        "src\\features\\task-assignment\\TaskAssignmentList.tsx"
+      ]
     },
     "M03.F03.I01": {
       "name": "样品 + 检测数据录入页",
@@ -360,33 +401,45 @@
     },
     "M03.F09.I01": {
       "name": "接样单详情页",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptDetail.dom.test.tsx::接样单详情：渲染标题 + 字段区"
+      ],
+      "entry": [
+        "src\\features\\receipts\\ReceiptDetail.tsx"
+      ]
     },
     "M03.F09.I02": {
       "name": "流程历史时间线",
-      "status": "规划",
+      "status": "已上线",
       "type": "查询",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptDetail.dom.test.tsx::接样单详情：流程历史时间线卡片可见（空种子时显示占位）"
+      ],
+      "entry": [
+        "src\\features\\receipts\\ReceiptDetail.tsx"
+      ]
     },
     "M03.F09.I03": {
       "name": "报告预览",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptDetail.dom.test.tsx::接样单详情：报告预览按钮开弹窗"
+      ],
+      "entry": [
+        "src\\features\\receipts\\ReceiptDetail.tsx"
+      ]
     },
     "M04.F06.I01": {
       "name": "型号列表（按专项过滤 + 拖拽排序）",

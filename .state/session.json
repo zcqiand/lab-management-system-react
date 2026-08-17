@@ -1,42 +1,30 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "Sprint 2 Batch 1 双仓 4 码表页（models/specifications/grades/brands）镜像 + function-tree 翻 已上线；下一步 Batch 2 流程线 8 页（contracts/report-names/param-interfaces/receipts(2)/task-assignment/data-entry）",
+  "current_task": "Sprint 2 Batch 2A 双仓 3 码表式页（合同/报告名称/参数界面）镜像完成；下一步 react 先行 Batch 2B-1 流程线 3 页：ReceiptsPage(M03.F01) + ReceiptDetailPage(M03.F09) + TaskAssignmentPage(M03.F02)",
   "done": [
-    "V013 rename 滞后 regen 提交（398feea，InspectionParamInterface + inspectionParamInterfaceCode）",
-    "orval filters exclude frontend-bind-meta 锚点 — 必须写 input:{target,filters} 对象形式，顶层 filters 无效",
-    "src/api/contracts.ts：8 契约 schema re-export + TOKEN_STORAGE_KEYS 常量 + AuthContextActions 行为签名 + BACKEND_REGISTRY_DEFAULT",
-    "src/state/auth-context.tsx：模块级 store + React Context 视图层；4 态 FSM（idle→anonymous→awaiting_tenant→authenticated）；login/logout/refresh/switchTenant/hasPermission/onChange；permissions 5min TTL",
-    "src/state/require-auth.ts useRequireAuth 守卫 + AppShell/SidebarNav/LoginPage/SelectTenantPage/DashboardPage 空壳 + App.tsx BrowserRouter",
-    "main.tsx 装 AuthProvider + installHttpClient 走 lab.accessToken 契约 key",
-    "tests/auth-fsm.test.ts 14 测全绿；fnTest 挂 M00.F01/F02 + M01.F04.I02 + M01.F05.I01/I02/I04",
-    "Sprint 1 commit d643f21 推 origin",
-    "Sprint 2 Batch 1：src/features/dicts/CategoryDictList.tsx 1:1 镜像 nextjs（@dnd-kit/core + sortable + utilities + ConfirmModal + legacy-client）",
-    "Sprint 2 Batch 1：4 码表页 BrandsPage/GradesPage/ModelsPage/SpecificationsPage 全部 lazy import 进 App.tsx 替换 Batch 0 placeholder",
-    "Sprint 2 Batch 1：tests/features/dicts/categoryDictPages.dom.test.tsx 12 测全绿（fnTest 挂 M04.F06/F07/F08/F09.I01/I02/I03）",
-    "Sprint 2 Batch 1：tests/helpers/seed.ts + tests/setup.dom.ts msw 适配（shape adapter 帮 msw dictCrud 裸数组 wrap {items}）",
-    "Sprint 2 Batch 1：CategoryDictList 加 @entry M04.F0[6-9].I02 + I03 注释（L5 静态解析 data-fn={xxx} JSX 表达式吃不到，必须靠 @entry 标注 UI 入口）",
-    "Sprint 2 Batch 1：docs/functions/function-tree.md M04.F0[6-9] + I01-I03 16 行 规划→已上线（与代码同 commit）",
-    "Sprint 2 Batch 1：gate L0-L5 全绿 99 条目 24 软告警（无设计映射 + 不在流程 12 + 12 = 跨 batch 跨仓设计债，本仓按 CLAUDE.md 留给后续 batch 收口）"
+    "Sprint 2 Batch 2A：src/features/contracts/ContractsList.tsx + src/pages/ContractsPage.tsx（Dialog 自实现 + ConfirmModal；status select + keyword 搜索；data-fn M02.F01.I01-I03 + @entry I02）",
+    "Sprint 2 Batch 2A：src/features/report-names/ReportNameList.tsx + page wrapper（单 Tab 简化版 + extFields JSON textarea；F07↔标准/参数关联 I02 留规划；data-fn M06.F07.I01）",
+    "Sprint 2 Batch 2A：src/features/param-interfaces/ParamInterfaceList.tsx + page wrapper（主表 CRUD；关联参数 link 端点已铺；data-fn M06.F08.I01）",
+    "Sprint 2 Batch 2A：tests/features/{contracts,report-names,param-interfaces}/* 9 fnTest 全绿（3 仓 × 3 I：列表穿透 + 新建开弹窗 + 删除开确认弹窗）",
+    "Sprint 2 Batch 2A：App.tsx 3 路由 placeholder → lazy 真页 import",
+    "Sprint 2 Batch 2A：function-tree.md M02.F01.I01-I03 + M06.F07.I01 + M06.F08.I01 规划→已上线（同 commit 落地）",
+    "Sprint 2 Batch 2A：gate L0-L5 全绿 99 功能条目 34 软告警（17 + 17 = Batch 1 24 + 新增 10；与 Batch 1 同型设计债）",
+    "Sprint 2 Batch 2A：commit c57b04c（react 指针 2a62036 → c57b04c）"
   ],
-  "next": "1) Sprint 2 Batch 2（react 先行）镜像 nextjs 流程线 8 页：contracts + report-names + param-interfaces + receipts(列表+详情) + task-assignment + data-entry；2) vue 仓镜像 react 同批落地（双仓并行）；3) Batch 3 inspection 6 页；4) Batch 4 报告 4 + summary；5) 全 batch 收完后提 /tree-change 翻状态 + 设计/流程映射表补 4 码表映射",
+  "next": "1) Batch 2B-1 react 仓先写 3 流程页：src/features/receipts/ReceiptsList.tsx (M03.F01.I01-I04: list + flowStatus 三态过滤 + submit 按钮推进状态机) + src/features/receipts/ReceiptDetail.tsx (M03.F09.I01-I03: 详情 + flow 历史时间线 + 报告预览) + src/features/task-assignment/TaskAssignmentList.tsx (M03.F02.I01-I02: 队列 + assignee 弹窗)；2) 4 page wrapper + App.tsx lazy + fnTest 每页 3-4 条；3) 跑 react gate → 绿 → commit；4) vue 仓镜像 Batch 2B-1；5) Batch 2B-2 单独做 data-entry（M03.F03，nextjs REF 12 个模型卡 + 报告预览 + extFields 弹窗，体量大建议拆 sub-batch）",
   "open_questions": [
-    "M01.F04.I03（路由守卫）未挂 fnTest — useRequireAuth 依赖 jsdom + router 环境，node 环境测不了；Sprint 2 引入 jsdom 测试时补",
-    "FSM 转移表已落 auth-context.tsx 注释落成（auth-context 头部），shared decision-log open_question 问的『是否需要契约定 FSM 转移表』仍未回填 shared 仓",
-    "M04 4 码表翻 已上线 后 24 条软告警（已上线但无设计映射 + 不在流程）由 docs/design/ + docs/flow/ 跨仓映射表收口（nextjs 仓设计/流程映射表已收 M04，可镜像 1:1）",
-    "拖拽 sortOrder 持久化 dnd-kit UX 已在 CategoryDictList.tsx 实现（line 196-216 PUT 持久化），但 nextjs 仓 tree-change 提案写过『拖拽 sortOrder 持久化本轮不做』— 实测做了，文档与代码不一致，需对账"
+    "M03 流程状态机走 /api/receipts/flow POST — installShapeAdapters 已含完整 8 阶流转 + withdraw 仅限本人 + flowHistory push；组件直接调 res.data.results，msw 主 handler 是 no-op 已被适配层覆盖",
+    "data-entry 的 12 个模型卡（水泥抗压/抗折/混凝土/钢筋力学数值/钢筋焊接弯曲/钢筋焊接拉伸/土工击实/土工击实度/颗粒级配 7+12 筛孔/默认）建议先做 1 个 DefaultParamCard + 1 个具体 Card（CementCompressCard）做样本，下批补齐；M06.F08.I01 已上线但 link 关联可能下批才做",
+    "M02.F01.I02 / M06.F07.I01 / M06.F08.I01 多 F 共享按钮 data-fn 撞名 — Batch 2A 单 F 用 dialog 内按钮 + header 按钮双挂 data-fn 的方式已绿，Batch 2B 流程页按钮（如「提交」「安排」）继续这种模式"
   ],
   "dont": [
-    "orval filters 必须在 input:{target,filters} 里 — 写在 entry 顶层静默无效（v7.21 实测）；tags 数组形式也是无效形态",
-    "contracts.ts 不能同时 `export type {X}` + `export {X}`（值枚举 BackendId/AuthHeaderKind）— TS2300 重复标识符；值枚举走 import 再 re-export 一份",
-    "node 环境测试 localStorage：auth-context 的 storageOf() 探测裸 localStorage 全局（不判 window），vi.stubGlobal('localStorage',{getItem:()=>Map.has?get:null}) — Map.get 直接返回 undefined 会导致 toBeNull() 断言错",
-    "axios mock 必须带 isAxiosError（toApiError 用它），缺了 login 失败 case 抛 TypeError",
-    "vitest.config.ts 必须配 @ alias（原 config 没配，auth-context import '@/api/...' 直接 Cannot find package）",
-    "AuthState 契约形状是 {kind, value:{kind, ...payload}} 双层（TypeSpec @discriminated 产物），写消费代码别按单层 discriminated union 解构",
-    "CategoryDictList 是 4 码表共用组件，UI 入口 @entry 必须一次列全 4 F 的 I01/I02/I03（不要按 dict 分支）",
-    "function-tree.md 翻 已上线 必须同 commit 落地代码 + 补 @entry，否则 L5 会硬 fail『已上线子项在代码里没有 UI 入口』"
+    "data-fn 用 {xxx} JSX 表达式（react L5 静态解析吃不到字面量）— 用静态字符串或 @entry 注释；Batch 1 坑：CategoryDictList 4 F 必须一次列全 4 @entry",
+    "screen.getByText 跨多 text-node 拼接字符串（如 '确认删除合同 HT-2026-001'）会 FAIL — 改 screen.getByRole('heading', { name: '删除合同' }) 拿单一节点；Batch 2A 3 个删除测试全踩过",
+    "L5 已上线但无 UI 入口会硬 fail（不是软告警）— 写完代码立刻确认每个 I 是否挂了 data-fn/@entry，否则回退 开发中；Batch 2A M02.F01.I03 漏 data-fn → L5 fail，回退后补 data-fn=\"M02.F01.I03\" 才绿",
+    "测试不用 resetFixtures() + installShapeAdapters(server) + 自己的 http.get 覆盖 — 适配层 already 包了 report-names/inspection-param-interfaces 主表为 {items,total}，不用再装；只有 contracts 需要自己装（msw 主 handler 已支持但要走 tenantId filter）"
   ],
-  "last_gate_passed_at": "2026-08-17T22:50+08:00",
+  "last_gate_passed_at": "2026-08-17T23:30+08:00",
   "active_branch": "master",
   "ahead_of_origin": "0"
 }
