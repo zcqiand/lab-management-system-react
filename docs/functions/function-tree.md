@@ -120,21 +120,21 @@
 
 | ID  | 模块 | 业务域边界 | 状态 |
 |-----|------|-----------|------|
-| M98 | 前端接线层 | apiclient / 后端切换 / orval endpoint 引用 | 规划 |
+| M98 | 前端接线层 | apiclient / 后端切换 / orval endpoint 引用 | 已上线 |
 
 ## 功能级
 
 | ID          | 功能 | 类型 | 状态 |
 |-------------|------|------|------|
-| M98.F01     | 运行时后端切换 | 接口 | 规划 |
-| M98.F02     | http-client 注入 | 接口 | 规划 |
-| M98.F03     | shared contract 客户端 | 接口 | 规划 |
+| M98.F01     | 运行时后端切换 | 接口 | 已上线 |
+| M98.F02     | http-client 注入 | 接口 | 已上线 |
+| M98.F03     | shared contract 客户端 | 接口 | 已上线 |
 
 ## 子项级
 
 | ID                | 子项 | 类型 | 状态 |
 |-------------------|------|------|------|
-| M98.F01.I01       | BackendSwitcher 下拉（4-backend：msw/aspnetcore/springboot/nextjs） | 按钮 | 规划 |
-| M98.F01.I02       | 持久化 baseUrl 到 localStorage | 接口 | 规划 |
-| M98.F02.I01       | axios 拦截器（baseUrl + Authorization）注入 | 接口 | 规划 |
-| M98.F03.I01       | orval 生成的 endpoints 函数存在性校验（endpoints-smoke.test.ts） | 接口 | 规划 |
+| M98.F01.I01       | BackendSwitcher 下拉（4-backend：msw/aspnetcore/springboot/nextjs） | 按钮 | 已上线 |
+| M98.F01.I02       | 持久化 baseUrl 到 localStorage | 接口 | 已上线 |
+| M98.F02.I01       | axios 拦截器（baseUrl + Authorization）注入 | 接口 | 已上线 |
+| M98.F03.I01       | orval 生成的 endpoints 函数存在性校验（endpoints-smoke.test.ts） | 接口 | 已上线 |

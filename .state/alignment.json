@@ -6,7 +6,7 @@
     "features": 29,
     "items": 62
   },
-  "warnings_total": 98,
+  "warnings_total": 110,
   "warnings": {
     "已上线但无设计映射": [
       "M02.F01.I01",
@@ -57,7 +57,17 @@
       "M06.F06.I02",
       "M06.F06.I03",
       "M06.F07.I01",
-      "M06.F08.I01"
+      "M06.F08.I01",
+      "M98.F01.I01",
+      "M98.F01.I02",
+      "M98.F02.I01",
+      "M98.F03.I01"
+    ],
+    "已上线但无测试引用": [
+      "M98.F01.I01",
+      "M98.F01.I02",
+      "M98.F02.I01",
+      "M98.F03.I01"
     ],
     "已上线但不在任何流程且非孤儿白名单": [
       "M02.F01.I01",
@@ -108,7 +118,11 @@
       "M06.F06.I02",
       "M06.F06.I03",
       "M06.F07.I01",
-      "M06.F08.I01"
+      "M06.F08.I01",
+      "M98.F01.I01",
+      "M98.F01.I02",
+      "M98.F02.I01",
+      "M98.F03.I01"
     ]
   },
   "unreachable_shipped": [],
@@ -936,7 +950,7 @@
     },
     "M98.F01.I01": {
       "name": "BackendSwitcher 下拉（4-backend：msw/aspnetcore/springboot/nextjs）",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
@@ -948,7 +962,7 @@
     },
     "M98.F01.I02": {
       "name": "持久化 baseUrl 到 localStorage",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -958,7 +972,7 @@
     },
     "M98.F02.I01": {
       "name": "axios 拦截器（baseUrl + Authorization）注入",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
@@ -968,7 +982,7 @@
     },
     "M98.F03.I01": {
       "name": "orval 生成的 endpoints 函数存在性校验（endpoints-smoke.test.ts）",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [],
       "flows": [],
