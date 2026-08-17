@@ -296,8 +296,12 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/dataEntryPage.dom.test.tsx::数据录入：渲染标题 + 列表行（fixtures 真数据穿透）"
+      ],
+      "entry": [
+        "src\\features\\data-entry\\DataEntryPage.tsx"
+      ]
     },
     "M03.F03.I02": {
       "name": "保存检测记录",
@@ -306,8 +310,12 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/dataEntryPage.dom.test.tsx::数据录入：弹窗内「保存检测记录」按钮可见（M03.F03.I02 data-fn 锚点）"
+      ],
+      "entry": [
+        "src\\features\\data-entry\\DataEntryPage.tsx"
+      ]
     },
     "M03.F03.I03": {
       "name": "人工改判 verdict",
@@ -316,8 +324,12 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/dataEntryPage.dom.test.tsx::数据录入：行内「录入结果」按钮（人工改判 verdict 入口）"
+      ],
+      "entry": [
+        "src\\features\\data-entry\\DataEntryPage.tsx"
+      ]
     },
     "M03.F05.I01": {
       "name": "审核队列（review 阶段）",
@@ -438,6 +450,7 @@
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptDetail.dom.test.tsx::接样单详情：报告预览按钮开弹窗"
       ],
       "entry": [
+        "src\\features\\data-entry\\ReportPreviewModal.tsx",
         "src\\features\\receipts\\ReceiptDetail.tsx"
       ]
     },

@@ -15,16 +15,10 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { apiClient, API_ROUTES } from "@/api/legacy-client";
 import type { SampleReceipt } from "@/types/process/sample-receipt";
 import { FLOW_STAGE_LABELS } from "@/types/process/flow";
+import { ReportPreviewModal } from "@/features/data-entry/ReportPreviewModal";
 
 export function ReceiptDetail() {
   const { id } = useParams<{ id: string }>();
@@ -161,28 +155,11 @@ export function ReceiptDetail() {
         </CardContent>
       </Card>
 
-      <Dialog
+      <ReportPreviewModal
         open={previewOpen}
-        onOpenChange={(open) => {
-          if (!open) setPreviewOpen(false);
-        }}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>报告预览 — {receipt.commissionCode}</DialogTitle>
-            <DialogDescription>
-              本弹窗为 M03.F09.I03 占位（Batch 2B-2 data-entry 镜像完整 ReportPreviewModal 时回填）。
-            </DialogDescription>
-          </DialogHeader>
-          <div className="text-sm text-slate-600">
-            当前流程阶段：{FLOW_STAGE_LABELS[receipt.flowStatus]}
-            <br />
-            报告类别编码：{receipt.categoryCode}
-            <br />
-            检测参数：{receipt.testParameters?.join("、") ?? "—"}
-          </div>
-        </DialogContent>
-      </Dialog>
+        receipt={receipt}
+        onClose={() => setPreviewOpen(false)}
+      />
     </div>
   );
 }

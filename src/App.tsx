@@ -34,7 +34,7 @@ const ParamInterfacesPage = lazy(() => import("@/pages/ParamInterfacesPage"));
 const ReceiptsPage = lazy(() => import("@/pages/ReceiptsPage"));
 const ReceiptDetailPage = lazy(() => import("@/pages/ReceiptDetailPage"));
 const TaskAssignmentPage = lazy(() => import("@/pages/TaskAssignmentPage"));
-const DataEntryPage = placeholder("数据录入");
+const DataEntryPage = lazy(() => import("@/pages/DataEntryPage"));
 const InspectionObjectsPage = placeholder("检测专项");
 const InspectionStandardsPage = placeholder("检测标准");
 const InspectionParametersPage = placeholder("检测参数");
