@@ -41,10 +41,11 @@ const InspectionParametersPage = placeholder("检测参数");
 const InspectionSpecialtiesPage = placeholder("检测项目");
 const InspectionTechnicalRequirementsPage = placeholder("技术要求");
 const InspectionCalculationRulesPage = placeholder("计算规则");
-const ReportIssuePage = placeholder("报告发放");
-const ReportReviewPage = placeholder("报告审核");
-const ReportApprovePage = placeholder("报告批准");
-const ReportArchivePage = placeholder("报告归档");
+// -- Batch 2B-3：报告 4 阶段（review/approval/issuance/archived）-------------------------
+const ReportIssuePage = lazy(() => import("@/pages/ReportIssuePage"));
+const ReportReviewPage = lazy(() => import("@/pages/ReportReviewPage"));
+const ReportApprovePage = lazy(() => import("@/pages/ReportApprovePage"));
+const ReportArchivePage = lazy(() => import("@/pages/ReportArchivePage"));
 const SummaryPage = placeholder("报告汇总");
 
 function placeholder(title: string) {

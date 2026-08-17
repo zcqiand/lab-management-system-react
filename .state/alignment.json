@@ -6,7 +6,7 @@
     "features": 29,
     "items": 62
   },
-  "warnings_total": 52,
+  "warnings_total": 58,
   "warnings": {
     "已上线但无设计映射": [
       "M02.F01.I01",
@@ -18,6 +18,9 @@
       "M03.F01.I04",
       "M03.F02.I01",
       "M03.F02.I02",
+      "M03.F03.I01",
+      "M03.F03.I02",
+      "M03.F03.I03",
       "M03.F09.I01",
       "M03.F09.I02",
       "M03.F09.I03",
@@ -46,6 +49,9 @@
       "M03.F01.I04",
       "M03.F02.I01",
       "M03.F02.I02",
+      "M03.F03.I01",
+      "M03.F03.I02",
+      "M03.F03.I03",
       "M03.F09.I01",
       "M03.F09.I02",
       "M03.F09.I03",
@@ -291,7 +297,7 @@
     },
     "M03.F03.I01": {
       "name": "样品 + 检测数据录入页",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
@@ -305,7 +311,7 @@
     },
     "M03.F03.I02": {
       "name": "保存检测记录",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
@@ -319,7 +325,7 @@
     },
     "M03.F03.I03": {
       "name": "人工改判 verdict",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
@@ -338,8 +344,12 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告审核：渲染标题 + 列表行（review 阶段 fixture 穿透）"
+      ],
+      "entry": [
+        "src\\pages\\ReportReviewPage.tsx"
+      ]
     },
     "M03.F05.I02": {
       "name": "审核通过/驳回（submit/return）",
@@ -348,7 +358,9 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告审核：「审核通过」按钮 data-fn 可见"
+      ],
       "entry": []
     },
     "M03.F06.I01": {
@@ -358,8 +370,12 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告批准：渲染标题 + 列表行（approval 阶段 fixture 穿透）"
+      ],
+      "entry": [
+        "src\\pages\\ReportApprovePage.tsx"
+      ]
     },
     "M03.F06.I02": {
       "name": "批准/驳回",
@@ -368,7 +384,9 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告批准：「批准」按钮 data-fn 可见"
+      ],
       "entry": []
     },
     "M03.F07.I01": {
@@ -378,8 +396,12 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告发放：渲染标题 + 列表行（issuance 阶段 fixture 穿透）"
+      ],
+      "entry": [
+        "src\\pages\\ReportIssuePage.tsx"
+      ]
     },
     "M03.F07.I02": {
       "name": "发放（生成报告编号）",
@@ -388,7 +410,9 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告发放：「发放」按钮 data-fn 可见"
+      ],
       "entry": []
     },
     "M03.F08.I01": {
@@ -398,8 +422,12 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告归档：渲染标题 + 列表行（archived 阶段 fixture 穿透）"
+      ],
+      "entry": [
+        "src\\pages\\ReportArchivePage.tsx"
+      ]
     },
     "M03.F08.I02": {
       "name": "归档完成",
@@ -408,7 +436,9 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告归档：「归档完成」按钮 data-fn 可见"
+      ],
       "entry": []
     },
     "M03.F09.I01": {
