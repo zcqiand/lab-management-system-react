@@ -38,12 +38,23 @@ installLegacyClient(
   },
 );
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <BackendProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </BackendProvider>
-  </StrictMode>,
-);
+// MSW dev bootstrap：mocks/browser.enableMocking() 在 VITE_DEFAULT_BACKEND=msw 时
+// 注册 service worker（public/mockServiceWorker.js），拦截 /api/* 全部请求。
+// 切到 nextjs/springboot/aspnetcore 时跳过，走真实后端。
+async function bootstrap() {
+  if (import.meta.env.DEV) {
+    const { enableMocking } = await import("./mocks/browser");
+    await enableMocking();
+  }
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <BackendProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </BackendProvider>
+    </StrictMode>,
+  );
+}
+
+void bootstrap();
