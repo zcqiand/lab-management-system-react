@@ -47,6 +47,7 @@ lab 自己写组件，不复用 saas 仓组件。详细 sprint 路线见 `docs/c
 - 镜像来源（UI 设计） → `../lab-management-system-nextjs/src/`（仅参考）
 - SSOT（OpenAPI.yaml） → `../lab-management-system-shared/generated/openapi/openapi.yaml`
 - 共享 mock 后端 → `../lab-management-system-msw`（`@lab/management-system-msw`）
+- **环境变量模板** → `.env.example`（提交）/ `.env.local`（gitignored，本地私有）
 
 ## 4. 工作循环
 

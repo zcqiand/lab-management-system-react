@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useBackend } from "@/state/backend-context";
 import type { BackendMode } from "@/api/backend-config";
+import { env } from "@/lib/env";
 
 const LABELS: Record<BackendMode, string> = {
   msw: "MSW（浏览器内 Mock）",
@@ -102,7 +103,7 @@ export function BackendSwitcher() {
               <Input
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
-                placeholder="http://localhost:5000"
+                placeholder={env.backendBaseUrls[editing] || "http://localhost:5000"}
                 autoFocus
                 onKeyDown={(e) => {
                   if (e.key === "Enter") commitEdit();
