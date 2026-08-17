@@ -1,31 +1,31 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "Sprint 2 Batch 2B-1 双仓 3 流程页（接样/详情/任务分配）镜像完成；下一步 react 先行 Batch 2B-2 data-entry（M03.F03，nextjs REF 12 个模型卡 + 报告预览，体量大可拆 sub-batch）",
+  "current_task": "Sprint 2 Batch 2B-2 双仓数据录入 + 2 模型卡 + ReportPreviewModal 升级镜像完成；下一步 react 先行 M03 报告 4 阶段（review/approval/issuance/archived 共 4 F + 8 I）",
   "done": [
-    "Sprint 2 Batch 2B-1：src/features/receipts/ReceiptsList.tsx + src/pages/ReceiptsPage.tsx（Dialog 自实现 + ConfirmModal；flowStatus 三态过滤 + keyword；data-fn M03.F01.I01-I04 + @entry I01/I02）",
-    "Sprint 2 Batch 2B-1：src/features/receipts/ReceiptDetail.tsx + src/pages/ReceiptDetailPage.tsx（react-router useParams；详情字段表 + 流程历史时间线 + 报告预览占位弹窗；data-fn M03.F09.I01-I03 + @entry I01/I02）",
-    "Sprint 2 Batch 2B-1：src/features/task-assignment/TaskAssignmentList.tsx + src/pages/TaskAssignmentPage.tsx（按 flowStatus=task_assignment 过滤；安排 Dialog 走 assigneeName + plannedTestDate → PUT /receipts/:id；data-fn M03.F02.I01/I02 + @entry I01）",
-    "Sprint 2 Batch 2B-1：tests/features/{receipts,task-assignment}/* 9 fnTest 全绿（列表穿透 + 新建开弹窗 + 删除开确认弹窗 + submit 调 /api/receipts/flow + ReceiptDetail 路由化 MemoryRouter）",
-    "Sprint 2 Batch 2B-1：App.tsx receipts/receipts/:id/task-assignment 3 路由 placeholder → lazy 真页 import",
-    "Sprint 2 Batch 2B-1：function-tree.md M03.F01/F02/F09 共 3 F + 9 I 规划→已上线（同 commit 落地）",
-    "Sprint 2 Batch 2B-1：gate L0-L5 全绿 99 功能条目 52 软告警（Batch 2A 34 + Batch 2B-1 新增 18；同型设计债）",
-    "Sprint 2 Batch 2B-1：commit 44e5788（react 指针 c57b04c → 44e5788）"
+    "Sprint 2 Batch 2B-2：src/features/data-entry/DataEntryPage.tsx + src/pages/DataEntryPage.tsx（Dialog 自实现；M03.F03.I01 列表 + flowStatus='data_entry' 过滤 + EntryModal 弹窗；M03.F03.I02 保存按钮 POST/PUT /api/test-records；M03.F03.I03 行内「录入结果」按钮）",
+    "Sprint 2 Batch 2B-2：src/features/data-entry/models/{DefaultParamCard,CementCompressCard}.tsx + cement-strength.ts（12 模型卡落 1：CementCompressCard 6 试件荷载 → 抗压强度 MPa → 平均值，简版算法不带 ±10% 剔除均值）+ types.ts + registry.ts",
+    "Sprint 2 Batch 2B-2：src/features/data-entry/ReportPreviewModal.tsx（升级 Batch 2B-1 占位：字段表 + 类别 + 检测参数列表，react 仓无 /templates 静态资源跳 docx 渲染）",
+    "Sprint 2 Batch 2B-2：src/features/receipts/ReceiptDetail.tsx 升级引用 ReportPreviewModal（M03.F09.I03 锚点不变）",
+    "Sprint 2 Batch 2B-2：App.tsx data-entry 路由 placeholder → lazy 真页 import",
+    "Sprint 2 Batch 2B-2：tests/features/data-entry/dataEntryPage.dom.test.tsx 3 fnTest 全绿（列表穿透 + 录入结果开弹窗 + 保存按钮可见）",
+    "Sprint 2 Batch 2B-2：function-tree.md M03.F03 + I01/I02/I03 共 1 F + 3 I 规划→已上线（同 commit 落地）",
+    "Sprint 2 Batch 2B-2：gate L0-L5 全绿 99 功能条目 52 软告警（Batch 2B-1 52 + Batch 2B-2 新增 0 — 同 4 条软告警持续滚动）"
   ],
-  "next": "1) Batch 2B-2 react 仓先写 data-entry 1 个 DefaultParamCard + 1 个具体 Card（推荐 CementCompressCard）做样本，下批补齐 11 个模型卡 + ReportPreviewModal（M03.F03.I01 + M03.F09.I03 弹窗回填）；2) gate → 绿 → commit；3) vue 仓镜像；4) 后续 batch 接 M03 报告 4 阶段（review/approval/issuance/archived 共 4 F + 8 I），仍走 react 先行 + vue 镜像模式",
+  "next": "1) Sprint 2 Batch 2B-3 react 仓写 M03 报告 4 阶段（review/approval/issuance/archived 共 4 F + 8 I），每阶段 1 列表页 + 1 提交/退回按钮；2) vue 仓镜像；3) 继续补 11 个模型卡（concrete-compress / concrete-permeability / cement-flexural / rebar-welding-tensile / rebar-welding-bend / rebar-mech-numeric / particle-gradation / soil-compaction / soil-compaction-degree + 综合比值卡）随 M06 落地一并下沉",
   "open_questions": [
-    "ReceiptDetail 报告预览按钮占位（Batch 2B-1 仅留 hook + 占位文字「Batch 2B-2 data-entry 镜像完整 ReportPreviewModal 时回填」）；msw 无 /api/org-info handler 所以 ReportPreviewModal 也 catch 兜底为 null（react 同行为），Batch 2B-2 需要单独跑通",
-    "ReceiptsList 新建弹窗内 contractId 写死 'placeholder-contract' + receivedBy='current-user' 是测试占位（react 仓无 auth context 全局用户）；REF Batch 2A 用 contractStore 拉真实合同下拉；Batch 2B-2 可以补合同下拉或保持占位（占位不影响 gate，但 L5 design mapping 软告警会增）",
-    "data-fn 撞名模式（每行 提交 + 编辑 + 删除 三 data-fn + 每行 详情 link）继续保留，Batch 2B-1 I02 用 dialog 内 + header 按钮双挂，没踩坑"
+    "M03.F09.I03 报告预览 Batch 2B-2 升级版仍是简化版（react 仓无 docx 模板/渲染；vue 仓同），shared 算法域 + 模板 JSON 下沉后 Batch 2B-N 补完整体 docxtemplater + docx-preview 链路",
+    "M03.F03.I03 已被 gate 警告「已上线但无测试引用」（Batch 2B-2 测试路径走的是 rowAction 入口，等价于「录入结果」按钮；与 nextjs REF I03 的 rowAction 同型），待 Batch 2B-3 补单测可消",
+    "cement-strength 简版算法不带 ±10% 剔除均值（完整版在 nextjs REF src/features/data-entry/models/cement-strength.ts；shared 算法域模块待下沉），测试通过靠 fixture 已知荷载 + 默认 area=1600 算期望均值"
   ],
   "dont": [
     "data-fn 用 {xxx} JSX 表达式（react L5 静态解析吃不到字面量）— 用静态字符串或 @entry 注释",
-    "screen.getByText 跨多 text-node 拼接字符串会 FAIL — 改 screen.getByRole('heading', { name: '删除合同' }) 拿单一节点",
+    "screen.getByText 跨多 text-node 拼接字符串会 FAIL",
     "L5 已上线但无 UI 入口会硬 fail（不是软告警）— 写完代码立刻确认每个 I 是否挂了 data-fn/@entry",
-    "测试 msw handler + installShapeAdapters 路径不要换 — Batch 2A/2B-1 验证 installShapeAdapters 已含完整 8 阶流转 + flowHistory push",
-    "M03.F02.I03 / I04（取消任务/批量提交）跳 I-level 不实现 — function tree 没列，react 仓 @entry 注释不挂（nextjs REF 标的但 tree-change 不批）；下一批如果需要再走 /tree-change 提案"
+    "react 仓 M03.F03.I03 不要绑「保存」按钮（避免与 I02 data-fn 撞名），按 row 入口绑「M03.F03.I03」，header 弹窗按钮绑「M03.F03.I02」（与 Batch 2B-1 模式同）",
+    "vue 仓模型卡组件类型不要 import '@/types/...' — 跨 SFC 共享类型放 models/ 子目录（与 react 仓一致）"
   ],
-  "last_gate_passed_at": "2026-08-17T23:50+08:00",
+  "last_gate_passed_at": "2026-08-17T24:30+08:00",
   "active_branch": "master",
   "ahead_of_origin": "0"
 }
