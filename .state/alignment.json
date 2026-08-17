@@ -6,7 +6,7 @@
     "features": 29,
     "items": 62
   },
-  "warnings_total": 94,
+  "warnings_total": 98,
   "warnings": {
     "已上线但无设计映射": [
       "M02.F01.I01",
@@ -44,6 +44,8 @@
       "M04.F09.I01",
       "M04.F09.I02",
       "M04.F09.I03",
+      "M05.F01.I01",
+      "M05.F01.I02",
       "M06.F01.I01",
       "M06.F02.I01",
       "M06.F02.I02",
@@ -93,6 +95,8 @@
       "M04.F09.I01",
       "M04.F09.I02",
       "M04.F09.I03",
+      "M05.F01.I01",
+      "M05.F01.I02",
       "M06.F01.I01",
       "M06.F02.I01",
       "M06.F02.I02",
@@ -699,25 +703,35 @@
     },
     "M05.F01.I01": {
       "name": "报告汇总表（按报告类别汇总）",
-      "status": "规划",
+      "status": "已上线",
       "type": "查询",
       "requirements": [],
       "flows": [],
       "designs": [],
       "tests": [
-        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::summary endpoint generated"
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::summary endpoint generated",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/summary/summaryList.dom.test.tsx::F01 列表行渲染（rows 数据穿透）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/summary/summaryList.dom.test.tsx::F01 渲染标题 + 汇总表表头（fixtures 穿透）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/summary/summaryList.dom.test.tsx::F01+F02 报告类别下拉存在（5 类 + 全部）"
       ],
-      "entry": []
+      "entry": [
+        "src\\features\\summary\\SummaryList.tsx"
+      ]
     },
     "M05.F01.I02": {
       "name": "仪表盘统计",
-      "status": "规划",
+      "status": "已上线",
       "type": "查询",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/summary/summaryList.dom.test.tsx::F01+F02 报告类别下拉存在（5 类 + 全部）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/summary/summaryList.dom.test.tsx::F02 仪表盘统计卡片（合同/接样/样品/待办/按状态）"
+      ],
+      "entry": [
+        "src\\features\\summary\\SummaryList.tsx"
+      ]
     },
     "M06.F01.I01": {
       "name": "检测专项列表 + CRUD",

@@ -49,18 +49,9 @@ const ReportIssuePage = lazy(() => import("@/pages/ReportIssuePage"));
 const ReportReviewPage = lazy(() => import("@/pages/ReportReviewPage"));
 const ReportApprovePage = lazy(() => import("@/pages/ReportApprovePage"));
 const ReportArchivePage = lazy(() => import("@/pages/ReportArchivePage"));
-const SummaryPage = placeholder("报告汇总");
 
-function placeholder(title: string) {
-  return function PlaceholderPage() {
-    return (
-      <EmptyState
-        title={`${title}（Sprint 2 待镜像）`}
-        description="本路由已占坑；页面随 Sprint 2 batch 逐批落地"
-      />
-    );
-  };
-}
+// -- Batch 2B-5：M05 报告汇总（Sprint 2 收尾）-----------------------------
+const SummaryPage = lazy(() => import("@/pages/SummaryPage"));
 
 function RouteSuspense({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={null}>{children}</Suspense>;
@@ -162,7 +153,10 @@ export default function App() {
             path="report-archive"
             element={<RouteSuspense><ReportArchivePage /></RouteSuspense>}
           />
-          <Route path="summary" element={<RouteSuspense><SummaryPage /></RouteSuspense>} />
+          <Route
+            path="summary"
+            element={<RouteSuspense><SummaryPage /></RouteSuspense>}
+          />
         </Route>
         <Route
           path="*"
