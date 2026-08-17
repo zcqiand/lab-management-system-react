@@ -17,6 +17,26 @@ import { useBackend } from "@/state/backend-context";
 import { BACKEND_REGISTRY_DEFAULT } from "@/api/contracts";
 import { authSsoAuthorize } from "@/api/endpoints/endpoints";
 
+/**
+ * 把 ?from= / redirect= 等 query 兜底成 lab 内部绝对路径。
+ *
+ * 防御 saas post-login 把字面量字符串 "undefined" 当 redirect 路径
+ * （历史上 saas 拼 URL 模板时 `${redirect}` 渲染成 "undefined"，
+ * lab 收到 `http://localhost:5173/undefined` 路由 404）。
+ *
+ * 规则：
+ *   - null / undefined / 空串 / 字面量 "undefined" → "/"
+ *   - 非 "/" 开头的相对路径（避免 saas 把 `redirect=undefined` 拼成外部 URL）→ "/"
+ *   - 含 "//" 的（协议相对 URL）→ "/"
+ *   - 通过校验：原样返回（登录成功后回跳）
+ */
+function sanitizeRedirect(from: string | null | undefined): string {
+  if (!from || from === "undefined" || from === "null") return "/";
+  if (!from.startsWith("/")) return "/";
+  if (from.startsWith("//")) return "/";
+  return from;
+}
+
 export function LoginPage() {
   const { state, login } = useAuth();
   const { backend } = useBackend();
@@ -41,7 +61,8 @@ export function LoginPage() {
     if (!ssoEnabled) return;
     if (state.kind !== "anonymous" && state.kind !== "idle") return;
     let cancelled = false;
-    const redirect = params.get("from") ?? "/";
+    const from = params.get("from");
+    const redirect = sanitizeRedirect(from);
     authSsoAuthorize({ redirect })
       .then((resp) => {
         if (cancelled) return;
@@ -60,7 +81,7 @@ export function LoginPage() {
 
   // 已登录访问 /login → 直接回业务页
   if (state.kind === "authenticated") {
-    return <Navigate to={params.get("from") ?? "/"} replace />;
+    return <Navigate to={sanitizeRedirect(params.get("from"))} replace />;
   }
   if (state.kind === "awaiting_tenant") {
     return <Navigate to="/select-tenant" replace />;
@@ -78,7 +99,7 @@ export function LoginPage() {
     }
     // FSM 已推进：单租户 → authenticated，多租户 → awaiting_tenant
     // navigate 由 guard/redirect 处理，这里兜底回 from
-    navigate(params.get("from") ?? "/", { replace: true });
+    navigate(sanitizeRedirect(params.get("from")), { replace: true });
   }
 
   return (
