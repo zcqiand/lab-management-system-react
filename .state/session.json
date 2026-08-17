@@ -1,13 +1,32 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "项目已初始化，等待第一个需求",
-  "done": ["脚手架生成，门禁全绿"],
-  "next": "跑 /req <需求原话> 落第一份需求文档，同时把 docs/functions/function-tree.md 填成真实功能清单",
-  "open_questions": [],
-  "dont": [
-    "不要改 .harness/stack.json 让门变松",
-    "不要给 skip 的测试挂功能 ID"
+  "current_task": "Sprint 1 前端绑定契约接入完成（AuthContext FSM + 守卫 + LoginPage）；下一步 Vue 仓对称镜像",
+  "done": [
+    "V013 rename 滞后 regen 提交（398feea，InspectionParamInterface + inspectionParamInterfaceCode）",
+    "orval filters exclude frontend-bind-meta 锚点 — 必须写 input:{target,filters} 对象形式，顶层 filters 无效",
+    "src/api/contracts.ts：8 契约 schema re-export + TOKEN_STORAGE_KEYS 常量 + AuthContextActions 行为签名 + BACKEND_REGISTRY_DEFAULT",
+    "src/state/auth-context.tsx：模块级 store + React Context 视图层；4 态 FSM（idle→anonymous→awaiting_tenant→authenticated）；login/logout/refresh/switchTenant/hasPermission/onChange；permissions 5min TTL",
+    "src/state/require-auth.ts useRequireAuth 守卫 + AppShell/SidebarNav/LoginPage/SelectTenantPage/DashboardPage 空壳 + App.tsx BrowserRouter",
+    "main.tsx 装 AuthProvider + installHttpClient 走 lab.accessToken 契约 key",
+    "tests/auth-fsm.test.ts 14 测全绿；fnTest 挂 M00.F01/F02 + M01.F04.I02 + M01.F05.I01/I02/I04",
+    "gate L0-L5 全绿 99 条目 0 软告警；gate --all 13 仓全绿；commit d643f21 推 origin"
   ],
-  "last_gate_passed_at": null
+  "next": "1) vue 仓（output/lab-management-system-vue）对称镜像本仓 8 文件（翻译规则见 docs/conventions/sprint-roadmap.md：JSX→template、Context→Pinia defineStore、auth-context 契约字段见 shared/.state/decision-log.md §2.2）；2) vue orval.config.ts 同样加 input.filters exclude frontend-bind-meta；3) react 侧 Sprint 2 起：镜像 nextjs 25 页（App.tsx 现在是路由骨架，旧 demo 内容已删）",
+  "open_questions": [
+    "M01.F04.I03（路由守卫）未挂 fnTest — useRequireAuth 依赖 jsdom + router 环境，node 环境测不了；Sprint 2 引入 jsdom 测试时补",
+    "FSM 转移表已在 auth-context.tsx 注释落成（auth-context 头部），shared decision-log open_question 问的『是否需要契约定 FSM 转移表』仍未回填 shared 仓",
+    "功能树 M00.F01/M01.F05.I01 等 7 子项状态仍『规划』— fnTest 已挂但按 suite 规矩改功能清单要走 /tree-change 提案（react 写完 + vue 镜像完后一起提）"
+  ],
+  "dont": [
+    "orval filters 必须在 input:{target,filters} 里 — 写在 entry 顶层静默无效（v7.21 实测）；tags 数组形式也是无效形态",
+    "contracts.ts 不能同时 `export type {X}` + `export {X}`（值枚举 BackendId/AuthHeaderKind）— TS2300 重复标识符；值枚举走 import 再 re-export 一份",
+    "node 环境测试 localStorage：auth-context 的 storageOf() 探测裸 localStorage 全局（不判 window），vi.stubGlobal('localStorage',{getItem:()=>Map.has?get:null}) — Map.get 直接返回 undefined 会导致 toBeNull() 断言错",
+    "axios mock 必须带 isAxiosError（toApiError 用它），缺了 login 失败 case 抛 TypeError",
+    "vitest.config.ts 必须配 @ alias（原 config 没配，auth-context import '@/api/...' 直接 Cannot find package）",
+    "AuthState 契约形状是 {kind, value:{kind, ...payload}} 双层（TypeSpec @discriminated 产物），写消费代码别按单层 discriminated union 解构"
+  ],
+  "last_gate_passed_at": "2026-08-17T18:40+08:00",
+  "active_branch": "master",
+  "ahead_of_origin": "0"
 }
