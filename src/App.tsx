@@ -14,7 +14,7 @@ import { AppShell } from "@/components/app/app-shell";
 import { LoginPage } from "@/pages/LoginPage";
 import { SelectTenantPage } from "@/pages/SelectTenantPage";
 import { DashboardPage } from "@/pages/DashboardPage";
-import { EmptyState } from "@/components/app/empty-state";
+import { BadPathRedirect } from "@/components/app/bad-path-redirect";
 import { Suspense, lazy } from "react";
 
 // -- Batch 1：基础数据码表 4 页（真页面）---------------------------------------
@@ -160,11 +160,7 @@ export default function App() {
         </Route>
         <Route
           path="*"
-          element={
-            <div className="flex min-h-screen items-center justify-center">
-              <EmptyState title="404" description="页面不存在" />
-            </div>
-          }
+          element={<BadPathRedirect />}
         />
       </Routes>
     </BrowserRouter>
