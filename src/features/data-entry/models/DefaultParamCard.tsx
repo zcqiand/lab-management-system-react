@@ -10,7 +10,7 @@ import type { InspectionTechnicalRequirement } from "@/types/inspection/inspecti
 const VERDICT_OPTIONS = ["合格", "不合格", "符合", "不符合"] as const;
 type Verdict = (typeof VERDICT_OPTIONS)[number];
 
-function requirementLabel(r: InspectionTechnicalRequirement): string {
+export function requirementLabel(r: InspectionTechnicalRequirement): string {
   const unit = r.unit ? ` ${r.unit}` : "";
   if (
     (r.valueType === "range" || r.comparison === "range") &&

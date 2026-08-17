@@ -1,18 +1,36 @@
-// 参数界面模型注册表（Batch 2B-2 样本：1 个具体 + 1 个兜底）。
+// 参数界面模型注册表（Batch 2B-7 满版 12 卡：default + 11 具体）。
 //
 // 镜像 nextjs REF src/features/data-entry/models/registry.ts：
 // - resolveParamInterfaceModel(key) 命中 registry 取具体卡，未命中回退 DefaultParamCard
-// - 本批只注册 2 个 key：'cement-compress' + 'default'
-// - 后续 batch 补 11 个具体卡（混凝土抗压/抗渗/水泥抗折/钢筋焊接拉伸/弯曲/钢筋力学数值/
-//   颗粒级配/土工击实/土工击实度 + 1 个综合比值卡），从 shared 算法域模块下沉
+// - 算法域模块（cement-strength / rebar-mechanics / rebar-welding）+ StrengthCardBase +
+//   resolveInterfaceByParam 来自 lab-management-system-shared/mocks/domain（nextjs 注释）
+//   本仓家族 shared v0.2.0 已瘦身无 mocks/domain，本仓逐字拷实现到 models/ 下，registry 直接 import。
 
 import type { ParamModelComponent } from "./types";
 import { DefaultParamCard } from "./DefaultParamCard";
+import { ConcreteCompressCard } from "./ConcreteCompressCard";
+import { ConcretePermeabilityCard } from "./ConcretePermeabilityCard";
+import { CementFlexuralCard } from "./CementFlexuralCard";
 import { CementCompressCard } from "./CementCompressCard";
+import { RebarWeldingTensileCard } from "./RebarWeldingTensileCard";
+import { RebarWeldingBendCard } from "./RebarWeldingBendCard";
+import { RebarMechNumericCard } from "./RebarMechNumericCard";
+import { ParticleGradationCard } from "./ParticleGradationCard";
+import { SoilCompactionCard } from "./SoilCompactionCard";
+import { SoilCompactionDegreeCard } from "./SoilCompactionDegreeCard";
 
 export const MODEL_REGISTRY: Record<string, ParamModelComponent> = {
   default: DefaultParamCard,
+  "concrete-compress": ConcreteCompressCard,
+  "concrete-permeability": ConcretePermeabilityCard,
+  "cement-flexural": CementFlexuralCard,
   "cement-compress": CementCompressCard,
+  "rebar-welding-tensile": RebarWeldingTensileCard,
+  "rebar-welding-bend": RebarWeldingBendCard,
+  "rebar-mech-numeric": RebarMechNumericCard,
+  "particle-gradation": ParticleGradationCard as unknown as ParamModelComponent,
+  "soil-compaction": SoilCompactionCard,
+  "soil-compaction-degree": SoilCompactionDegreeCard,
 };
 
 export function resolveParamInterfaceModel(key?: string): ParamModelComponent {
