@@ -556,7 +556,7 @@ export interface ObjectStandardLink {
 
 export type ParamInterfaceConfig = {[key: string]: unknown};
 
-export interface ParamInterface {
+export interface InspectionParamInterface {
   code: string;
   name?: string;
   componentPath: string;
@@ -572,7 +572,7 @@ export type ParamInterfaceLinkConfig = {[key: string]: unknown};
 
 export interface ParamInterfaceLink {
   inspectionParameterCode: string;
-  paramInterfaceCode: string;
+  inspectionParamInterfaceCode: string;
   reportNameCode?: string;
   config?: ParamInterfaceLinkConfig;
 }
@@ -1086,7 +1086,7 @@ keyword?: string;
 
 export type ParamInterfacesUnlinkParamInterfaceBody = {
   inspectionParameterCode: string;
-  paramInterfaceCode: string;
+  inspectionParamInterfaceCode: string;
 };
 
 export type ReceiptsListReceiptsParams = {

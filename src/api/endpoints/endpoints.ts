@@ -83,7 +83,7 @@ import type {
   ObjectParameterLink,
   ObjectReportNameLink,
   ObjectStandardLink,
-  ParamInterface,
+  InspectionParamInterface,
   ParamInterfaceLink,
   ParamInterfacesListParamInterfacesParams,
   ParamInterfacesUnlinkParamInterfaceBody,
@@ -3879,11 +3879,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     
 export const paramInterfacesListParamInterfaces = (
     params?: ParamInterfacesListParamInterfacesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ParamInterface[]>> => {
+ ): Promise<AxiosResponse<InspectionParamInterface[]>> => {
     
     
     return axios.default.get(
-      `/api/param-interfaces`,{
+      `/api/inspection-param-interfaces`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -3894,7 +3894,7 @@ export const paramInterfacesListParamInterfaces = (
 
 export const getParamInterfacesListParamInterfacesQueryKey = (params?: ParamInterfacesListParamInterfacesParams,) => {
     return [
-    `/api/param-interfaces`, ...(params ? [params]: [])
+    `/api/inspection-param-interfaces`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -3966,11 +3966,11 @@ export function useParamInterfacesListParamInterfaces<TData = Awaited<ReturnType
 
 export const paramInterfacesCreateParamInterface = (
     createParamInterfaceRequest: CreateParamInterfaceRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ParamInterface>> => {
+ ): Promise<AxiosResponse<InspectionParamInterface>> => {
     
     
     return axios.default.post(
-      `/api/param-interfaces`,
+      `/api/inspection-param-interfaces`,
       createParamInterfaceRequest,options
     );
   }
@@ -4026,7 +4026,7 @@ export const paramInterfacesLinkParamInterface = (
     
     
     return axios.default.post(
-      `/api/param-interfaces/links`,
+      `/api/inspection-param-interfaces/links`,
       paramInterfaceLink,options
     );
   }
@@ -4082,7 +4082,7 @@ export const paramInterfacesUnlinkParamInterface = (
     
     
     return axios.default.delete(
-      `/api/param-interfaces/links`,{data:
+      `/api/inspection-param-interfaces/links`,{data:
       paramInterfacesUnlinkParamInterfaceBody, ...options}
     );
   }
@@ -4134,11 +4134,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     
 export const paramInterfacesGetParamInterface = (
     code: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ParamInterface>> => {
+ ): Promise<AxiosResponse<InspectionParamInterface>> => {
     
     
     return axios.default.get(
-      `/api/param-interfaces/${code}`,options
+      `/api/inspection-param-interfaces/${code}`,options
     );
   }
 
@@ -4147,7 +4147,7 @@ export const paramInterfacesGetParamInterface = (
 
 export const getParamInterfacesGetParamInterfaceQueryKey = (code?: string,) => {
     return [
-    `/api/param-interfaces/${code}`
+    `/api/inspection-param-interfaces/${code}`
     ] as const;
     }
 
@@ -4220,11 +4220,11 @@ export function useParamInterfacesGetParamInterface<TData = Awaited<ReturnType<t
 export const paramInterfacesUpdateParamInterface = (
     code: string,
     updateParamInterfaceRequest: UpdateParamInterfaceRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ParamInterface>> => {
+ ): Promise<AxiosResponse<InspectionParamInterface>> => {
     
     
     return axios.default.put(
-      `/api/param-interfaces/${code}`,
+      `/api/inspection-param-interfaces/${code}`,
       updateParamInterfaceRequest,options
     );
   }
@@ -4280,7 +4280,7 @@ export const paramInterfacesDeleteParamInterface = (
     
     
     return axios.default.delete(
-      `/api/param-interfaces/${code}`,options
+      `/api/inspection-param-interfaces/${code}`,options
     );
   }
 
