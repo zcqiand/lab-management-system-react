@@ -56,7 +56,7 @@ import type {
   CreateSampleRequest,
   CreateTechnicalRequirementRequest,
   CreateTestRecordRequest,
-  CurrentUser,
+  CurrentUserSession,
   DashboardStats,
   ErrorResponse,
   FlowActionRequest,
@@ -83,7 +83,7 @@ import type {
   ObjectParameterLink,
   ObjectReportNameLink,
   ObjectStandardLink,
-  InspectionParamInterface,
+  ParamInterface,
   ParamInterfaceLink,
   ParamInterfacesListParamInterfacesParams,
   ParamInterfacesUnlinkParamInterfaceBody,
@@ -109,6 +109,7 @@ import type {
   StandardParameterLink,
   SummaryData,
   SummaryGetReportSummaryParams,
+  SwitchTenantRequest,
   TechnicalRequirement,
   TechnicalRequirementsListTechnicalRequirementsParams,
   TestRecord,
@@ -248,7 +249,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     
 export const authGetCurrentUser = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CurrentUser>> => {
+ ): Promise<AxiosResponse<CurrentUserSession>> => {
     
     
     return axios.default.get(
@@ -696,6 +697,62 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       > => {
 
       const mutationOptions = getAuthSsoCallbackMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export const authSwitchTenant = (
+    switchTenantRequest: SwitchTenantRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<LoginResponse>> => {
+    
+    
+    return axios.default.post(
+      `/api/auth/switch-tenant`,
+      switchTenantRequest,options
+    );
+  }
+
+
+
+export const getAuthSwitchTenantMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authSwitchTenant>>, TError,{data: SwitchTenantRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof authSwitchTenant>>, TError,{data: SwitchTenantRequest}, TContext> => {
+
+const mutationKey = ['authSwitchTenant'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authSwitchTenant>>, {data: SwitchTenantRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  authSwitchTenant(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AuthSwitchTenantMutationResult = NonNullable<Awaited<ReturnType<typeof authSwitchTenant>>>
+    export type AuthSwitchTenantMutationBody = SwitchTenantRequest
+    export type AuthSwitchTenantMutationError = AxiosError<ErrorResponse>
+
+    export const useAuthSwitchTenant = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authSwitchTenant>>, TError,{data: SwitchTenantRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof authSwitchTenant>>,
+        TError,
+        {data: SwitchTenantRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getAuthSwitchTenantMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }
@@ -3879,11 +3936,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     
 export const paramInterfacesListParamInterfaces = (
     params?: ParamInterfacesListParamInterfacesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<InspectionParamInterface[]>> => {
+ ): Promise<AxiosResponse<ParamInterface[]>> => {
     
     
     return axios.default.get(
-      `/api/inspection-param-interfaces`,{
+      `/api/param-interfaces`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -3894,7 +3951,7 @@ export const paramInterfacesListParamInterfaces = (
 
 export const getParamInterfacesListParamInterfacesQueryKey = (params?: ParamInterfacesListParamInterfacesParams,) => {
     return [
-    `/api/inspection-param-interfaces`, ...(params ? [params]: [])
+    `/api/param-interfaces`, ...(params ? [params]: [])
     ] as const;
     }
 
@@ -3966,11 +4023,11 @@ export function useParamInterfacesListParamInterfaces<TData = Awaited<ReturnType
 
 export const paramInterfacesCreateParamInterface = (
     createParamInterfaceRequest: CreateParamInterfaceRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<InspectionParamInterface>> => {
+ ): Promise<AxiosResponse<ParamInterface>> => {
     
     
     return axios.default.post(
-      `/api/inspection-param-interfaces`,
+      `/api/param-interfaces`,
       createParamInterfaceRequest,options
     );
   }
@@ -4026,7 +4083,7 @@ export const paramInterfacesLinkParamInterface = (
     
     
     return axios.default.post(
-      `/api/inspection-param-interfaces/links`,
+      `/api/param-interfaces/links`,
       paramInterfaceLink,options
     );
   }
@@ -4082,7 +4139,7 @@ export const paramInterfacesUnlinkParamInterface = (
     
     
     return axios.default.delete(
-      `/api/inspection-param-interfaces/links`,{data:
+      `/api/param-interfaces/links`,{data:
       paramInterfacesUnlinkParamInterfaceBody, ...options}
     );
   }
@@ -4134,11 +4191,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     
 export const paramInterfacesGetParamInterface = (
     code: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<InspectionParamInterface>> => {
+ ): Promise<AxiosResponse<ParamInterface>> => {
     
     
     return axios.default.get(
-      `/api/inspection-param-interfaces/${code}`,options
+      `/api/param-interfaces/${code}`,options
     );
   }
 
@@ -4147,7 +4204,7 @@ export const paramInterfacesGetParamInterface = (
 
 export const getParamInterfacesGetParamInterfaceQueryKey = (code?: string,) => {
     return [
-    `/api/inspection-param-interfaces/${code}`
+    `/api/param-interfaces/${code}`
     ] as const;
     }
 
@@ -4220,11 +4277,11 @@ export function useParamInterfacesGetParamInterface<TData = Awaited<ReturnType<t
 export const paramInterfacesUpdateParamInterface = (
     code: string,
     updateParamInterfaceRequest: UpdateParamInterfaceRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<InspectionParamInterface>> => {
+ ): Promise<AxiosResponse<ParamInterface>> => {
     
     
     return axios.default.put(
-      `/api/inspection-param-interfaces/${code}`,
+      `/api/param-interfaces/${code}`,
       updateParamInterfaceRequest,options
     );
   }
@@ -4280,7 +4337,7 @@ export const paramInterfacesDeleteParamInterface = (
     
     
     return axios.default.delete(
-      `/api/inspection-param-interfaces/${code}`,options
+      `/api/param-interfaces/${code}`,options
     );
   }
 

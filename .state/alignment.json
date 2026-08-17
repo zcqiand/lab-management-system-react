@@ -27,7 +27,10 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::authenticated 态拉取 /auth/permissions 并供 hasPermission 判断",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::非 authenticated 态 hasPermission 恒 false"
+      ],
       "entry": []
     },
     "M01.F04.I03": {
@@ -48,6 +51,8 @@
       "flows": [],
       "designs": [],
       "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::login 单租户 → 直进 authenticated + token 双 key 持久化",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::login 失败 → 停在 anonymous，ErrorResponse 返回",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::auth login endpoint generated"
       ],
       "entry": []
@@ -59,7 +64,11 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::TOKEN_STORAGE_KEYS 5 个 key 全部 lab.* 前缀且名字锁死",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::onChange 契约：状态转移触发订阅 + unsub 停止",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::token 失效（me 401 + refresh 401）→ 退 anonymous + 清 token"
+      ],
       "entry": []
     },
     "M01.F05.I03": {
@@ -79,7 +88,9 @@
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::logout → anonymous + 全部持久化 key 清空"
+      ],
       "entry": []
     },
     "M02.F01.I01": {

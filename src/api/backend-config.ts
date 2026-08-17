@@ -1,8 +1,12 @@
 // Runtime backend-switching singleton (module-level, not Context).
 // Lab family: msw / aspnetcore / springboot / nextjs 四模式运行时切换，不进 env / vite proxy。
 // React Context 只是它的视图层：mount 时 hydrate，change 时 snapshot 写 localStorage。
+// 契约：BackendId 来自 shared frontend-bind.tsp（src/api/contracts.ts re-export）。
 
-export type BackendMode = "msw" | "aspnetcore" | "springboot" | "nextjs";
+import type { BackendId } from "@/api/contracts";
+
+/** 旧名兼容别名 — 契约正名是 BackendId */
+export type BackendMode = BackendId;
 
 const DEFAULT_BASE_URLS: Readonly<Record<BackendMode, string>> = {
   msw: "", // 同源，service worker 拦截

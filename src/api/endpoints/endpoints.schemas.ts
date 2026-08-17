@@ -10,10 +10,191 @@ export interface AssignTaskRequest {
   plannedTestDate?: string;
 }
 
+/**
+ * AuthContext 数据契约。方法(login/logout/refresh/switchTenant/hasPermission/onChange)由消费方实现,TS 签名见 .state/decision-log.md §2.2
+ */
+export interface AuthContext {
+  /** 当前 auth 状态 */
+  state: AuthState;
+}
+
+export type AuthHeaderKind = typeof AuthHeaderKind[keyof typeof AuthHeaderKind];
+
+
+ 
+export const AuthHeaderKind = {
+  Authorization: 'Authorization',
+  'X-Auth-Token': 'X-Auth-Token',
+} as const;
+
+/**
+ * auth 状态机 4 态。Vue: pinia store / React: Context;两侧实现可同构
+ */
+export type AuthState = AuthStateIdle | AuthStateAnonymous | AuthStateAwaitingTenant | AuthStateAuthenticated;
+
+export type AuthStateAnonymousKind = typeof AuthStateAnonymousKind[keyof typeof AuthStateAnonymousKind];
+
+
+ 
+export const AuthStateAnonymousKind = {
+  anonymous: 'anonymous',
+} as const;
+
+export type AuthStateAnonymousValueKind = typeof AuthStateAnonymousValueKind[keyof typeof AuthStateAnonymousValueKind];
+
+
+ 
+export const AuthStateAnonymousValueKind = {
+  anonymous: 'anonymous',
+} as const;
+
+export type AuthStateAnonymousValue = {
+  kind: AuthStateAnonymousValueKind;
+};
+
+export interface AuthStateAnonymous {
+  kind: AuthStateAnonymousKind;
+  value: AuthStateAnonymousValue;
+}
+
+export type AuthStateAuthenticatedKind = typeof AuthStateAuthenticatedKind[keyof typeof AuthStateAuthenticatedKind];
+
+
+ 
+export const AuthStateAuthenticatedKind = {
+  authenticated: 'authenticated',
+} as const;
+
+export type AuthStateAuthenticatedValueKind = typeof AuthStateAuthenticatedValueKind[keyof typeof AuthStateAuthenticatedValueKind];
+
+
+ 
+export const AuthStateAuthenticatedValueKind = {
+  authenticated: 'authenticated',
+} as const;
+
+export type AuthStateAuthenticatedValue = {
+  kind: AuthStateAuthenticatedValueKind;
+  user: CurrentUser;
+  tenant: MyTenant;
+  permissions: string[];
+  /** unix ms */
+  tokenExpiresAt: number;
+};
+
+export interface AuthStateAuthenticated {
+  kind: AuthStateAuthenticatedKind;
+  value: AuthStateAuthenticatedValue;
+}
+
+export type AuthStateAwaitingTenantKind = typeof AuthStateAwaitingTenantKind[keyof typeof AuthStateAwaitingTenantKind];
+
+
+ 
+export const AuthStateAwaitingTenantKind = {
+  awaiting_tenant: 'awaiting_tenant',
+} as const;
+
+export type AuthStateAwaitingTenantValueKind = typeof AuthStateAwaitingTenantValueKind[keyof typeof AuthStateAwaitingTenantValueKind];
+
+
+ 
+export const AuthStateAwaitingTenantValueKind = {
+  awaiting_tenant: 'awaiting_tenant',
+} as const;
+
+export type AuthStateAwaitingTenantValue = {
+  kind: AuthStateAwaitingTenantValueKind;
+  user: CurrentUser;
+  tenants: MyTenant[];
+};
+
+export interface AuthStateAwaitingTenant {
+  kind: AuthStateAwaitingTenantKind;
+  value: AuthStateAwaitingTenantValue;
+}
+
+export type AuthStateIdleKind = typeof AuthStateIdleKind[keyof typeof AuthStateIdleKind];
+
+
+ 
+export const AuthStateIdleKind = {
+  idle: 'idle',
+} as const;
+
+export type AuthStateIdleValueKind = typeof AuthStateIdleValueKind[keyof typeof AuthStateIdleValueKind];
+
+
+ 
+export const AuthStateIdleValueKind = {
+  idle: 'idle',
+} as const;
+
+export type AuthStateIdleValue = {
+  kind: AuthStateIdleValueKind;
+};
+
+export interface AuthStateIdle {
+  kind: AuthStateIdleKind;
+  value: AuthStateIdleValue;
+}
+
+/**
+ * 4-backend 运行时切换配置。运行时由消费方仓各自实现(React Context / Vue pinia store)
+ */
+export interface BackendConfig {
+  /** 槽位标识,必须是 BackendId 之一 */
+  id: BackendId;
+  /** 显示名(MSW Mock / Next.js API / Spring Boot / ASP.NET Core) */
+  label: string;
+  /** baseUrl 的展示值,例如 'http://localhost:3000/api' */
+  baseUrl: string;
+  /** token 头:Bearer 走 Authorization,部分老后端用 X-Auth-Token */
+  authHeader: AuthHeaderKind;
+  /** SSO 回调路径(仅启用 SSO 的后端填写) */
+  ssoCallbackPath?: string;
+  /** 能力矩阵 */
+  features: BackendFeatures;
+}
+
+/**
+ * 后端能力矩阵
+ */
+export interface BackendFeatures {
+  /** 是否启用 SSO 跳转(msw=false / nextjs=true / springboot/aspnetcore 视实现) */
+  sso: boolean;
+  /** 是否对接真实数据库(vs mock seed) */
+  realDb: boolean;
+}
+
+/**
+ * 4 个槽位;id 锁定,避免拼写漂移
+ */
+export type BackendId = typeof BackendId[keyof typeof BackendId];
+
+
+ 
+export const BackendId = {
+  msw: 'msw',
+  nextjs: 'nextjs',
+  springboot: 'springboot',
+  aspnetcore: 'aspnetcore',
+} as const;
+
+/**
+ * 运行时注册表:当前激活 + 可切列表。切换/订阅方法由消费方实现,TS 签名见 .state/decision-log.md §2.1
+ */
+export interface BackendRegistry {
+  /** 当前激活后端 */
+  active: BackendId;
+  /** 可切换列表(通常包含全部 4 个槽位) */
+  available: BackendConfig[];
+}
+
 export type CalculationAlgorithmType = typeof CalculationAlgorithmType[keyof typeof CalculationAlgorithmType];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const CalculationAlgorithmType = {
   simple_avg: 'simple_avg',
   compressive_strength: 'compressive_strength',
@@ -42,6 +223,7 @@ export interface CalculationRule {
 
 export interface Contract {
   id: string;
+  tenantId: string;
   contractCode: string;
   clientUnit: string;
   projectName: string;
@@ -66,7 +248,7 @@ export interface Contract {
 export type ContractStatus = typeof ContractStatus[keyof typeof ContractStatus];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const ContractStatus = {
   active: 'active',
   archived: 'archived',
@@ -180,8 +362,6 @@ export interface CreateParamInterfaceRequest {
   config?: CreateParamInterfaceRequestConfig;
 }
 
-export type CreateSampleReceiptRequestTestParameters = {[key: string]: unknown};
-
 export interface CreateSampleReceiptRequest {
   contractId: string;
   commissionCode: string;
@@ -212,7 +392,7 @@ export interface CreateSampleReceiptRequest {
   remark?: string;
   judgmentBasis?: string[];
   testingBasis?: string[];
-  testParameters?: CreateSampleReceiptRequestTestParameters;
+  testParameters?: string[];
 }
 
 export type CreateSampleRequestExt = {[key: string]: string};
@@ -282,6 +462,12 @@ export interface CurrentUser {
   roleCode?: string;
 }
 
+export interface CurrentUserSession {
+  user: CurrentUser;
+  tenants: MyTenant[];
+  currentTenantId?: string;
+}
+
 export type DashboardStatsReportCountByStatus = {
   draft: number;
   reviewing: number;
@@ -317,7 +503,7 @@ export interface ExtFieldDef {
 export type ExtFieldDefSource = typeof ExtFieldDefSource[keyof typeof ExtFieldDefSource];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const ExtFieldDefSource = {
   sample: 'sample',
   receipt: 'receipt',
@@ -326,7 +512,7 @@ export const ExtFieldDefSource = {
 export type ExtFieldDefType = typeof ExtFieldDefType[keyof typeof ExtFieldDefType];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const ExtFieldDefType = {
   text: 'text',
   number: 'number',
@@ -337,7 +523,7 @@ export const ExtFieldDefType = {
 export type FlowAction = typeof FlowAction[keyof typeof FlowAction];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const FlowAction = {
   submit: 'submit',
   return: 'return',
@@ -370,7 +556,7 @@ export interface FlowHistoryEntry {
 export type FlowStatus = typeof FlowStatus[keyof typeof FlowStatus];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const FlowStatus = {
   receiving: 'receiving',
   task_assignment: 'task_assignment',
@@ -382,8 +568,15 @@ export const FlowStatus = {
   completed: 'completed',
 } as const;
 
+export interface FrontendBindMetaFrontendBindSnapshot {
+  registry: BackendRegistry;
+  authContext: AuthContext;
+  tokenKeys: TokenStorageKeys;
+}
+
 export interface InspectionBrand {
   code: string;
+  tenantId: string;
   inspectionObjectCode?: string;
   name: string;
   remark?: string;
@@ -394,6 +587,7 @@ export interface InspectionBrand {
 
 export interface InspectionGrade {
   code: string;
+  tenantId: string;
   inspectionObjectCode?: string;
   name: string;
   remark?: string;
@@ -404,6 +598,7 @@ export interface InspectionGrade {
 
 export interface InspectionModel {
   code: string;
+  tenantId: string;
   inspectionObjectCode?: string;
   name: string;
   remark?: string;
@@ -443,7 +638,7 @@ export interface InspectionParameter {
 export type InspectionParameterSourceType = typeof InspectionParameterSourceType[keyof typeof InspectionParameterSourceType];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const InspectionParameterSourceType = {
   official: 'official',
   custom: 'custom',
@@ -464,6 +659,7 @@ export interface InspectionReportName {
 
 export interface InspectionSpec {
   code: string;
+  tenantId: string;
   inspectionObjectCode?: string;
   name: string;
   remark?: string;
@@ -498,7 +694,7 @@ export interface InspectionStandard {
 export type InspectionStandardRole = typeof InspectionStandardRole[keyof typeof InspectionStandardRole];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const InspectionStandardRole = {
   TESTING: 'TESTING',
   JUDGMENT: 'JUDGMENT',
@@ -507,7 +703,7 @@ export const InspectionStandardRole = {
 export type InspectionStandardStatus = typeof InspectionStandardStatus[keyof typeof InspectionStandardStatus];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const InspectionStandardStatus = {
   active: 'active',
   superseded: 'superseded',
@@ -523,6 +719,7 @@ export interface LoginResponse {
   token: string;
   refreshToken?: string;
   user: CurrentUser;
+  tenants: MyTenant[];
 }
 
 export interface MenuNode {
@@ -531,6 +728,13 @@ export interface MenuNode {
   path?: string;
   icon?: string;
   children?: MenuNode[];
+}
+
+export interface MyTenant {
+  tenantId: string;
+  code: string;
+  name: string;
+  roleIds: string[];
 }
 
 export interface ObjectParameterLink {
@@ -556,7 +760,7 @@ export interface ObjectStandardLink {
 
 export type ParamInterfaceConfig = {[key: string]: unknown};
 
-export interface InspectionParamInterface {
+export interface ParamInterface {
   code: string;
   name?: string;
   componentPath: string;
@@ -572,7 +776,7 @@ export type ParamInterfaceLinkConfig = {[key: string]: unknown};
 
 export interface ParamInterfaceLink {
   inspectionParameterCode: string;
-  inspectionParamInterfaceCode: string;
+  paramInterfaceCode: string;
   reportNameCode?: string;
   config?: ParamInterfaceLinkConfig;
 }
@@ -584,7 +788,7 @@ export interface PermissionSet {
 export type QualificationLevel = typeof QualificationLevel[keyof typeof QualificationLevel];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const QualificationLevel = {
   QUALIFIED: 'QUALIFIED',
   RESTRICTED: 'RESTRICTED',
@@ -593,7 +797,7 @@ export const QualificationLevel = {
 export type ReceiptResult = typeof ReceiptResult[keyof typeof ReceiptResult];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const ReceiptResult = {
   pass: 'pass',
   fail: 'fail',
@@ -620,7 +824,7 @@ export interface ReportNameStandardLink {
 export type RequirementComparison = typeof RequirementComparison[keyof typeof RequirementComparison];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const RequirementComparison = {
   '≥': '≥',
   '≤': '≤',
@@ -632,7 +836,7 @@ export const RequirementComparison = {
 export type RequirementJudgmentMode = typeof RequirementJudgmentMode[keyof typeof RequirementJudgmentMode];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const RequirementJudgmentMode = {
   automatic: 'automatic',
   manual: 'manual',
@@ -641,7 +845,7 @@ export const RequirementJudgmentMode = {
 export type RequirementValueType = typeof RequirementValueType[keyof typeof RequirementValueType];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const RequirementValueType = {
   numeric: 'numeric',
   string: 'string',
@@ -653,7 +857,7 @@ export const RequirementValueType = {
 export type RequirementVerificationStatus = typeof RequirementVerificationStatus[keyof typeof RequirementVerificationStatus];
 
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const RequirementVerificationStatus = {
   draft: 'draft',
   reviewed: 'reviewed',
@@ -665,6 +869,7 @@ export type SampleExt = {[key: string]: string};
 
 export interface Sample {
   id: string;
+  tenantId: string;
   receiptId: string;
   sampleCode: string;
   sampleName?: string;
@@ -688,10 +893,9 @@ export interface Sample {
   updatedAt: string;
 }
 
-export type SampleReceiptTestParameters = {[key: string]: unknown};
-
 export interface SampleReceipt {
   id: string;
+  tenantId: string;
   contractId: string;
   commissionCode: string;
   commissionDate: string;
@@ -721,7 +925,7 @@ export interface SampleReceipt {
   remark?: string;
   judgmentBasis?: string[];
   testingBasis?: string[];
-  testParameters?: SampleReceiptTestParameters;
+  testParameters?: string[];
   flowStatus: FlowStatus;
   flowHistory: FlowHistoryEntry[];
   lastSubmittedBy?: string;
@@ -771,7 +975,12 @@ export interface SummaryData {
   rows: SummaryDataRowsItem[];
 }
 
+export interface SwitchTenantRequest {
+  tenantId: string;
+}
+
 export interface TechnicalRequirement {
+  tenantId: string;
   inspectionObjectCode: string;
   inspectionParameterCode: string;
   judgmentStandardCode: string;
@@ -801,6 +1010,7 @@ export interface TechnicalRequirement {
 
 export interface TestRecord {
   id: string;
+  tenantId: string;
   sampleId: string;
   parameterCode: string;
   standardCode?: string;
@@ -810,6 +1020,77 @@ export interface TestRecord {
   verdict?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+/**
+ * Bearer token
+ */
+export type TokenStorageKeysAccessToken = typeof TokenStorageKeysAccessToken[keyof typeof TokenStorageKeysAccessToken];
+
+
+ 
+export const TokenStorageKeysAccessToken = {
+  labaccessToken: 'lab.accessToken',
+} as const;
+
+/**
+ * refresh token(与 accessToken 分存,便于隔离 XSS 影响面)
+ */
+export type TokenStorageKeysRefreshToken = typeof TokenStorageKeysRefreshToken[keyof typeof TokenStorageKeysRefreshToken];
+
+
+ 
+export const TokenStorageKeysRefreshToken = {
+  labrefreshToken: 'lab.refreshToken',
+} as const;
+
+/**
+ * 当前选中租户 ID(authenticated 态缓存)
+ */
+export type TokenStorageKeysActiveTenantId = typeof TokenStorageKeysActiveTenantId[keyof typeof TokenStorageKeysActiveTenantId];
+
+
+ 
+export const TokenStorageKeysActiveTenantId = {
+  labactiveTenantId: 'lab.activeTenantId',
+} as const;
+
+/**
+ * 当前激活后端槽位(用于跨刷新记忆)
+ */
+export type TokenStorageKeysActiveBackend = typeof TokenStorageKeysActiveBackend[keyof typeof TokenStorageKeysActiveBackend];
+
+
+ 
+export const TokenStorageKeysActiveBackend = {
+  labactiveBackend: 'lab.activeBackend',
+} as const;
+
+/**
+ * permissions 缓存(避免每次路由跳转都打 /auth/permissions)
+ */
+export type TokenStorageKeysPermissionsCache = typeof TokenStorageKeysPermissionsCache[keyof typeof TokenStorageKeysPermissionsCache];
+
+
+ 
+export const TokenStorageKeysPermissionsCache = {
+  labpermissions: 'lab.permissions',
+} as const;
+
+/**
+ * 前端持久化 key 命名约定;后端契约不感知,但前端实现必须遵守
+ */
+export interface TokenStorageKeys {
+  /** Bearer token */
+  accessToken: TokenStorageKeysAccessToken;
+  /** refresh token(与 accessToken 分存,便于隔离 XSS 影响面) */
+  refreshToken: TokenStorageKeysRefreshToken;
+  /** 当前选中租户 ID(authenticated 态缓存) */
+  activeTenantId: TokenStorageKeysActiveTenantId;
+  /** 当前激活后端槽位(用于跨刷新记忆) */
+  activeBackend: TokenStorageKeysActiveBackend;
+  /** permissions 缓存(避免每次路由跳转都打 /auth/permissions) */
+  permissionsCache: TokenStorageKeysPermissionsCache;
 }
 
 export interface UpdateCalculationRuleRequest {
@@ -911,8 +1192,6 @@ export interface UpdateParamInterfaceRequest {
   config?: UpdateParamInterfaceRequestConfig;
 }
 
-export type UpdateSampleReceiptRequestTestParameters = {[key: string]: unknown};
-
 export interface UpdateSampleReceiptRequest {
   contractId?: string;
   commissionCode?: string;
@@ -943,7 +1222,7 @@ export interface UpdateSampleReceiptRequest {
   remark?: string;
   judgmentBasis?: string[];
   testingBasis?: string[];
-  testParameters?: UpdateSampleReceiptRequestTestParameters;
+  testParameters?: string[];
 }
 
 export type UpdateSampleRequestExt = {[key: string]: string};
@@ -1086,7 +1365,7 @@ keyword?: string;
 
 export type ParamInterfacesUnlinkParamInterfaceBody = {
   inspectionParameterCode: string;
-  inspectionParamInterfaceCode: string;
+  paramInterfaceCode: string;
 };
 
 export type ReceiptsListReceiptsParams = {
