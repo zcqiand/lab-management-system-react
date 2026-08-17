@@ -1,33 +1,27 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "Sprint 2 Batch 2B-4 react 仓 M06 检测能力 10 组件（specialty/object/parameter/standard/calculation-rule/technical-requirement 共 6 F + 10 I）双仓落地完成；M06 模块全功能上线 + 5 路由 + 复合键路由全链路 + M03 4 阶段 I02 @entry 补全；下一步走 Batch 2B-5 / 3A 之类的 M05 仪表盘/统计或其他 11 个模型卡",
+  "current_task": "Sprint 2 Batch 2B-5 react 仓 M05 报告汇总 + 仪表盘统计（1 F + 2 I）双仓落地完成；M05 模块全功能上线；Sprint 2 主体业务模块全部完成（100 业务 ID 全部已上线）；下一步走 Sprint 3 仪表盘/统计/审计等其他模块",
   "done": [
-    "Sprint 2 Batch 2B-4：src/features/inspection-capability/InspectionCapabilityList.tsx（多资源 4 字典通用页：specialty/object/parameter/standard；含 keyword + 3 级 filter + 4 资源对话框 + 共用 resetForm/openEdit/save/confirmDelete）",
-    "Sprint 2 Batch 2B-4：src/features/inspection-capability/CalculationRuleList.tsx（M06.F05 计算规则：复合主键 object+parameter + 试件数量 + 修约规则 + 6 算法类型）",
-    "Sprint 2 Batch 2B-4：src/features/inspection-capability/TechnicalRequirementList.tsx（M06.F06 技术要求：4 维筛选 brand/model/grade/spec 客户端二次过滤 + 比较符 + 上下限）",
-    "Sprint 2 Batch 2B-4：src/pages/{Specialties,Objects,Standards,Parameters,CalculationRules,TechnicalRequirements}Page.tsx（6 薄包装）",
-    "Sprint 2 Batch 2B-4：App.tsx inspection-{specialties,objects,parameters,standards,calculation-rules,technical-requirements} 6 路由 placeholder → lazy 真页 import + src/components/app/menus.ts 修正 specialties/objects 名字（之前 path 调换）",
-    "Sprint 2 Batch 2B-4：src/pages/{ReportReview,ReportApprove,ReportIssue,ReportArchive}Page.tsx 补 M03.F05.I02/F06.I02/F07.I02/F08.I02 @entry 注释（Batch 2B-3 漏挂导致 L5 fail，2B-4 顺手补）",
-    "Sprint 2 Batch 2B-4：tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx 12 fnTest 全绿（6 F 列表穿透 + F02/F04/F06 4 维 + 多维筛选 + fireEvent 模拟）",
-    "Sprint 2 Batch 2B-4：function-tree.md M06.F01/F02/F03/F04/F05/F06 共 6 F + 10 I 规划→已上线",
-    "Sprint 2 Batch 2B-4：gate L0-L5 全绿 99 功能条目 94 软告警（Batch 2B-3 58 + Batch 2B-4 新增 36 — 多资源 4 字典共用 InspectionCapabilityList 拉低软告警净增）",
-    "Sprint 2 Batch 2B-4：commit 21dcfa4（react 指针 d2df8ae → 21dcfa4）"
+    "Sprint 2 Batch 2B-5：src/features/summary/SummaryList.tsx（M05.F01 报告汇总 + 仪表盘统计：reportSummary 表格 + 5 仪表盘卡片）",
+    "Sprint 2 Batch 2B-5：src/pages/SummaryPage.tsx（薄包装）",
+    "Sprint 2 Batch 2B-5：App.tsx 移除 SummaryPage placeholder，sumary 路由 lazy 真页 import",
+    "Sprint 2 Batch 2B-5：tests/features/summary/summaryList.dom.test.tsx 4 fnTest 全绿（标题/表头穿透 + 列表行 + 5 仪表盘卡片 + 报告类别下拉）",
+    "Sprint 2 Batch 2B-5：function-tree.md M05.F01 + I01/I02 规划→已上线",
+    "Sprint 2 Batch 2B-5：gate L0-L5 全绿 99 功能条目 98 软告警",
+    "Sprint 2 收尾盘点：M00/M01/M02/M03/M04/M05/M06 共 7 模块业务 ID 全部已上线（除 msw handler 兜底的 M01.F04 权限管理 / M01.F05 认证 / M03.F07 报告 4 阶段 I02 之外；M01 整体由 saas 仓提供，react 仓不实现）"
   ],
-  "next": "1) Sprint 2 Batch 2B-5 / 3A 走 M05 仪表盘/统计（summaryGetReportSummary）— 11 个剩余模型卡（concrete-compress / concrete-permeability / cement-flexural / rebar-welding-tensile / rebar-welding-bend / rebar-mech-numeric / particle-gradation / soil-compaction / soil-compaction-degree + 综合比值卡）随 M06 落地一并下沉；2) saas suite 7 仓家族推进（vue/nextjs/springboot/aspnetcore 镜像）",
+  "next": "1) Sprint 3 走 M98 前端接线层 / M05 仪表盘统计增量（按状态分布已有；按报告类别、按月度等更细粒度汇总）；2) 11 个剩余模型卡（concrete-compress / concrete-permeability / cement-flexural / rebar-welding-tensile / rebar-welding-bend / rebar-mech-numeric / particle-gradation / soil-compaction / soil-compaction-degree + 综合比值卡）随 data-entry 报表生成器一并补；3) saas 仓家族镜像（vue/nextjs/springboot/aspnetcore 后续）",
   "open_questions": [
-    "M06 4 字典 InspectionCapabilityList 共享组件的 data-fn 用 prop 透传 — 走 FN_CREATE[resource] 动态映射，react 仓用 @entry 注释兼容 L5 静态扫描（vs vue 仓走相同 @entry 模式）",
-    "M06.F02.I02 项目↔专项/参数关联 — react 仓 InspectionCapabilityList 在 objects 资源 form 下拉选检测专项编码（占位），实际关联持久化由 M06.F03.I02 在 form 关联实现",
-    "M06.F06.I03 删除技术要求引用保护 — msw handler 兜底返回「被引用」错误，UI 在 ConfirmModal 显示 deleteError",
-    "M03.F05/F06/F07/F08 I02 @entry 注释（4 个 ReportPhasePage 包装） — 此前用 i02DataFn 动态 prop 透传，L5 静态扫不到，本批补 4 个静态 @entry 让 L5 引用完整性过线"
+    "M05 报告汇总表 + 仪表盘统计：msw handlers-extra.ts summaryExtraHandlers 直接返回 REF 期望形状，react 仓 SummaryList 无需 installShapeAdapters 兜底（与 M06 复合主键 installShapeAdapters 模式不同）",
+    "M05.F01 报告汇总 5 报告类别（RC/ST/MT/AD/ID）—— 类别值取自 msw sampleReceipts seed 的 categoryCode 字段"
   ],
   "dont": [
     "data-fn 用 {xxx} JSX 表达式（react L5 静态解析吃不到字面量）— 用静态字符串或 @entry 注释兼容",
     "L5 已上线但无 UI 入口会硬 fail（不是软告警）— 写完代码立刻确认每个 I 是否挂了 data-fn/ @entry",
-    "多资源 InspectionCapabilityList 共享组件不要拆 4 文件 — FN_CREATE 动态映射 + @entry 4 I 同时挂顶层就够",
-    "技术要求 4 维筛选（brand/model/grade/spec）走客户端二次过滤 — msw 不支持服务端多维过滤，installShapeAdapters 已铺 object/parameter 主端点"
+    "M05.F01.I02 仪表盘统计 5 卡片（合同/接样/样品/待办/按状态分布）— 不要拆 5 单独组件，一个 grid 容器即可"
   ],
-  "last_gate_passed_at": "2026-08-17T26:00+08:00",
+  "last_gate_passed_at": "2026-08-17T26:30+08:00",
   "active_branch": "master",
   "ahead_of_origin": "0"
 }
