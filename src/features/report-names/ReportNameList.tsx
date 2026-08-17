@@ -28,6 +28,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { apiClient, API_ROUTES } from "@/api/legacy-client";
+import { ReportNameLinkDialog } from "@/features/report-names/ReportNameLinkDialog";
 import type { InspectionReportName } from "@/types/inspection/inspection-report-name";
 import type { ExtFieldDef } from "@/types/api";
 import { ConfirmModal } from "@/components/ConfirmModal";
@@ -61,6 +62,8 @@ export function ReportNameList() {
   const [mode, setMode] = useState<Mode>({ kind: "idle" });
   const [loading, setLoading] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<InspectionReportName | null>(null);
+  // M06.F07.I02 报告名称↔标准/参数关联弹窗
+  const [linking, setLinking] = useState<InspectionReportName | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -229,6 +232,18 @@ export function ReportNameList() {
                       size="sm"
                       onClick={(e) => {
                         e.stopPropagation();
+                        setLinking(r);
+                      }}
+                      data-fn="M06.F07.I02"
+                    >
+                      关联
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="ml-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setMode({ kind: "edit", id: r.id });
                       }}
                     >
@@ -252,6 +267,19 @@ export function ReportNameList() {
           </table>
         </CardContent>
       </Card>
+
+      {/* M06.F07.I02 报告名称↔标准/参数关联弹窗 */}
+      {linking && (
+        <ReportNameLinkDialog
+          open={linking !== null}
+          onOpenChange={(o) => {
+            if (!o) setLinking(null);
+          }}
+          reportNameCode={linking.code}
+          reportNameLabel={linking.name}
+          onChanged={() => void load()}
+        />
+      )}
     </>
   );
 }

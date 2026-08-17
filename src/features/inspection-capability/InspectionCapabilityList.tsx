@@ -49,6 +49,7 @@ import {
 import { EmptyState } from "@/components/app/empty-state";
 import { ConfirmModal } from "@/components/ConfirmModal";
 import { apiClient, API_ROUTES } from "@/api/legacy-client";
+import { ParameterStandardLinkDialog } from "@/features/inspection-capability/ParameterStandardLinkDialog";
 import type {
   InspectionSpecialty,
   InspectionObject,
@@ -153,6 +154,7 @@ function isOfficialRow(r: CapabilityResource, item: ListItem): boolean {
 // @entry M06.F04.I02
 // M06.F02.I02 项目↔专项/参数关联（行内 / 新建表单下拉选检测专项编码）
 // M06.F04.I02 标准 CRUD（行内 编辑/删除 按钮）
+// M06.F03.I02 参数↔标准关联（parameters 行内「关联标准」→ ParameterStandardLinkDialog）
 export function InspectionCapabilityList({ resource }: Props) {
   const [items, setItems] = useState<ListItem[]>([]);
   const [total, setTotal] = useState(0);
@@ -174,6 +176,8 @@ export function InspectionCapabilityList({ resource }: Props) {
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [form, setForm] = useState<Record<string, string | boolean | number>>({});
+  // M06.F03.I02 参数↔标准关联弹窗（parameters 资源专属）
+  const [linkingParam, setLinkingParam] = useState<ListItem | null>(null);
 
   const resetForm = () => {
     if (resource === "specialties") {
@@ -546,6 +550,17 @@ export function InspectionCapabilityList({ resource }: Props) {
                       <TableCell key={i}>{c}</TableCell>
                     ))}
                     <TableCell className="text-xs whitespace-nowrap">
+                      {resource === "parameters" && (
+                        <Button
+                          variant="link"
+                          size="sm"
+                          onClick={() => setLinkingParam(item)}
+                          data-fn="M06.F03.I02"
+                          aria-label={`关联标准 ${item.code}`}
+                        >
+                          关联标准
+                        </Button>
+                      )}
                       <Button
                         variant="link"
                         size="sm"
@@ -841,6 +856,19 @@ export function InspectionCapabilityList({ resource }: Props) {
           setDeleteError(null);
         }}
       />
+
+      {/* M06.F03.I02 参数↔标准关联弹窗（parameters 资源） */}
+      {resource === "parameters" && linkingParam && (
+        <ParameterStandardLinkDialog
+          open={linkingParam !== null}
+          onOpenChange={(o) => {
+            if (!o) setLinkingParam(null);
+          }}
+          parameterCode={linkingParam.code}
+          parameterName={linkingParam.name}
+          onChanged={load}
+        />
+      )}
     </div>
   );
 }

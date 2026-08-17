@@ -1,56 +1,20 @@
 {
   "schema": 1,
   "approved": true,
-  "base_sha": "2d9a3b09f6bde680",
-  "summary": "认证域收口（对齐 nextjs 2026-08-18 决策）：登录全部委托 saas SSO，本地无用户名密码表单、无选租户页。LoginPage 重写为纯 SSO orchestrator（三分支：?token= 直达 / ?code=&state= 换 token / authorize 跳 saas），删 SelectTenantPage + /select-tenant 路由。据此：5 个子项 规划→已上线（代码+fnTest+锚点三件套齐），3 个子项 规划→已废弃（表单登录废弃、RBAC 两级角色与权限指令对齐 nextjs 废弃），M00.F02 选租户与 nextjs 一致保持规划（FSM 态保留、UI 入口移除）。",
+  "base_sha": "581c85f41c610976",
+  "summary": "M06 两个关联按钮落地（双仓同批）：M06.F03.I02 参数↔标准关联（parameters 行内「关联标准」→ ParameterStandardLinkDialog，toggle POST/DELETE /api/inspection/links/standard-parameter）+ M06.F07.I02 报告名称↔标准/参数关联（行内「关联」→ ReportNameLinkDialog 两段列表，标准 role=TESTING）。后端契约（shared tsp link/unlink + msw handlers）与 GET shape adapters 已就绪，本批补 UI + fnTest。代码+锚点+测试三件套齐，2 个子项 规划→已上线。",
   "changes": [
     {
-      "id": "M00.F01",
+      "id": "M06.F03.I02",
       "action": "变更",
-      "name": "当前用户会话",
-      "reason": "规划→已上线：auth-context.tsx hydrate 走 GET /api/auth/me 恢复会话；tests/auth-fsm.test.ts 2 个 fnTest（hydrate 无 token→anonymous / 有 token→authenticated）"
+      "name": "参数↔标准关联",
+      "reason": "规划→已上线：src/features/inspection-capability/ParameterStandardLinkDialog.tsx（data-fn=M06.F03.I02）+ InspectionCapabilityList parameters 行内入口；tests/features/inspection-capability/parameterStandardLink.dom.test.tsx 2 个 fnTest（本批新增）"
     },
     {
-      "id": "M01.F04.I02",
+      "id": "M06.F07.I02",
       "action": "变更",
-      "name": "动态权限集",
-      "reason": "规划→已上线：auth-context.tsx fetchPermissions（TTL 缓存）+ hasPermission；tests/auth-fsm.test.ts 2 个 fnTest"
-    },
-    {
-      "id": "M01.F04.I03",
-      "action": "变更",
-      "name": "路由守卫",
-      "reason": "规划→已上线：src/state/require-auth.ts useRequireAuth（// @entry M01.F04.I03）；tests/require-auth.dom.test.tsx 4 个 fnTest（anonymous→/login、awaiting_tenant→/login、缺权→/403、权限齐放行）"
-    },
-    {
-      "id": "M01.F04.I01",
-      "action": "变更",
-      "name": "动态菜单下发",
-      "reason": "规划→已上线：sidebar-nav.tsx data-fn=\"M01.F04.I01\" 锚点 + MENU_TREE 按分组渲染；tests/components/sidebar-nav.dom.test.tsx 2 个 fnTest（本批新增）"
-    },
-    {
-      "id": "M01.F05.I02",
-      "action": "变更",
-      "name": "Token 注入与失效跳登录",
-      "reason": "规划→已上线：legacy-client.ts // @entry M01.F05.I02 + http-client 拦截器；tests/auth-fsm.test.ts 3 个 fnTest"
-    },
-    {
-      "id": "M01.F05.I03",
-      "action": "变更",
-      "name": "SSO 授权码流",
-      "reason": "规划→已上线：LoginPage.tsx 重写为纯 SSO orchestrator（2026-08-18 对齐 nextjs，砍用户名密码表单）；tests/features/auth/loginPageSso.dom.test.tsx 3 个 fnTest 覆盖三阶段（本批新增）"
-    },
-    {
-      "id": "M01.F05.I04",
-      "action": "变更",
-      "name": "登出",
-      "reason": "规划→已上线：app-shell.tsx data-fn=\"M01.F05.I04\" 登出按钮；tests/auth-fsm.test.ts 1 个 fnTest"
-    },
-    {
-      "id": "M01.F05.I01",
-      "action": "变更",
-      "name": "用户名+密码登录",
-      "reason": "规划→已废弃：2026-08-18 认证收口对齐 nextjs——登录全部委托 saas 身份平台，本仓不再有本地登录表单页；login 端点消费保留在 FSM（测试基建），UI 入口已删"
+      "name": "报告名称↔标准/参数关联",
+      "reason": "规划→已上线：src/features/report-names/ReportNameLinkDialog.tsx（data-fn=M06.F07.I02，标准 role=TESTING + 参数两段 toggle）+ ReportNameList 行内入口；tests/features/report-names/reportNameLink.dom.test.tsx 2 个 fnTest（本批新增）"
     }
   ],
   "sync_files": []
