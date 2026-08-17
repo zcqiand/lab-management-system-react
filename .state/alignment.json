@@ -6,9 +6,12 @@
     "features": 29,
     "items": 62
   },
-  "warnings_total": 24,
+  "warnings_total": 34,
   "warnings": {
     "已上线但无设计映射": [
+      "M02.F01.I01",
+      "M02.F01.I02",
+      "M02.F01.I03",
       "M04.F06.I01",
       "M04.F06.I02",
       "M04.F06.I03",
@@ -20,9 +23,14 @@
       "M04.F08.I03",
       "M04.F09.I01",
       "M04.F09.I02",
-      "M04.F09.I03"
+      "M04.F09.I03",
+      "M06.F07.I01",
+      "M06.F08.I01"
     ],
     "已上线但不在任何流程且非孤儿白名单": [
+      "M02.F01.I01",
+      "M02.F01.I02",
+      "M02.F01.I03",
       "M04.F06.I01",
       "M04.F06.I02",
       "M04.F06.I03",
@@ -34,7 +42,9 @@
       "M04.F08.I03",
       "M04.F09.I01",
       "M04.F09.I02",
-      "M04.F09.I03"
+      "M04.F09.I03",
+      "M06.F07.I01",
+      "M06.F08.I01"
     ]
   },
   "unreachable_shipped": [],
@@ -135,35 +145,46 @@
     },
     "M02.F01.I01": {
       "name": "合同列表（三态过滤）",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],
       "tests": [
-        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::contract list endpoint generated"
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::contract list endpoint generated",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/contracts/contractsList.dom.test.tsx::合同列表：渲染标题 + 列表行（fixtures 真数据穿透）"
       ],
-      "entry": []
+      "entry": [
+        "src\\features\\contracts\\ContractsList.tsx"
+      ]
     },
     "M02.F01.I02": {
       "name": "新建/编辑合同",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/contracts/contractsList.dom.test.tsx::合同管理：新建按钮开弹窗"
+      ],
+      "entry": [
+        "src\\features\\contracts\\ContractsList.tsx"
+      ]
     },
     "M02.F01.I03": {
       "name": "删除合同",
-      "status": "规划",
+      "status": "已上线",
       "type": "按钮",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/contracts/contractsList.dom.test.tsx::合同管理：行内删除按钮开确认弹窗"
+      ],
+      "entry": [
+        "src\\features\\contracts\\ContractsList.tsx"
+      ]
     },
     "M03.F01.I01": {
       "name": "接样单列表（flowStatus 三态过滤）",
@@ -674,15 +695,20 @@
     },
     "M06.F07.I01": {
       "name": "报告名称列表 + extFields 模板",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],
       "tests": [
-        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::report name endpoint generated"
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::report name endpoint generated",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/report-names/reportNameList.dom.test.tsx::报告名称：新建按钮开弹窗（带 extFields 文本域）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/report-names/reportNameList.dom.test.tsx::报告名称：渲染标题 + 列表行（fixtures 真数据穿透）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/report-names/reportNameList.dom.test.tsx::报告名称：行内删除按钮开确认弹窗"
       ],
-      "entry": []
+      "entry": [
+        "src\\features\\report-names\\ReportNameList.tsx"
+      ]
     },
     "M06.F07.I02": {
       "name": "报告名称↔标准/参数关联",
@@ -696,13 +722,19 @@
     },
     "M06.F08.I01": {
       "name": "参数界面维护 + link",
-      "status": "规划",
+      "status": "已上线",
       "type": "页面",
       "requirements": [],
       "flows": [],
       "designs": [],
-      "tests": [],
-      "entry": []
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/param-interfaces/paramInterfaceList.dom.test.tsx::参数界面：新建按钮开弹窗",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/param-interfaces/paramInterfaceList.dom.test.tsx::参数界面：渲染标题 + 列表行（fixtures 真数据穿透）",
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/param-interfaces/paramInterfaceList.dom.test.tsx::参数界面：行内删除按钮开确认弹窗"
+      ],
+      "entry": [
+        "src\\features\\param-interfaces\\ParamInterfaceList.tsx"
+      ]
     },
     "M98.F01.I01": {
       "name": "BackendSwitcher 下拉（4-backend：msw/aspnetcore/springboot/nextjs）",

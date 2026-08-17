@@ -25,9 +25,11 @@ const BrandsPage = lazy(() => import("@/pages/BrandsPage"));
 
 // -- 业务页（Sprint 2 逐批替换为真页面 lazy import）---------------------------
 
-const ContractsPage = placeholder("合同管理");
-const ReportNamesPage = placeholder("报告名称维护");
-const ParamInterfacesPage = placeholder("参数界面维护");
+// -- Batch 2A：合同 / 报告名称 / 参数界面（码表式页）-------------------------
+const ContractsPage = lazy(() => import("@/pages/ContractsPage"));
+const ReportNamesPage = lazy(() => import("@/pages/ReportNamesPage"));
+const ParamInterfacesPage = lazy(() => import("@/pages/ParamInterfacesPage"));
+
 const ReceiptsPage = placeholder("接样管理");
 const ReceiptDetailPage = placeholder("接样单详情");
 const TaskAssignmentPage = placeholder("任务分配");
