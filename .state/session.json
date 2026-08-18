@@ -1,27 +1,23 @@
 {
   "schema": 1,
-  "project": "lab-management-system-vue",
-  "current_task": "Sprint 2 Batch 2B-5 vue 镜像 react M05 报告汇总 + 仪表盘统计（1 F + 2 I）完成；M05 模块全功能上线；Sprint 2 主体业务模块全部完成（100 业务 ID 全部已上线）；下一步走 Sprint 3 仪表盘/统计/审计等其他模块",
+  "project": "lab-management-system-react",
+  "current_task": "2026-08-18 认证域收口 + M06 两关联按钮落地（commit 1e26470 认证 / 214bebf M06），Sprint 3 前的欠账清理批次全部收口",
   "done": [
-    "Sprint 2 Batch 2B-5：src/features/summary/SummaryList.vue（M05.F01 镜像 react 仓：Teleport 不需要 + 内联 table + 5 仪表盘卡片 grid）",
-    "Sprint 2 Batch 2B-5：src/pages/SummaryPage.vue（薄包装）",
-    "Sprint 2 Batch 2B-5：router.ts 新增 summary 路由",
-    "Sprint 2 Batch 2B-5：tests/features/summary/summaryList.dom.test.ts 4 fnTest 全绿（vi.mock('axios') + 2 行 fixture + 5 仪表盘卡片穿透）",
-    "Sprint 2 Batch 2B-5：function-tree.md M05.F01 + I01/I02 规划→已上线（与 react 仓同 commit 落地）",
-    "Sprint 2 Batch 2B-5：gate L0-L5 全绿 99 功能条目 98 软告警（与 react 仓对齐）"
+    "认证收口对齐 nextjs：LoginPage 重写纯 SSO orchestrator（删用户名密码表单）+ 删 SelectTenantPage + /select-tenant 路由；gate 全绿",
+    "tree-change（已批）：M00.F01/M01.F04.I01-I03/M01.F05.I02-I04 规划→已上线；M01.F05.I01 表单登录→已废弃",
+    "新 fnTest：sidebar-nav 2 测（M01.F04.I01）+ loginPageSso 3 测（M01.F05.I03 三分支）",
+    "M06.F03.I02 参数↔标准关联：ParameterStandardLinkDialog.tsx + parameters 行内入口 + 2 fnTest",
+    "M06.F07.I02 报告名称↔标准/参数关联：ReportNameLinkDialog.tsx + 行内入口 + 2 fnTest",
+    "M06 两 ID tree-change 已批翻已上线；gate L0-L5 全绿（--all 14 仓验证）"
   ],
-  "next": "1) Sprint 3 走 M98 前端接线层 / M05 仪表盘统计增量（按状态分布已有；按报告类别、按月度等更细粒度汇总）；2) 11 个剩余模型卡（concrete-compress / concrete-permeability / cement-flexural / rebar-welding-tensile / rebar-welding-bend / rebar-mech-numeric / particle-gradation / soil-compaction / soil-compaction-degree + 综合比值卡）随 data-entry 报表生成器一并补；3) vue-draggable-plus 拖拽 sortOrder 持久化随 M04 4 码表补 UI 时做",
+  "next": "下批：无认证/M06 欠账。可选方向：① Sprint 3 M05 仪表盘统计增量（按月度/按报告类别，src/features/summary/SummaryList.tsx 加维度）② 清死代码：RebarMechCompositeCard.tsx 427 行未注册无 consumer，可提废弃提案",
   "open_questions": [
-    "vue 仓 SummaryList 多卡片 grid 用 div + class（vs react 仓 shadcn Card）— vue 仓无 Card 组件",
-    "vue 仓 fnTest 走 fnReporter from 测试名提取（[M05.F01.I01] 前缀）— react 仓走 TaskMeta.fn，两侧机制不同但对齐矩阵等价"
+    "M00.F02 选租户保持规划（FSM 态+3 fnTest 保留、UI 删）——saas 侧租户下发接入时机需人决策"
   ],
   "dont": [
-    "vue 仓从 '@/types/...' import — vue 仓无 src/types/ 目录，类型全部内联",
-    "vue 模板用 window.alert / globalThis.alert — 提取 alertError() 函数到 script setup（避免 template 表达式作用域不识别）",
-    "vue @entry 注释放 HTML 注释 <!-- @entry Mxx.Fxx.Ixx -->（L5 静态扫不到）— 必须放 // @entry 在 <script setup> 段 JS 注释",
-    "vue 仓 string 索引类型 ?? || 混合 TS5076 报错 — 用 (a ?? (b || c)) 显式括号"
-  ],
-  "last_gate_passed_at": "2026-08-17T26:30+08:00",
-  "active_branch": "master",
-  "ahead_of_origin": "0"
+    "tree 状态列禁止带括号注释（如「已废弃（原因…）」）——L5 hard-fail「缺少合法状态」，理由只写 tree-change.json",
+    "「查询」型子项翻已上线必须有 @entry/data-fn 锚点（M01.F04.I02 补在 auth-context.tsx fetchPermissions）",
+    "SSO 阶段 1 测试：AuthProvider hydrate 与 LoginPage 阶段 1 并发走 axios /me，mock 队列必须补 hydrate 响应，否则 hydrate 401→refresh 401→clearPersisted 竞争清 token（表现为 accessToken 断言 null）",
+    "jsdom window.location.href 赋值不生效：用 Object.defineProperty(window,'location',{get:()=>new Proxy(original,{set...})}) 拦截"
+  ]
 }
