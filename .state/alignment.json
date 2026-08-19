@@ -6,144 +6,8 @@
     "features": 29,
     "items": 63
   },
-  "warnings_total": 129,
-  "warnings": {
-    "已上线但无设计映射": [
-      "M01.F04.I01",
-      "M01.F04.I02",
-      "M01.F04.I03",
-      "M01.F05.I02",
-      "M01.F05.I03",
-      "M01.F05.I04",
-      "M02.F01.I01",
-      "M02.F01.I02",
-      "M02.F01.I03",
-      "M03.F01.I01",
-      "M03.F01.I02",
-      "M03.F01.I03",
-      "M03.F01.I04",
-      "M03.F01.I07",
-      "M03.F02.I01",
-      "M03.F02.I02",
-      "M03.F03.I01",
-      "M03.F03.I02",
-      "M03.F03.I03",
-      "M03.F05.I01",
-      "M03.F05.I02",
-      "M03.F06.I01",
-      "M03.F06.I02",
-      "M03.F07.I01",
-      "M03.F07.I02",
-      "M03.F08.I01",
-      "M03.F08.I02",
-      "M03.F09.I01",
-      "M03.F09.I02",
-      "M03.F09.I03",
-      "M04.F06.I01",
-      "M04.F06.I02",
-      "M04.F06.I03",
-      "M04.F07.I01",
-      "M04.F07.I02",
-      "M04.F07.I03",
-      "M04.F08.I01",
-      "M04.F08.I02",
-      "M04.F08.I03",
-      "M04.F09.I01",
-      "M04.F09.I02",
-      "M04.F09.I03",
-      "M05.F01.I01",
-      "M05.F01.I02",
-      "M06.F01.I01",
-      "M06.F02.I01",
-      "M06.F02.I02",
-      "M06.F03.I01",
-      "M06.F03.I02",
-      "M06.F04.I01",
-      "M06.F04.I02",
-      "M06.F05.I01",
-      "M06.F06.I01",
-      "M06.F06.I02",
-      "M06.F06.I03",
-      "M06.F07.I01",
-      "M06.F07.I02",
-      "M06.F08.I01",
-      "M98.F01.I01",
-      "M98.F01.I02",
-      "M98.F02.I01",
-      "M98.F03.I01"
-    ],
-    "已上线但无测试引用": [
-      "M03.F01.I07",
-      "M98.F01.I01",
-      "M98.F01.I02",
-      "M98.F02.I01",
-      "M98.F03.I01"
-    ],
-    "已上线但不在任何流程且非孤儿白名单": [
-      "M01.F04.I01",
-      "M01.F04.I02",
-      "M01.F04.I03",
-      "M01.F05.I02",
-      "M01.F05.I03",
-      "M01.F05.I04",
-      "M02.F01.I01",
-      "M02.F01.I02",
-      "M02.F01.I03",
-      "M03.F01.I01",
-      "M03.F01.I02",
-      "M03.F01.I03",
-      "M03.F01.I04",
-      "M03.F01.I07",
-      "M03.F02.I01",
-      "M03.F02.I02",
-      "M03.F03.I01",
-      "M03.F03.I02",
-      "M03.F03.I03",
-      "M03.F05.I01",
-      "M03.F05.I02",
-      "M03.F06.I01",
-      "M03.F06.I02",
-      "M03.F07.I01",
-      "M03.F07.I02",
-      "M03.F08.I01",
-      "M03.F08.I02",
-      "M03.F09.I01",
-      "M03.F09.I02",
-      "M03.F09.I03",
-      "M04.F06.I01",
-      "M04.F06.I02",
-      "M04.F06.I03",
-      "M04.F07.I01",
-      "M04.F07.I02",
-      "M04.F07.I03",
-      "M04.F08.I01",
-      "M04.F08.I02",
-      "M04.F08.I03",
-      "M04.F09.I01",
-      "M04.F09.I02",
-      "M04.F09.I03",
-      "M05.F01.I01",
-      "M05.F01.I02",
-      "M06.F01.I01",
-      "M06.F02.I01",
-      "M06.F02.I02",
-      "M06.F03.I01",
-      "M06.F03.I02",
-      "M06.F04.I01",
-      "M06.F04.I02",
-      "M06.F05.I01",
-      "M06.F06.I01",
-      "M06.F06.I02",
-      "M06.F06.I03",
-      "M06.F07.I01",
-      "M06.F07.I02",
-      "M06.F08.I01",
-      "M98.F01.I01",
-      "M98.F01.I02",
-      "M98.F02.I01",
-      "M98.F03.I01"
-    ]
-  },
+  "warnings_total": 0,
+  "warnings": {},
   "unreachable_shipped": [],
   "function_map": {
     "M01.F04.I01": {
@@ -151,8 +15,12 @@
       "status": "已上线",
       "type": "查询",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/sidebar-nav.dom.test.tsx::侧边栏按菜单树下发渲染：锚点 + 分组 + 页面项",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/sidebar-nav.dom.test.tsx::菜单项是可点按钮，点击触发导航回调"
@@ -166,8 +34,12 @@
       "status": "已上线",
       "type": "查询",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::authenticated 态拉取 /auth/permissions 并供 hasPermission 判断",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::非 authenticated 态 hasPermission 恒 false"
@@ -181,8 +53,12 @@
       "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/require-auth.dom.test.tsx::anonymous 访问受守卫路由 → 跳 /login 带 from 回跳",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/require-auth.dom.test.tsx::authenticated 权限齐 → allowed=true 留在原地",
@@ -212,8 +88,12 @@
       "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::TOKEN_STORAGE_KEYS 5 个 key 全部 lab.* 前缀且名字锁死",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::onChange 契约：状态转移触发订阅 + unsub 停止",
@@ -228,8 +108,12 @@
       "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/auth/loginPageSso.dom.test.tsx::阶段 1：?token= 直达 → 存 localStorage + /me 建会话 → 进业务页",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/auth/loginPageSso.dom.test.tsx::阶段 2：?code=&state= → POST sso/callback 换 token → setSession 进业务页",
@@ -242,8 +126,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::logout → anonymous + 全部持久化 key 清空"
       ],
@@ -256,8 +144,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::contract list endpoint generated",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/contracts/contractsList.dom.test.tsx::合同列表：渲染标题 + 列表行（fixtures 真数据穿透）"
@@ -271,8 +163,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/contracts/contractsList.dom.test.tsx::合同管理：新建按钮开弹窗"
       ],
@@ -285,8 +181,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/contracts/contractsList.dom.test.tsx::合同管理：行内删除按钮开确认弹窗"
       ],
@@ -299,8 +199,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::receipt list endpoint generated",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptsList.dom.test.tsx::接样管理：渲染标题 + 列表行（fixtures 真数据穿透）"
@@ -314,8 +218,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptsList.dom.test.tsx::接样管理：新建按钮开弹窗"
       ],
@@ -328,8 +236,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptsList.dom.test.tsx::接样管理：行内删除按钮开确认弹窗"
       ],
@@ -342,8 +254,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptsList.dom.test.tsx::接样管理：提交按钮调 POST /api/receipts/flow 推进 receiving → task_assignment"
       ],
@@ -356,9 +272,15 @@
       "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/infrastructure-anchors.test.ts::SampleExtFieldsModal module source file exists"
+      ],
       "entry": [
         "src\\features\\data-entry\\SampleExtFieldsModal.tsx"
       ]
@@ -368,8 +290,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/task-assignment/taskAssignmentList.dom.test.tsx::任务分配：渲染标题 + 列表行（fixtures 真数据穿透）"
       ],
@@ -382,8 +308,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/task-assignment/taskAssignmentList.dom.test.tsx::任务分配：安排按钮开弹窗"
       ],
@@ -396,8 +326,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/cementStrength.dom.test.tsx::CementCompressCard readOnly：输入吞掉 onChange",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/cementStrength.dom.test.tsx::CementCompressCard 渲染 6 个破坏荷载输入框",
@@ -437,8 +371,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/cementStrength.dom.test.tsx::CementCompressCard 有技术要求：录入均值达标 → 自动判合格",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/concreteCards.dom.test.tsx::ConcreteCompressCard 录入荷载 → onChange 上报代表值 JSON",
@@ -460,8 +398,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/cementStrength.dom.test.tsx::CementCompressCard 无技术要求：回退手选单项评定",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/data-entry/dataEntryPage.dom.test.tsx::数据录入：行内「录入结果」按钮（人工改判 verdict 入口）"
@@ -478,8 +420,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告审核：渲染标题 + 列表行（review 阶段 fixture 穿透）"
       ],
@@ -492,8 +438,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告审核：「审核通过」按钮 data-fn 可见"
       ],
@@ -506,8 +456,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告批准：渲染标题 + 列表行（approval 阶段 fixture 穿透）"
       ],
@@ -520,8 +474,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告批准：「批准」按钮 data-fn 可见"
       ],
@@ -534,8 +492,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告发放：渲染标题 + 列表行（issuance 阶段 fixture 穿透）"
       ],
@@ -548,8 +510,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告发放：「发放」按钮 data-fn 可见"
       ],
@@ -562,8 +528,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告归档：渲染标题 + 列表行（archived 阶段 fixture 穿透）"
       ],
@@ -576,8 +546,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/reports/reportPhasePage.dom.test.tsx::报告归档：「归档完成」按钮 data-fn 可见"
       ],
@@ -590,8 +564,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptDetail.dom.test.tsx::接样单详情：渲染标题 + 字段区"
       ],
@@ -604,8 +582,12 @@
       "status": "已上线",
       "type": "查询",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptDetail.dom.test.tsx::接样单详情：流程历史时间线卡片可见（空种子时显示占位）"
       ],
@@ -618,8 +600,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/receipts/receiptDetail.dom.test.tsx::接样单详情：报告预览按钮开弹窗"
       ],
@@ -632,8 +618,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::型号维护：渲染标题 + 检测项目树 + 默认选中项目下列表"
       ],
@@ -646,8 +636,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::型号维护：新建按钮开弹窗（检测项目/名称/备注表单）"
       ],
@@ -660,8 +654,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::型号维护：行内删除按钮开确认弹窗"
       ],
@@ -674,8 +672,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::规格维护：渲染标题不炸"
       ],
@@ -688,8 +690,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::规格维护：新建按钮开弹窗"
       ],
@@ -702,8 +708,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::规格维护：行内删除按钮开确认弹窗"
       ],
@@ -716,8 +726,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::等级维护：渲染标题不炸"
       ],
@@ -730,8 +744,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::等级维护：新建按钮开弹窗"
       ],
@@ -744,8 +762,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::等级维护：行内删除按钮开确认弹窗"
       ],
@@ -758,8 +780,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::brand list endpoint generated",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::牌号维护：牌号种子行渲染（fixtures 真数据穿透）"
@@ -773,8 +799,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::牌号维护：新建按钮开弹窗"
       ],
@@ -787,8 +817,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::牌号维护：行内删除按钮开确认弹窗"
       ],
@@ -801,8 +835,12 @@
       "status": "已上线",
       "type": "查询",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::summary endpoint generated",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/summary/summaryList.dom.test.tsx::F01 列表行渲染（rows 数据穿透）",
@@ -818,8 +856,12 @@
       "status": "已上线",
       "type": "查询",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/summary/summaryList.dom.test.tsx::F01+F02 报告类别下拉存在（5 类 + 全部）",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/summary/summaryList.dom.test.tsx::F02 仪表盘统计卡片（合同/接样/样品/待办/按状态）"
@@ -833,8 +875,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::inspection specialty endpoint generated",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F01 新建按钮存在 + 编码列显示官方序号",
@@ -849,8 +895,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F02 新建按钮存在 + 行内编辑/删除按钮",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F02 渲染标题 + 检测专项筛选下拉"
@@ -864,8 +914,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F02 新建按钮存在 + 行内编辑/删除按钮"
       ],
@@ -878,8 +932,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F03 渲染标题 + 3 级筛选下拉（专项/项目/标准）"
       ],
@@ -892,8 +950,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/parameterStandardLink.dom.test.tsx::toggle：未关联标准 → POST 后按钮翻「解除关联」",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/parameterStandardLink.dom.test.tsx::关联弹窗：列出标准 + 已关联态（IP-0001 已关联 GB 175-2023，fixtures 真数据穿透）"
@@ -908,8 +970,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F04 新建按钮存在 + 标准编码列显示",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F04 渲染标题 + 列表行"
@@ -923,8 +989,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::inspection standard create endpoint generated",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F04 新建按钮存在 + 标准编码列显示"
@@ -938,8 +1008,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F05 新建按钮 + 行内编辑/删除按钮",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F05 渲染标题 + 列表行（复合主键 fixtures）"
@@ -953,8 +1027,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F06 4 维筛选输入可达（fireEvent 模拟）",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F06 列表渲染（fixtures 穿透）+ 新建按钮",
@@ -969,8 +1047,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F06 列表渲染（fixtures 穿透）+ 新建按钮"
       ],
@@ -983,8 +1065,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F06 列表渲染（fixtures 穿透）+ 新建按钮"
       ],
@@ -997,8 +1083,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::report name endpoint generated",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/report-names/reportNameList.dom.test.tsx::报告名称：新建按钮开弹窗（带 extFields 文本域）",
@@ -1014,8 +1104,12 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/report-names/reportNameLink.dom.test.tsx::toggle 参数：POST 后按钮翻「解除」",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/report-names/reportNameLink.dom.test.tsx::关联弹窗：两段列表渲染（标准 + 参数，fixtures 真数据穿透）"
@@ -1030,8 +1124,12 @@
       "status": "已上线",
       "type": "页面",
       "requirements": [],
-      "flows": [],
-      "designs": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/param-interfaces/paramInterfaceList.dom.test.tsx::参数界面：新建按钮开弹窗",
         "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/param-interfaces/paramInterfaceList.dom.test.tsx::参数界面：渲染标题 + 列表行（fixtures 真数据穿透）",
@@ -1046,9 +1144,15 @@
       "status": "已上线",
       "type": "按钮",
       "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/infrastructure-anchors.test.ts::BackendSwitcher module source file exists"
+      ],
       "entry": [
         "src\\components\\app\\backend-switcher.tsx"
       ]
@@ -1058,9 +1162,15 @@
       "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/infrastructure-anchors.test.ts::useBackend store source file exists (backend-context)"
+      ],
       "entry": []
     },
     "M98.F02.I01": {
@@ -1068,9 +1178,15 @@
       "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/infrastructure-anchors.test.ts::axios interceptor module source file exists"
+      ],
       "entry": []
     },
     "M98.F03.I01": {
@@ -1078,9 +1194,15 @@
       "status": "已上线",
       "type": "接口",
       "requirements": [],
-      "flows": [],
-      "designs": [],
-      "tests": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
+      "tests": [
+        "D:/zcqiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/infrastructure-anchors.test.ts::orval-generated auth endpoint directory exists"
+      ],
       "entry": []
     }
   }
