@@ -1,4 +1,4 @@
-// env 单元测试 — 验证 import.meta.env.VITE_* 注入 + 默认值兜底。
+// env 单元测试 — 验证 import.meta.env.VITE_* 注入 + 默认值兜底（ADR-0014）。
 //
 // vitest 默认不读 .env.local（.env.test / setup file 另议），所以这里用
 // vitest 的 `vi.stubEnv` 注入每个 case 的 env 后 import lib。
@@ -28,15 +28,13 @@ describe("src/lib/env", () => {
     }
   }
 
-  it("无 VITE_* 时回退默认端口 5173", async () => {
+  it("无 VITE_* 时回退默认端口 5173 + 空 baseUrl + msw 模式", async () => {
     stubEnvs({});
     const { env } = await import("@/lib/env");
     expect(env.devPort).toBe(5173);
-    expect(env.defaultBackend).toBe("msw");
-    expect(env.backendBaseUrls.msw).toBe("");
-    expect(env.backendBaseUrls.aspnetcore).toBe("http://localhost:5000");
-    expect(env.backendBaseUrls.springboot).toBe("http://localhost:8080");
-    expect(env.backendBaseUrls.nextjs).toBe("http://localhost:3001");
+    expect(env.apiBaseUrl).toBe("");
+    expect(env.apiMode).toBe("msw");
+    expect(env.enableMsw).toBe(true); // dev mode 兜底
     expect(env.saasBaseUrl).toBe("http://localhost:3000");
   });
 
@@ -46,22 +44,28 @@ describe("src/lib/env", () => {
     expect(env.devPort).toBe(6000);
   });
 
-  it("VITE_DEFAULT_BACKEND 切换到 nextjs", async () => {
-    stubEnvs({ VITE_DEFAULT_BACKEND: "nextjs" });
+  it("VITE_API_BASE_URL 切到外部后端", async () => {
+    stubEnvs({ VITE_API_BASE_URL: "http://localhost:3001" });
     const { env } = await import("@/lib/env");
-    expect(env.defaultBackend).toBe("nextjs");
+    expect(env.apiBaseUrl).toBe("http://localhost:3001");
   });
 
-  it("VITE_BACKEND_URL_ASPNETCORE 覆盖", async () => {
-    stubEnvs({ VITE_BACKEND_URL_ASPNETCORE: "https://staging.example.com" });
+  it("VITE_API_BASE_URL 空字符串视为未设，回退默认", async () => {
+    stubEnvs({ VITE_API_BASE_URL: "" });
     const { env } = await import("@/lib/env");
-    expect(env.backendBaseUrls.aspnetcore).toBe("https://staging.example.com");
+    expect(env.apiBaseUrl).toBe("");
   });
 
-  it("VITE_BACKEND_URL_MSW 空字符串视为未设，回退默认", async () => {
-    stubEnvs({ VITE_BACKEND_URL_MSW: "" });
+  it("VITE_API_MODE=nextjs 显示标签切换", async () => {
+    stubEnvs({ VITE_API_MODE: "nextjs" });
     const { env } = await import("@/lib/env");
-    expect(env.backendBaseUrls.msw).toBe("");
+    expect(env.apiMode).toBe("nextjs");
+  });
+
+  it("VITE_ENABLE_MSW=false 强制关闭 MSW", async () => {
+    stubEnvs({ VITE_ENABLE_MSW: "false" });
+    const { env } = await import("@/lib/env");
+    expect(env.enableMsw).toBe(false);
   });
 
   it("VITE_SAAS_BASE_URL 覆盖 saas 地址", async () => {

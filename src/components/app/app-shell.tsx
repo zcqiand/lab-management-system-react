@@ -13,7 +13,7 @@ import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarNav, useSaasMenus } from "@/components/app/sidebar-nav";
 import { APP_CODE, APP_NAME, MENU_TREE } from "@/components/app/menus";
-import { BackendSwitcher } from "@/components/app/backend-switcher";
+import { BackendBadge } from "@/components/app/backend-badge";
 import { useAuth } from "@/state/auth-context";
 import { useRequireAuth } from "@/state/require-auth";
 
@@ -41,7 +41,7 @@ export function AppShell() {
         menus={menus}
         appCode={APP_CODE}
         appName={APP_NAME}
-        footerExtras={<BackendSwitcher />}
+        footerExtras={<BackendBadge />}
         version={`lab-management-system-react · appCode=${APP_CODE}`}
       />
       <main className="flex-1 flex flex-col min-w-0">

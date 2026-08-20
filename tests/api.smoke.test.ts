@@ -1,72 +1,56 @@
-// Smoke test: 4-backend config + http-client wiring。验证：
-//   - BackendMode 包括 'nextjs'
-//   - setBackend / getBaseUrl / setBaseUrlFor 行为正确
-//   - hydrate/snapshot 是 idempotent 的
+// Smoke test: backend-config env-driven 单 URL（ADR-0014）。验证：
+//   - getApiBaseUrl / getApiMode / isMswEnabled 行为正确
+//   - 单 URL 模式不再有 4-backend 切换
 //
-// 不启 React、不触 axios；只看 backend-config + http-client 模块级 singleton。
-import { describe, it, expect, beforeEach } from "vitest";
-import {
-  BACKEND_DEFAULT_BASE_URLS,
-  getBackend,
-  setBackend,
-  getBaseUrl,
-  getBaseUrlFor,
-  setBaseUrlFor,
-  hydrateBackendConfig,
-  snapshotBackendConfig,
-  type BackendMode,
-} from "../src/api/backend-config";
+// 不启 React、不触 axios；只看 backend-config 模块导出。
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
-const ALL_MODES: BackendMode[] = ["msw", "aspnetcore", "springboot", "nextjs"];
-
-describe("M98 backend switcher (4-backend)", () => {
+describe("M98 backend-config (env-driven 单 URL — ADR-0014)", () => {
   beforeEach(() => {
-    // 每个 case 前回到默认状态
-    hydrateBackendConfig({ backend: "msw", baseUrls: BACKEND_DEFAULT_BASE_URLS });
+    // 每个 case 前清 stub env
+    for (const k of Object.keys(import.meta.env)) {
+      if (k.startsWith("VITE_")) {
+        delete (import.meta.env as Record<string, unknown>)[k];
+      }
+    }
+    vi.resetModules();
   });
 
-  it("BackendMode union has 4 modes including 'nextjs'", () => {
-    expect(ALL_MODES).toContain("nextjs");
-    expect(ALL_MODES).toHaveLength(4);
+  function stubEnvs(values: Record<string, string>) {
+    for (const [k, v] of Object.entries(values)) {
+      (import.meta.env as Record<string, string>)[k] = v;
+    }
+  }
+
+  it("无 env 时 getApiBaseUrl 回退空串（同源）", async () => {
+    stubEnvs({});
+    const { getApiBaseUrl, getApiMode, isMswEnabled } = await import(
+      "@/api/backend-config"
+    );
+    expect(getApiBaseUrl()).toBe("");
+    expect(getApiMode()).toBe("msw");
+    expect(isMswEnabled()).toBe(true);
   });
 
-  it("DEFAULT_BASE_URLS has 'nextjs' default :3001 (跨 origin)", () => {
-    expect(BACKEND_DEFAULT_BASE_URLS.nextjs).toBe("http://localhost:3001");
-    expect(BACKEND_DEFAULT_BASE_URLS.msw).toBe("");
-  });
-
-  it("setBackend('nextjs') updates getBaseUrl() to :3001", () => {
-    setBackend("nextjs");
-    expect(getBackend()).toBe("nextjs");
-    expect(getBaseUrl()).toBe("http://localhost:3001");
-  });
-
-  it("setBackend('aspnetcore') updates getBaseUrl() to localhost:5000", () => {
-    setBackend("aspnetcore");
-    expect(getBaseUrl()).toBe("http://localhost:5000");
-  });
-
-  it("setBaseUrlFor('springboot', ...) round-trips", () => {
-    setBaseUrlFor("springboot", "http://10.0.0.5:9090");
-    expect(getBaseUrlFor("springboot")).toBe("http://10.0.0.5:9090");
-  });
-
-  it("hydrate/snapshot round-trip preserves all 4 baseUrls", () => {
-    setBaseUrlFor("aspnetcore", "http://a:1");
-    setBaseUrlFor("springboot", "http://b:2");
-    setBaseUrlFor("nextjs", "http://c:3");
-    const snap = snapshotBackendConfig();
-    expect(snap.baseUrls).toEqual({
-      msw: "",
-      aspnetcore: "http://a:1",
-      springboot: "http://b:2",
-      nextjs: "http://c:3",
+  it("VITE_API_BASE_URL=http://localhost:3001 → getApiBaseUrl 切到 nextjs 仓", async () => {
+    stubEnvs({
+      VITE_API_BASE_URL: "http://localhost:3001",
+      VITE_API_MODE: "nextjs",
     });
+    const { getApiBaseUrl, getApiMode } = await import("@/api/backend-config");
+    expect(getApiBaseUrl()).toBe("http://localhost:3001");
+    expect(getApiMode()).toBe("nextjs");
+  });
 
-    hydrateBackendConfig({ backend: "nextjs", baseUrls: { nextjs: "http://d:4" } });
-    expect(getBackend()).toBe("nextjs");
-    // 其它模式保留旧值（partial merge）
-    expect(getBaseUrlFor("aspnetcore")).toBe("http://a:1");
-    expect(getBaseUrlFor("nextjs")).toBe("http://d:4");
+  it("VITE_ENABLE_MSW=false → isMswEnabled=false（fetch 直走真后端）", async () => {
+    stubEnvs({ VITE_ENABLE_MSW: "false" });
+    const { isMswEnabled } = await import("@/api/backend-config");
+    expect(isMswEnabled()).toBe(false);
+  });
+
+  it("VITE_API_BASE_URL=空串 → getApiBaseUrl 仍回退空串（同源）", async () => {
+    stubEnvs({ VITE_API_BASE_URL: "" });
+    const { getApiBaseUrl } = await import("@/api/backend-config");
+    expect(getApiBaseUrl()).toBe("");
   });
 });

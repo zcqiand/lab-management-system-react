@@ -48,7 +48,6 @@ vi.mock("axios", () => ({
 }));
 
 import { AuthProvider, __testReset } from "../../../src/state/auth-context";
-import { BackendProvider } from "../../../src/state/backend-context";
 import { LoginPage } from "../../../src/pages/LoginPage";
 
 // -- fixtures ---------------------------------------------------------------------
@@ -65,15 +64,13 @@ function TestLocation() {
 function renderAt(path: string) {
   return render(
     <AuthProvider>
-      <BackendProvider>
-        <MemoryRouter initialEntries={[path]}>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/" element={<div data-testid="home">业务页</div>} />
-            <Route path="*" element={<TestLocation />} />
-          </Routes>
-        </MemoryRouter>
-      </BackendProvider>
+      <MemoryRouter initialEntries={[path]}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<div data-testid="home">业务页</div>} />
+          <Route path="*" element={<TestLocation />} />
+        </Routes>
+      </MemoryRouter>
     </AuthProvider>,
   );
 }

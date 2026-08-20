@@ -20,21 +20,11 @@ describe("Infrastructure anchor registration", () => {
     },
   );
 
-  fnTest(["M98.F01.I01"], "BackendSwitcher module source file exists", () => {
+  fnTest(["M98.F01.I01"], "BackendBadge module source file exists (replaces BackendSwitcher — ADR-0014)", () => {
     expect(
-      fs.existsSync(path.join(SRC, "src/components/app/backend-switcher.tsx")),
+      fs.existsSync(path.join(SRC, "src/components/app/backend-badge.tsx")),
     ).toBe(true);
   });
-
-  fnTest(
-    ["M98.F01.I02"],
-    "useBackend store source file exists (backend-context)",
-    () => {
-      expect(fs.existsSync(path.join(SRC, "src/state/backend-context.tsx"))).toBe(
-        true,
-      );
-    },
-  );
 
   fnTest(["M98.F02.I01"], "axios interceptor module source file exists", () => {
     expect(fs.existsSync(path.join(SRC, "src/api/legacy-client.ts"))).toBe(true);

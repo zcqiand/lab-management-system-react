@@ -3,12 +3,14 @@
 // 端点 1:1 映射由 src/api/endpoints/endpoints.ts 提供（orval 从
 // ../lab-management-system-shared/generated/openapi/openapi.yaml 生成）。
 // 本文件做两件事：
-//   1) 装 axios 拦截器：每次请求从运行时配置（backend-config）拿 baseUrl，
+//   1) 装 axios 拦截器：每次请求从部署期配置（VITE_API_BASE_URL）拿 baseUrl，
 //      从 getToken callback 拿 token，写进 Authorization 头
 //   2) 提供 ApiError 封装（low-level fetch 走 axios 错误时统一）
+//
+// ADR-0014：runtime baseUrl 已废弃，改走 env-driven 单 URL。
 
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
-import { getBaseUrl } from "./backend-config";
+import { getApiBaseUrl } from "./backend-config";
 
 export class ApiError extends Error {
   status: number;
@@ -37,9 +39,8 @@ export function toApiError(err: unknown): ApiError {
  */
 export function installHttpClient(getToken: () => string | null): void {
   axios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-    // 4-backend 切换：msw/nextjs 时 baseUrl 为 ""（同源），其他为 localhost:<port>
     if (!config.baseURL) {
-      config.baseURL = getBaseUrl();
+      config.baseURL = getApiBaseUrl();
     }
     // 跨源后端（aspnetcore/springboot）的 SSO state cookie 依赖 withCredentials：
     // 没有它，跨源响应的 Set-Cookie 不被存储、后续请求也不携带（RFC 6749 §10.12
@@ -71,7 +72,7 @@ export async function apiRequest<T>(
   };
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const res = await fetch(`${getBaseUrl()}${path}`, {
+  const res = await fetch(`${getApiBaseUrl()}${path}`, {
     method: options.method ?? "GET",
     headers,
     body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
@@ -84,3 +85,5 @@ export async function apiRequest<T>(
   if (res.status === 204) return undefined as T;
   return (await res.json()) as T;
 }
+
+export { getApiBaseUrl, getApiMode, isMswEnabled } from "./backend-config";

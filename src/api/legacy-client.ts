@@ -7,7 +7,7 @@
 //     main.tsx 从 auth-context FSM 桥接（nextjs 版的 setToken 是给 zustand authStore 用的）
 //   - identityClient / env.ts 不搬（SSO/authStore 专属，react 仓走自己的 auth FSM）
 import axios, { AxiosError, type AxiosInstance } from "axios";
-import { getBaseUrl } from "./backend-config";
+import { getApiBaseUrl } from "./backend-config";
 
 let getToken: () => string | null = () => null;
 let unauthorizedHandler: (() => void) | null = null;
@@ -35,7 +35,7 @@ export const apiClient: AxiosInstance = axios.create({ baseURL: "" });
 //   apiClient 请求拦截器：注入 Authorization: Bearer <token>（经 installLegacyClient 桥接 FSM）
 //   响应拦截器：401 调 unauthorizedHandler（清 token 落 anonymous）
 apiClient.interceptors.request.use((config) => {
-  if (!config.baseURL) config.baseURL = getBaseUrl() || "";
+  if (!config.baseURL) config.baseURL = getApiBaseUrl() || "";
   const token = getToken();
   if (token) config.headers.set("Authorization", `Bearer ${token}`);
   return config;

@@ -16,8 +16,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { FlaskConical } from "lucide-react";
 import { AxiosError } from "axios";
 import { useAuth } from "@/state/auth-context";
-import { useBackend } from "@/state/backend-context";
-import { BACKEND_REGISTRY_DEFAULT } from "@/api/contracts";
+import { getApiBaseUrl, getApiMode } from "@/api/backend-config";
 import { authSsoAuthorize, authSsoCallback } from "@/api/endpoints/endpoints";
 import { sanitizeRedirect } from "@/lib/sanitize-redirect";
 import { clearSsoBroken } from "@/components/app/bad-path-redirect";
@@ -57,19 +56,21 @@ function computeRedirectUri(): string {
 
 export function LoginPage() {
   const { state, setSession } = useAuth();
-  const { backend, baseUrl } = useBackend();
+  const baseUrl = getApiBaseUrl();
+  const apiMode = getApiMode();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const [status, setStatus] = useState<string>("检查登录态…");
 
-  // 当前 backend 是否启用 SSO（msw/nextjs 启用，springboot/aspnetcore 暂关）。
-  const ssoEnabled =
-    BACKEND_REGISTRY_DEFAULT.available.find((b) => b.id === backend)?.features.sso === true;
+  // ADR-0014：后端塌缩到单 URL 后，"当前 backend 是否启用 SSO" 简化为
+  // "是否配了后端"（baseUrl 非空 = 同源走 Route Handler 或跨源走真后端，SSO 都可达）。
+  // 历史上 msw/nextjs/springboot/aspnetcore 都已落地 SSO handler，不再按 mode 区分。
+  const ssoEnabled = true;
 
   useEffect(() => {
     void (async () => {
       if (!ssoEnabled) {
-        setStatus(`当前 backend（${backend}）未启用 SSO，请切到 msw / nextjs 后端`);
+        setStatus(`当前 backend（${apiMode}）未启用 SSO，请检查 VITE_API_BASE_URL`);
         return;
       }
       // 等 hydrate 完成（state.kind: idle → anonymous）后再触发 SSO。
@@ -158,7 +159,7 @@ export function LoginPage() {
       }
 
       // 阶段 2：无回调参数 → 调 authorize 让 saas 跳过来
-      setStatus(`未登录，正在跳 saas 身份平台（backend=${backend}）…`);
+      setStatus(`未登录，正在跳 saas 身份平台（backend=${apiMode}）…`);
       // from 存 sessionStorage 随 state 走（redirect_uri 保持裸 /login 精确匹配白名单）
       if (from) sessionStorage.setItem(SSO_FROM_STORAGE_KEY, from);
       // 用绝对 URL 指向本仓裸 /login。saas 收到 redirect_uri 后会原样回跳到
@@ -192,7 +193,7 @@ export function LoginPage() {
         sessionStorage.removeItem(SSO_STATE_STORAGE_KEY);
       }
     })();
-  }, [ssoEnabled, state.kind, params, baseUrl, navigate, setSession, backend]);
+  }, [ssoEnabled, state.kind, params, baseUrl, navigate, setSession, apiMode]);
 
   // 已登录访问 /login → 直接回业务页（render 期副作用挪进 useEffect，避免
   // "Cannot update a component (BrowserRouter) while rendering a different component" 报错）
@@ -218,7 +219,7 @@ export function LoginPage() {
           换 token
         </p>
         <p className="text-muted-foreground/70 text-xs">
-          demo 后端：{backend} · saas 端口：3000
+          demo 后端：{apiMode} · saas 端口：3000
         </p>
       </div>
     </div>

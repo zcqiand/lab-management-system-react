@@ -1141,9 +1141,9 @@
       ]
     },
     "M98.F01.I01": {
-      "name": "BackendSwitcher 下拉（4-backend：msw/aspnetcore/springboot/nextjs）",
+      "name": "BackendBadge 后端模式显示（env: apiMode + baseUrl；ADR-0014 替代旧 BackendSwitcher）",
       "status": "已上线",
-      "type": "按钮",
+      "type": null,
       "requirements": [],
       "flows": [
         "docs\\design\\flow-function-map.md"
@@ -1152,15 +1152,13 @@
         "docs\\design\\design-function-map.md"
       ],
       "tests": [
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/infrastructure-anchors.test.ts::BackendSwitcher module source file exists"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/infrastructure-anchors.test.ts::BackendBadge module source file exists (replaces BackendSwitcher — ADR-0014)"
       ],
-      "entry": [
-        "src\\components\\app\\backend-switcher.tsx"
-      ]
+      "entry": []
     },
     "M98.F01.I02": {
       "name": "持久化 baseUrl 到 localStorage",
-      "status": "已上线",
+      "status": "已废弃",
       "type": "接口",
       "requirements": [],
       "flows": [
@@ -1169,9 +1167,7 @@
       "designs": [
         "docs\\design\\design-function-map.md"
       ],
-      "tests": [
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/infrastructure-anchors.test.ts::useBackend store source file exists (backend-context)"
-      ],
+      "tests": [],
       "entry": []
     },
     "M98.F02.I01": {

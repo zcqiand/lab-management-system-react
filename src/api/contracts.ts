@@ -82,29 +82,26 @@ export const TOKEN_STORAGE_KEYS = {
   permissionsCache: "lab.permissions",
 } as const;
 
-// 4 槽位默认注册表 — BackendConfig 契约的 lab family 缺省值。
-// baseUrl 走 src/lib/env.ts（VITE_BACKEND_URL_*），与 backend-config.ts 的
-// DEFAULT_BASE_URLS 共享同一 env 来源。
+// 4 槽位默认注册表 — BackendConfig 契约的 lab family 缺省值（信息性）。
+// ADR-0014：运行时不再切后端；baseUrl 仍走 env（VITE_API_BASE_URL 单 URL）。
+// 这里 4 个槽位的 baseUrl 都回退到 env.apiBaseUrl（无独立 default），
+// 保留 BACKEND_REGISTRY_DEFAULT 仅作为契约类型的展示 — LoginPage 已不再查它。
 import { env } from "@/lib/env";
 
 export const BACKEND_REGISTRY_DEFAULT: BackendRegistry = {
-  active: env.defaultBackend,
+  active: "msw",
   available: [
     {
       id: "msw",
       label: "MSW Mock",
-      baseUrl: env.backendBaseUrls.msw,
+      baseUrl: env.apiBaseUrl,
       authHeader: "Authorization",
-      // msw 后端 SSO handler 已实现（handlers-extra.ts /auth/sso/authorize +
-      // /auth/sso/callback，callback 返回 mock-jwt），前端 LoginPage 检测到
-      // sso: true 自动跳 saas /login。saas dev server 不在 3000 时用
-      // `VITE_SAAS_BASE_URL` 环境变量覆写。
       features: { sso: true, realDb: false },
     },
     {
       id: "nextjs",
       label: "Next.js API",
-      baseUrl: env.backendBaseUrls.nextjs,
+      baseUrl: env.apiBaseUrl,
       authHeader: "Authorization",
       ssoCallbackPath: "/api/auth/sso/callback",
       features: { sso: true, realDb: true },
@@ -112,19 +109,15 @@ export const BACKEND_REGISTRY_DEFAULT: BackendRegistry = {
     {
       id: "springboot",
       label: "Spring Boot",
-      baseUrl: env.backendBaseUrls.springboot,
+      baseUrl: env.apiBaseUrl,
       authHeader: "Authorization",
-      // M01.F05.I02/I03 已实现（B12 真后端 OAuth 2.0：/api/auth/sso/authorize 真调
-      // saas，callback code 换 lab JWT，ADR-0008）。默认 profile=sso。
       features: { sso: true, realDb: true },
     },
     {
       id: "aspnetcore",
       label: "ASP.NET Core",
-      baseUrl: env.backendBaseUrls.aspnetcore,
+      baseUrl: env.apiBaseUrl,
       authHeader: "Authorization",
-      // M01.F05.I02/I03 后端已实现（Program.cs:53 默认跳 saas:3000/login；SsoCallback dev 直发 demo session）。
-      // LoginPage 走分支 1：saas 重定向回 lab /login 带 ?token= → /api/auth/me。
       features: { sso: true, realDb: true },
     },
   ],

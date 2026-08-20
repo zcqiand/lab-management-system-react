@@ -35,6 +35,7 @@ lab 自己写组件，不复用 saas 仓组件。详细 sprint 路线见 `docs/c
 - **禁止本仓加 `src/app/api/*/route.ts` 类后端 route** — 数据走 lab-msw 或 lab-nextjs
 - **禁止从 `@lab/management-system-shared` import TS 客户端** — shared 仓只产 OpenAPI.yaml
 - **禁止复制 saas-identity-platform-react 的 src/components/app/* 源码** — lab 自己写
+- **禁止运行时切后端 / 禁止恢复 BackendProvider / BackendSwitcher / useBackend / localStorage["lab.backend"]**（**v0.x 已废弃 — ADR-0014**）；**必须**把 `VITE_API_BASE_URL` / `VITE_ENABLE_MSW` / `VITE_API_MODE` 写到 `.env.example`，部署平台覆盖
 
 ## 3. 指向别处
 

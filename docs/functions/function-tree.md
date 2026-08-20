@@ -127,7 +127,7 @@
 
 | ID          | 功能 | 类型 | 状态 |
 |-------------|------|------|------|
-| M98.F01     | 运行时后端切换 | 接口 | 已上线 |
+| M98.F01     | env 驱动后端配置（ADR-0014 — VITE_API_BASE_URL / VITE_ENABLE_MSW / VITE_API_MODE） | 接口 | 已上线 |
 | M98.F02     | http-client 注入 | 接口 | 已上线 |
 | M98.F03     | shared contract 客户端 | 接口 | 已上线 |
 
@@ -135,7 +135,7 @@
 
 | ID                | 子项 | 类型 | 状态 |
 |-------------------|------|------|------|
-| M98.F01.I01       | BackendSwitcher 下拉（4-backend：msw/aspnetcore/springboot/nextjs） | 按钮 | 已上线 |
-| M98.F01.I02       | 持久化 baseUrl 到 localStorage | 接口 | 已上线 |
+| M98.F01.I01       | BackendBadge 后端模式显示（env: apiMode + baseUrl；ADR-0014 替代旧 BackendSwitcher） | 展示 | 已上线 |
+| M98.F01.I02       | 持久化 baseUrl 到 localStorage | 接口 | 已废弃 |
 | M98.F02.I01       | axios 拦截器（baseUrl + Authorization）注入 | 接口 | 已上线 |
 | M98.F03.I01       | orval 生成的 endpoints 函数存在性校验（endpoints-smoke.test.ts） | 接口 | 已上线 |
