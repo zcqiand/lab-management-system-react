@@ -43,6 +43,11 @@ installLegacyClient(
 // 切到 nextjs/springboot/aspnetcore 时跳过，走真实后端。
 async function bootstrap() {
   if (import.meta.env.DEV) {
+    // 必须先从 localStorage hydrate backend 单例再决定是否注册 MSW SW。
+    // 否则 getBackend() 停在 env 默认 msw：切到 aspnetcore 等真后端的用户
+    // reload 后 SW 被错误注册回来，/api/* 与页面导航全被拦截。
+    const { hydrateBackendFromStorage } = await import("./api/backend-config");
+    hydrateBackendFromStorage();
     const { enableMocking } = await import("./mocks/browser");
     await enableMocking();
   }

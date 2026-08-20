@@ -32,7 +32,7 @@ flowchart TD
 | M01.F04.I02 | 动态权限集；路由守卫前置 (M01.F04.I03) |
 | M01.F04.I03 | 客户端路由守卫（无 token 时跳 /login） |
 | M01.F05.I02 | axios 拦截器：在 baseURL = getBaseUrl() 上自动跑；注入 Bearer token |
-| M01.F05.I03 | SSO 统一登录：跳 saas /login 拿 token 回 /login |
+| M01.F05.I03 | SSO OAuth 2.0 授权码流：lab /login 无回调 → GET authorize 跳 saas → saas 回跳带 ?code=&state= → POST sso/callback（grant_type=authorization_code，client_secret 仅后端持）→ lab 后端用 saas id_token 解身份 + 签自家 JWT |
 | M01.F05.I04 | 登出：侧栏 logout 按钮 → POST /api/auth/logout |
 | M02.F01.I01 | 合同管理是上游资源池，所有接样单通过 contractId 引用；不参与流程转换 |
 | M02.F01.I02 | 同上（合同新建/编辑） |

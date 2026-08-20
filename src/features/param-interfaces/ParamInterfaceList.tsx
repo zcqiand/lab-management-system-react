@@ -29,6 +29,7 @@ import {
 import { apiClient, API_ROUTES } from "@/api/legacy-client";
 import type { ParamInterfaceRow } from "@/types/common/inspection-param-interface";
 import { ConfirmModal } from "@/components/ConfirmModal";
+import { unwrapListResponse } from "@/lib/responses";
 
 type Mode = { kind: "idle" } | { kind: "create" } | { kind: "edit"; id: string };
 
@@ -55,18 +56,16 @@ export function ParamInterfaceList() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await apiClient.get<{ items: ParamInterfaceRow[]; total: number }>(
-        API_ROUTES["/inspection-param-interfaces"],
-        {
-          params: {
-            ...(keyword ? { keyword } : {}),
-            page: 1,
-            pageSize: "50",
-          },
+      const res = await apiClient.get<unknown>(API_ROUTES["/inspection-param-interfaces"], {
+        params: {
+          ...(keyword ? { keyword } : {}),
+          page: 1,
+          pageSize: "50",
         },
-      );
-      setItems(Array.isArray(res.data?.items) ? res.data.items : []);
-      setTotal(typeof res.data?.total === "number" ? res.data.total : 0);
+      });
+      const { items: listItems, total: listTotal } = unwrapListResponse<ParamInterfaceRow>(res);
+      setItems(listItems);
+      setTotal(listTotal);
     } finally {
       setLoading(false);
     }

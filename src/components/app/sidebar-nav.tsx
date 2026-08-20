@@ -74,8 +74,9 @@ function Icon({ name }: { name?: string }) {
 }
 
 interface SidebarNavProps {
-  /** 菜单树（react 仓：静态 MENU_TREE，见 menus.ts） */
-  menus: MenuNode[];
+  /** 菜单树。null 表示还在加载或拉取失败（消费方应传 fallback 静态 MENU_TREE）。
+   *  镜像 nextjs 行为：useSaasMenus 拿到数据前 menus=null，sidebar 渲染空状态。 */
+  menus: MenuNode[] | null;
   appCode: string;
   appName?: string | null;
   /** Sidebar 底部主操作（如登出按钮） */
@@ -97,8 +98,10 @@ export function SidebarNav({
   const navigate = useNavigate();
   const pathname = location.pathname;
 
-  // 选中态：按 pathname 前缀匹配（"/models/xxx" 也选中 m-models）
+  // 选中态：按 pathname 前缀匹配（"/models/xxx" 也选中 m-models）。
+  // menus=null 时（saas 拉取失败或加载中）跳过匹配，让 router 重定向去 /login。
   const selectedCode = (() => {
+    if (!menus) return null;
     for (const g of menus) {
       for (const leaf of g.children) {
         if (!leaf.path) continue;
@@ -216,7 +219,14 @@ export function SidebarNav({
         </button>
       </div>
       <nav className="flex-1 px-2 py-3 overflow-y-auto" aria-label="菜单树">
-        {menus.length === 0 ? (
+        {!menus ? (
+          <p
+            className={cn("text-xs text-white/40", effectiveCollapsed ? "text-center" : "px-3")}
+            data-testid="sidebar-menus-loading"
+          >
+            {effectiveCollapsed ? "…" : "（菜单加载中）"}
+          </p>
+        ) : menus.length === 0 ? (
           <p className={cn("text-xs text-white/40", effectiveCollapsed ? "text-center" : "px-3")}>
             {effectiveCollapsed ? "—" : "（无菜单）"}
           </p>
@@ -399,4 +409,55 @@ function ChevronToggle({ expanded }: { expanded: boolean }) {
       />
     </svg>
   );
+}
+
+const SAAS_APP_CODE = "lab-management";
+
+/** 客户端 hook：拉 /api/saas/me/menus?appCode=<code>
+ *  镜像 lab-nextjs sidebar-nav.tsx 的同名 hook。dev 期浏览器请求被 Vite proxy
+ *  转发到 saas:3000/api/v1/me/menus（同源避开 CORS preflight）；saas 返回
+ *  `{ [appCode]: MenuNode[] }` map（saas-msw handlers-extra.ts:215 一致），
+ *  这里按 SAAS_APP_CODE 取数组。失败返 null，消费方应回退到静态 MENU_TREE。 */
+export function useSaasMenus(): {
+  data: MenuNode[] | null;
+  loading: boolean;
+  error: string | null;
+} {
+  const [data, setData] = useState<MenuNode[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    fetch(`/api/saas/me/menus?appCode=${encodeURIComponent(SAAS_APP_CODE)}`, {
+      cache: "no-store",
+    })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((d: unknown) => {
+        if (cancelled) return;
+        // saas /api/v1/me/menus 形状：`{ [appCode]: MenuNode[] }` map；
+        // 取本仓 appCode 对应的数组。
+        if (d && typeof d === "object" && !Array.isArray(d)) {
+          const map = d as Record<string, MenuNode[]>;
+          setData(map[SAAS_APP_CODE] ?? []);
+        } else if (Array.isArray(d)) {
+          // 兼容旧的扁平数组（lab-msw 老 handler / 单元测试 mock）
+          setData(d as MenuNode[]);
+        } else {
+          setData([]);
+        }
+        setLoading(false);
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        setError(err instanceof Error ? err.message : String(err));
+        setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return { data, loading, error };
 }

@@ -737,6 +737,22 @@ export interface MyTenant {
   roleIds: string[];
 }
 
+export type OAuthGrantType = typeof OAuthGrantType[keyof typeof OAuthGrantType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const OAuthGrantType = {
+  authorization_code: 'authorization_code',
+} as const;
+
+export type OAuthResponseType = typeof OAuthResponseType[keyof typeof OAuthResponseType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const OAuthResponseType = {
+  code: 'code',
+} as const;
+
 export interface ObjectParameterLink {
   inspectionObjectCode: string;
   inspectionParameterCode: string;
@@ -948,7 +964,9 @@ export interface SpecialtyObjectLink {
 }
 
 export interface SsoCallbackRequest {
+  grant_type: OAuthGrantType;
   code: string;
+  redirect_uri: string;
   state: string;
 }
 
@@ -1287,7 +1305,10 @@ export type AuthLogoutBody = {
 };
 
 export type AuthSsoAuthorizeParams = {
-redirect: string;
+response_type: OAuthResponseType;
+client_id: string;
+redirect_uri: string;
+state: string;
 };
 
 export type CalculationRulesListCalculationRulesParams = {

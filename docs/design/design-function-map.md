@@ -12,7 +12,7 @@
 | M01.F04.I02 | src/state/auth-context.tsx (fetchPermissions) | GET /api/auth/permissions | – | M01.F04.I02 | – | 已上线 |
 | M01.F04.I03 | src/state/require-auth.ts (useRequireAuth) | – (客户端守卫，无 API) | – | M01.F04.I03 | – | 已上线 |
 | M01.F05.I02 | src/api/legacy-client.ts | – (axios Bearer + 401-bridge 拦截器) | – | M01.F05.I02 | – | 已上线 |
-| M01.F05.I03 | src/state/auth-context.tsx (ssoCallback) | GET /api/auth/sso/authorize ; POST /api/auth/sso/callback ; GET /api/auth/me | – | M01.F05.I03 | – | 已上线 |
+| M01.F05.I03 | src/state/auth-context.tsx (ssoCallback) ; src/pages/LoginPage.tsx (orchestrator) | GET /api/auth/sso/authorize?response_type=code&client_id=...&redirect_uri=...&state=... ; POST /api/auth/sso/callback {grant_type:authorization_code, code, redirect_uri} ; GET /api/auth/me | – | M01.F05.I03 | – | 已上线 |
 | M01.F05.I04 | src/components/app/app-shell.tsx (header logout button) | POST /api/auth/logout | – | M01.F05.I04 | – | 已上线 |
 | M02.F01.I01 | src/features/contracts/ContractsList.tsx (table row) | GET /api/contracts | contracts | M02.F01.I01 | – | 已上线 |
 | M02.F01.I02 | src/features/contracts/ContractsList.tsx (新建 + 编辑) | POST /api/contracts ; PUT /api/contracts/:id | contracts | M02.F01.I02 | – | 已上线 |

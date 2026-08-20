@@ -16,6 +16,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { apiClient, API_ROUTES } from "@/api/legacy-client";
 import { ConfirmModal } from "@/components/ConfirmModal";
+import { unwrapListResponse } from "@/lib/responses";
 
 /** 型号/规格/等级/牌号 通用行结构（4 个 InspectionBrand/Model/Grade/Spec 共用） */
 interface DictItem {
@@ -88,11 +89,11 @@ export function CategoryDictList({
 
   useEffect(() => {
     apiClient
-      .get<{ items: InspectionObject[] }>(API_ROUTES["/inspection-objects"], {
+      .get<unknown>(API_ROUTES["/inspection-objects"], {
         params: { page: 1, pageSize: "200" },
       })
       .then((r) => {
-        const items = Array.isArray(r.data?.items) ? r.data.items : [];
+        const items = unwrapListResponse<InspectionObject>(r).items;
         // 检测项目按 sortOrder 升序展示
         items.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
         setObjects(items);
@@ -117,10 +118,10 @@ export function CategoryDictList({
     setLoading(true);
     setError(null);
     try {
-      const res = await apiClient.get<{ items: DictItem[] }>(base, {
+      const res = await apiClient.get<unknown>(base, {
         params: { page: "1", pageSize: "200", inspectionObjectCode: selectedCode },
       });
-      const items = [...(Array.isArray(res.data?.items) ? res.data.items : [])];
+      const items = [...unwrapListResponse<DictItem>(res).items];
       items.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
       setList(items);
     } catch (e: unknown) {

@@ -1,12 +1,14 @@
-// M01.F05.I03 fnTest — SSO 授权码流（authorize + callback）三阶段。
+// M01.F05.I03 fnTest — SSO OAuth 2.0 授权码流两阶段（2026-08-19 升级）。
 //
-// LoginPage 的 SSO 分支（ssoEnabled=true 时 useEffect）三阶段：
-//   阶段 1：URL 带 ?token=（saas 已换 token）→ 存 localStorage + GET /me → setSession 进业务页
-//   阶段 2：URL 带 ?code=&state=（未换 token）→ POST /api/auth/sso/callback 换 mock-jwt → setSession
-//   阶段 3：无回调参数 → GET /api/auth/sso/authorize → window.location = authorizeUrl 跳 saas
+// LoginPage 的 SSO 分支（ssoEnabled=true 时 useEffect）两阶段：
+//   阶段 1：URL 带 ?code=&state=（saas 已授权）→ POST /api/auth/sso/callback
+//           换 lab 自家 JWT（grant_type=authorization_code，client_secret 仅后端持有）
+//           → setSession 进业务页
+//   阶段 2：无回调参数 → GET /api/auth/sso/authorize → window.location = authorizeUrl 跳 saas
 //
-// axios 在 orval 生成层被 vi.mock 拦截（auth-fsm.test.ts 同款队列模式）；
-// 阶段 1 的裸 fetch 也用 vi.stubGlobal 拦截。jsdom + RTL + MemoryRouter。
+// 旧的 ?token= shortcut 阶段已删除（不符合 OAuth 2.0 + 首登缺 refreshToken 必崩）。
+// axios 在 orval 生成层被 vi.mock 拦截（auth-fsm.test.ts 同款队列模式）。
+// jsdom + RTL + MemoryRouter。
 
 import { describe, beforeEach, expect, vi } from "vitest";
 import { render, screen, cleanup, waitFor } from "@testing-library/react";
@@ -83,12 +85,10 @@ beforeEach(() => {
   __testReset();
   localStorage.clear();
   sessionStorage.clear();
-  // setSession 要求 refreshToken 存量兜底（saas 场景 token 直达时只带 token+user）
-  localStorage.setItem("lab.refreshToken", "rt-sso");
 });
 
-describe("M01.F05.I03 SSO 授权码流", () => {
-  fnTest(["M01.F05.I03"], "阶段 3：无回调参数 → authorize 拿 authorizeUrl → 跳 saas", async () => {
+describe("M01.F05.I03 SSO OAuth 2.0 授权码流", () => {
+  fnTest(["M01.F05.I03"], "阶段 2：无回调参数 → authorize 拿 authorizeUrl → 跳 saas", async () => {
     // jsdom 的 window.location.href 只读且不可导航 — 用 getter/setter 拦截赋值。
     // setter 记录目标 URL（断言用），读取回退原值（LoginPage 不读 href）。
     const original = window.location;
@@ -121,13 +121,22 @@ describe("M01.F05.I03 SSO 授权码流", () => {
     }
   });
 
-  fnTest(["M01.F05.I03"], "阶段 2：?code=&state= → POST sso/callback 换 token → setSession 进业务页", async () => {
+  fnTest(["M01.F05.I03"], "阶段 1：?code=&state= → POST sso/callback 换 token → setSession 进业务页", async () => {
+    // OAuth 2.0 state 防 CSRF：LoginPage 用 sessionStorage 里预存的 state 与 URL 回跳的
+    // state 比对。测试模拟「authorize 时存了 state=xyz，回跳 ?code=abc&state=xyz」的真实流程。
+    sessionStorage.setItem("lab.sso.state", "xyz");
     queue.push({ status: 200, data: LOGIN_OK });
     renderAt("/login?code=abc&state=xyz");
     await waitFor(() => {
       expect(
         calls.some(
-          (c) => c.method === "POST" && c.url.includes("/api/auth/sso/callback") && c.body && (c.body as { code: string }).code === "abc",
+          (c) =>
+            c.method === "POST" &&
+            c.url.includes("/api/auth/sso/callback") &&
+            c.body &&
+            (c.body as { code: string }).code === "abc" &&
+            (c.body as { grant_type: string }).grant_type === "authorization_code" &&
+            typeof (c.body as { redirect_uri: string }).redirect_uri === "string",
         ),
       ).toBe(true);
     });
@@ -135,38 +144,7 @@ describe("M01.F05.I03 SSO 授权码流", () => {
       expect(screen.getByTestId("home")).toBeTruthy();
     });
     expect(localStorage.getItem("lab.accessToken")).toBe("sso-jwt-1");
-  });
-
-  fnTest(["M01.F05.I03"], "阶段 1：?token= 直达 → 存 localStorage + /me 建会话 → 进业务页", async () => {
-    // 阶段 1 用裸 fetch（不经 axios），stub 掉；/me 响应形状对齐 msw
-    // （{ user, tenants, currentTenantId }），settleLogin 单租户直进 authenticated。
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ user: USER, tenants: [TENANT_A], currentTenantId: "t-a" }),
-    });
-    vi.stubGlobal("fetch", fetchMock);
-    // AuthProvider mount 的 hydrate 也走 axios /auth/me（此时 accessToken 已被
-    // LoginPage setItem）—— 队列补一份响应，避免 hydrate 401→refresh 401→
-    // clearPersisted 与阶段 1 竞争清掉 token（真实环境两请求都有后端）。
-    queue.push({ status: 200, data: { user: USER, tenants: [TENANT_A], currentTenantId: "t-a" } });
-    try {
-      renderAt("/login?token=from-saas");
-      // 等待 setSession 完成（/me 返回 → settleLogin → authenticated → Navigate to /）
-      await waitFor(
-        () => {
-          expect(screen.getByTestId("home")).toBeTruthy();
-        },
-        { timeout: 3000 },
-      );
-      expect(localStorage.getItem("lab.accessToken")).toBe("from-saas");
-      expect(fetchMock).toHaveBeenCalled();
-      const [url, init] = fetchMock.mock.calls[0]!;
-      expect(String(url)).toContain("/api/auth/me");
-      expect((init as { headers: Record<string, string> }).headers.Authorization).toBe(
-        "Bearer from-saas",
-      );
-    } finally {
-      vi.unstubAllGlobals();
-    }
+    // state 一次性：验过后应清掉
+    expect(sessionStorage.getItem("lab.sso.state")).toBeNull();
   });
 });

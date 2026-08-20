@@ -50,6 +50,7 @@ import { EmptyState } from "@/components/app/empty-state";
 import { ConfirmModal } from "@/components/ConfirmModal";
 import { apiClient, API_ROUTES } from "@/api/legacy-client";
 import { ParameterStandardLinkDialog } from "@/features/inspection-capability/ParameterStandardLinkDialog";
+import { unwrapListResponse } from "@/lib/responses";
 import type {
   InspectionSpecialty,
   InspectionObject,
@@ -219,11 +220,11 @@ export function InspectionCapabilityList({ resource }: Props) {
       if (standardFilter) params.inspectionStandardCode = standardFilter;
     }
     apiClient
-      .get<{ items: ListItem[]; total: number }>(ROUTES[resource], { params })
+      .get<unknown>(ROUTES[resource], { params })
       .then((res) => {
-        const data = res.data ?? { items: [], total: 0 };
-        setItems(Array.isArray(data.items) ? data.items : []);
-        setTotal(typeof data.total === "number" ? data.total : 0);
+        const { items: listItems, total: listTotal } = unwrapListResponse<ListItem>(res);
+        setItems(listItems);
+        setTotal(listTotal);
       })
       .catch((err: unknown) => {
         setError(err instanceof Error ? err.message : "加载失败");
@@ -242,10 +243,10 @@ export function InspectionCapabilityList({ resource }: Props) {
       return;
     }
     apiClient
-      .get<{ items: InspectionSpecialty[] }>(ROUTES.specialties, {
+      .get<unknown>(ROUTES.specialties, {
         params: { page: "1", pageSize: "100" },
       })
-      .then((res) => setSpecialtyOptions(Array.isArray(res.data?.items) ? res.data.items : []))
+      .then((res) => setSpecialtyOptions(unwrapListResponse<InspectionSpecialty>(res).items))
       .catch(() => undefined);
   }, [resource]);
 
@@ -258,8 +259,8 @@ export function InspectionCapabilityList({ resource }: Props) {
     const params: Record<string, string> = { page: "1", pageSize: "200" };
     if (specialtyFilter) params.inspectionSpecialtyCode = specialtyFilter;
     apiClient
-      .get<{ items: InspectionObject[] }>(ROUTES.objects, { params })
-      .then((res) => setObjectOptions(Array.isArray(res.data?.items) ? res.data.items : []))
+      .get<unknown>(ROUTES.objects, { params })
+      .then((res) => setObjectOptions(unwrapListResponse<InspectionObject>(res).items))
       .catch(() => undefined);
   }, [resource, specialtyFilter]);
 
@@ -272,8 +273,8 @@ export function InspectionCapabilityList({ resource }: Props) {
     const params: Record<string, string> = { page: "1", pageSize: "200" };
     if (objectFilter) params.inspectionObjectCode = objectFilter;
     apiClient
-      .get<{ items: InspectionStandard[] }>(ROUTES.standards, { params })
-      .then((res) => setStandardOptions(Array.isArray(res.data?.items) ? res.data.items : []))
+      .get<unknown>(ROUTES.standards, { params })
+      .then((res) => setStandardOptions(unwrapListResponse<InspectionStandard>(res).items))
       .catch(() => undefined);
   }, [resource, objectFilter]);
 
@@ -284,10 +285,10 @@ export function InspectionCapabilityList({ resource }: Props) {
       return;
     }
     apiClient
-      .get<{ items: InspectionParameter[] }>(ROUTES.parameters, {
+      .get<unknown>(ROUTES.parameters, {
         params: { page: "1", pageSize: "200" },
       })
-      .then((res) => setParameterOptions(Array.isArray(res.data?.items) ? res.data.items : []))
+      .then((res) => setParameterOptions(unwrapListResponse<InspectionParameter>(res).items))
       .catch(() => undefined);
   }, [resource]);
 

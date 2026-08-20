@@ -23,6 +23,31 @@ let baseUrls: Record<BackendMode, string> = { ...DEFAULT_BASE_URLS };
 export function getBackend(): BackendMode {
   return currentBackend;
 }
+
+/** localStorage 持久化 key — backend-context 与 bootstrap 期 hydrate 共用 */
+export const BACKEND_STORAGE_KEY = "lab.backend";
+
+/**
+ * bootstrap 期（React mount 前）从 localStorage 同步 hydrate 单例。
+ * 必须在 enableMocking() 之前调：否则 getBackend() 还是 env 默认 msw，
+ * 已切到 aspnetcore/springboot 的用户 reload 后 SW 被错误地重新注册，
+ * /api/* 乃至页面导航全被 mockServiceWorker.js 拦截。
+ * Provider mount 时的 hydrateBackendConfig 仍保留（同一 key，幂等）。
+ */
+export function hydrateBackendFromStorage(): void {
+  if (typeof window === "undefined") return;
+  try {
+    const raw = window.localStorage.getItem(BACKEND_STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw) as {
+      backend?: BackendMode;
+      baseUrls?: Partial<Record<BackendMode, string>>;
+    };
+    hydrateBackendConfig(parsed);
+  } catch {
+    /* 损坏的持久化值忽略，保持 env 默认 */
+  }
+}
 export function setBackend(mode: BackendMode): void {
   currentBackend = mode;
 }

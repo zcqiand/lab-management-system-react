@@ -11,7 +11,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SidebarNav } from "@/components/app/sidebar-nav";
+import { SidebarNav, useSaasMenus } from "@/components/app/sidebar-nav";
 import { APP_CODE, APP_NAME, MENU_TREE } from "@/components/app/menus";
 import { BackendSwitcher } from "@/components/app/backend-switcher";
 import { useAuth } from "@/state/auth-context";
@@ -21,6 +21,10 @@ export function AppShell() {
   const { state, logout } = useAuth();
   const { checking } = useRequireAuth();
   const navigate = useNavigate();
+  // 菜单从 saas 拉（lab-msw saasMenusExtraHandlers 兜底）；失败时回退静态
+  // MENU_TREE 保证 sidebar 永远不空白（nextjs 仓同款 fallback 链路）。
+  const { data: saasMenus } = useSaasMenus();
+  const menus = saasMenus ?? MENU_TREE;
 
   const token =
     state.kind === "authenticated" ? (state.value.tokenExpiresAt > 0 ? "ok" : null) : null;
@@ -34,7 +38,7 @@ export function AppShell() {
   return (
     <div className="min-h-screen flex bg-slate-50">
       <SidebarNav
-        menus={MENU_TREE}
+        menus={menus}
         appCode={APP_CODE}
         appName={APP_NAME}
         footerExtras={<BackendSwitcher />}

@@ -30,6 +30,7 @@ import {
 import { apiClient, API_ROUTES } from "@/api/legacy-client";
 import { ReportNameLinkDialog } from "@/features/report-names/ReportNameLinkDialog";
 import type { InspectionReportName } from "@/types/inspection/inspection-report-name";
+import { unwrapListResponse } from "@/lib/responses";
 import type { ExtFieldDef } from "@/types/api";
 import { ConfirmModal } from "@/components/ConfirmModal";
 
@@ -68,18 +69,16 @@ export function ReportNameList() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await apiClient.get<{ items: InspectionReportName[]; total: number }>(
-        API_ROUTES["/report-names"],
-        {
-          params: {
-            ...(keyword ? { keyword } : {}),
-            page: 1,
-            pageSize: "50",
-          },
+      const res = await apiClient.get<unknown>(API_ROUTES["/report-names"], {
+        params: {
+          ...(keyword ? { keyword } : {}),
+          page: 1,
+          pageSize: "50",
         },
-      );
-      setItems(Array.isArray(res.data?.items) ? res.data.items : []);
-      setTotal(typeof res.data?.total === "number" ? res.data.total : 0);
+      });
+      const { items, total } = unwrapListResponse<InspectionReportName>(res);
+      setItems(items);
+      setTotal(total);
     } finally {
       setLoading(false);
     }

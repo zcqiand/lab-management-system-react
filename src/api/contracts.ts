@@ -114,14 +114,18 @@ export const BACKEND_REGISTRY_DEFAULT: BackendRegistry = {
       label: "Spring Boot",
       baseUrl: env.backendBaseUrls.springboot,
       authHeader: "Authorization",
-      features: { sso: false, realDb: true },
+      // M01.F05.I02/I03 已实现（B12 真后端 OAuth 2.0：/api/auth/sso/authorize 真调
+      // saas，callback code 换 lab JWT，ADR-0008）。默认 profile=sso。
+      features: { sso: true, realDb: true },
     },
     {
       id: "aspnetcore",
       label: "ASP.NET Core",
       baseUrl: env.backendBaseUrls.aspnetcore,
       authHeader: "Authorization",
-      features: { sso: false, realDb: true },
+      // M01.F05.I02/I03 后端已实现（Program.cs:53 默认跳 saas:3000/login；SsoCallback dev 直发 demo session）。
+      // LoginPage 走分支 1：saas 重定向回 lab /login 带 ?token= → /api/auth/me。
+      features: { sso: true, realDb: true },
     },
   ],
 };

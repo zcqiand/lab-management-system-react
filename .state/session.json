@@ -1,23 +1,30 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "2026-08-18 认证域收口 + M06 两关联按钮落地（commit 1e26470 认证 / 214bebf M06），Sprint 3 前的欠账清理批次全部收口",
+  "current_task": "B7：前端 5 个检测能力 page + 6 个基础数据 page + 参数↔标准关联弹窗 全部改用 unwrapListResponse 归一器读 Page<T>",
   "done": [
-    "认证收口对齐 nextjs：LoginPage 重写纯 SSO orchestrator（删用户名密码表单）+ 删 SelectTenantPage + /select-tenant 路由；gate 全绿",
-    "tree-change（已批）：M00.F01/M01.F04.I01-I03/M01.F05.I02-I04 规划→已上线；M01.F05.I01 表单登录→已废弃",
-    "新 fnTest：sidebar-nav 2 测（M01.F04.I01）+ loginPageSso 3 测（M01.F05.I03 三分支）",
-    "M06.F03.I02 参数↔标准关联：ParameterStandardLinkDialog.tsx + parameters 行内入口 + 2 fnTest",
-    "M06.F07.I02 报告名称↔标准/参数关联：ReportNameLinkDialog.tsx + 行内入口 + 2 fnTest",
-    "M06 两 ID tree-change 已批翻已上线；gate L0-L5 全绿（--all 14 仓验证）"
+    "src/lib/responses.ts:新增 normalizeListResponse<T> + unwrapListResponse<T> 防御性归一器(3 种输入形态:裸数组/4-field Page<T>/短 envelope 都归一为 {items,total})",
+    "tests/lib/responses.test.ts:5 个 vitest 用例覆盖 3 种形态 + malformed 输入 + AxiosResponse 入口",
+    "src/features/inspection-capability/InspectionCapabilityList.tsx:5 处 .get<{items,...}> 改 unwrapListResponse(main load + 4 dropdown useEffect)",
+    "src/features/inspection-capability/ParameterStandardLinkDialog.tsx:link list 改 unwrapListResponse<{inspectionStandardCode, inspectionParameterCode}>",
+    "src/features/dicts/CategoryDictList.tsx:2 处 axios.get 改 unwrapListResponse(objects dropdown + list fetch)",
+    "src/features/report-names/ReportNameList.tsx:load 改 unwrapListResponse<InspectionReportName>",
+    "src/features/param-interfaces/ParamInterfaceList.tsx:load 改 unwrapListResponse<ParamInterfaceRow>",
+    "react 仓 gate L0-L5 全绿 100 条目 0 软告警"
   ],
-  "next": "下批：无认证/M06 欠账。可选方向：① Sprint 3 M05 仪表盘统计增量（按月度/按报告类别，src/features/summary/SummaryList.tsx 加维度）② 清死代码：RebarMechCompositeCard.tsx 427 行未注册无 consumer，可提废弃提案",
-  "open_questions": [
-    "M00.F02 选租户保持规划（FSM 态+3 fnTest 保留、UI 删）——saas 侧租户下发接入时机需人决策"
+  "next": [
+    "git add -A + commit（src/lib/responses.ts 新增 + tests/lib/responses.test.ts 新增 + 5 个 features 文件改 unwrapListResponse）",
+    "Optional: InspectionCapabilityList 还有 1 处 [link] InspectionReportNameGet 这种 orval 自动生成的 AxiosResponse.data 读法(legacy-client 外),本 batch 不动",
+    "Optional: 新加 features 模板类若读 page 应同样走 unwrapListResponse,by-pass ad-hoc Array.isArray(res.data?.items) 模式"
   ],
+  "open_questions": [],
   "dont": [
-    "tree 状态列禁止带括号注释（如「已废弃（原因…）」）——L5 hard-fail「缺少合法状态」，理由只写 tree-change.json",
-    "「查询」型子项翻已上线必须有 @entry/data-fn 锚点（M01.F04.I02 补在 auth-context.tsx fetchPermissions）",
-    "SSO 阶段 1 测试：AuthProvider hydrate 与 LoginPage 阶段 1 并发走 axios /me，mock 队列必须补 hydrate 响应，否则 hydrate 401→refresh 401→clearPersisted 竞争清 token（表现为 accessToken 断言 null）",
-    "jsdom window.location.href 赋值不生效：用 Object.defineProperty(window,'location',{get:()=>new Proxy(original,{set...})}) 拦截"
-  ]
+    "不要在 features/* 里直接 fetch（CLAUDE.md §2 硬约束）— 走 src/api/ 层 (apiClient 或 orval)",
+    "不要在 src/lib/responses.ts 加 any / @ts-ignore（CLAUDE.md §2 硬约束）",
+    "不要把 normalizeListResponse 抽到 src/api/（CLAUDE.md §3 注释：src/api/ 是 orval 生成领地）",
+    "不要把 lib/responses 写成 class — 保持 pure function 纯函数利于 tree-shaking 与 unit test",
+    "不要给 features/dicts/CategoryDictList 加新依赖（CLAUDE.md §2 硬约束 '禁止复制 saas-identity-platform-react 的 src/components/app/* 源码'）",
+    "不要给 lib/responses 加 normalize response 的旁路 fallback（旧 inline 风格）"
+  ],
+  "active_branch": "master"
 }

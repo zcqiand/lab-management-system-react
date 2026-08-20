@@ -1,20 +1,14 @@
 {
   "schema": 1,
   "approved": true,
-  "base_sha": "581c85f41c610976",
-  "summary": "M06 两个关联按钮落地（双仓同批）：M06.F03.I02 参数↔标准关联（parameters 行内「关联标准」→ ParameterStandardLinkDialog，toggle POST/DELETE /api/inspection/links/standard-parameter）+ M06.F07.I02 报告名称↔标准/参数关联（行内「关联」→ ReportNameLinkDialog 两段列表，标准 role=TESTING）。后端契约（shared tsp link/unlink + msw handlers）与 GET shape adapters 已就绪，本批补 UI + fnTest。代码+锚点+测试三件套齐，2 个子项 规划→已上线。",
+  "base_sha": "139ec85db4e261de",
+  "summary": "M01.F05.I03 SSO 流从「借 OAuth 名字的自创协议」升级到真 OAuth 2.0 授权码模式（RFC 6749）。三个根因：(1) authorize 字段用 redirect 而非 redirect_uri；(2) callback body 用 {code,state} 而非 OAuth 规范字段（缺 grant_type/redirect_uri/client_secret 校验）；(3) saas 直跳 ?token= 让 saas token 进 URL + 首登缺 refreshToken 触发 setSession 抛错。改后：authorize 收 response_type/code/code_challenge/client_id/redirect_uri/state（无 PKCE——v1 不加，留作纵深防御后续）；callback body 用 grant_type=authorization_code + code + client_secret（仅后端持密）；lab 后端拿 saas id_token 解身份 + 查自家 DB 算 tenant/permissions + 用 LAB_JWT_SECRET 签自家 JWT；saas token 不出 lab 后端。删 LoginPage ?token= 分支（无 fn-ID，直接改代码）。同步修 setState-during-render bug（navigate 挪进 useEffect）。",
   "changes": [
     {
-      "id": "M06.F03.I02",
+      "id": "M01.F05.I03",
       "action": "变更",
-      "name": "参数↔标准关联",
-      "reason": "规划→已上线：src/features/inspection-capability/ParameterStandardLinkDialog.tsx（data-fn=M06.F03.I02）+ InspectionCapabilityList parameters 行内入口；tests/features/inspection-capability/parameterStandardLink.dom.test.tsx 2 个 fnTest（本批新增）"
-    },
-    {
-      "id": "M06.F07.I02",
-      "action": "变更",
-      "name": "报告名称↔标准/参数关联",
-      "reason": "规划→已上线：src/features/report-names/ReportNameLinkDialog.tsx（data-fn=M06.F07.I02，标准 role=TESTING + 参数两段 toggle）+ ReportNameList 行内入口；tests/features/report-names/reportNameLink.dom.test.tsx 2 个 fnTest（本批新增）"
+      "name": "SSO OAuth 2.0 授权码流（client_secret + lab 自家 token mint）",
+      "reason": "原实现：(a) authorize 端点收 {redirect} 自定义字段，非 OAuth 规范的 client_id/redirect_uri/state；(b) callback body {code,state} 不带 grant_type/redirect_uri/client_secret，等于零认证；(c) saas 直接回跳 ?token= 让 token 经 URL 泄漏 + 首登时 localStorage 无 refreshToken → setSession 抛 'requires accessToken + user + refreshToken'。改后：authorize 接 {response_type, client_id, redirect_uri, state}；callback body = {grant_type:'authorization_code', code, redirect_uri} + 后端 header 带 client_secret；lab 后端用 saas 的 id_token 解 user + 查 lab DB 算 tenant/permissions + 签自家 JWT（LAB_JWT_SECRET，HS256）；saas token 不出 lab 后端；前端存 lab JWT 调 /api/auth/{me,menus,permissions}。PKCE v1 不加（已有 client_secret 已足），留作未来纵深防御（切 IDP/接纯 SPA 时再加）。"
     }
   ],
   "sync_files": []

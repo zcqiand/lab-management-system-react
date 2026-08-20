@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/table";
 import { apiClient, API_ROUTES } from "@/api/legacy-client";
 import type { InspectionStandard } from "@/types/inspection";
+import { unwrapListResponse } from "@/lib/responses";
 
 const STANDARD_STATUS_CN: Record<string, string> = {
   active: "现行",
@@ -61,17 +62,16 @@ export function ParameterStandardLinkDialog({
     try {
       // 标准全量（无分页上限的 keyword 空查询）+ 关联全量（客户端过滤）
       const [stdResp, linkResp] = await Promise.all([
-        apiClient.get<{ items: InspectionStandard[] }>(API_ROUTES["/inspection-standards"], {
+        apiClient.get<unknown>(API_ROUTES["/inspection-standards"], {
           params: { page: 1, pageSize: 500 },
         }),
-        apiClient.get<
-          Array<{ inspectionStandardCode: string; inspectionParameterCode: string }>
-        >(API_ROUTES["/inspection-standard-parameters"]),
+        apiClient.get<unknown>(API_ROUTES["/inspection-standard-parameters"]),
       ]);
-      const linkList = Array.isArray(linkResp.data)
-        ? linkResp.data
-        : ((linkResp.data as unknown as { items: typeof linkResp.data })?.items ?? []);
-      setStandards(stdResp.data.items ?? []);
+      const linkList = unwrapListResponse<{
+        inspectionStandardCode: string;
+        inspectionParameterCode: string;
+      }>(linkResp).items;
+      setStandards(unwrapListResponse<InspectionStandard>(stdResp).items);
       setLinked(
         new Set(
           linkList

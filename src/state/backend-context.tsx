@@ -3,7 +3,7 @@
 // Backend Context — 运行时后端切换（msw / aspnetcore / springboot / nextjs）。
 //
 // 设计：
-//   - 配置存 localStorage["saas.backend"]（沿用 saas key，便于跨仓 mental model）
+//   - 配置存 localStorage["lab.backend"]（key 常量在 backend-config.ts，bootstrap 期共用）
 //   - React 树 mount 时 hydrate 进模块级单例（backend-config.ts）
 //   - setBackend / setBaseUrl 同步写单例 + localStorage
 //   - 非 msw 后端：fetch 走对应 baseUrl；MSW worker 不启用
@@ -23,12 +23,13 @@ import {
 } from "react";
 import {
   BACKEND_DEFAULT_BASE_URLS,
+  BACKEND_STORAGE_KEY,
   hydrateBackendConfig,
   snapshotBackendConfig,
   type BackendMode,
 } from "@/api/backend-config";
 
-const STORAGE_KEY = "lab.backend";
+const STORAGE_KEY = BACKEND_STORAGE_KEY;
 
 export interface BackendContextValue {
   backend: BackendMode;

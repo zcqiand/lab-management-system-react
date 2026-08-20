@@ -20,6 +20,22 @@ import { Input } from "@/components/ui/input";
 import { useBackend } from "@/state/backend-context";
 import type { BackendMode } from "@/api/backend-config";
 import { env } from "@/lib/env";
+import { disableMocking } from "@/mocks/browser";
+import { TOKEN_STORAGE_KEYS } from "@/api/contracts";
+
+// 不同后端的 token 互不通用（msw 的 mock-jwt-* 不是真 JWT，aspnetcore/springboot
+// 各自签发互不认验）。切换时清掉持久化会话，让 FSM 落回 anonymous 重新走各后端
+// 自己的登录流——否则旧 token 每次请求都 401（msw token 还会让 JwtBearer 抛
+// IDX14100 "no dots"），hydrate 绕一圈 refresh 才能恢复。
+function clearCrossBackendSession(): void {
+  for (const key of Object.values(TOKEN_STORAGE_KEYS)) {
+    try {
+      window.localStorage.removeItem(key);
+    } catch {
+      /* ignore */
+    }
+  }
+}
 
 const LABELS: Record<BackendMode, string> = {
   msw: "MSW（浏览器内 Mock）",
@@ -56,12 +72,15 @@ export function BackendSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
+        {/* 显式 text-foreground：本组件嵌在深色侧边栏（bg-slate-900 text-white）里，
+            outline 按钮的 bg-background 是白底，若不重设字色会继承 text-white →
+            白底白字不可见。镜像 lab-nextjs backend-switcher.tsx:47 的写法。 */}
         <Button
           variant="outline"
           size="sm"
           data-testid="backend-switcher-trigger"
           data-fn="M98.F01.I01"
-          className="gap-2"
+          className="gap-2 bg-white text-slate-900 border-slate-300 hover:bg-slate-100 hover:text-slate-900"
           title={`当前后端：${LABELS[backend]}`}
         >
           <Server className="h-4 w-4" />
@@ -76,9 +95,19 @@ export function BackendSwitcher() {
           return (
             <DropdownMenuItem
               key={mode}
-              onSelect={(e) => {
+              onSelect={async (e) => {
                 e.preventDefault();
+                if (mode === backend) return;
                 setBackend(mode);
+                // 跨后端 token 互不通用：清持久化会话，reload 后落 anonymous 重新登录。
+                clearCrossBackendSession();
+                // 切到非 msw 后端时，反注册 MSW SW 并 reload 页面。
+                // 否则 SW 继续拦截 fetch，所有 /api/* 请求永远打不到真后端，
+                // 还会拦 navigate 请求造成 "FetchEvent for /login" 错误。
+                if (mode !== "msw") {
+                  await disableMocking();
+                }
+                window.location.reload();
               }}
               data-testid={`backend-option-${mode}`}
               className={active ? "bg-accent" : ""}
