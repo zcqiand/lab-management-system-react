@@ -9,6 +9,10 @@ WORKDIR /app
 # 硬约束:npm 依赖一律走 npmmirror (suite root CLAUDE.md §2)
 RUN npm config set registry https://registry.npmmirror.com
 
+# 拉 sibling 仓（file: 依赖 + gen:shared 需要 sibling 存在）
+RUN git clone --depth 1 https://github.com/zcqiand/lab-management-system-msw.git ../lab-management-system-msw \
+ && git clone --depth 1 https://github.com/zcqiand/lab-management-system-shared.git ../lab-management-system-shared
+
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 
