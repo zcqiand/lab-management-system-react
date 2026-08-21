@@ -38,13 +38,9 @@ installLegacyClient(
   },
 );
 
-// ADR-0014：MSW 是否启用走 VITE_ENABLE_MSW（部署期 env）；不再有 backend-switcher
-// 切走时反注册 SW 的逻辑。
+// ADR-0012 v0.3.0：删除 SW bootstrap（Service Worker 模式完全删除）。
+// dev 路径走 msw-http 独立 HTTP server（@lab/management-system-msw/src/server.ts 起 :5173）。
 async function bootstrap() {
-  if (import.meta.env.DEV) {
-    const { enableMocking } = await import("./mocks/browser");
-    await enableMocking();
-  }
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
       <AuthProvider>

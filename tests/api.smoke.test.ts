@@ -1,6 +1,7 @@
-// Smoke test: backend-config env-driven 单 URL（ADR-0014）。验证：
-//   - getApiBaseUrl / getApiMode / isMswEnabled 行为正确
+// Smoke test: backend-config env-driven 单 URL（ADR-0014 + ADR-0012 v0.3.0）。验证：
+//   - getApiBaseUrl / getApiMode 行为正确
 //   - 单 URL 模式不再有 4-backend 切换
+//   - isMswEnabled / VITE_ENABLE_MSW 已删除（msw-http 是默认；dev 走独立 HTTP server）
 //
 // 不启 React、不触 axios；只看 backend-config 模块导出。
 import { describe, it, expect, beforeEach, vi } from "vitest";
@@ -22,14 +23,14 @@ describe("M98 backend-config (env-driven 单 URL — ADR-0014)", () => {
     }
   }
 
-  it("无 env 时 getApiBaseUrl 回退空串（同源）", async () => {
+  it("无 env 时（VITE_* 全 delete） getApiBaseUrl 回退 msw-http :5173", async () => {
+    // beforeEach 删除所有 VITE_* → import.meta.env.VITE_API_BASE_URL === undefined →
+    // readEnv 走 fallback。dev（无 .env.local）也是相同路径（Vite 给 "" 默认，
+    // 但若 .env 完全没设则是 undefined 走 fallback）。
     stubEnvs({});
-    const { getApiBaseUrl, getApiMode, isMswEnabled } = await import(
-      "@/api/backend-config"
-    );
-    expect(getApiBaseUrl()).toBe("");
-    expect(getApiMode()).toBe("msw");
-    expect(isMswEnabled()).toBe(true);
+    const { getApiBaseUrl, getApiMode } = await import("@/api/backend-config");
+    expect(getApiBaseUrl()).toBe("http://localhost:5173");
+    expect(getApiMode()).toBe("msw-http");
   });
 
   it("VITE_API_BASE_URL=http://localhost:3001 → getApiBaseUrl 切到 nextjs 仓", async () => {
@@ -42,13 +43,19 @@ describe("M98 backend-config (env-driven 单 URL — ADR-0014)", () => {
     expect(getApiMode()).toBe("nextjs");
   });
 
-  it("VITE_ENABLE_MSW=false → isMswEnabled=false（fetch 直走真后端）", async () => {
-    stubEnvs({ VITE_ENABLE_MSW: "false" });
-    const { isMswEnabled } = await import("@/api/backend-config");
-    expect(isMswEnabled()).toBe(false);
+  it("VITE_API_BASE_URL=http://localhost:8080 → 切到 springboot 真后端", async () => {
+    stubEnvs({
+      VITE_API_BASE_URL: "http://localhost:8080",
+      VITE_API_MODE: "springboot",
+    });
+    const { getApiBaseUrl, getApiMode } = await import("@/api/backend-config");
+    expect(getApiBaseUrl()).toBe("http://localhost:8080");
+    expect(getApiMode()).toBe("springboot");
   });
 
-  it("VITE_API_BASE_URL=空串 → getApiBaseUrl 仍回退空串（同源）", async () => {
+  it("VITE_API_BASE_URL=空串 → 显式空，URL 走相对（@mswjs/node setupServer 拦截）", async () => {
+    // .env.test 模式：显式设空串 → readEnv 不走 fallback → 返回 ""。
+    // fetch 走相对 URL → setupServer handler（/api/...）匹配。
     stubEnvs({ VITE_API_BASE_URL: "" });
     const { getApiBaseUrl } = await import("@/api/backend-config");
     expect(getApiBaseUrl()).toBe("");
