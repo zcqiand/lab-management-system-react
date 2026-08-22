@@ -1,30 +1,20 @@
 {
-  "schema": 1,
+  "schema": 2,
   "project": "lab-management-system-react",
-  "current_task": "B7：前端 5 个检测能力 page + 6 个基础数据 page + 参数↔标准关联弹窗 全部改用 unwrapListResponse 归一器读 Page<T>",
+  "current_task": "Post-Phase-3 frontend 集成收尾：@faker-js/faker 错位 deps → devDeps",
+  "last_session_at": "2026-08-22",
+  "last_session_summary": "@faker-js/faker 从 dependencies 挪到 devDependencies（src/ 零 import，仅 msw sibling 用）；commit 948ee4c + tag v0.3.10-20260822 pushed",
   "done": [
-    "src/lib/responses.ts:新增 normalizeListResponse<T> + unwrapListResponse<T> 防御性归一器(3 种输入形态:裸数组/4-field Page<T>/短 envelope 都归一为 {items,total})",
-    "tests/lib/responses.test.ts:5 个 vitest 用例覆盖 3 种形态 + malformed 输入 + AxiosResponse 入口",
-    "src/features/inspection-capability/InspectionCapabilityList.tsx:5 处 .get<{items,...}> 改 unwrapListResponse(main load + 4 dropdown useEffect)",
-    "src/features/inspection-capability/ParameterStandardLinkDialog.tsx:link list 改 unwrapListResponse<{inspectionStandardCode, inspectionParameterCode}>",
-    "src/features/dicts/CategoryDictList.tsx:2 处 axios.get 改 unwrapListResponse(objects dropdown + list fetch)",
-    "src/features/report-names/ReportNameList.tsx:load 改 unwrapListResponse<InspectionReportName>",
-    "src/features/param-interfaces/ParamInterfaceList.tsx:load 改 unwrapListResponse<ParamInterfaceRow>",
-    "react 仓 gate L0-L5 全绿 100 条目 0 软告警"
+    "@faker-js/faker 从 dependencies 挪到 devDependencies（gate L0/L1/L2/L3/L4/L5 全绿 exit 0；100 功能条目 0 软告警）",
+    "commit 948ee4c + tag v0.3.10-20260822 + push origin/master"
   ],
   "next": [
-    "git add -A + commit（src/lib/responses.ts 新增 + tests/lib/responses.test.ts 新增 + 5 个 features 文件改 unwrapListResponse）",
-    "Optional: InspectionCapabilityList 还有 1 处 [link] InspectionReportNameGet 这种 orval 自动生成的 AxiosResponse.data 读法(legacy-client 外),本 batch 不动",
-    "Optional: 新加 features 模板类若读 page 应同样走 unwrapListResponse,by-pass ad-hoc Array.isArray(res.data?.items) 模式"
+    "无（本批原子收尾）。如起新工作读 docs/conventions/sprint-roadmap.md 取下一站"
   ],
   "open_questions": [],
   "dont": [
-    "不要在 features/* 里直接 fetch（CLAUDE.md §2 硬约束）— 走 src/api/ 层 (apiClient 或 orval)",
-    "不要在 src/lib/responses.ts 加 any / @ts-ignore（CLAUDE.md §2 硬约束）",
-    "不要把 normalizeListResponse 抽到 src/api/（CLAUDE.md §3 注释：src/api/ 是 orval 生成领地）",
-    "不要把 lib/responses 写成 class — 保持 pure function 纯函数利于 tree-shaking 与 unit test",
-    "不要给 features/dicts/CategoryDictList 加新依赖（CLAUDE.md §2 硬约束 '禁止复制 saas-identity-platform-react 的 src/components/app/* 源码'）",
-    "不要给 lib/responses 加 normalize response 的旁路 fallback（旧 inline 风格）"
+    "不要把 @faker-js/faker 拉回 dependencies —— src/ 零 import，仅 msw sibling 用",
+    "不要走 vi.mock @faker-js/faker 来'激活'它 —— devDep 在 vitest 跑得动足矣"
   ],
   "active_branch": "master"
 }
