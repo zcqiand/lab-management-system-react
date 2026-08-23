@@ -3,7 +3,7 @@
 // 适配层（installShapeAdapters in tests/helpers/seed.ts）已铺：
 //   - 主表 wrapDict（id=code + keyword 过滤 + junction 反查）
 //   - junction 反查（specialty→object→standard / parameter）
-//   - 计算规则 GET（+ testingStandardCode 过滤）
+//   - 计算方法 GET（+ testingStandardCode 过滤）
 //   - 技术要求 GET（+ judgmentStandardCode 过滤）
 //
 // 测试只断言：标题、列表渲染、关键按钮存在；不调 POST/PUT/DELETE。
@@ -13,7 +13,7 @@ import { fnTest } from "../../fn";
 import { server } from "../../setup.dom";
 import { installShapeAdapters, resetFixtures } from "../../helpers/seed";
 import { InspectionCapabilityList } from "@/features/inspection-capability/InspectionCapabilityList";
-import { CalculationRuleList } from "@/features/inspection-capability/CalculationRuleList";
+import { CalculationMethodList } from "@/features/inspection-capability/CalculationMethodList";
 import { TechnicalRequirementList } from "@/features/inspection-capability/TechnicalRequirementList";
 
 beforeEach(() => {
@@ -104,10 +104,10 @@ describe("M06.F04 检测标准维护", () => {
   );
 });
 
-describe("M06.F05 计算规则维护", () => {
+describe("M06.F05 计算方法维护", () => {
   fnTest(["M06.F05.I01"], "F05 渲染标题 + 列表行（复合主键 fixtures）", async () => {
-    render(<CalculationRuleList />);
-    expect(screen.getByText("计算规则维护")).toBeTruthy();
+    render(<CalculationMethodList />);
+    expect(screen.getByText("计算方法维护")).toBeTruthy();
     await waitFor(() => {
       const rows = screen.getAllByRole("row");
       expect(rows.length).toBeGreaterThan(1);
@@ -115,8 +115,8 @@ describe("M06.F05 计算规则维护", () => {
   });
 
   fnTest(["M06.F05.I01"], "F05 新建按钮 + 行内编辑/删除按钮", async () => {
-    render(<CalculationRuleList />);
-    expect(screen.getByRole("button", { name: /新建计算规则/ })).toBeTruthy();
+    render(<CalculationMethodList />);
+    expect(screen.getByRole("button", { name: /新建计算方法/ })).toBeTruthy();
     await waitFor(() => {
       const delBtns = screen.getAllByRole("button", { name: /^删除 / });
       expect(delBtns.length).toBeGreaterThan(0);

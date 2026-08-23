@@ -1,4 +1,4 @@
-// M06.F05 计算规则维护 — 列表 + Dialog 弹窗。
+// M06.F05 计算方法维护 — 列表 + Dialog 弹窗。
 //
 // 复合主键：(inspectionObjectCode, inspectionParameterCode)；
 // 主键由 tests 端 shape adapter 兜底生成 id=`cr-${objectCode}-${parameterCode}`。
@@ -84,7 +84,7 @@ const EMPTY_FORM: Record<string, string> = {
 };
 
 // @entry M06.F05.I01
-export function CalculationRuleList() {
+export function CalculationMethodList() {
   const [items, setItems] = useState<CalcRule[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -107,9 +107,12 @@ export function CalculationRuleList() {
     const params: Record<string, string> = { page: "1", pageSize: "100" };
     if (keyword.trim()) params.keyword = keyword.trim();
     apiClient
-      .get<{ items: CalcRule[]; total: number }>(API_ROUTES["/inspection-calculation-rules"], {
-        params,
-      })
+      .get<{ items: CalcRule[]; total: number }>(
+        API_ROUTES["/inspection-calculation-methods"],
+        {
+          params,
+        },
+      )
       .then((res) => {
         setItems(Array.isArray(res.data?.items) ? res.data.items : []);
       })
@@ -179,19 +182,19 @@ export function CalculationRuleList() {
     try {
       if (editingId) {
         await apiClient.put(
-          `${API_ROUTES["/inspection-calculation-rules"]}/${editingId}`,
+          `${API_ROUTES["/inspection-calculation-methods"]}/${editingId}`,
           payload,
         );
       } else {
-        await apiClient.post(API_ROUTES["/inspection-calculation-rules"], payload);
+        await apiClient.post(API_ROUTES["/inspection-calculation-methods"], payload);
       }
       toast.success(editingId ? "已更新" : "已创建");
       setOpen(false);
       load();
     } catch (err: unknown) {
       const msg =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "保存失败";
+        (err as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message ?? "保存失败";
       setSaveError(msg);
     }
   };
@@ -202,15 +205,15 @@ export function CalculationRuleList() {
     setDeleteError(null);
     try {
       await apiClient.delete(
-        `${API_ROUTES["/inspection-calculation-rules"]}/${deleting.id}`,
+        `${API_ROUTES["/inspection-calculation-methods"]}/${deleting.id}`,
       );
       toast.success("已删除");
       setDeleting(null);
       load();
     } catch (err: unknown) {
       const msg =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "删除失败";
+        (err as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message ?? "删除失败";
       setDeleteError(msg);
     } finally {
       setDeletingBusy(false);
@@ -221,9 +224,10 @@ export function CalculationRuleList() {
     <div className="space-y-4" data-fn="M06.F05.I01">
       <Card>
         <CardHeader>
-          <CardTitle>计算规则维护</CardTitle>
+          <CardTitle>计算方法维护</CardTitle>
           <CardDescription>
-            M06.F05 计算规则（复合主键：检测项目 + 检测参数）——算法类型 + 试件数量 + 修约规则
+            M06.F05 计算方法（复合主键：检测项目 + 检测参数）——算法类型 + 试件数量 +
+            修约规则
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -236,7 +240,7 @@ export function CalculationRuleList() {
               className="w-56"
             />
             <Button onClick={openCreate} data-fn="M06.F05.I01">
-              <Plus className="mr-1 h-4 w-4" /> 新建计算规则
+              <Plus className="mr-1 h-4 w-4" /> 新建计算方法
             </Button>
           </div>
 
@@ -247,7 +251,7 @@ export function CalculationRuleList() {
           )}
 
           {items.length === 0 && !loading ? (
-            <EmptyState title="暂无计算规则" description="点击右上角新建一条" />
+            <EmptyState title="暂无计算方法" description="点击右上角新建一条" />
           ) : (
             <Table>
               <TableHeader>
@@ -267,20 +271,28 @@ export function CalculationRuleList() {
                     <TableCell>
                       <div className="font-mono text-xs">{row.inspectionObjectCode}</div>
                       {row.objectName && (
-                        <div className="text-xs text-muted-foreground">{row.objectName}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {row.objectName}
+                        </div>
                       )}
                     </TableCell>
                     <TableCell>
-                      <div className="font-mono text-xs">{row.inspectionParameterCode}</div>
+                      <div className="font-mono text-xs">
+                        {row.inspectionParameterCode}
+                      </div>
                       {row.parameterName && (
-                        <div className="text-xs text-muted-foreground">{row.parameterName}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {row.parameterName}
+                        </div>
                       )}
                     </TableCell>
                     <TableCell className="font-mono text-xs">
                       {row.testingStandardCode ?? "-"}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline">{ALGO_LABEL[row.algorithmType] ?? row.algorithmType}</Badge>
+                      <Badge variant="outline">
+                        {ALGO_LABEL[row.algorithmType] ?? row.algorithmType}
+                      </Badge>
                     </TableCell>
                     <TableCell>{row.specimenCount}</TableCell>
                     <TableCell className="text-xs text-muted-foreground">
@@ -328,7 +340,7 @@ export function CalculationRuleList() {
       >
         <DialogContent className="max-w-xl">
           <DialogHeader>
-            <DialogTitle>{editingId ? "编辑计算规则" : "新建计算规则"}</DialogTitle>
+            <DialogTitle>{editingId ? "编辑计算方法" : "新建计算方法"}</DialogTitle>
             <DialogDescription>
               复合主键：检测项目 + 检测参数（msw 端以 id=cr-… 兜底）
             </DialogDescription>
@@ -462,7 +474,7 @@ export function CalculationRuleList() {
 
       <ConfirmModal
         open={deleting !== null}
-        title="删除计算规则"
+        title="删除计算方法"
         message={
           <>
             确定删除
@@ -489,4 +501,4 @@ export function CalculationRuleList() {
   );
 }
 
-export default CalculationRuleList;
+export default CalculationMethodList;

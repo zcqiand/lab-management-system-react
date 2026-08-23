@@ -18,6 +18,9 @@ export interface AuthContext {
   state: AuthState;
 }
 
+/**
+ * 已废弃 (ADR-0014)
+ */
 export type AuthHeaderKind = typeof AuthHeaderKind[keyof typeof AuthHeaderKind];
 
 
@@ -140,7 +143,7 @@ export interface AuthStateIdle {
 }
 
 /**
- * 4-backend 运行时切换配置。运行时由消费方仓各自实现(React Context / Vue pinia store)
+ * 已废弃 (ADR-0014):用 VITE_API_BASE_URL / NEXT_PUBLIC_API_BASE_URL 替代;4-backend 运行时切换配置
  */
 export interface BackendConfig {
   /** 槽位标识,必须是 BackendId 之一 */
@@ -158,7 +161,7 @@ export interface BackendConfig {
 }
 
 /**
- * 后端能力矩阵
+ * 已废弃 (ADR-0014);后端能力矩阵
  */
 export interface BackendFeatures {
   /** 是否启用 SSO 跳转(msw=false / nextjs=true / springboot/aspnetcore 视实现) */
@@ -168,7 +171,7 @@ export interface BackendFeatures {
 }
 
 /**
- * 4 个槽位;id 锁定,避免拼写漂移
+ * 已废弃 (ADR-0014);4 个槽位,id 锁定避免拼写漂移
  */
 export type BackendId = typeof BackendId[keyof typeof BackendId];
 
@@ -182,7 +185,7 @@ export const BackendId = {
 } as const;
 
 /**
- * 运行时注册表:当前激活 + 可切列表。切换/订阅方法由消费方实现,TS 签名见 .state/decision-log.md §2.1
+ * 已废弃 (ADR-0014);运行时注册表:当前激活 + 可切列表
  */
 export interface BackendRegistry {
   /** 当前激活后端 */
@@ -205,7 +208,7 @@ export const CalculationAlgorithmType = {
   auto_calc_ratio: 'auto_calc_ratio',
 } as const;
 
-export interface CalculationRule {
+export interface CalculationMethod {
   inspectionObjectCode: string;
   inspectionParameterCode: string;
   testingStandardCode?: string;
@@ -254,7 +257,7 @@ export const ContractStatus = {
   archived: 'archived',
 } as const;
 
-export interface CreateCalculationRuleRequest {
+export interface CreateCalculationMethodRequest {
   inspectionObjectCode: string;
   inspectionParameterCode: string;
   testingStandardCode?: string;
@@ -569,6 +572,7 @@ export const FlowStatus = {
 } as const;
 
 export interface FrontendBindMetaFrontendBindSnapshot {
+  /** 已废弃 (ADR-0014);保留以维持 BackendRegistry schema 在 openapi.yaml 里的可达性 */
   registry: BackendRegistry;
   authContext: AuthContext;
   tokenKeys: TokenStorageKeys;
@@ -1074,17 +1078,6 @@ export const TokenStorageKeysActiveTenantId = {
 } as const;
 
 /**
- * 当前激活后端槽位(用于跨刷新记忆)
- */
-export type TokenStorageKeysActiveBackend = typeof TokenStorageKeysActiveBackend[keyof typeof TokenStorageKeysActiveBackend];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const TokenStorageKeysActiveBackend = {
-  labactiveBackend: 'lab.activeBackend',
-} as const;
-
-/**
  * permissions 缓存(避免每次路由跳转都打 /auth/permissions)
  */
 export type TokenStorageKeysPermissionsCache = typeof TokenStorageKeysPermissionsCache[keyof typeof TokenStorageKeysPermissionsCache];
@@ -1105,13 +1098,11 @@ export interface TokenStorageKeys {
   refreshToken: TokenStorageKeysRefreshToken;
   /** 当前选中租户 ID(authenticated 态缓存) */
   activeTenantId: TokenStorageKeysActiveTenantId;
-  /** 当前激活后端槽位(用于跨刷新记忆) */
-  activeBackend: TokenStorageKeysActiveBackend;
   /** permissions 缓存(避免每次路由跳转都打 /auth/permissions) */
   permissionsCache: TokenStorageKeysPermissionsCache;
 }
 
-export interface UpdateCalculationRuleRequest {
+export interface UpdateCalculationMethodRequest {
   testingStandardCode?: string;
   reportNameCode?: string;
   algorithmType?: CalculationAlgorithmType;
@@ -1311,29 +1302,65 @@ redirect_uri: string;
 state: string;
 };
 
-export type CalculationRulesListCalculationRulesParams = {
+export type CalculationMethodsListCalculationMethodsParams = {
 inspectionObjectCode?: string;
 inspectionParameterCode?: string;
 };
 
 export type CatalogListBrandsParams = {
+page?: number;
+pageSize?: number;
 inspectionObjectCode?: string;
 keyword?: string;
+};
+
+export type CatalogListBrands200 = {
+  items: InspectionBrand[];
+  page: number;
+  pageSize: number;
+  total: number;
 };
 
 export type CatalogListGradesParams = {
+page?: number;
+pageSize?: number;
 inspectionObjectCode?: string;
 keyword?: string;
+};
+
+export type CatalogListGrades200 = {
+  items: InspectionGrade[];
+  page: number;
+  pageSize: number;
+  total: number;
 };
 
 export type CatalogListModelsParams = {
+page?: number;
+pageSize?: number;
 inspectionObjectCode?: string;
 keyword?: string;
 };
 
+export type CatalogListModels200 = {
+  items: InspectionModel[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
 export type CatalogListSpecsParams = {
+page?: number;
+pageSize?: number;
 inspectionObjectCode?: string;
 keyword?: string;
+};
+
+export type CatalogListSpecs200 = {
+  items: InspectionSpec[];
+  page: number;
+  pageSize: number;
+  total: number;
 };
 
 export type ContractsListContractsParams = {
@@ -1355,33 +1382,125 @@ export type InspectionDictionaryUnlinkObjectParameterBody = {
   inspectionParameterCode: string;
 };
 
+export type InspectionDictionaryListObjectParameterLinksParams = {
+inspectionObjectCode?: string;
+inspectionParameterCode?: string;
+};
+
+export type InspectionDictionaryListObjectParameterLinks200 = {
+  items: ObjectParameterLink[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
 export type InspectionDictionaryUnlinkObjectStandardBody = {
   inspectionObjectCode: string;
   inspectionStandardCode: string;
   role: InspectionStandardRole;
 };
 
+export type InspectionDictionaryListObjectStandardLinksParams = {
+inspectionObjectCode?: string;
+role?: InspectionStandardRole;
+};
+
+export type InspectionDictionaryListObjectStandardLinks200 = {
+  items: ObjectStandardLink[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
+export type InspectionDictionaryListSpecialtyObjectLinksParams = {
+inspectionSpecialtyCode?: string;
+};
+
+export type InspectionDictionaryListSpecialtyObjectLinks200 = {
+  items: SpecialtyObjectLink[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
+export type InspectionDictionaryListStandardParameterLinksParams = {
+inspectionStandardCode?: string;
+inspectionParameterCode?: string;
+};
+
+export type InspectionDictionaryListStandardParameterLinks200 = {
+  items: StandardParameterLink[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
 export type InspectionDictionaryListObjectsParams = {
+page?: number;
+pageSize?: number;
 inspectionSpecialtyCode?: string;
 keyword?: string;
 };
 
+export type InspectionDictionaryListObjects200 = {
+  items: InspectionObject[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
 export type InspectionDictionaryListParametersParams = {
+page?: number;
+pageSize?: number;
 keyword?: string;
 sourceType?: InspectionParameterSourceType;
 };
 
+export type InspectionDictionaryListParameters200 = {
+  items: InspectionParameter[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
 export type InspectionDictionaryListSpecialtiesParams = {
+page?: number;
+pageSize?: number;
 keyword?: string;
 };
 
+export type InspectionDictionaryListSpecialties200 = {
+  items: InspectionSpecialty[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
 export type InspectionDictionaryListStandardsParams = {
+page?: number;
+pageSize?: number;
 keyword?: string;
 status?: InspectionStandardStatus;
 };
 
+export type InspectionDictionaryListStandards200 = {
+  items: InspectionStandard[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
 export type ParamInterfacesListParamInterfacesParams = {
+page?: number;
+pageSize?: number;
 keyword?: string;
+};
+
+export type ParamInterfacesListParamInterfaces200 = {
+  items: ParamInterface[];
+  page: number;
+  pageSize: number;
+  total: number;
 };
 
 export type ParamInterfacesUnlinkParamInterfaceBody = {
@@ -1418,7 +1537,16 @@ export type ReportFlowListFlowQueue200 = {
 };
 
 export type ReportNamesListReportNamesParams = {
+page?: number;
+pageSize?: number;
 keyword?: string;
+};
+
+export type ReportNamesListReportNames200 = {
+  items: InspectionReportName[];
+  page: number;
+  pageSize: number;
+  total: number;
 };
 
 export type ReportNamesUnlinkObjectReportNameBody = {

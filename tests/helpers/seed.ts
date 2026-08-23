@@ -50,7 +50,7 @@ import {
   inspectionObjectParameters,
   inspectionSpecialtyObjects,
   inspectionObjectReportNames,
-  inspectionCalculationRules,
+  inspectionCalculationMethods,
   technicalRequirements,
 } from "@lab/management-system-msw/fixtures";
 import paramInterfacesJson from "@/data/generated/inspection-param-interface.json";
@@ -67,7 +67,7 @@ const SNAPSHOTTED: Array<{ arr: unknown[]; snapshot: unknown[] }> = [
   inspectionReportNameParameters, inspectionParamInterfaces, inspectionParamInterfaceLinks, contracts,
   inspectionSpecialties, inspectionObjects, inspectionObjectStandards,
   inspectionObjectParameters, inspectionSpecialtyObjects, inspectionObjectReportNames,
-  inspectionCalculationRules, technicalRequirements,
+  inspectionCalculationMethods, technicalRequirements,
 ].map((arr) => ({ arr: arr as unknown[], snapshot: structuredClone(arr) }));
 
 /** 把 fixtures 恢复到模块加载时的快照（引用不变，内容重置）。 */
@@ -424,7 +424,7 @@ export function installShapeAdapters(server: { use: (...h: unknown[]) => void })
     // 主表路由（/api/inspection/specialties 等）REF 组件按 `/:id` PUT/DELETE，msw dictCrud
     // 按 `/:code`——seed 行无 id 列，组件行 id 取 code 语义（rowId 读 (item as {id}).id，
     // 适配层在 wrap 时补 id=code，PUT/DELETE `/:code` 天然命中 msw handler）。
-    // 计算规则 / 技术要求 msw 主键是复合键，REF 组件 PUT/DELETE `/:id`——在 wrap 时
+    // 计算方法 / 技术要求 msw 主键是复合键，REF 组件 PUT/DELETE `/:id`——在 wrap 时
     // 补 id（`cr-${objectCode}-${parameterCode}` / `tr-${objectCode}-${parameterCode}-${std}`），
     // 并拦截 PUT/DELETE `/:id` 反查复合键转发 fixtures 原地写。
     http.get("*/api/inspection/specialties", ({ request }) =>
@@ -580,27 +580,27 @@ export function installShapeAdapters(server: { use: (...h: unknown[]) => void })
     http.delete("*/api/inspection-param-interfaces/links", linkDelete(inspectionParamInterfaceLinks as unknown as Array<Record<string, unknown>>)),
     http.delete("*/api/inspection/links/standard-parameter", linkDelete(inspectionStandardParameters as unknown as Array<Record<string, unknown>>)),
 
-    // —— 计算规则 GET：+ testingStandardCode 过滤（msw 只支持 object/parameter）——
-    http.get("*/api/calculation-rules", ({ request }) => {
+    // —— 计算方法 GET：+ testingStandardCode 过滤（msw 只支持 object/parameter）——
+    http.get("*/api/calculation-methods", ({ request }) => {
       const url = new URL(request.url);
       const std = url.searchParams.get("testingStandardCode");
-      let items = (inspectionCalculationRules as unknown as Array<Record<string, unknown>>)
+      let items = (inspectionCalculationMethods as unknown as Array<Record<string, unknown>>)
         .map((r): Record<string, unknown> => ({ ...r, id: String(r["id"] ?? `cr-${r["inspectionObjectCode"]}-${r["inspectionParameterCode"]}`) }));
       if (std) items = items.filter((r) => r["testingStandardCode"] === std);
       return HttpResponse.json(pageOf(items, num(url.searchParams.get("page"), 1), num(url.searchParams.get("pageSize"), items.length || 1)));
     }),
-    // 计算规则 PUT/DELETE /:id → 复合键转发（REF 组件以 id 调用，msw 是复合键路由）
-    http.put("*/api/calculation-rules/:id", async ({ params, request }) => {
-      const row = (inspectionCalculationRules as unknown as Array<Record<string, unknown>>)
+    // 计算方法 PUT/DELETE /:id → 复合键转发（REF 组件以 id 调用，msw 是复合键路由）
+    http.put("*/api/calculation-methods/:id", async ({ params, request }) => {
+      const row = (inspectionCalculationMethods as unknown as Array<Record<string, unknown>>)
         .find((r) => String(r["id"] ?? `cr-${r["inspectionObjectCode"]}-${r["inspectionParameterCode"]}`) === params.id);
-      if (!row) return HttpResponse.json({ message: "CalculationRule not found" }, { status: 404 });
+      if (!row) return HttpResponse.json({ message: "CalculationMethod not found" }, { status: 404 });
       Object.assign(row, (await request.json()) as object, { updatedAt: new Date().toISOString() });
       return HttpResponse.json(row);
     }),
-    http.delete("*/api/calculation-rules/:id", ({ params }) => {
-      const arr = inspectionCalculationRules as unknown as Array<Record<string, unknown>>;
+    http.delete("*/api/calculation-methods/:id", ({ params }) => {
+      const arr = inspectionCalculationMethods as unknown as Array<Record<string, unknown>>;
       const i = arr.findIndex((r) => String(r["id"] ?? `cr-${r["inspectionObjectCode"]}-${r["inspectionParameterCode"]}`) === params.id);
-      if (i < 0) return HttpResponse.json({ message: "CalculationRule not found" }, { status: 404 });
+      if (i < 0) return HttpResponse.json({ message: "CalculationMethod not found" }, { status: 404 });
       arr.splice(i, 1);
       return new HttpResponse(null, { status: 204 });
     }),

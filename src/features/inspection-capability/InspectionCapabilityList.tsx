@@ -7,7 +7,7 @@
 //   - 数据由 tests/helpers/seed.ts installShapeAdapters wrapDict 提供
 //     （id=code、keyword 过滤、inspectionObjectCode / inspectionSpecialtyCode
 //     junction 反查）。组件直读 res.data.items/total 即可。
-//   - 计算规则 / 技术要求是复合主键独立页，不在本组件范围。
+//   - 计算方法 / 技术要求是复合主键独立页，不在本组件范围。
 import { useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
@@ -182,7 +182,14 @@ export function InspectionCapabilityList({ resource }: Props) {
 
   const resetForm = () => {
     if (resource === "specialties") {
-      setForm({ code: "", name: "", officialNo: "", isOfficial: false, enabled: true, sortOrder: "999" });
+      setForm({
+        code: "",
+        name: "",
+        officialNo: "",
+        isOfficial: false,
+        enabled: true,
+        sortOrder: "999",
+      });
     } else if (resource === "objects") {
       setForm({
         code: "",
@@ -198,7 +205,14 @@ export function InspectionCapabilityList({ resource }: Props) {
     } else if (resource === "parameters") {
       setForm({ code: "", name: "", unit: "", sourceType: "custom", sortOrder: "999" });
     } else {
-      setForm({ code: "", name: "", version: "", status: "active", sourceDocumentId: "", sortOrder: "999" });
+      setForm({
+        code: "",
+        name: "",
+        version: "",
+        status: "active",
+        sourceDocumentId: "",
+        sortOrder: "999",
+      });
     }
   };
 
@@ -246,7 +260,9 @@ export function InspectionCapabilityList({ resource }: Props) {
       .get<unknown>(ROUTES.specialties, {
         params: { page: "1", pageSize: "100" },
       })
-      .then((res) => setSpecialtyOptions(unwrapListResponse<InspectionSpecialty>(res).items))
+      .then((res) =>
+        setSpecialtyOptions(unwrapListResponse<InspectionSpecialty>(res).items),
+      )
       .catch(() => undefined);
   }, [resource]);
 
@@ -274,7 +290,9 @@ export function InspectionCapabilityList({ resource }: Props) {
     if (objectFilter) params.inspectionObjectCode = objectFilter;
     apiClient
       .get<unknown>(ROUTES.standards, { params })
-      .then((res) => setStandardOptions(unwrapListResponse<InspectionStandard>(res).items))
+      .then((res) =>
+        setStandardOptions(unwrapListResponse<InspectionStandard>(res).items),
+      )
       .catch(() => undefined);
   }, [resource, objectFilter]);
 
@@ -288,7 +306,9 @@ export function InspectionCapabilityList({ resource }: Props) {
       .get<unknown>(ROUTES.parameters, {
         params: { page: "1", pageSize: "200" },
       })
-      .then((res) => setParameterOptions(unwrapListResponse<InspectionParameter>(res).items))
+      .then((res) =>
+        setParameterOptions(unwrapListResponse<InspectionParameter>(res).items),
+      )
       .catch(() => undefined);
   }, [resource]);
 
@@ -347,8 +367,8 @@ export function InspectionCapabilityList({ resource }: Props) {
       load();
     } catch (err: unknown) {
       const msg =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "保存失败";
+        (err as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message ?? "保存失败";
       setSaveError(msg);
     }
   };
@@ -364,8 +384,8 @@ export function InspectionCapabilityList({ resource }: Props) {
       load();
     } catch (err: unknown) {
       const msg =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "删除失败";
+        (err as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message ?? "删除失败";
       setDeleteError(msg);
     } finally {
       setDeletingBusy(false);
@@ -382,13 +402,21 @@ export function InspectionCapabilityList({ resource }: Props) {
     if (resource === "specialties") {
       cells.push(<span key="officialNo">{item.officialNo ?? "-"}</span>);
       cells.push(
-        item.isOfficial ? <Badge key="off">官方</Badge> : <Badge key="off" variant="outline">自定义</Badge>,
+        item.isOfficial ? (
+          <Badge key="off">官方</Badge>
+        ) : (
+          <Badge key="off" variant="outline">
+            自定义
+          </Badge>
+        ),
       );
       cells.push(
         item.enabled ? (
           <Badge key="en">启用</Badge>
         ) : (
-          <Badge key="en" variant="outline">停用</Badge>
+          <Badge key="en" variant="outline">
+            停用
+          </Badge>
         ),
       );
     } else if (resource === "objects") {
@@ -406,7 +434,9 @@ export function InspectionCapabilityList({ resource }: Props) {
         item.enabled ? (
           <Badge key="en">启用</Badge>
         ) : (
-          <Badge key="en" variant="outline">停用</Badge>
+          <Badge key="en" variant="outline">
+            停用
+          </Badge>
         ),
       );
     } else if (resource === "parameters") {
@@ -438,9 +468,11 @@ export function InspectionCapabilityList({ resource }: Props) {
   };
 
   const columnHeaders: string[] = (() => {
-    if (resource === "specialties") return ["编码", "名称", "官方序号", "官方/自定义", "状态"];
+    if (resource === "specialties")
+      return ["编码", "名称", "官方序号", "官方/自定义", "状态"];
     if (resource === "objects") return ["编码", "名称", "检测参数", "检测标准", "状态"];
-    if (resource === "parameters") return ["编码", "名称", "单位", "检测项目", "检测标准"];
+    if (resource === "parameters")
+      return ["编码", "名称", "单位", "检测项目", "检测标准"];
     return ["编码", "名称", "版本", "状态", "检测参数"];
   })();
 
@@ -533,7 +565,10 @@ export function InspectionCapabilityList({ resource }: Props) {
           )}
 
           {items.length === 0 && !loading ? (
-            <EmptyState title={`暂无${TITLES[resource]}`} description="试试清空筛选或新建一行" />
+            <EmptyState
+              title={`暂无${TITLES[resource]}`}
+              description="试试清空筛选或新建一行"
+            />
           ) : (
             <Table>
               <TableHeader>
@@ -610,7 +645,9 @@ export function InspectionCapabilityList({ resource }: Props) {
       >
         <DialogContent className="max-w-xl">
           <DialogHeader>
-            <DialogTitle>{editing ? `编辑${TITLES[resource]}` : CREATE_LABELS[resource]}</DialogTitle>
+            <DialogTitle>
+              {editing ? `编辑${TITLES[resource]}` : CREATE_LABELS[resource]}
+            </DialogTitle>
             <DialogDescription>
               {resource === "objects"
                 ? "M06.F02.I02 项目↔专项/参数关联：选择检测专项编码，把项目挂到专项下"
@@ -677,7 +714,10 @@ export function InspectionCapabilityList({ resource }: Props) {
                   <Select
                     value={(form.inspectionSpecialtyCode as string) ?? "_none"}
                     onValueChange={(v) =>
-                      setForm({ ...form, inspectionSpecialtyCode: v === "_none" ? "" : v })
+                      setForm({
+                        ...form,
+                        inspectionSpecialtyCode: v === "_none" ? "" : v,
+                      })
                     }
                   >
                     <SelectTrigger id="inspectionSpecialtyCode">
@@ -699,7 +739,9 @@ export function InspectionCapabilityList({ resource }: Props) {
                     <Input
                       id="sourceProjectNo"
                       value={(form.sourceProjectNo as string) ?? ""}
-                      onChange={(e) => setForm({ ...form, sourceProjectNo: e.target.value })}
+                      onChange={(e) =>
+                        setForm({ ...form, sourceProjectNo: e.target.value })
+                      }
                     />
                   </div>
                   <div>
@@ -707,7 +749,9 @@ export function InspectionCapabilityList({ resource }: Props) {
                     <Input
                       id="sourceProjectName"
                       value={(form.sourceProjectName as string) ?? ""}
-                      onChange={(e) => setForm({ ...form, sourceProjectName: e.target.value })}
+                      onChange={(e) =>
+                        setForm({ ...form, sourceProjectName: e.target.value })
+                      }
                     />
                   </div>
                 </div>
@@ -716,7 +760,9 @@ export function InspectionCapabilityList({ resource }: Props) {
                     <Checkbox
                       id="isOfficial"
                       checked={form.isOfficial === true}
-                      onCheckedChange={(v) => setForm({ ...form, isOfficial: v === true })}
+                      onCheckedChange={(v) =>
+                        setForm({ ...form, isOfficial: v === true })
+                      }
                     />
                     <Label htmlFor="isOfficial">官方</Label>
                   </div>
@@ -742,8 +788,8 @@ export function InspectionCapabilityList({ resource }: Props) {
                 <div>
                   <Label>已选检测参数（M06.F02.I02 关联）</Label>
                   <div className="text-xs text-muted-foreground mt-1">
-                    {parameterOptions.length} 个候选参数；保存时由 M06.F03.I02 在 form 关联。
-                    本批实现只透出选择器，关联持久化由后续 batch 补。
+                    {parameterOptions.length} 个候选参数；保存时由 M06.F03.I02 在 form
+                    关联。 本批实现只透出选择器，关联持久化由后续 batch 补。
                   </div>
                 </div>
               </div>
@@ -806,7 +852,9 @@ export function InspectionCapabilityList({ resource }: Props) {
                   <Input
                     id="sourceDocumentId"
                     value={(form.sourceDocumentId as string) ?? ""}
-                    onChange={(e) => setForm({ ...form, sourceDocumentId: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, sourceDocumentId: e.target.value })
+                    }
                   />
                 </div>
               </div>

@@ -42,7 +42,7 @@ const SpecialtiesPage = lazy(() => import("@/pages/SpecialtiesPage"));
 const ObjectsPage = lazy(() => import("@/pages/ObjectsPage"));
 const StandardsPage = lazy(() => import("@/pages/StandardsPage"));
 const ParametersPage = lazy(() => import("@/pages/ParametersPage"));
-const CalculationRulesPage = lazy(() => import("@/pages/CalculationRulesPage"));
+const CalculationMethodsPage = lazy(() => import("@/pages/CalculationMethodsPage"));
 const TechnicalRequirementsPage = lazy(() => import("@/pages/TechnicalRequirementsPage"));
 // -- Batch 2B-3：报告 4 阶段（review/approval/issuance/archived）-------------------------
 const ReportIssuePage = lazy(() => import("@/pages/ReportIssuePage"));
@@ -128,10 +128,10 @@ export default function App() {
             }
           />
           <Route
-            path="inspection-calculation-rules"
+            path="inspection-calculation-methods"
             element={
               <RouteSuspense>
-                <CalculationRulesPage />
+                <CalculationMethodsPage />
               </RouteSuspense>
             }
           />

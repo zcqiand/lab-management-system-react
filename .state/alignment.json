@@ -1005,7 +1005,7 @@
       ]
     },
     "M06.F05.I01": {
-      "name": "计算规则维护",
+      "name": "计算方法维护",
       "status": "已上线",
       "type": "页面",
       "requirements": [],
@@ -1020,7 +1020,7 @@
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F05 渲染标题 + 列表行（复合主键 fixtures）"
       ],
       "entry": [
-        "src\\features\\inspection-capability\\CalculationRuleList.tsx"
+        "src\\features\\inspection-capability\\CalculationMethodList.tsx"
       ]
     },
     "M06.F06.I01": {
