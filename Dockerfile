@@ -1,9 +1,9 @@
 # ===== lab-management-system-react — Vite SPA production image =====
-# Multi-stage: build with node:20-alpine, serve with nginx:alpine.
+# Multi-stage: build with node:24-alpine, serve with nginx:alpine.
 # 容器内监听 :80;VPS nginx 反代到 host 8011 (lab-react.xiangru.uk)。
 
 # ---------- Stage 1: builder ----------
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 
 # 硬约束:npm 依赖一律走 npmmirror (suite root CLAUDE.md §2)
