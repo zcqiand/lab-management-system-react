@@ -24,8 +24,15 @@ COPY package.json package-lock.json ./
 RUN npm install --legacy-peer-deps --no-audit --no-fund
 
 COPY . .
-# prebuild hook (gen:shared) 自动跑;需要 ../lab-management-system-shared 存在
-RUN npm run build
+# prebuild hook (gen:shared) 自动跑;需要 ../lab-management-system-shared 存在。
+# 用 npx vite build 而非 npm run build（= tsc --noEmit && vite build）：
+# Linux 上 npm install 对 file:../lab-management-system-msw 建 symlink，
+# tests 的 dynamic import 链（setup.dom → @lab/msw/node → handlers-array →
+# handlers-extra → 'msw' lib）在 sibling 真路径下解析不到 node_modules →
+# TS2307 → 118 条 TS7006 连锁（v0.2.8/09/10 三次踩坑）。类型检查由 CI
+# test job 的 npm ci（packed copy 形态）+ tsc --noEmit 对同一 commit 全量
+# 覆盖，镜像构建只管产物。
+RUN npx vite build
 
 # ---------- Stage 2: runtime ----------
 FROM nginx:alpine AS runtime
