@@ -17,5 +17,12 @@
     "skipLibCheck": true,
     "paths": { "@/*": ["./src/*"] }
   },
-  "include": ["src", "tests", "vite.config.ts", "vitest.config.ts"]
+  "include": ["src", "tests", "vite.config.ts", "vitest.config.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "../lab-management-system-shared",
+    "../lab-management-system-msw"
+  ]
 }
