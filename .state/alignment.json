@@ -22,6 +22,8 @@
         "docs\\design\\design-function-map.md"
       ],
       "tests": [
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/backend-menus.dom.test.tsx::失败：data=null + error 上抛，消费方回退静态 MENU_TREE",
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/backend-menus.dom.test.tsx::成功：/api/auth/menus 契约树适配为本地渲染树（有子节点=group）",
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/sidebar-nav.dom.test.tsx::侧边栏按菜单树下发渲染：锚点 + 分组 + 页面项",
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/sidebar-nav.dom.test.tsx::菜单项是可点按钮，点击触发导航回调"
       ],
