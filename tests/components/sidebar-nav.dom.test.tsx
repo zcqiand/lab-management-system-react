@@ -1,8 +1,9 @@
 // M01.F04.I01 fnTest — 动态菜单下发（GET /auth/menus → SidebarNav 渲染）。
 //
-// react 仓菜单树是静态 MENU_TREE（menus.ts，镜像 nextjs 的 saas 下发形状），
-// 本测试验证「菜单树 → SidebarNav 按分组渲染 + 分组折叠持久化」这条链路。
-// jsdom + RTL；SidebarNav 是纯展示组件（menus 传 props），无需 msw。
+// SidebarNav 是纯展示组件（menus 传 props）：本测试验证「菜单树 → 按分组
+// 渲染 + 分组折叠持久化」这条渲染链路，传静态 MENU_TREE 作 fixture。
+// 数据链（useBackendMenus 拉后端 /api/auth/menus + 失败回退 MENU_TREE）
+// 由 backend-menus.dom.test.tsx 覆盖。jsdom + RTL，无需 msw。
 
 import { describe, beforeEach, expect } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";

@@ -1,8 +1,8 @@
 // SidebarNav — nextjs 仓 sidebar-nav.tsx 的镜像（Sprint 2 Batch 0）。
 //
 // 与 nextjs 版的差异（镜像改造点）：
-//   - 菜单数据源：nextjs 从 saas /api/saas/me/menus 拉取 → react 仓静态
-//     MENU_TREE（menus.ts），无 saas 依赖
+//   - 菜单数据源：lab 后端 /api/auth/menus（orval authGetMenus + Bearer lab
+//     JWT；springboot 侧 saas 快照缓存 → demo 兜底）；失败回退静态 MENU_TREE
 //   - next/navigation 的 usePathname/useRouter/useSearchParams →
 //     react-router-dom 的 useLocation/useNavigate；?menu= 机制不搬，
 //     选中态按 location.pathname 匹配
@@ -33,6 +33,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { authGetMenus } from "@/api/endpoints/endpoints";
+import type { MenuNode as ContractMenuNode } from "@/api/endpoints/endpoints.schemas";
 
 // 与 saas 的 EffectiveMenuNode 对齐（手写，避免跨仓依赖）
 interface MenuNode {
@@ -75,7 +77,7 @@ function Icon({ name }: { name?: string }) {
 
 interface SidebarNavProps {
   /** 菜单树。null 表示还在加载或拉取失败（消费方应传 fallback 静态 MENU_TREE）。
-   *  镜像 nextjs 行为：useSaasMenus 拿到数据前 menus=null，sidebar 渲染空状态。 */
+   *  useBackendMenus 拿到数据前 menus=null，sidebar 渲染空状态。 */
   menus: MenuNode[] | null;
   appCode: string;
   appName?: string | null;
@@ -413,12 +415,15 @@ function ChevronToggle({ expanded }: { expanded: boolean }) {
 
 const SAAS_APP_CODE = "lab-management";
 
-/** 客户端 hook：拉 /api/saas/me/menus?appCode=<code>
- *  镜像 lab-nextjs sidebar-nav.tsx 的同名 hook。dev 期浏览器请求被 Vite proxy
- *  转发到 saas:3000/api/v1/me/menus（同源避开 CORS preflight）；saas 返回
- *  `{ [appCode]: MenuNode[] }` map（saas-msw handlers-extra.ts:215 一致），
- *  这里按 SAAS_APP_CODE 取数组。失败返 null，消费方应回退到静态 MENU_TREE。 */
-export function useSaasMenus(): {
+/**
+ * 客户端 hook：拉后端 `GET /api/auth/menus`（orval authGetMenus，axios 拦截器
+ * 自动注 baseURL + Bearer lab JWT）。后端数据链（lab-springboot v0.1.7 起）：
+ * SSO/refresh 时缓存的 saas 菜单快照 → miss 回退 demo 菜单，端点永不 5xx。
+ *
+ * 契约 MenuNode{id,label,path?,icon?,children?} 在此适配成本地渲染 MenuNode
+ * （name/code/type/sortOrder），menus.ts 静态树与渲染层零改动。
+ * 失败返 null，消费方回退静态 MENU_TREE。 */
+export function useBackendMenus(): {
   data: MenuNode[] | null;
   loading: boolean;
   error: string | null;
@@ -430,23 +435,10 @@ export function useSaasMenus(): {
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    fetch(`/api/saas/me/menus?appCode=${encodeURIComponent(SAAS_APP_CODE)}`, {
-      cache: "no-store",
-    })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
-      .then((d: unknown) => {
+    authGetMenus()
+      .then((resp) => {
         if (cancelled) return;
-        // saas /api/v1/me/menus 形状：`{ [appCode]: MenuNode[] }` map；
-        // 取本仓 appCode 对应的数组。
-        if (d && typeof d === "object" && !Array.isArray(d)) {
-          const map = d as Record<string, MenuNode[]>;
-          setData(map[SAAS_APP_CODE] ?? []);
-        } else if (Array.isArray(d)) {
-          // 兼容旧的扁平数组（lab-msw 老 handler / 单元测试 mock）
-          setData(d as MenuNode[]);
-        } else {
-          setData([]);
-        }
+        setData(resp.data.map(adaptContractMenu));
         setLoading(false);
       })
       .catch((err: unknown) => {
@@ -460,4 +452,21 @@ export function useSaasMenus(): {
   }, []);
 
   return { data, loading, error };
+}
+
+/** 契约 MenuNode（shared tsp：id/label/path?/icon?/children?）→ 本地渲染 MenuNode。 */
+function adaptContractMenu(node: ContractMenuNode, index: number): MenuNode {
+  const children = node.children ?? [];
+  return {
+    id: node.id,
+    appId: SAAS_APP_CODE,
+    code: node.id,
+    name: node.label,
+    path: node.path,
+    icon: node.icon,
+    // 契约无 type 字段：有子节点即 group，否则 page
+    type: children.length > 0 ? "group" : "page",
+    sortOrder: index + 1,
+    children: children.map(adaptContractMenu),
+  };
 }

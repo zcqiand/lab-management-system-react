@@ -11,7 +11,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SidebarNav, useSaasMenus } from "@/components/app/sidebar-nav";
+import { SidebarNav, useBackendMenus } from "@/components/app/sidebar-nav";
 import { APP_CODE, APP_NAME, MENU_TREE } from "@/components/app/menus";
 import { BackendBadge } from "@/components/app/backend-badge";
 import { useAuth } from "@/state/auth-context";
@@ -21,10 +21,10 @@ export function AppShell() {
   const { state, logout } = useAuth();
   const { checking } = useRequireAuth();
   const navigate = useNavigate();
-  // 菜单从 saas 拉（lab-msw saasMenusExtraHandlers 兜底）；失败时回退静态
-  // MENU_TREE 保证 sidebar 永远不空白（nextjs 仓同款 fallback 链路）。
-  const { data: saasMenus } = useSaasMenus();
-  const menus = saasMenus ?? MENU_TREE;
+  // 菜单从 lab 后端 /api/auth/menus 拉（springboot：saas 快照缓存 → demo 兜底）；
+  // 请求彻底失败时回退静态 MENU_TREE 保证 sidebar 永远不空白。
+  const { data: backendMenus } = useBackendMenus();
+  const menus = backendMenus ?? MENU_TREE;
 
   const token =
     state.kind === "authenticated" ? (state.value.tokenExpiresAt > 0 ? "ok" : null) : null;
