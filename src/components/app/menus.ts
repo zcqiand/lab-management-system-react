@@ -8,7 +8,7 @@ import type { MenuNode } from "./sidebar-nav";
 
 export const APP_CODE = "lab-management";
 
-export const APP_NAME = "实验室管理系统";
+export const APP_NAME = "建筑工程实验室管理系统";
 
 /** 6 组 26 项：总览 / 基础数据 / 试验过程 / 检测能力 / 报告 / 统计 */
 export const MENU_TREE: MenuNode[] = [

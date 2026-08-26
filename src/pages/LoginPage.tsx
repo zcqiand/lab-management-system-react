@@ -94,13 +94,17 @@ export function LoginPage() {
       const fromParam = params.get("from");
       // 回跳时 URL 是裸 /login（redirect_uri 不带 query），from 从 sessionStorage 恢复
       const fromStored =
-        typeof window !== "undefined" ? sessionStorage.getItem(SSO_FROM_STORAGE_KEY) : null;
+        typeof window !== "undefined"
+          ? sessionStorage.getItem(SSO_FROM_STORAGE_KEY)
+          : null;
       const from = fromParam ?? fromStored;
       if (code && stateParam) {
         // 验 state：sessionStorage 存的 vs URL 回跳的必须一致（防 CSRF 攻击）。
         // 失败说明 state 被偷换或 session 过期，拒换 token 并清掉 storage 让用户重试。
         const expectedState =
-          typeof window !== "undefined" ? sessionStorage.getItem(SSO_STATE_STORAGE_KEY) : null;
+          typeof window !== "undefined"
+            ? sessionStorage.getItem(SSO_STATE_STORAGE_KEY)
+            : null;
         if (!expectedState || expectedState !== stateParam) {
           setStatus("state 校验失败（可能 session 过期或被攻击），请重新登录");
           sessionStorage.removeItem(SSO_STATE_STORAGE_KEY);
@@ -112,7 +116,8 @@ export function LoginPage() {
         params.delete("code");
         params.delete("state");
         const cleanSearch = params.toString();
-        const cleanUrl = window.location.pathname + (cleanSearch ? `?${cleanSearch}` : "");
+        const cleanUrl =
+          window.location.pathname + (cleanSearch ? `?${cleanSearch}` : "");
 
         setStatus("拿到 saas code，正在换 token…");
         try {
@@ -146,10 +151,7 @@ export function LoginPage() {
           // 把 MSW 响应体打到 console，下次触发就能直接看到 INVALID_GRANT 的 message
           // 字符串（不用翻 Network）。生产环境换成 toApiError 走 error boundary。
           const axErr = err as AxiosError<{ code: string; message: string }>;
-          console.error(
-            "sso callback failed:",
-            axErr.response?.data ?? axErr.message,
-          );
+          console.error("sso callback failed:", axErr.response?.data ?? axErr.message);
           // 失败也清掉 URL 残留的 code/state —— dev server 重启 / Vite HMR 会清空 MSW
           // 进程内的 oauthCodes Map，导致同一个 code 第二次 callback 必返 INVALID_GRANT。
           // 不清 URL 的话，用户每次刷新都会重跑这条失败路径；清掉后用户能直接点登录按钮走密码流程。
@@ -209,15 +211,17 @@ export function LoginPage() {
       <div className="bg-background w-full max-w-sm rounded-lg border p-8 shadow-sm">
         <div className="mb-6 flex flex-col items-center gap-2">
           <FlaskConical className="text-primary size-8" />
-          <h1 className="text-xl font-semibold">实验室管理系统</h1>
-          <p className="text-muted-foreground text-sm">SSO 登录（OAuth 2.0 授权码模式）</p>
+          <h1 className="text-xl font-semibold">建筑工程实验室管理系统</h1>
+          <p className="text-muted-foreground text-sm">
+            SSO 登录（OAuth 2.0 授权码模式）
+          </p>
         </div>
         <p className="text-muted-foreground mb-4 text-sm" data-testid="login-status">
           {status}
         </p>
         <p className="text-muted-foreground/70 text-xs">
-          流程：lab /login → saas /authorize → saas 登录 → 带 code 回 lab /login → lab 后端
-          换 token
+          流程：lab /login → saas /authorize → saas 登录 → 带 code 回 lab /login → lab
+          后端 换 token
         </p>
         <p className="text-muted-foreground/70 text-xs">
           demo 后端：{apiMode} · saas 端口：3000

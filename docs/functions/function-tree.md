@@ -1,6 +1,6 @@
 # lab-management-system-react 功能树
 
-> 实验室管理系统 — React 前端。consumes `lab-management-system-shared` TypeSpec SSOT。
+> 建筑工程实验室管理系统 — React 前端。consumes `lab-management-system-shared` TypeSpec SSOT。
 > F 级别镜像 shared BASE 24 功能（重标前端类型），向下加 I 级子项。全部 规划（待实现）。
 > **2026-08-17 sprint 0 起：前端 only 镜像仓。**
 > 镜像 `lab-management-system-nextjs` 26 页 UI，**不实现 `/api` route**。

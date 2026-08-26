@@ -20,7 +20,11 @@ beforeEach(() => {
 function renderSidebar() {
   return render(
     <MemoryRouter initialEntries={["/"]}>
-      <SidebarNav menus={MENU_TREE} appCode="lab-management" appName="实验室管理系统" />
+      <SidebarNav
+        menus={MENU_TREE}
+        appCode="lab-management"
+        appName="建筑工程实验室管理系统"
+      />
     </MemoryRouter>,
   );
 }
