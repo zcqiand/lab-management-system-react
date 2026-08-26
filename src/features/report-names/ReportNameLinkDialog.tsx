@@ -72,7 +72,11 @@ export function ReportNameLinkDialog({
       ]);
       setStandards(stdResp.data.items ?? []);
       setParameters(paramResp.data.items ?? []);
-      setStdLinks(Array.isArray(stdLinkResp.data) ? stdLinkResp.data : []);
+      // shared 契约已升 Page<T>（items/total/page/pageSize）；裸数组分支保留兼容旧 msw
+      const sl = Array.isArray(stdLinkResp.data)
+        ? stdLinkResp.data
+        : ((stdLinkResp.data as unknown as { items: StdLink[] })?.items ?? []);
+      setStdLinks(sl);
       const pl = Array.isArray(paramLinkResp.data)
         ? paramLinkResp.data
         : ((paramLinkResp.data as unknown as { items: ParamLink[] })?.items ?? []);
