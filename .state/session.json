@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "project": "lab-management-system-react",
-  "current_task": "Post-Phase-3 frontend 集成收尾：@faker-js/faker 错位 deps → devDeps",
+  "current_task": "ReportNameLinkDialog stdLink 兼容 Page<T>（757b52b）",
   "last_session_at": "2026-08-22",
   "last_session_summary": "@faker-js/faker 从 dependencies 挪到 devDependencies（src/ 零 import，仅 msw sibling 用）；commit 948ee4c + tag v0.3.10-20260822 pushed",
   "done": [
@@ -9,7 +9,7 @@
     "commit 948ee4c + tag v0.3.10-20260822 + push origin/master"
   ],
   "next": [
-    "无（本批原子收尾）。如起新工作读 docs/conventions/sprint-roadmap.md 取下一站"
+    "无"
   ],
   "open_questions": [],
   "dont": [
