@@ -26,8 +26,9 @@ import type {
   OAuthResponseType,
 } from "@/api/endpoints/endpoints.schemas";
 
-// OAuth 2.0 client_id：lab 在 saas 注册的应用标识（apps.json clientId=lab-mgmt）。
-// 真部署走部署期注入（env 或运行时远端 config）；当前单仓 demo 硬编码。
+// OAuth 2.0 client_id：契约必填参数，但真 client_id 由 lab 后端 env 权威持有
+// （springboot LAB_SAAS_CLIENT_ID=UUID V014 seed；nextjs SAAS_OAUTH_CLIENT_ID），
+// 前端传的值会被后端忽略。此处只为满足 OpenAPI required 字段，勿当配置源。
 const OAUTH_CLIENT_ID = "lab-mgmt";
 const SSO_STATE_STORAGE_KEY = "lab.sso.state";
 // 业务回跳路径（?from=）存 sessionStorage 随 state 走。RFC 6749 §3.1.2 要求
