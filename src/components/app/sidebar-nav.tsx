@@ -417,20 +417,20 @@ const SAAS_APP_CODE = "lab-management";
 
 /**
  * 客户端 hook：拉后端 `GET /api/auth/menus`（orval authGetMenus，axios 拦截器
- * 自动注 baseURL + Bearer lab JWT）。后端数据链（lab-springboot v0.1.7 起）：
- * SSO/refresh 时缓存的 saas 菜单快照 → miss 回退 demo 菜单，端点永不 5xx。
+ * 自动注 baseURL + Bearer lab JWT）。后端数据链：SSO/refresh 时缓存的 saas
+ * 菜单快照；miss（503 MENUS_UNAVAILABLE，2026-08-27 demo 兜底删除）→ 抛错
+ * 上抛 ErrorBoundary 兜，**不再静默回退静态树**（前端兜底会让真问题隐形，
+ * 与 demo 兜底删除的家族语义一致）。
  *
  * 契约 MenuNode{id,label,path?,icon?,children?} 在此适配成本地渲染 MenuNode
- * （name/code/type/sortOrder），menus.ts 静态树与渲染层零改动。
- * 失败返 null，消费方回退静态 MENU_TREE。 */
+ * （name/code/type/sortOrder），menus.ts 静态树与渲染层零改动。 */
 export function useBackendMenus(): {
   data: MenuNode[] | null;
   loading: boolean;
-  error: string | null;
 } {
   const [data, setData] = useState<MenuNode[] | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [err, setErr] = useState<Error | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -441,9 +441,11 @@ export function useBackendMenus(): {
         setData(resp.data.map(adaptContractMenu));
         setLoading(false);
       })
-      .catch((err: unknown) => {
+      .catch((cause: unknown) => {
         if (cancelled) return;
-        setError(err instanceof Error ? err.message : String(err));
+        // 保存到 state，下一次 render 时由 ErrorBoundary 接住（useEffect 抛
+        // React 不接）。ErrorBoundary 在 app-shell 顶层包住 SidebarNav。
+        setErr(cause instanceof Error ? cause : new Error(String(cause)));
         setLoading(false);
       });
     return () => {
@@ -451,7 +453,9 @@ export function useBackendMenus(): {
     };
   }, []);
 
-  return { data, loading, error };
+  // 失败时 render 阶段抛错 — ErrorBoundary 兜（demo 兜底删除后：不再静默回退静态树）
+  if (err) throw err;
+  return { data, loading };
 }
 
 /** 契约 MenuNode（shared tsp：id/label/path?/icon?/children?）→ 本地渲染 MenuNode。 */

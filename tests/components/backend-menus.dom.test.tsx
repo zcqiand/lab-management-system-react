@@ -2,13 +2,14 @@
 //
 // 2026-08-25 起菜单数据源从 saas /api/saas/me/menus 切到 lab 后端
 // /api/auth/menus（orval authGetMenus；springboot 侧 saas 快照缓存 →
-// demo 兜底）。本测试验证三条链路：
+// miss 503，2026-08-27 起 demo 兜底删除）。本测试验证三条链路：
 //   1. hook 拉取成功 → 契约 MenuNode 适配成本地渲染树（group/page 推导）
-//   2. 请求失败 → data=null，消费方（app-shell）回退静态 MENU_TREE
+//   2. 请求失败 → 抛错（不静默回退静态树），ErrorBoundary 兜
 //   3. hook 确实走 /api/auth/menus 端点（防回退到旧 saas 路径）
 // axios 在 orval 生成层被 vi.mock 拦截（loginPageSso.dom.test 同款队列模式）。
 
 import { describe, beforeEach, expect, vi } from "vitest";
+import React from "react";
 import { render, screen, cleanup, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { fnTest } from "../fn";
@@ -56,10 +57,26 @@ const CONTRACT_MENUS = [
   { id: "standalone", label: "独立页", path: "/solo" },
 ];
 
+// 错误边界：捕获子组件 throw，避免单测崩溃；同时断言错误态 UI。
+class MenuErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { error: Error | null }
+> {
+  override state = { error: null as Error | null };
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+  override render() {
+    if (this.state.error) {
+      return <div data-testid="menus-error">{this.state.error.message}</div>;
+    }
+    return this.props.children;
+  }
+}
+
 function Harness() {
-  const { data, loading, error } = useBackendMenus();
+  const { data, loading } = useBackendMenus();
   if (loading) return <div data-testid="menus-loading" />;
-  if (error) return <div data-testid="menus-error">{error}</div>;
   if (!data) return <div data-testid="menus-null" />;
   return (
     <ul>
@@ -82,7 +99,9 @@ function Harness() {
 function renderHarness() {
   return render(
     <MemoryRouter>
-      <Harness />
+      <MenuErrorBoundary>
+        <Harness />
+      </MenuErrorBoundary>
     </MemoryRouter>,
   );
 }
@@ -114,12 +133,16 @@ describe("M01.F04.I01 useBackendMenus", () => {
     expect(calls).toEqual([{ method: "GET", url: "/api/auth/menus" }]);
   });
 
-  fnTest(["M01.F04.I01"], "失败：data=null + error 上抛，消费方回退静态 MENU_TREE", async () => {
+  fnTest(["M01.F04.I01"], "失败：抛错上抛，不静默回退静态 MENU_TREE（demo 兜底已删）", async () => {
     queue.push({ status: 500, data: { message: "boom" } });
     renderHarness();
 
     await waitFor(() => {
-      expect(screen.getByTestId("menus-error")).toBeTruthy();
+      // 错误边界接住抛错，渲染错误态（不再是 menus-null 或静态树）
+      const errNode = screen.getByTestId("menus-error");
+      expect(errNode.textContent).toMatch(/HTTP 500/);
     });
+    // 静态 MENU_TREE 不应渲染（无 g-overview 等 saas code 标签）
+    expect(screen.queryByTestId("group-g-overview")).toBeNull();
   });
 });
