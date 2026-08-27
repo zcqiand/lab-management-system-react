@@ -1508,6 +1508,18 @@ export type ParamInterfacesUnlinkParamInterfaceBody = {
   paramInterfaceCode: string;
 };
 
+export type ParamInterfacesListParamInterfaceLinksParams = {
+inspectionParameterCode?: string;
+paramInterfaceCode?: string;
+};
+
+export type ParamInterfacesListParamInterfaceLinks200 = {
+  items: ParamInterfaceLink[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
 export type ReceiptsListReceiptsParams = {
 page?: number;
 pageSize?: number;
@@ -1554,15 +1566,51 @@ export type ReportNamesUnlinkObjectReportNameBody = {
   reportNameCode: string;
 };
 
+export type ReportNamesListObjectReportNameLinksParams = {
+inspectionObjectCode?: string;
+reportNameCode?: string;
+};
+
+export type ReportNamesListObjectReportNameLinks200 = {
+  items: ObjectReportNameLink[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
 export type ReportNamesUnlinkReportNameParameterBody = {
   reportNameCode: string;
   inspectionParameterCode: string;
+};
+
+export type ReportNamesListReportNameParameterLinksParams = {
+reportNameCode?: string;
+inspectionParameterCode?: string;
+};
+
+export type ReportNamesListReportNameParameterLinks200 = {
+  items: ReportNameParameterLink[];
+  page: number;
+  pageSize: number;
+  total: number;
 };
 
 export type ReportNamesUnlinkReportNameStandardBody = {
   reportNameCode: string;
   inspectionStandardCode: string;
   role: InspectionStandardRole;
+};
+
+export type ReportNamesListReportNameStandardLinksParams = {
+reportNameCode?: string;
+role?: InspectionStandardRole;
+};
+
+export type ReportNamesListReportNameStandardLinks200 = {
+  items: ReportNameStandardLink[];
+  page: number;
+  pageSize: number;
+  total: number;
 };
 
 export type SamplesListSamplesParams = {
