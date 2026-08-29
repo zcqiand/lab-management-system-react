@@ -1,20 +1,15 @@
 {
   "schema": 2,
   "project": "lab-management-system-react",
-  "current_task": "ReportNameLinkDialog stdLink 兼容 Page<T>（757b52b）",
-  "last_session_at": "2026-08-22",
+  "current_task": "VITE_* 烘焙改 Dockerfile ENV(v0.3.15 GREEN)",
+  "last_session_at": "2026-08-29",
   "last_session_summary": "@faker-js/faker 从 dependencies 挪到 devDependencies（src/ 零 import，仅 msw sibling 用）；commit 948ee4c + tag v0.3.10-20260822 pushed",
   "done": [
-    "@faker-js/faker 从 dependencies 挪到 devDependencies（gate L0/L1/L2/L3/L4/L5 全绿 exit 0；100 功能条目 0 软告警）",
-    "commit 948ee4c + tag v0.3.10-20260822 + push origin/master"
+    ".env.production untrack + Dockerfile ENV VITE_API_BASE_URL/SAAS_BASE_URL/MODE(react→lab-springboot)",
+    "v0.3.15 部署 GREEN"
   ],
-  "next": [
-    "无"
-  ],
+  "next": [],
   "open_questions": [],
-  "dont": [
-    "不要把 @faker-js/faker 拉回 dependencies —— src/ 零 import，仅 msw sibling 用",
-    "不要走 vi.mock @faker-js/faker 来'激活'它 —— devDep 在 vitest 跑得动足矣"
-  ],
+  "dont": [],
   "active_branch": "master"
 }
