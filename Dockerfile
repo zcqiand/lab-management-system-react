@@ -30,6 +30,9 @@ COPY . .
 ENV VITE_API_BASE_URL=https://lab-springboot.xiangru.uk
 ENV VITE_SAAS_BASE_URL=https://saas-react.xiangru.uk
 ENV VITE_API_MODE=springboot
+# V014/V015 seed 后 saas apps.client_id=固定 UUID;前端必须发同一值(后端不验证,
+# saas-aspnetcore authorize 端点会查 apps 表,字符串 miss 返 401)。与 lab-nextjs 一致。
+ENV VITE_SAAS_CLIENT_ID=11111111-1111-1111-1111-111111111111
 # prebuild hook (gen:shared) 自动跑;需要 ../lab-management-system-shared 存在。
 # 用 npx vite build 而非 npm run build（= tsc --noEmit && vite build）：
 # Linux 上 npm install 对 file:../lab-management-system-msw 建 symlink，
