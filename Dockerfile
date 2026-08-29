@@ -28,7 +28,7 @@ COPY . .
 # context 里没有它):prod 值在此显式声明,语义与原 .env.production 完全一致。
 # 这些是公开 URL 非 secret;改后端出口/模式时同步改这里。
 ENV VITE_API_BASE_URL=https://lab-springboot.xiangru.uk
-ENV VITE_SAAS_BASE_URL=https://saas-nextjs.xiangru.uk
+ENV VITE_SAAS_BASE_URL=https://saas-react.xiangru.uk
 ENV VITE_API_MODE=springboot
 # prebuild hook (gen:shared) 自动跑;需要 ../lab-management-system-shared 存在。
 # 用 npx vite build 而非 npm run build（= tsc --noEmit && vite build）：
