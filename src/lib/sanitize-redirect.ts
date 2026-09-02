@@ -2,7 +2,7 @@
 //
 // 防御 saas post-login 把字面量字符串 "undefined" 当 redirect 路径
 // （历史上 saas 拼 URL 模板时 `${redirect}` 渲染成 "undefined"，
-// lab 收到 `http://localhost:5173/undefined` 路由 404）。
+// lab 收到 `http://localhost:5202/undefined` 路由 404）。
 //
 // 规则：
 //   - null / undefined / 空串 → "/"

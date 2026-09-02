@@ -40,11 +40,11 @@
 lab-management-system-shared/   ← 契约源（TypeSpec → openapi.yaml）
         │
         ▼
-lab-management-system-msw/      ← mock 后端（:5173，ADR-0012 B 强度）
+lab-management-system-msw/      ← mock 后端（:5200，ADR-0012 B 强度；端口分段 conventions §6）
         │ (HTTP)
         ▼
-lab-management-system-react/    ← 本仓：React 19 + Vite + axios（5173 同源 / 跨源）
-lab-management-system-vue/      ← vue-ts（5173 同源 / 跨源）
+lab-management-system-react/    ← 本仓：React 19 + Vite + axios（5202 dev server / 跨源）
+lab-management-system-vue/      ← vue-ts（5202 dev server / 跨源）
 lab-management-system-nextjs/   ← nextjs App Router + 兼 schema emit infra（3000 跨源）
 ```
 
@@ -55,7 +55,7 @@ lab-management-system-nextjs/   ← nextjs App Router + 兼 schema emit infra（
 | 维度 | 选择 | 备注 |
 |---|---|---|
 | 框架 | React 19 + TypeScript | 函数组件 + Hooks（禁 class） |
-| 构建 | Vite 5 | dev 默认 :5173 |
+| 构建 | Vite 5 | dev 默认 :5202 |
 | 路由 | react-router-dom v6 | layout route + `<Outlet />` |
 | HTTP | axios + orval codegen | baseURL 走 env，token 走 interceptor |
 | 状态 | React Context（auth FSM） + 模块级 store | Zustand 未引入；SSO 跳板场景要求 FSM 可在非 React 树里驱动 |
@@ -282,20 +282,20 @@ src/features/
 ```
 1. 启动 mock 后端:
    cd ../lab-management-system-msw && npm start
-   → http://localhost:5173
+   → http://localhost:5200
    → GET /healthz → { mode: "msw" }
 
 2. 启动前端:
    npm run dev
-   → http://localhost:5173（同源）
+   → http://localhost:5200（同源）
 
 3. 浏览器调 API:
    页 import { authGetCurrentUser } from "@/api/endpoints/endpoints"
    → 或 apiClient.get(API_ROUTES['/contracts'])（legacy 轨）
    → http-client.ts::installHttpClient 拦截器：
-     - baseURL = env.apiBaseUrl (= "http://localhost:5173"，.env.example 默认)
+     - baseURL = env.apiBaseUrl (= "http://localhost:5200"，.env.example 默认)
      - Authorization: Bearer <localStorage.lab.accessToken>
-   → fetch → :5173/api/v1/auth/me → msw-handlers 拦截 → 返回 JSON fixture
+   → fetch → :5200/api/v1/auth/me → msw-handlers 拦截 → 返回 JSON fixture
 
 4. 切真后端（开发后期 / 集成测试）:
    .env.local 改 VITE_API_BASE_URL=http://localhost:8080（springboot）
@@ -415,11 +415,11 @@ exit 0 = 全绿；1 = 按 fix 提示回代码改；2 = 契约/环境问题（停
 
 ### 5.4 Service Worker bootstrap 已删除
 
-`main.tsx` 不再调 `worker.start()`——ADR-0012 v0.3.0 删除 SW 模式。dev 路径只走 msw-http（`@lab/management-system-msw/src/server.ts` 起 :5173）；`*_ENABLE_MSW` env 与 `isMswEnabled()` 函数一并删除。
+`main.tsx` 不再调 `worker.start()`——ADR-0012 v0.3.0 删除 SW 模式。dev 路径只走 msw-http（`@lab/management-system-msw/src/server.ts` 起 :5200）；`*_ENABLE_MSW` env 与 `isMswEnabled()` 函数一并删除。
 
 ### 5.5 SSO 跳板（saas → lab）
 
-本仓不直接实现 `/api/auth/sso/callback` 路由，但 `LoginPage` 在用户提交时**跳到 saas**（`env.saasBaseUrl` = `http://localhost:3000`），saas 完成授权码流后跳回 lab 带 `?token=...&state=...`，由 `auth-context.tsx::doSetSession` 接管（不走 `/api/auth/login`）。
+本仓不直接实现 `/api/auth/sso/callback` 路由，但 `LoginPage` 在用户提交时**跳到 saas**（`env.saasBaseUrl` = `http://localhost:5101`），saas 完成授权码流后跳回 lab 带 `?token=...&state=...`，由 `auth-context.tsx::doSetSession` 接管（不走 `/api/auth/login`）。
 
 `http-client.ts` 的 `config.withCredentials = true` 保证跨源（aspnetcore/springboot）的 SSO state cookie 正常写入与携带——同源模式无副作用。
 
@@ -454,7 +454,7 @@ exit 0 = 全绿；1 = 按 fix 提示回代码改；2 = 契约/环境问题（停
 | **BASE tree** | 契约仓的功能清单 | 只到 F 级；消费仓在 F 镜像后加 I |
 | **codegen** | orval 读 openapi.yaml 生成 TS 具名函数 | 见 `orval.config.ts` |
 | **env-driven 单 URL** | ADR-0014：后端 URL 走 env，不走 runtime Context | 替代旧 BackendSwitcher |
-| **msw-http** | ADR-0012：msw 仓作独立 HTTP server 起 :5173 | 替代旧 Service Worker 模式 |
+| **msw-http** | ADR-0012：msw 仓作独立 HTTP server 起 :5200 | 替代旧 Service Worker 模式 |
 | **FSM（4 态）** | `idle → anonymous → awaiting_tenant → authenticated` | `state/auth-context.tsx` |
 | **fnTest** | 测试 ID 嵌入 it 名称的模式 | `fnTest(["M01.F05.I01"], "...", () => {...})` |
 | **trace.json** | 测试命中 fn-ID 的清单 | `trace_cmd` 产，禁止手写 |
@@ -474,8 +474,8 @@ exit 0 = 全绿；1 = 按 fix 提示回代码改；2 = 契约/环境问题（停
 | [父仓 §1 套件全景](../../../docs/ARCHITECTURE.md) | §1 仓在 lab 家族的位置（react-ts 前端 1/3） |
 | [父仓 §2.3 14 仓 5 段结构](../../../docs/ARCHITECTURE.md) | §2 目录骨架（react-ts 变体） |
 | [父仓 §3.3 后端模式 env-driven](../../../docs/ARCHITECTURE.md) | §5.1 v0.3.0 关键基建 + §5.3 废止清单 |
-| [父仓 §3.5 端口 / CORS 对称](../../../docs/ARCHITECTURE.md) | §4.1 dev 模式（msw-http :5173） |
-| [父仓 §3.6 Mock 仓 B 强度](../../../docs/ARCHITECTURE.md) | §4.1 dev 模式（lab-msw :5173） |
+| [父仓 §3.5 端口 / CORS 对称](../../../docs/ARCHITECTURE.md) | §4.1 dev 模式（msw-http :5200） |
+| [父仓 §3.6 Mock 仓 B 强度](../../../docs/ARCHITECTURE.md) | §4.1 dev 模式（lab-msw :5200） |
 | [父仓 §4.3 前端仓 react-ts 形态](../../../docs/ARCHITECTURE.md) | §2 + §3 全章（react 专属命名） |
 | [父仓 §5.2 前端开发流程](../../../docs/ARCHITECTURE.md) | §4.1 dev 模式（lab-react 专属） |
 | [父仓 §5.4 门禁链](../../../docs/ARCHITECTURE.md) | §4.3 门禁链（lab-react 配置） |
@@ -489,7 +489,7 @@ exit 0 = 全绿；1 = 按 fix 提示回代码改；2 = 契约/环境问题（停
 | 维度 | saas-react | lab-react |
 |---|---|---|
 | 家族 | saas-identity-platform | lab-management-system |
-| 后端仓（同源） | saas-msw :5174 | lab-msw :5173 |
+| 后端仓（同源） | saas-msw :5100 | lab-msw :5200 |
 | 后端仓（跨源真后端） | saas-springboot :8080 / saas-aspnetcore :5000 | lab-springboot :8080 / lab-aspnetcore :5000 |
 | 契约源 | `saas-shared/generated/openapi/openapi.yaml` | `lab-shared/generated/openapi/openapi.yaml` |
 | env 4 件套 | `lib/env.ts` / `api/backend-config.ts` / `api/http-client.ts` / `api/contracts.ts` | 同款 4 件套 ✅ |

@@ -150,7 +150,7 @@ export interface BackendConfig {
   id: BackendId;
   /** 显示名(MSW Mock / Next.js API / Spring Boot / ASP.NET Core) */
   label: string;
-  /** baseUrl 的展示值,例如 'http://localhost:3000/api' */
+  /** baseUrl 的展示值,例如 'http://localhost:5201/api' */
   baseUrl: string;
   /** token 头:Bearer 走 Authorization,部分老后端用 X-Auth-Token */
   authHeader: AuthHeaderKind;

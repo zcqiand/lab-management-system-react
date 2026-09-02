@@ -1,15 +1,19 @@
 {
   "schema": 2,
   "project": "lab-management-system-react",
-  "current_task": "VITE_* 烘焙改 Dockerfile ENV(v0.3.15 GREEN)",
-  "last_session_at": "2026-08-29",
-  "last_session_summary": "@faker-js/faker 从 dependencies 挪到 devDependencies（src/ 零 import，仅 msw sibling 用）；commit 948ee4c + tag v0.3.10-20260822 pushed",
+  "current_task": "VITE_SAAS_CLIENT_ID 四份 env 契约补齐（2026-09-02 handoff）",
+  "last_session_at": "2026-09-02",
+  "last_session_summary": "example 有 VITE_SAAS_CLIENT_ID 而 test/production/local 缺 → L0.5 红。三份补齐 11111111-1111-1111-1111-111111111111 后 gate 全绿",
   "done": [
-    ".env.production untrack + Dockerfile ENV VITE_API_BASE_URL/SAAS_BASE_URL/MODE(react→lab-springboot)",
-    "v0.3.15 部署 GREEN"
+    ".env.test / .env.production / .env.local 补 VITE_SAAS_CLIENT_ID=11111111-1111-1111-1111-111111111111（对齐 .env.example）",
+    "gate -p lab-management-system-react exit 0（100 功能条目，软告警 0）"
   ],
-  "next": [],
+  "next": [
+    "commit + push .env.test（production/local 是 gitignored，进仓的只有 .env.test）"
+  ],
   "open_questions": [],
-  "dont": [],
+  "dont": [
+    "加 VITE_* key 只改 .env.example 不补 .env.test/.env.production/.env.local = L0.5 必红（本次就是踩的这个）"
+  ],
   "active_branch": "master"
 }

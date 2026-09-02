@@ -23,13 +23,13 @@ describe("M98 backend-config (env-driven 单 URL — ADR-0014)", () => {
     }
   }
 
-  it("无 env 时（VITE_* 全 delete） getApiBaseUrl 回退 msw-http :5173", async () => {
+  it("无 env 时（VITE_* 全 delete） getApiBaseUrl 回退 msw-http :5200", async () => {
     // beforeEach 删除所有 VITE_* → import.meta.env.VITE_API_BASE_URL === undefined →
     // readEnv 走 fallback。dev（无 .env.local）也是相同路径（Vite 给 "" 默认，
     // 但若 .env 完全没设则是 undefined 走 fallback）。
     stubEnvs({});
     const { getApiBaseUrl, getApiMode } = await import("@/api/backend-config");
-    expect(getApiBaseUrl()).toBe("http://localhost:5173");
+    expect(getApiBaseUrl()).toBe("http://localhost:5200");
     expect(getApiMode()).toBe("msw-http");
   });
 

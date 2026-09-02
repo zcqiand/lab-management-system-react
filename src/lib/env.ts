@@ -8,23 +8,23 @@
 //
 // 规则：
 //   - 所有值都有默认值（dev 离线也能跑）
-//   - VITE_API_BASE_URL 默认 http://localhost:5173（msw-http，ADR-0012）
+//   - VITE_API_BASE_URL 默认 http://localhost:5200（msw-http，ADR-0012；端口分段 §6）
 //   - 单元测试可通过 vitest 的 import.meta.env stub 注入
 
 export const env = {
-  devPort: Number(readEnv("VITE_DEV_PORT", "5173")) || 5173,
+  devPort: Number(readEnv("VITE_DEV_PORT", "5202")) || 5202,
 
   // === 后端（ADR-0014：单 URL + ADR-0012 msw-http 默认）===
-  apiBaseUrl: readEnv("VITE_API_BASE_URL", "http://localhost:5173"),
+  apiBaseUrl: readEnv("VITE_API_BASE_URL", "http://localhost:5200"),
   apiMode: readEnv("VITE_API_MODE", "msw-http"),
 
   // === saas（SSO 跳板仍需独立 env）===
-  saasBaseUrl: readEnv("VITE_SAAS_BASE_URL", "http://localhost:3000"),
+  saasBaseUrl: readEnv("VITE_SAAS_BASE_URL", "http://localhost:5101"),
 } as const;
 
 function readEnv(key: string, fallback: string): string {
   // 区分「未设」(undefined) 和「空串」(explicit empty)：
-  //   - 未设 → fallback（dev 默认走 msw-http :5173）
+  //   - 未设 → fallback（dev 默认走 msw-http :5200）
   //   - 空串 → ""（测试 .env.test 用，fetch 走相对 URL，@mswjs/node setupServer 拦截）
   // v0.3.0 之前用 `v.length > 0` 把两者合并，导致 .env.test 的空 baseUrl 被
   // 当成未设，回退到绝对 URL，setupServer handler（用相对路径）不匹配。

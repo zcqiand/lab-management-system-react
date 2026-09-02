@@ -39,7 +39,7 @@ installLegacyClient(
 );
 
 // ADR-0012 v0.3.0：删除 SW bootstrap（Service Worker 模式完全删除）。
-// dev 路径走 msw-http 独立 HTTP server（@lab/management-system-msw/src/server.ts 起 :5173）。
+// dev 路径走 msw-http 独立 HTTP server（@lab/management-system-msw/src/server.ts 起 :5200）。
 async function bootstrap() {
   createRoot(document.getElementById("root")!).render(
     <StrictMode>

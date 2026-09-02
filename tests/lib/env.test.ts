@@ -35,15 +35,15 @@ describe("src/lib/env", () => {
     }
   }
 
-  it("无 VITE_* 时回退默认端口 5173 + msw-http :5173 + msw-http 模式", async () => {
+  it("无 VITE_* 时回退默认端口 5202 + msw-http :5200 + msw-http 模式", async () => {
     // beforeEach 删除所有 VITE_* → import.meta.env.VITE_API_BASE_URL === undefined →
-    // readEnv 走 fallback 到 msw-http :5173。dev（无 .env.local）走相同路径。
+    // readEnv 走 fallback 到 msw-http :5200。dev（无 .env.local）走相同路径。
     stubEnvs({});
     const { env } = await import("@/lib/env");
-    expect(env.devPort).toBe(5173);
-    expect(env.apiBaseUrl).toBe("http://localhost:5173");
+    expect(env.devPort).toBe(5202);
+    expect(env.apiBaseUrl).toBe("http://localhost:5200");
     expect(env.apiMode).toBe("msw-http");
-    expect(env.saasBaseUrl).toBe("http://localhost:3000");
+    expect(env.saasBaseUrl).toBe("http://localhost:5101");
   });
 
   it("VITE_DEV_PORT 覆盖默认端口", async () => {
