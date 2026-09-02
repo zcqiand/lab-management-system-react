@@ -19,7 +19,7 @@
 | 新人，要 30 分钟搞懂本仓 | §1 → §2 → §3（API 层 → state → 页面） |
 | 想加新页面 / 新业务模块 | §3 → §4（开发流程）→ [docs/conventions/sprint-roadmap.md](conventions/sprint-roadmap.md) |
 | 想加新接口（动契约） | §4.1（gen-shared 链）→ 父仓 [§3.2](../../../docs/ARCHITECTURE.md) → [docs/adr/0003-function-tree-requires-human-approval.md](../../../docs/adr/0003-function-tree-requires-human-approval.md) |
-| 跨端调不通（401 / CORS / 拿不到数据） | §5（v0.3.0 基建）→ 父仓 [§3.5/§6](../../../docs/ARCHITECTURE.md) → [memory/orval-axios-baseurl-must-be-installed.md](../../../memory/orval-axios-baseurl-must-be-installed.md) |
+| 跨端调不通（401 / CORS / 拿不到数据） | §5（v0.3.0 基建）→ 父仓 [§3.5/§6](../../../docs/ARCHITECTURE.md) → memory/orval-axios-baseurl-must-be-installed.md |
 | 想问"为什么这样设计" | §6（决策索引）→ 对应 ADR |
 
 ---
@@ -28,11 +28,11 @@
 
 **本仓 = lab 家族的 react-ts 前端仓**：
 
-- 消费 [`../lab-management-system-shared/generated/openapi/openapi.yaml`](../lab-management-system-shared/generated/openapi/openapi.yaml)（TypeSpec emit 产物）作为 API 契约唯一真源；
+- 消费 [`../lab-management-system-shared/generated/openapi/openapi.yaml`](../../lab-management-system-shared/generated/openapi/openapi.yaml)（TypeSpec emit 产物）作为 API 契约唯一真源；
 - 通过 **orval** codegen 出 `src/api/endpoints/endpoints.ts` 具名函数（react-query 形态）；
 - 通过 **axios 拦截器** + **`installHttpClient`** bootstrap 注入 baseURL / Authorization；
 - **不实现任何 `/api` route**（[ADR-0001](#6-决策索引)），后端由 lab-msw / lab-nextjs / 未来 springboot / aspnetcore 提供；
-- 26 页 UI（22 业务 + 4 工具页）镜像自 [`../lab-management-system-nextjs/src/pages/`](../lab-management-system-nextjs/src/pages/)。
+- 26 页 UI（22 业务 + 4 工具页）镜像自 [`../lab-management-system-nextjs/src/app/`](../../lab-management-system-nextjs/src/app/)。
 
 ### 1.1 仓在三仓前端里的位置
 
@@ -154,7 +154,7 @@ lab-management-system-react/
 
 **模块组成**：
 
-- `auth-context.tsx` — AuthProvider + useAuth + 4 态 FSM（`idle → anonymous → awaiting_tenant → authenticated`）。契约签名见 [shared/tsp/contracts/frontend-bind.tsp](../lab-management-system-shared/tsp/contracts/frontend-bind.tsp)。
+- `auth-context.tsx` — AuthProvider + useAuth + 4 态 FSM（`idle → anonymous → awaiting_tenant → authenticated`）。契约签名见 [shared/tsp/contracts/frontend-bind.tsp](../../lab-management-system-shared/tsp/contracts/frontend-bind.tsp)。
 - `require-auth.ts` — `useRequireAuth()` 守卫；AppShell 内部调用，业务子路由不再各自守卫。
 
 **关键设计**：状态真相是**模块级 store**（`store.state` + `setState` + listener 列表），React Context 只是它的视图层。这意味着：
@@ -241,7 +241,7 @@ lab-management-system-react/
 
 ### 3.5 src/features/ — 镜像业务层
 
-镜像自 [`../lab-management-system-nextjs/src/features/`](../lab-management-system-nextjs/src/features/)，含 9 个子目录：
+镜像自 [`../lab-management-system-nextjs/src/features/`](../../lab-management-system-nextjs/src/features/)，含 9 个子目录：
 
 ```
 src/features/
@@ -298,7 +298,7 @@ src/features/
    → fetch → :5200/api/v1/auth/me → msw-handlers 拦截 → 返回 JSON fixture
 
 4. 切真后端（开发后期 / 集成测试）:
-   .env.local 改 VITE_API_BASE_URL=http://localhost:8080（springboot）
+   .env.local 改 VITE_API_BASE_URL=http://localhost:5205（springboot）
    重启 vite（env 启动期注入）
    → axios 走绝对 URL 直连 springboot
    → springboot 调 shared SQL 灌过的 lab_dev DB
@@ -306,8 +306,8 @@ src/features/
 
 **关键检查点**：
 
-- `main.tsx` bootstrap **必须**调 `installHttpClient()`——否则 prod 永远走同 origin 被 nginx 405（[`memory/orval-axios-baseurl-must-be-installed.md`](../../../memory/orval-axios-baseurl-must-be-installed.md)）；
-- `baseURL` 是 root URL，**不带 `/api/v1` 前缀**——path 自带，baseURL 别加（[`memory/axios-baseurl-no-path-prefix.md`](../../../memory/axios-baseurl-no-path-prefix.md)）；
+- `main.tsx` bootstrap **必须**调 `installHttpClient()`——否则 prod 永远走同 origin 被 nginx 405（`memory/orval-axios-baseurl-must-be-installed.md`）；
+- `baseURL` 是 root URL，**不带 `/api/v1` 前缀**——path 自带，baseURL 别加（`memory/axios-baseurl-no-path-prefix.md`）；
 - 改 env 后必须**重启 vite**（Vite 在启动 phase 注入 env，运行时改 env 不生效）；
 - 后端 CORS allowlist 必须含 3000（nextjs dev 跨源），否则 preflight 莫名失败（父仓 [§3.5](../../../docs/ARCHITECTURE.md)）；
 - `.env` 用 `registry.npmmirror.com`（CLAUDE.md 顶层约束）。
@@ -379,7 +379,7 @@ exit 0 = 全绿；1 = 按 fix 提示回代码改；2 = 契约/环境问题（停
 
 ### 5.1 与 saas-react 同款 4 文件
 
-本仓 v0.3.0 与 [`../saas-identity-platform-react/`](../saas-identity-platform-react/) 落地了 **同一套** env-driven 后端配置 4 件套：
+本仓 v0.3.0 与 [`../saas-identity-platform-react/`](../../saas-identity-platform-react/) 落地了 **同一套** env-driven 后端配置 4 件套：
 
 | 文件 | saas-react | lab-react |
 |---|---|---|
@@ -490,7 +490,7 @@ exit 0 = 全绿；1 = 按 fix 提示回代码改；2 = 契约/环境问题（停
 |---|---|---|
 | 家族 | saas-identity-platform | lab-management-system |
 | 后端仓（同源） | saas-msw :5100 | lab-msw :5200 |
-| 后端仓（跨源真后端） | saas-springboot :8080 / saas-aspnetcore :5000 | lab-springboot :8080 / lab-aspnetcore :5000 |
+| 后端仓（跨源真后端） | saas-springboot :5105 / saas-aspnetcore :5104 | lab-springboot :5205 / lab-aspnetcore :5204 |
 | 契约源 | `saas-shared/generated/openapi/openapi.yaml` | `lab-shared/generated/openapi/openapi.yaml` |
 | env 4 件套 | `lib/env.ts` / `api/backend-config.ts` / `api/http-client.ts` / `api/contracts.ts` | 同款 4 件套 ✅ |
 | 业务页 | M00-M03（M00 租户 / M01 RBAC / M02 OAuth / M03 资源） | M00-M06（M00 租户 / M01 认证 / M02 合同 / M03 试验过程 / M04 基础数据 / M05 数据统计 / M06 检测能力） |
@@ -502,7 +502,7 @@ exit 0 = 全绿；1 = 按 fix 提示回代码改；2 = 契约/环境问题（停
 
 ---
 
-## 附录 C：典型陷阱（详见 [`../../../memory/`](../../../memory/)）
+## 附录 C：典型陷阱（详见 `../../../memory/`）
 
 | 陷阱 | 后果 | 解法 |
 |---|---|---|
@@ -530,8 +530,8 @@ exit 0 = 全绿；1 = 按 fix 提示回代码改；2 = 契约/环境问题（停
 - env 配置细则：[docs/conventions/env-config.md](conventions/env-config.md)
 - UI 底座：[docs/conventions/app-ui.md](conventions/app-ui.md)
 - 性能细则：[docs/conventions/react-perf.md](conventions/react-perf.md)
-- 镜像来源：[`../lab-management-system-nextjs/src/`](../lab-management-system-nextjs/src/)（仅参考）
-- SSOT（OpenAPI.yaml）：[`../lab-management-system-shared/generated/openapi/openapi.yaml`](../lab-management-system-shared/generated/openapi/openapi.yaml)
-- 共享 mock 后端：[`../lab-management-system-msw`](../lab-management-system-msw/)（`@lab/management-system-msw`）
+- 镜像来源：[`../lab-management-system-nextjs/src/`](../../lab-management-system-nextjs/src/)（仅参考）
+- SSOT（OpenAPI.yaml）：[`../lab-management-system-shared/generated/openapi/openapi.yaml`](../../lab-management-system-shared/generated/openapi/openapi.yaml)
+- 共享 mock 后端：[`../lab-management-system-msw`](../../lab-management-system-msw/)（`@lab/management-system-msw`）
 - 父仓 ARCHITECTURE.md：[`../../../docs/ARCHITECTURE.md`](../../../docs/ARCHITECTURE.md)
-- 跨仓经验教训：[`../../../memory/`](../../../memory/)（非入仓，~/.claude/...）
+- 跨仓经验教训：`../../../memory/`（非入仓，~/.claude/...）
