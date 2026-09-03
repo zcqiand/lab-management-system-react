@@ -1,7 +1,8 @@
 #!/bin/sh
 # Usage: lab-management-system-react.sh <DOCKER_USERNAME> <DOCKER_PASSWORD> [VERSION]
 #
-# Vite SPA (nginx:alpine);HOST_PORT=8011;VPS nginx 反代 (lab-react.xiangru.uk)
+# Vite SPA (nginx:alpine);容器内 :80(privileged),HOST_PORT=5202 走 lab 家族 X02 段;
+# VPS nginx 反代 (lab-react.xiangru.uk)；ADR-0018 SPA partial 双层。
 # v0.2.12 起补 nginx vhost 自举段（照 saas-react 同款）—— 之前精简版从不创建
 # /etc/nginx/sites-available/<domain>，首次部署后站点 404。
 
@@ -13,7 +14,8 @@ VERSION="${3:-latest}"
 IMAGE="${USERNAME}/lab-management-system-react:${VERSION}"
 BASE="/home/deploy/lab-management-system-react"
 CONTAINER_NAME="lab-management-system-react"
-HOST_PORT=8011
+# lab-react:容器内 nginx:alpine 监听 :80(privileged),host 端口走 family 段 5202(ADR-0018)
+HOST_PORT=5202
 
 # nginx domain (react SPA 没有 CORS / cross-origin runtime env, 但 deploy 脚本
 # 自举 nginx vhost 时仍要用到, 提前到 bootstrap 块之前)

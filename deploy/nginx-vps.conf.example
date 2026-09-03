@@ -1,5 +1,6 @@
 # lab-management-system-react — VPS nginx vhost 模板
-# 容器内 nginx 监听 :80,VPS nginx 反代到 127.0.0.1:8011。
+# 容器内 nginx 监听 :80(nginx:alpine 默认 privileged),VPS nginx 反代到 127.0.0.1:5202
+# (lab 家族 X02 段；ADR-0018 SPA partial 双层：host 走 family 段、容器内 :80)。
 
 server {
     listen 80;
@@ -22,7 +23,7 @@ server {
     add_header Strict-Transport-Security "max-age=31536000" always;
 
     location / {
-        proxy_pass http://127.0.0.1:8011;
+        proxy_pass http://127.0.0.1:5202;
 
         proxy_http_version 1.1;
         proxy_set_header Host              $host;
