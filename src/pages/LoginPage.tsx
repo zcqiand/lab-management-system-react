@@ -32,8 +32,19 @@ import type {
 // V014/V015 收敛为固定 UUID '11111111-1111-1111-1111-111111111111' ——
 // 前端必须发同一 UUID，否则 saas 返 401。
 // （2026-08-29 修 prod 401：lab-react 之前硬编码 "lab-mgmt" → 改 env 读；与 lab-nextjs 同款。）
-const OAUTH_CLIENT_ID =
-  import.meta.env.VITE_SAAS_CLIENT_ID ?? "11111111-1111-1111-1111-111111111111";
+// ADR-0019：删除 "11111111-..." UUID 字面 fallback。dev 期 .env.local 显式声明
+// VITE_SAAS_CLIENT_ID；prod 由 Dockerfile ENV / deploy 脚本注入。
+// 空串视为「显式设空」（测试同源相对 URL 模式），只查 undefined throw。
+const OAUTH_CLIENT_ID = (() => {
+  const v = import.meta.env.VITE_SAAS_CLIENT_ID;
+  if (v === undefined) {
+    throw new Error(
+      "VITE_SAAS_CLIENT_ID env is required (ADR-0019 禁 UUID 字面兜底). " +
+        "Set in .env.local (dev) or Dockerfile ENV (prod).",
+    );
+  }
+  return v;
+})();
 const SSO_STATE_STORAGE_KEY = "lab.sso.state";
 // 业务回跳路径（?from=）存 sessionStorage 随 state 走。RFC 6749 §3.1.2 要求
 // redirect_uri 与注册白名单精确匹配——不能把 from 塞进 redirect_uri（带 query
