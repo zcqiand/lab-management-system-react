@@ -198,7 +198,7 @@ lab-management-system-react/
 | 模块 | 页面 | 路由 | 功能 ID |
 |---|---|---|---|
 | **M01 认证** | `LoginPage.tsx` | `/login`（公共，不带 AppShell） | M01.F05 |
-| **M00 仪表盘** | `DashboardPage.tsx` | `/`（AppShell 内 index） | M00.F01 |
+| **M00 仪表盘** | `DashboardPage.tsx` | `/`、`/dashboard`（AppShell 内 index + V016 saas path 别名） | M05.F01 |
 | **M02 合同** | `ContractsPage.tsx` | `/contracts` | M02.F01 |
 | **M03 试验过程** | `ReceiptsPage.tsx` | `/receipts` | M03.F01 |
 | | `ReceiptDetailPage.tsx` | `/receipts/:id` | M03.F09 |
@@ -217,7 +217,7 @@ lab-management-system-react/
 | | `ObjectsPage.tsx` | `/inspection-objects` | M06.F02 |
 | | `ParametersPage.tsx` | `/inspection-parameters` | M06.F03 |
 | | `StandardsPage.tsx` | `/inspection-standards` | M06.F04 |
-| | `CalculationMethodsPage.tsx` | `/inspection-calculation-methods` | M06.F05 |
+| | `CalculationMethodsPage.tsx` | `/inspection-calculation-methods`、`/inspection-calculation-rules`（V016 saas path 别名） | M06.F05 |
 | | `TechnicalRequirementsPage.tsx` | `/inspection-technical-requirements` | M06.F06 |
 | | `ReportNamesPage.tsx` | `/report-names` | M06.F07 |
 | | `ParamInterfacesPage.tsx` | `/param-interfaces` | M06.F08 |

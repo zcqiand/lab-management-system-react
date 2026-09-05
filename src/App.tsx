@@ -3,7 +3,7 @@
 // 结构：
 //   /login                     公共页（SSO orchestrator，不带 AppShell；2026-08-18
 //                              认证收口对齐 nextjs：砍表单+选租户页，登录委托 saas）
-//   /                          AppShell（layout route，守卫在 AppShell 内层）+ 22 条业务子路由
+//   /                          AppShell（layout route，守卫在 AppShell 内层）+ 24 条业务子路由
 //   *                          兜底 404
 //
 // Sprint 2 镜像策略：业务页逐批落地（Batch 1 码表 4 页 → Batch 2 流程线 →
@@ -64,6 +64,9 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route element={<AppShell />}>
           <Route index element={<DashboardPage />} />
+          {/* V016 菜单路径对齐：saas 仪表盘 path=dashboard（m-lab-dash）。
+              legacy 路径 `/` 保留，两路由同渲染 DashboardPage（SummaryList）。 */}
+          <Route path="dashboard" element={<DashboardPage />} />
           {/* 基础数据（Batch 1：models/specifications/grades/brands） */}
           <Route
             path="models"
@@ -129,6 +132,16 @@ export default function App() {
           />
           <Route
             path="inspection-calculation-methods"
+            element={
+              <RouteSuspense>
+                <CalculationMethodsPage />
+              </RouteSuspense>
+            }
+          />
+          {/* V016 菜单路径对齐：saas 计算方法 path=inspection-calculation-rules
+              （m-calc-rules）。legacy 路径 `inspection-calculation-methods` 保留。 */}
+          <Route
+            path="inspection-calculation-rules"
             element={
               <RouteSuspense>
                 <CalculationMethodsPage />

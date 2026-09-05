@@ -100,20 +100,26 @@ export function SidebarNav({
   const navigate = useNavigate();
   const pathname = location.pathname;
 
-  // 选中态：按 pathname 前缀匹配（"/models/xxx" 也选中 m-models）。
+  // 选中态：递归遍历菜单树（不限深度），按 pathname 前缀匹配。
+  // V016 seed 里 m-lab-dash 是顶层 leaf（parent_id NULL），旧版只扫 depth-2
+  // 会漏它 —— 走全树 walk 才能正确高亮。
   // menus=null 时（saas 拉取失败或加载中）跳过匹配，让 router 重定向去 /login。
   const selectedCode = (() => {
     if (!menus) return null;
-    for (const g of menus) {
-      for (const leaf of g.children) {
-        if (!leaf.path) continue;
-        if (pathname === `/${leaf.path}` || pathname.startsWith(`/${leaf.path}/`)) return leaf.code;
+    const findMatch = (nodes: MenuNode[]): string | null => {
+      for (const n of nodes) {
+        if (n.path !== undefined) {
+          if (n.path === "" && pathname === "/") return n.code;
+          if (n.path !== "" && (pathname === `/${n.path}` || pathname.startsWith(`/${n.path}/`))) return n.code;
+        }
+        if (n.children.length > 0) {
+          const hit = findMatch(n.children);
+          if (hit) return hit;
+        }
       }
-      if (pathname === "/" && g.children.some((c) => c.path === "")) {
-        return g.children.find((c) => c.path === "")?.code ?? null;
-      }
-    }
-    return null;
+      return null;
+    };
+    return findMatch(menus);
   })();
 
   // 全局收起/展开：状态持久化到 localStorage（按 appCode 区分），刷新保留
