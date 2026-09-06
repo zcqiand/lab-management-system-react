@@ -1,20 +1,83 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "passed": false,
+  "passed": true,
   "partial": true,
   "ran": [
-    "L0.no_fallback"
+    "L0",
+    "L0.no_fallback",
+    "L0.5",
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5"
   ],
-  "checked_at": "2026-09-04T13:26:52+0800",
+  "checked_at": "2026-09-05T21:09:45+0800",
   "gates": [
+    {
+      "level": "L0",
+      "name": "结构完整性",
+      "passed": true,
+      "returncode": 0,
+      "duration_s": 0.11,
+      "output": ""
+    },
     {
       "level": "L0.no_fallback",
       "name": "业务身份字段兜底（ADR-0019）",
-      "passed": false,
-      "returncode": 1,
-      "duration_s": 0.204,
-      "output": "- lab-management-system-react/src/pages/LoginPage.tsx:36  import.meta.env.VITE_SAAS_CLIENT_ID ?? 兜底到 '11111111-1111-1111-1111-111111111111'（CLAUDE.md §2 禁）\r\n\r\n扫描 144 文件, 跳过 0（白名单豁免）; 命中 1 处。\r\nADR-0019 禁止业务身份字段兜底到 demo 字面量。修复后重跑 gate。"
+      "passed": true,
+      "returncode": 0,
+      "duration_s": 0.203,
+      "output": "L0.no_fallback: 扫描 144 文件, 跳过 0; 0 命中。"
+    },
+    {
+      "level": "L0.5",
+      "name": "env 一致性",
+      "passed": true,
+      "returncode": 0,
+      "duration_s": 0.109,
+      "output": "[OK] lab-management-system 家族 env 一致(9 个 synced key + deploy parity)"
+    },
+    {
+      "level": "L1",
+      "name": "格式",
+      "passed": true,
+      "returncode": 0,
+      "duration_s": 4.078,
+      "output": "// 后端配置：env-driven 单 URL（ADR-0014 — 完全镜像 saas-identity-platform-nextjs）。\n//\n// 旧 4-backend 运行时切换（msw / nextjs / aspnetcore / springboot）+ localStorage 持久化\n// + 模块单例 + Context 已废弃。改用：\n//\n//   VITE_API_BASE_URL    后端 base URL（默认 \"\" = 同源）\n//   VITE_API_MODE        显示标签（默认 \"msw-http\"），仅 UI 显示\n//\n// ADR-0012 v0.3.0：Service Worker 模式完全删除。dev 路径只走 msw-http\n//（独立 HTTP server，由 @lab/management-system-msw/src/server.ts 起在 :5200）；\n// *_ENABLE_MSW env 与 isMswEnabled() 函数一并删除（MSW 启动不再由 env 门控）。\n//\n// 所有调用方从 `getBaseUrl()` / `getBackend()` 切到 `getApiBaseUrl()` / `getApiMode()`。\n\nimport { env } from \"@/lib/env\";\n\nexport function getApiBaseUrl(): string {\n  // 直接返回 env.apiBaseUrl：默认值在 env.ts；.env.test 设 VITE_API_BASE_URL= 显式\n  // 空串 → 返回 \"\" → fetch 相对 URL → @mswjs/node setupServer handler（/api/...）匹配。\n  // dev 走 .env.example 的 http://localhost:5200 msw-http 默认值。\n  return env.apiBaseUrl;\n}\n\nexport function getApiMode(): string {\n  return env.apiMode;\n}\n// Sprint 1 前端绑定契约消费入口。\n// SSOT: ../lab-management-system-shared/tsp/contracts/frontend-bind.tsp\n//       → generated/openapi/openapi.yaml components.schemas\n//       → orval → src/api/endpoints/endpoints.schemas.ts（此处只 re-export + 派生）\n// 本文件不引入 runtime 库；行为签名见 shared/.state/decision-log.md §2。\n\nimport { AuthHeaderKind, BackendId } from \"./endpoints/endpoints.schemas\";\nimport type {\n  AuthState,\n  BackendRegistry,\n  BackendConfig,\n  AuthContext,\n  AuthStateAnonymous,\n  AuthStateAnonymousValue,\n  AuthStateAuthenticated,\n  AuthStateAuthenticatedValue,\n  AuthStateAwaitingTenant,\n  AuthStateAwaitingTenantValue,\n  AuthStateIdle,\n  AuthStateIdleValue,\n  BackendFeatures,\n  TokenStorageKeys,\n} from \"./endpoints/endpoints.schemas\";\n\nexport type {\n  AuthContext,\n  AuthState,\n  AuthStateAnonymous,\n  AuthStateAnonymousValue,\n  AuthStateAuthenticated,\n  AuthStateAuthenticatedValue,\n  AuthStateAwaitingTenant,\n  AuthStateAwaitingTenantValue,\n  AuthStateIdle,\n  AuthStateIdleValue,\n  BackendConfig,\n  BackendFeatures,\n  BackendRegistry,\n  TokenStorageKeys,\n};\nexport { AuthHeaderKind, BackendId };\n\n// 行为契约（decision-log §2.1/§2.2 的 TS 签名；TypeSpec 不允许 model 挂方法，此处落地）\n\n/** 切换激活后端；持久化由消费方负责 */\nexport type SwitchBackendFn = (id: BackendId) => void;\n\n/** 订阅后端切换事件；返回 unsub 函数 */\nexport type OnBackendSwitchHandler = (newId: BackendId) => void;\nexport type UnsubscribeFn = () => void;\n\n/** AuthContext 行为签名（React 侧由 src/state/auth-context.tsx 实现） */\nexport interface AuthContextActions {\n  login(\n    req: import(\"./endpoints/endpoints.schemas\").LoginRequest,\n  ): Promise<\n    | import(\"./endpoints/endpoints.schemas\").LoginResponse\n    | import(\"./endpoints/endpoints.schemas\").ErrorResponse\n  >;\n  logout(): Promise<void>;\n  /** 静默刷新：基于 refreshToken；401 时退到 anonymous */\n  refresh(): Promise<\n    | import(\"./endpoints/endpoints.schemas\").LoginResponse\n    | import(\"./endpoints/endpoints.schemas\").ErrorResponse\n  >;\n  /** 登录后选租户（仅在 awaiting_tenant 态可调） */\n  switchTenant(\n    req: import(\"./endpoints/endpoints.schemas\").SwitchTenantRequest,\n  ): Promise<\n    | import(\"./endpoints/endpoints.schemas\").LoginResponse\n    | import(\"./endpoints/endpoints.schemas\").ErrorResponse\n  >;\n  /** RBAC 单点判断（来自 /auth/permissions 缓存） */\n  hasPermission(perm: string): boolean;\n  onChange(handler: (state: AuthState) => void): UnsubscribeFn;\n}\n\n// 持久化 key 常量 — TokenStorageKeys 契约的运行时形态。\n// orval 对字符串字面量类型生成 TokenStorageKeysAccessToken 等独立枚举，\n// 这里直接展平成常量对象，避免消费点写裸字符串。\nexport const TOKEN_STORAGE_KEYS = {\n  accessToken: \"lab.accessToken\",\n  refreshToken: \"lab.refreshToken\",\n  activeTenantId: \"lab.activeTenantId\",\n  activeBackend: \"lab.activeBackend\",\n  permissionsCache: \"lab.permissions\",\n} as const;\n\n// 4 槽位默认注册表 — BackendConfig 契约的 lab family 缺省值（信息性）。\n// ADR-0014：运行时不再切后端；baseUrl 仍走 env（VITE_API_BASE_URL 单 URL）。\n// 这里 4 个槽位的 baseUrl 都回退到 env.apiBaseUrl（无独立 default），\n// 保留 BACKEND_REGISTRY_DEFAULT 仅作为契约类型的展示 — LoginPage 已不再查它。\nimport { env } from \"@/lib/env\";\n\nexport const BACKEND_REGISTRY_DEFAULT: BackendRegistry = {\n  active: \"msw\",\n  available: [\n"
+    },
+    {
+      "level": "L2",
+      "name": "静态检查",
+      "passed": true,
+      "returncode": 0,
+      "duration_s": 4.235,
+      "output": "D:\\qiand-life\\1-projects\\xr-code-suite\\output\\lab-management-system-react\\src\\api\\endpoints\\endpoints.schemas.ts\n    27:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n    41:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n    49:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n    66:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n    74:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n    96:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   104:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   123:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   131:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   179:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   200:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   254:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   509:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   518:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   529:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   562:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   645:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   701:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   710:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   747:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   755:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   811:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   820:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   847:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   859:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   868:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n   880:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n  1053:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n  1064:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n  1075:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n  1086:1  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-redeclare')\n\nD:\\qiand-life\\1-projects\\xr-code-suite\\output\\lab-management-system-react\\src\\features\\data-entry\\models\\ParticleGradationCard.tsx\n  160:5  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/ex"
+    },
+    {
+      "level": "L3",
+      "name": "类型",
+      "passed": true,
+      "returncode": 0,
+      "duration_s": 7.469,
+      "output": "npm warn Unknown cli config \"--noEmit\". This will stop working in the next major version of npm."
+    },
+    {
+      "level": "L4",
+      "name": "测试",
+      "passed": true,
+      "returncode": 0,
+      "duration_s": 17.265,
+      "output": "RUN  v4.1.10 D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react\n\n ✓ |jsdom| tests/features/task-assignment/taskAssignmentList.dom.test.tsx (2 tests) 2012ms\n     ✓ 任务分配：渲染标题 + 列表行（fixtures 真数据穿透）  614ms\n     ✓ 任务分配：安排按钮开弹窗  888ms\n ✓ |jsdom| tests/features/param-interfaces/paramInterfaceList.dom.test.tsx (3 tests) 2524ms\n     ✓ 参数界面：渲染标题 + 列表行（fixtures 真数据穿透）  698ms\n     ✓ 参数界面：新建按钮开弹窗  709ms\n     ✓ 参数界面：行内删除按钮开确认弹窗  533ms\n ✓ |jsdom| tests/features/report-names/reportNameList.dom.test.tsx (3 tests) 2960ms\n     ✓ 报告名称：渲染标题 + 列表行（fixtures 真数据穿透）  785ms\n     ✓ 报告名称：新建按钮开弹窗（带 extFields 文本域）  882ms\n     ✓ 报告名称：行内删除按钮开确认弹窗  778ms\n ✓ |jsdom| tests/features/reports/reportPhasePage.dom.test.tsx (8 tests) 3669ms\n     ✓ 报告审核：渲染标题 + 列表行（review 阶段 fixture 穿透）  699ms\n     ✓ 报告审核：「审核通过」按钮 data-fn 可见  565ms\n     ✓ 报告批准：「批准」按钮 data-fn 可见  376ms\n     ✓ 报告发放：「发放」按钮 data-fn 可见  348ms\n     ✓ 报告归档：「归档完成」按钮 data-fn 可见  361ms\n ✓ |jsdom| tests/features/data-entry/dataEntryPage.dom.test.tsx (3 tests) 3601ms\n     ✓ 数据录入：渲染标题 + 列表行（fixtures 真数据穿透）  853ms\n     ✓ 数据录入：行内「录入结果」按钮（人工改判 verdict 入口）  981ms\n     ✓ 数据录入：弹窗内「保存检测记录」按钮可见（M03.F03.I02 data-fn 锚点）  789ms\n ✓ |jsdom| tests/features/summary/summaryList.dom.test.tsx (4 tests) 3950ms\n     ✓ F01 渲染标题 + 汇总表表头（fixtures 穿透）  1606ms\n     ✓ F01 列表行渲染（rows 数据穿透）  1092ms\n     ✓ F02 仪表盘统计卡片（合同/接样/样品/待办/按状态）  546ms\n ✓ |jsdom| tests/features/receipts/receiptsList.dom.test.tsx (4 tests) 4678ms\n     ✓ 接样管理：渲染标题 + 列表行（fixtures 真数据穿透）  1204ms\n     ✓ 接样管理：新建按钮开弹窗  961ms\n     ✓ 接样管理：行内删除按钮开确认弹窗  894ms\n     ✓ 接样管理：提交按钮调 POST /api/receipts/flow 推进 receiving → task_assignment  1095ms\n ✓ |jsdom| tests/features/inspection-capability/parameterStandardLink.dom.test.tsx (2 tests) 4923ms\n     ✓ 关联弹窗：列出标准 + 已关联态（IP-0001 已关联 GB 175-2023，fixtures 真数据穿透）  1943ms\n     ✓ toggle：未关联标准 → POST 后按钮翻「解除关联」  2474ms\n ✓ |jsdom| tests/components/bad-path-redirect.dom.test.tsx (9 tests) 991ms\n ✓ |jsdom| tests/features/data-entry/particleGradation.dom.test.tsx (4 tests) 1155ms\n ✓ |jsdom| tests/components/sidebar-nav.dom.test.tsx (2 tests) 1368ms\n     ✓ 侧边栏按菜单树下发渲染：锚点 + 分组 + 页面项  315ms\n ✓ |jsdom| tests/features/data-entry/soilCards.dom.test.tsx (10 tests) 1183ms\n ✓ |jsdom| tests/features/data-entry/cementStrength.dom.test.tsx (16 tests) 1136ms\n ✓ |jsdom| tests/features/data-entry/concreteCards.dom.test.tsx (6 tests) 1173ms\n ✓ |jsdom| tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx (12 tests) 8189ms\n     ✓ F01 渲染标题 + 列表行（fixtures 真数据穿透）  883ms\n     ✓ F02 渲染标题 + 检测专项筛选下拉  513ms\n     ✓ F02 新建按钮存在 + 行内编辑/删除按钮  954ms\n     ✓ F03 渲染标题 + 3 级筛选下拉（专项/项目/标准）  1072ms\n     ✓ F04 渲染标题 + 列表行  925ms\n     ✓ F04 新建按钮存在 + 标准编码列显示  761ms\n     ✓ F05 新建按钮 + 行内编辑/删除按钮  370ms\n     ✓ F06 列表渲染（fixtures 穿透）+ 新建按钮  1371ms\n ✓ |jsdom| tests/features/data-entry/rebarMech.dom.test.tsx (7 tests) 1007ms\n ✓ |jsdom| tests/features/data-entry/rebarWelding.dom.test.tsx (9 tests) 1092ms\n ✓ |jsdom| tests/features/dicts/categoryDictPages.dom.test.tsx (12 tests) 9301ms\n     ✓ 型号维护：新建按钮开弹窗（检测项目/名称/备注表单）  1327ms\n     ✓ 型号维护：行内删除按钮开确认弹窗  1418ms\n     ✓ 规格维护：新建按钮开弹窗  565ms\n     ✓ 规格维护：行内删除按钮开确认弹窗  1124ms\n     ✓ 等级维护：新建按钮开弹窗  506ms\n     ✓ 等级维护：行内删除按钮开确认弹窗  1115ms\n     ✓ 牌号维护：新建按钮开弹窗  533ms\n     ✓ 牌号维护：行内删除按钮开确认弹窗  1263ms\n ✓ |node| tests/lib/env.test.ts (6 tests) 22ms\n ✓ |node| tests/auth-fsm.test.ts (14 tests) 98ms\n ✓ |node| tests/api.smoke.test.ts (4 tests) 15ms\n ✓ |node| tests/lib/responses.test.ts (5 tests) 8ms\n ✓ |node| tests/lib/sanitize-redirect.test.ts (22 tests) 9ms\n ✓ |node| tests/infrastructure-anchors.test.ts (4 tests) 7ms\n ✓ |node| tests/endpoints-smoke.test.ts (8 tests) 7ms\n ✓ |jsdom| tests/features/report-names/reportNameLink.dom.test.tsx (2 tests) 10736ms\n     ✓ 关联弹窗：两段列表渲染（标准 + 参数，fixtures 真数据穿透）  3756ms\n     ✓ toggle 参数：POST 后按钮翻「解除」  6322ms\n ✓ |jsdom| tests/features/auth/loginPageSso.dom.test.tsx (2 tests) 766ms\n ✓ |jsdom| tests/features/contracts/contractsList.dom.test.tsx (3 tests) 911ms\n ✓ |jsdom| tests/require-auth.dom.test.t"
+    },
+    {
+      "level": "L5",
+      "name": "引用完整性",
+      "passed": true,
+      "returncode": 0,
+      "duration_s": 17.969,
+      "output": "100 个功能条目，引用完整。软告警 0 条（见 .state/alignment.json）"
     }
   ]
 }
