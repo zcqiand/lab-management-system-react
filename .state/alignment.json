@@ -25,7 +25,18 @@
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/backend-menus.dom.test.tsx::失败：抛错上抛，不静默回退静态 MENU_TREE（demo 兜底已删）",
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/backend-menus.dom.test.tsx::成功：/api/auth/menus 契约树适配为本地渲染树（有子节点=group）",
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/sidebar-nav.dom.test.tsx::侧边栏按菜单树下发渲染：锚点 + 分组 + 页面项",
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/sidebar-nav.dom.test.tsx::菜单项是可点按钮，点击触发导航回调"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/components/sidebar-nav.dom.test.tsx::菜单项是可点按钮，点击触发导航回调",
+        "output\\lab-management-system-contract-test\\tests\\auth-read.test.ts:1848 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\calculation-methods-write.test.ts:2034 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:6320 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-catalog-write.test.ts:3048 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:2874 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\param-interfaces-write.test.ts:712 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:1729 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\sample-receipts-write.test.ts:2554 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\samples-write.test.ts:1964 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\technical-requirements-write.test.ts:2095 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\test-records-write.test.ts:1875 (annot)"
       ],
       "entry": [
         "src\\components\\app\\sidebar-nav.tsx"
@@ -44,7 +55,18 @@
       ],
       "tests": [
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::authenticated 态拉取 /auth/permissions 并供 hasPermission 判断",
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::非 authenticated 态 hasPermission 恒 false"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::非 authenticated 态 hasPermission 恒 false",
+        "output\\lab-management-system-contract-test\\tests\\auth-read.test.ts:960 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\auth-write.test.ts:1740 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\auth-write.test.ts:2293 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:2573 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-catalog-write.test.ts:2447 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:2250 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\param-interfaces.test.ts:2774 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:792 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\sample-receipts-write.test.ts:1977 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\sample-receipts.test.ts:1923 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\samples-write.test.ts:756 (annot)"
       ],
       "entry": [
         "src\\state\\auth-context.tsx"
@@ -81,7 +103,20 @@
       "tests": [
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::login 单租户 → 直进 authenticated + token 双 key 持久化",
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::login 失败 → 停在 anonymous，ErrorResponse 返回",
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::auth login endpoint generated"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::auth login endpoint generated",
+        "output\\lab-management-system-contract-test\\tests\\auth.test.ts:877 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\calculation-methods.test.ts:970 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:1174 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-catalog.test.ts:2278 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary.test.ts:2208 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\param-interfaces.test.ts:913 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\report-flow.test.ts:743 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\report-names.test.ts:1356 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\sample-receipts.test.ts:922 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\samples.test.ts:850 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\summary.test.ts:673 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\technical-requirements.test.ts:996 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\test-records.test.ts:842 (annot)"
       ],
       "entry": []
     },
@@ -99,7 +134,19 @@
       "tests": [
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::TOKEN_STORAGE_KEYS 5 个 key 全部 lab.* 前缀且名字锁死",
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::onChange 契约：状态转移触发订阅 + unsub 停止",
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::token 失效（me 401 + refresh 401）→ 退 anonymous + 清 token"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::token 失效（me 401 + refresh 401）→ 退 anonymous + 清 token",
+        "output\\lab-management-system-contract-test\\tests\\auth-read.test.ts:2950 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\auth-write.test.ts:1255 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\calculation-methods-write.test.ts:2712 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:6894 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-catalog.test.ts:2972 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary.test.ts:2629 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\param-interfaces-write.test.ts:1664 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:2323 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\sample-receipts-write.test.ts:3055 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\samples-write.test.ts:2535 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\technical-requirements-write.test.ts:2728 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\test-records-write.test.ts:2438 (annot)"
       ],
       "entry": [
         "src\\api\\legacy-client.ts"
@@ -155,7 +202,8 @@
       ],
       "tests": [
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::contract list endpoint generated",
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/contracts/contractsList.dom.test.tsx::合同列表：渲染标题 + 列表行（fixtures 真数据穿透）"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/contracts/contractsList.dom.test.tsx::合同列表：渲染标题 + 列表行（fixtures 真数据穿透）",
+        "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:90 (annot)"
       ],
       "entry": [
         "src\\features\\contracts\\ContractsList.tsx"
@@ -173,7 +221,8 @@
         "docs\\design\\design-function-map.md"
       ],
       "tests": [
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/contracts/contractsList.dom.test.tsx::合同管理：新建按钮开弹窗"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/contracts/contractsList.dom.test.tsx::合同管理：新建按钮开弹窗",
+        "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:111 (annot)"
       ],
       "entry": [
         "src\\features\\contracts\\ContractsList.tsx"
@@ -191,7 +240,8 @@
         "docs\\design\\design-function-map.md"
       ],
       "tests": [
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/contracts/contractsList.dom.test.tsx::合同管理：行内删除按钮开确认弹窗"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/contracts/contractsList.dom.test.tsx::合同管理：行内删除按钮开确认弹窗",
+        "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:134 (annot)"
       ],
       "entry": [
         "src\\features\\contracts\\ContractsList.tsx"
@@ -646,7 +696,13 @@
         "docs\\design\\design-function-map.md"
       ],
       "tests": [
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::型号维护：新建按钮开弹窗（检测项目/名称/备注表单）"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::型号维护：新建按钮开弹窗（检测项目/名称/备注表单）",
+        "output\\lab-management-system-contract-test\\tests\\inspection-catalog-write.test.ts:3825 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:3444 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\param-interfaces-write.test.ts:2274 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\report-names.test.ts:3090 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\sample-receipts.test.ts:2791 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\test-records-write.test.ts:2960 (annot)"
       ],
       "entry": [
         "src\\features\\dicts\\CategoryDictList.tsx"
@@ -664,7 +720,11 @@
         "docs\\design\\design-function-map.md"
       ],
       "tests": [
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::型号维护：行内删除按钮开确认弹窗"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::型号维护：行内删除按钮开确认弹窗",
+        "output\\lab-management-system-contract-test\\tests\\inspection-catalog-write.test.ts:4482 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:4237 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\param-interfaces-write.test.ts:2809 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\report-names.test.ts:4035 (annot)"
       ],
       "entry": [
         "src\\features\\dicts\\CategoryDictList.tsx"
@@ -700,7 +760,10 @@
         "docs\\design\\design-function-map.md"
       ],
       "tests": [
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::规格维护：新建按钮开弹窗"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::规格维护：新建按钮开弹窗",
+        "output\\lab-management-system-contract-test\\tests\\inspection-catalog.test.ts:3665 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary.test.ts:3041 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:2892 (annot)"
       ],
       "entry": [
         "src\\features\\dicts\\CategoryDictList.tsx"
@@ -718,7 +781,10 @@
         "docs\\design\\design-function-map.md"
       ],
       "tests": [
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::规格维护：行内删除按钮开确认弹窗"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::规格维护：行内删除按钮开确认弹窗",
+        "output\\lab-management-system-contract-test\\tests\\inspection-catalog-write.test.ts:5641 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:5401 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:3414 (annot)"
       ],
       "entry": [
         "src\\features\\dicts\\CategoryDictList.tsx"
@@ -754,7 +820,10 @@
         "docs\\design\\design-function-map.md"
       ],
       "tests": [
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::等级维护：新建按钮开弹窗"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::等级维护：新建按钮开弹窗",
+        "output\\lab-management-system-contract-test\\tests\\inspection-catalog-write.test.ts:6887 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:6795 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:3942 (annot)"
       ],
       "entry": [
         "src\\features\\dicts\\CategoryDictList.tsx"
@@ -772,7 +841,10 @@
         "docs\\design\\design-function-map.md"
       ],
       "tests": [
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::等级维护：行内删除按钮开确认弹窗"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::等级维护：行内删除按钮开确认弹窗",
+        "output\\lab-management-system-contract-test\\tests\\inspection-catalog.test.ts:4354 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary.test.ts:3461 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:4514 (annot)"
       ],
       "entry": [
         "src\\features\\dicts\\CategoryDictList.tsx"
@@ -924,7 +996,10 @@
         "docs\\design\\design-function-map.md"
       ],
       "tests": [
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F02 新建按钮存在 + 行内编辑/删除按钮"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F02 新建按钮存在 + 行内编辑/删除按钮",
+        "output\\lab-management-system-contract-test\\tests\\inspection-catalog-write.test.ts:8098 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:8132 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:5091 (annot)"
       ],
       "entry": [
         "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
@@ -961,7 +1036,8 @@
       ],
       "tests": [
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/parameterStandardLink.dom.test.tsx::toggle：未关联标准 → POST 后按钮翻「解除关联」",
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/parameterStandardLink.dom.test.tsx::关联弹窗：列出标准 + 已关联态（IP-0001 已关联 GB 175-2023，fixtures 真数据穿透）"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/parameterStandardLink.dom.test.tsx::关联弹窗：列出标准 + 已关联态（IP-0001 已关联 GB 175-2023，fixtures 真数据穿透）",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary.test.ts:4345 (annot)"
       ],
       "entry": [
         "src\\features\\inspection-capability\\InspectionCapabilityList.tsx",
@@ -1000,7 +1076,8 @@
       ],
       "tests": [
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::inspection standard create endpoint generated",
-        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F04 新建按钮存在 + 标准编码列显示"
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/inspection-capability/inspectionCapabilityPages.dom.test.tsx::F04 新建按钮存在 + 标准编码列显示",
+        "output\\lab-management-system-contract-test\\tests\\inspection-dictionary.test.ts:4799 (annot)"
       ],
       "entry": [
         "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
