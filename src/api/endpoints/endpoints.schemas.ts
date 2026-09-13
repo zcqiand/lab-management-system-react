@@ -477,12 +477,37 @@ export type DashboardStatsReportCountByStatus = {
   issued: number;
 };
 
+export type DashboardStatsQualifiedRateByMaterial = {
+  concrete: MaterialQualifiedRate;
+  rebar: MaterialQualifiedRate;
+  sand: MaterialQualifiedRate;
+};
+
+export type DashboardStatsReportOutputByStatus = {
+  generated: number;
+  pending: number;
+  issued: number;
+};
+
+export type DashboardStatsFunnelByStage = {
+  pending_collect: number;
+  received: number;
+  testing: number;
+  reporting: number;
+  reviewing: number;
+  issued: number;
+};
+
 export interface DashboardStats {
   contractCount: number;
   receiptCount: number;
   sampleCount: number;
   reportCountByStatus: DashboardStatsReportCountByStatus;
   pendingTaskCount: number;
+  todayTestCount: number;
+  qualifiedRateByMaterial: DashboardStatsQualifiedRateByMaterial;
+  reportOutputByStatus: DashboardStatsReportOutputByStatus;
+  funnelByStage: DashboardStatsFunnelByStage;
 }
 
 export type ErrorResponseDetails = {[key: string]: unknown};
@@ -724,6 +749,12 @@ export interface LoginResponse {
   refreshToken?: string;
   user: CurrentUser;
   tenants: MyTenant[];
+}
+
+export interface MaterialQualifiedRate {
+  total: number;
+  pass: number;
+  rate: number;
 }
 
 export interface MenuNode {
