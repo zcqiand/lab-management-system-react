@@ -1,19 +1,19 @@
 {
-  "schema": 2,
+  "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "VITE_SAAS_CLIENT_ID 四份 env 契约补齐（2026-09-02 handoff）",
-  "last_session_at": "2026-09-02",
-  "last_session_summary": "example 有 VITE_SAAS_CLIENT_ID 而 test/production/local 缺 → L0.5 红。三份补齐 11111111-1111-1111-1111-111111111111 后 gate 全绿",
+  "current_task": "ADR-0033 阶段二：M98 段退役 + BASE 41 子项镜像",
   "done": [
-    ".env.test / .env.production / .env.local 补 VITE_SAAS_CLIENT_ID=11111111-1111-1111-1111-111111111111（对齐 .env.example）",
-    "gate -p lab-management-system-react exit 0（100 功能条目，软告警 0）"
+    "function-tree: M98 整段删除；补 41 个 BASE 镜像「规划」行（消费树严格 ⊆ BASE）；M05.F01.I06 已上线",
+    "tests: infrastructure-anchors M98 fnTest 解挂；sidebar-nav.dom 断言 m-* data-fn",
+    "src: sidebar-nav data-fn=m-<code>、SummaryList @entry I06；design maps M98 行删除；commit a0dfd9a"
   ],
   "next": [
-    "commit + push .env.test（production/local 是 gitignored，进仓的只有 .env.test）"
+    "阶段三 e2e 接入（E2E_*_URL fail-fast）"
   ],
   "open_questions": [],
   "dont": [
-    "加 VITE_* key 只改 .env.example 不补 .env.test/.env.production/.env.local = L0.5 必红（本次就是踩的这个）"
+    "规划行不得标已上线——L5 会要求 UI 入口（data-fn/@entry），后端实现不等于前端上线"
   ],
-  "active_branch": "master"
+  "active_branch": "master",
+  "last_session_at": "2026-09-13"
 }
