@@ -52,7 +52,7 @@ import {
   inspectionObjectReportNames,
   inspectionCalculationMethods,
   technicalRequirements,
-} from "@lab/management-system-msw/fixtures";
+} from "../../../lab-management-system-msw/src/fixtures/seed";
 import paramInterfacesJson from "@/data/generated/inspection-param-interface.json";
 import paramInterfaceLinksJson from "@/data/generated/inspection-parameter-param-interface.json";
 // (reportNameParametersJson 随 Batch 4 seedData 回填)

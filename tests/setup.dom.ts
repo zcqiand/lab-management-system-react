@@ -26,7 +26,9 @@ let serverRef: NodeMockServer | null = null;
 
 if (isDom) {
   beforeAll(async () => {
-    const { setupNodeMocks } = await import("@lab/management-system-msw/node");
+    // ADR-0012 lab 收尾：前端零 package 依赖，测试基建走相对路径引 sibling msw 源码
+    // （saas-react tests/setup.ts 同款通道；CI 已 clone msw sibling）。
+    const { setupNodeMocks } = await import("../../lab-management-system-msw/src/node");
     serverRef = setupNodeMocks() as unknown as NodeMockServer;
     serverRef.listen({ onUnhandledRequest: "error" });
   });

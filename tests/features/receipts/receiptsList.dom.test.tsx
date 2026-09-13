@@ -5,7 +5,7 @@ import { fnTest } from '../../fn'
 import { server } from '../../setup.dom'
 import { installShapeAdapters, resetFixtures } from '../../helpers/seed'
 import { ReceiptsList } from '@/features/receipts/ReceiptsList'
-import { sampleReceipts } from '@lab/management-system-msw/fixtures'
+import { sampleReceipts } from '../../../../lab-management-system-msw/src/fixtures/seed'
 
 /**
  * M03.F01 接样管理 smoke。

@@ -5,7 +5,7 @@ import { fnTest } from '../../fn'
 import { server } from '../../setup.dom'
 import { installShapeAdapters, resetFixtures } from '../../helpers/seed'
 import { DataEntryPage } from '@/features/data-entry/DataEntryPage'
-import { sampleReceipts } from '@lab/management-system-msw/fixtures'
+import { sampleReceipts } from '../../../../lab-management-system-msw/src/fixtures/seed'
 
 /**
  * M03.F03 数据录入 smoke。

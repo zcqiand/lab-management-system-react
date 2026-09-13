@@ -39,6 +39,6 @@ export default defineConfig({
     // msw v2 has unresolvable @mswjs/interceptors exports conditions for
     // ClientRequest in browser; exclude from pre-bundling so it loads at
     // runtime without vite choking on it.
-    exclude: ['@lab/management-system-msw', 'msw', '@mswjs/interceptors'],
+    exclude: ['msw', '@mswjs/interceptors'],
   },
 })

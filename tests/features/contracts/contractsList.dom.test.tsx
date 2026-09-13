@@ -5,7 +5,7 @@ import { server } from '../../setup.dom'
 import { http, HttpResponse } from 'msw'
 import { installShapeAdapters, resetFixtures } from '../../helpers/seed'
 import { ContractsList } from '@/features/contracts/ContractsList'
-import { contracts } from '@lab/management-system-msw/fixtures'
+import { contracts } from '../../../../lab-management-system-msw/src/fixtures/seed'
 
 /**
  * M02.F01 合同管理 smoke。

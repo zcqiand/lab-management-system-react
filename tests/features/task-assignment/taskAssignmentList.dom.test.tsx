@@ -5,7 +5,7 @@ import { fnTest } from '../../fn'
 import { server } from '../../setup.dom'
 import { installShapeAdapters, resetFixtures } from '../../helpers/seed'
 import { TaskAssignmentList } from '@/features/task-assignment/TaskAssignmentList'
-import { sampleReceipts } from '@lab/management-system-msw/fixtures'
+import { sampleReceipts } from '../../../../lab-management-system-msw/src/fixtures/seed'
 
 /**
  * M03.F02 任务分配 smoke。
