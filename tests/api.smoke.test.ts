@@ -6,7 +6,7 @@
 // 不启 React、不触 axios；只看 backend-config 模块导出。
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
-describe("M98 backend-config (env-driven 单 URL — ADR-0014)", () => {
+describe("backend-config (env-driven 单 URL — ADR-0014)", () => {
   beforeEach(() => {
     // 每个 case 前清 stub env
     for (const k of Object.keys(import.meta.env)) {

@@ -66,6 +66,7 @@ const STATUS_LABEL: Record<string, string> = {
 
 // @entry M05.F01.I01
 // @entry M05.F01.I02
+// @entry M05.F01.I06 — 仪表盘统计基础端点 （ADR-0033 阶段二自后端仓 M05.F02.I01 改挂 F01）
 export function SummaryList() {
   const [data, setData] = useState<SummaryData | null>(null);
   const [stats, setStats] = useState<DashboardStats | null>(null);

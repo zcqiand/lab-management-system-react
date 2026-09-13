@@ -47,7 +47,7 @@ describe("M01.F04.I01 动态菜单", () => {
   fnTest(["M01.F04.I01"], "菜单项是可点按钮，点击触发导航回调", () => {
     renderSidebar();
     const item = screen.getByTestId("sidebar-item-m-dashboard");
-    expect(item.getAttribute("data-fn")).toBe("M98.F04.m-dashboard");
+    expect(item.getAttribute("data-fn")).toBe("m-m-dashboard");
     fireEvent.click(item);
     // MemoryRouter 内 navigate("/") 不报错即通过（导航行为由 router 测）
   });

@@ -86,10 +86,6 @@ flowchart TD
 | M06.F07.I01 | M06 字典子域 — 报告名称 list（FLOW-02 S06） |
 | M06.F07.I02 | M06 字典子域 — 报告名称 关联 button（FLOW-02 S07） |
 | M06.F08.I01 | M06 字典子域 — 参数界面 list（FLOW-02 S06） |
-| M98.F01.I01 | 运行时后端切换 UI 下拉（infra 切面：选择 msw/aspnetcore/springboot/nextjs 之一） |
-| M98.F01.I02 | baseURL 持久化到 localStorage[lab.backend]（infra 状态） |
-| M98.F02.I01 | axios 拦截器在 baseURL = getBaseUrl() 上自动跑（infra 副作用，不参与业务流程） |
-| M98.F03.I01 | orval 生成的认证端点 validation smoke test（infra 验证） |
 
 ---
 

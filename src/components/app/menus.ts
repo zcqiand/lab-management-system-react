@@ -3,7 +3,7 @@
 // nextjs 仓菜单来自 saas（/api/saas/me/menus 按 appCode 过滤），react 仓是
 // 前端 only 镜像仓、无 /api route，菜单树落本地静态常量（MenuNode 形状与
 // nextjs sidebar-nav 手写接口一致）。code 沿用 saas 菜单码（m-*），供
-// data-fn 锚点（M98.F04.<code>）与未来跨仓对齐。
+// data-fn 锚点（m-<code>）与未来跨仓对齐。
 import type { MenuNode } from "./sidebar-nav";
 
 export const APP_CODE = "lab-management";

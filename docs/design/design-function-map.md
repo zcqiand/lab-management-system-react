@@ -66,10 +66,6 @@
 | M06.F07.I01 | src/features/report-names/ReportNameList.tsx (via src/pages/ReportNamesPage.tsx) | GET /api/inspection-report-names ; POST/PUT/DELETE 同 | inspection_report_name | M06.F07.I01 | – | 已上线 |
 | M06.F07.I02 | src/features/report-names/ReportNameList.tsx + ReportNameLinkDialog.tsx (行内 关联 button) | POST /api/inspection-report-name-standards ; DELETE 同 ; POST /api/inspection-report-name-parameters ; DELETE 同 | inspection_report_name_standard + inspection_report_name_parameter | M06.F07.I02 | – | 已上线 |
 | M06.F08.I01 | src/features/param-interfaces/ParamInterfaceList.tsx (via src/pages/ParamInterfacesPage.tsx) | GET /api/inspection-param-interfaces ; POST/PUT/DELETE 同 | inspection_param_interface | M06.F08.I01 | – | 已上线 |
-| M98.F01.I01 | src/components/app/backend-switcher.tsx (dropdown trigger) | – (UI 下拉；useBackend) | – | M98.F01.I01 | – | 已上线 |
-| M98.F01.I02 | src/state/backend-context.tsx (useBackend.setBaseUrl) | – (localStorage[lab.backend]) | – | M98.F01.I02 | – | 已上线 |
-| M98.F02.I01 | src/api/legacy-client.ts (apiClient interceptors) + src/api/http-client.ts | – (axios Bearer + 401-bridge 拦截器) | – | M98.F02.I01 | – | 已上线 |
-| M98.F03.I01 | tests/endpoints-smoke.test.ts | – (validation: orval 端点函数存在性) | – | M98.F03.I01 | – | 已上线 |
 
 ## 约定
 
