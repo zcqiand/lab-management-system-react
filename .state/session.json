@@ -1,19 +1,18 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "ADR-0033 阶段二：M98 段退役 + BASE 41 子项镜像",
+  "current_task": "REQ-2026-001：legacy-client 映射收敛契约路径——已上线",
   "done": [
-    "function-tree: M98 整段删除；补 41 个 BASE 镜像「规划」行（消费树严格 ⊆ BASE）；M05.F01.I06 已上线",
-    "tests: infrastructure-anchors M98 fnTest 解挂；sidebar-nav.dom 断言 m-* data-fn",
-    "src: sidebar-nav data-fn=m-<code>、SummaryList @entry I06；design maps M98 行删除；commit a0dfd9a"
+    "API_ROUTES 两键 /inspection-param-interfaces、/inspection-parameter-param-interfaces 恒等映射改契约路径",
+    "引用旧路径字面量的测试同步修；commit 83f2f4e"
   ],
   "next": [
-    "阶段三 e2e 接入（E2E_*_URL fail-fast）"
+    "无遗留；候选 REQ 见 shared §7.1"
   ],
   "open_questions": [],
   "dont": [
     "规划行不得标已上线——L5 会要求 UI 入口（data-fn/@entry），后端实现不等于前端上线"
   ],
   "active_branch": "master",
-  "last_session_at": "2026-09-13"
+  "last_session_at": "2026-09-14"
 }
