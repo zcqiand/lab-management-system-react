@@ -29,7 +29,7 @@
         "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:6320 (annot)",
         "output\\lab-management-system-contract-test\\tests\\inspection-catalog-write.test.ts:3048 (annot)",
         "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:2874 (annot)",
-        "output\\lab-management-system-contract-test\\tests\\param-interfaces-write.test.ts:712 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\param-interfaces-write.test.ts:1114 (annot)",
         "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:1729 (annot)",
         "output\\lab-management-system-contract-test\\tests\\sample-receipts-write.test.ts:2554 (annot)",
         "output\\lab-management-system-contract-test\\tests\\samples-write.test.ts:1964 (annot)",
@@ -143,7 +143,7 @@
         "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:6894 (annot)",
         "output\\lab-management-system-contract-test\\tests\\inspection-catalog.test.ts:2972 (annot)",
         "output\\lab-management-system-contract-test\\tests\\inspection-dictionary.test.ts:2629 (annot)",
-        "output\\lab-management-system-contract-test\\tests\\param-interfaces-write.test.ts:1664 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\param-interfaces-write.test.ts:2098 (annot)",
         "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:2323 (annot)",
         "output\\lab-management-system-contract-test\\tests\\sample-receipts-write.test.ts:3055 (annot)",
         "output\\lab-management-system-contract-test\\tests\\samples-write.test.ts:2535 (annot)",
@@ -819,7 +819,7 @@
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::型号维护：新建按钮开弹窗（检测项目/名称/备注表单）",
         "output\\lab-management-system-contract-test\\tests\\inspection-catalog-write.test.ts:3825 (annot)",
         "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:3444 (annot)",
-        "output\\lab-management-system-contract-test\\tests\\param-interfaces-write.test.ts:2274 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\param-interfaces-write.test.ts:2708 (annot)",
         "output\\lab-management-system-contract-test\\tests\\report-names.test.ts:3090 (annot)",
         "output\\lab-management-system-contract-test\\tests\\sample-receipts.test.ts:2791 (annot)",
         "output\\lab-management-system-contract-test\\tests\\test-records-write.test.ts:2960 (annot)"
@@ -841,7 +841,7 @@
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/dicts/categoryDictPages.dom.test.tsx::型号维护：行内删除按钮开确认弹窗",
         "output\\lab-management-system-contract-test\\tests\\inspection-catalog-write.test.ts:4482 (annot)",
         "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:4237 (annot)",
-        "output\\lab-management-system-contract-test\\tests\\param-interfaces-write.test.ts:2809 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\param-interfaces-write.test.ts:3243 (annot)",
         "output\\lab-management-system-contract-test\\tests\\report-names.test.ts:4035 (annot)"
       ],
       "entry": [

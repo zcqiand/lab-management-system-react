@@ -8,7 +8,7 @@ import { ParamInterfaceList } from '@/features/param-interfaces/ParamInterfaceLi
 /**
  * M06.F08 参数界面维护 smoke。
  *
- * 适配层已包含在 installShapeAdapters（http.get /api/inspection-param-interfaces 注册），
+ * 适配层已包含在 installShapeAdapters（http.get /api/param-interfaces 注册），
  * 直接复用即可。
  */
 

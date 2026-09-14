@@ -6,7 +6,7 @@
  *   ParamInterfaceLink：参数 ↔ 界面 多对多关联（一个参数可绑多种卡片）
  *
  * 数据来源：mock 内存表（`data/generated/inspection-param-interface.json` + `inspection-parameter-param-interface.json`）
- * 走 `/inspection-param-interfaces` 和 `/inspection-parameter-param-interfaces` 端点。
+ * 走 shared 契约路径 `/api/param-interfaces` 和 `/api/param-interfaces/links`（REQ-2026-001 收敛）。
  */
 
 export interface ParamInterfaceRow {
@@ -18,7 +18,7 @@ export interface ParamInterfaceRow {
 
 export interface ParamInterfaceLink {
   inspectionParameterCode: string
-  inspectionParamInterfaceCode: string
+  paramInterfaceCode: string   // REQ-2026-001：对齐契约字段（DB 列 param_interface_code）
   /**
    * 报告作用域（可选）：仅当接样单 categoryCode === reportNameCode 时该关联生效。
    * 缺省 = 通用关联（对所有报告生效，作为作用域未命中时的兜底）。
