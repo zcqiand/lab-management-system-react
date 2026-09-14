@@ -6,18 +6,8 @@
     "features": 26,
     "items": 104
   },
-  "warnings_total": 3,
-  "warnings": {
-    "已上线但无设计映射": [
-      "M05.F01.I06"
-    ],
-    "已上线但无测试引用": [
-      "M05.F01.I06"
-    ],
-    "已上线但不在任何流程且非孤儿白名单": [
-      "M05.F01.I06"
-    ]
-  },
+  "warnings_total": 0,
+  "warnings": {},
   "unreachable_shipped": [],
   "function_map": {
     "M01.F04.I01": {
@@ -63,8 +53,8 @@
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::authenticated 态拉取 /auth/permissions 并供 hasPermission 判断",
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::非 authenticated 态 hasPermission 恒 false",
         "output\\lab-management-system-contract-test\\tests\\auth-read.test.ts:960 (annot)",
-        "output\\lab-management-system-contract-test\\tests\\auth-write.test.ts:1740 (annot)",
-        "output\\lab-management-system-contract-test\\tests\\auth-write.test.ts:2293 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\auth-write.test.ts:1750 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\auth-write.test.ts:3513 (annot)",
         "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:2573 (annot)",
         "output\\lab-management-system-contract-test\\tests\\inspection-catalog-write.test.ts:2447 (annot)",
         "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:2250 (annot)",
@@ -148,7 +138,7 @@
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::onChange 契约：状态转移触发订阅 + unsub 停止",
         "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/auth-fsm.test.ts::token 失效（me 401 + refresh 401）→ 退 anonymous + 清 token",
         "output\\lab-management-system-contract-test\\tests\\auth-read.test.ts:2950 (annot)",
-        "output\\lab-management-system-contract-test\\tests\\auth-write.test.ts:1255 (annot)",
+        "output\\lab-management-system-contract-test\\tests\\auth-write.test.ts:1265 (annot)",
         "output\\lab-management-system-contract-test\\tests\\calculation-methods-write.test.ts:2712 (annot)",
         "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:6894 (annot)",
         "output\\lab-management-system-contract-test\\tests\\inspection-catalog.test.ts:2972 (annot)",
@@ -1094,8 +1084,13 @@
       "type": "查询",
       "requirements": [],
       "flows": [],
-      "designs": [],
-      "tests": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
+      "tests": [
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/endpoints-smoke.test.ts::stats endpoint generated",
+        "D:/qiand-life/1-projects/xr-code-suite/output/lab-management-system-react/tests/features/summary/summaryList.dom.test.tsx::I06 仪表盘统计基础端点：GET /summary/stats 基础字段穿透渲染"
+      ],
       "entry": [
         "src\\features\\summary\\SummaryList.tsx"
       ]

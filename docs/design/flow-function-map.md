@@ -72,6 +72,7 @@ flowchart TD
 | M04.F09.I03 | M04 字典维护 — 牌号 删除（FLOW-02 S05） |
 | M05.F01.I01 | 试验报告汇总：按 categoryCode 聚合 sample_receipts；流程末端读视图，不参与状态流转 |
 | M05.F01.I02 | 仪表盘聚合：跨 sample_receipts/contracts 计数 + 3 桶 + pendingTask；只读 |
+| M05.F01.I06 | 仪表盘统计基础端点：GET /api/summary/stats 基础字段（3 计数 + 报告状态 3 桶 + 待办任务）；流程末端读视图，只读 |
 | M06.F01.I01 | M06 字典子域 — 专项 list（FLOW-02 S06） |
 | M06.F02.I01 | M06 字典子域 — 项目 list（FLOW-02 S06） |
 | M06.F02.I02 | M06 字典子域 — 项目 新建/编辑（FLOW-02 S06） |

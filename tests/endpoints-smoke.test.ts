@@ -25,6 +25,10 @@ describe("shared contract client smoke", () => {
     expect(typeof api.summaryGetReportSummary).toBe("function");
   });
 
+  fnTest(["M05.F01.I06"], "stats endpoint generated", () => {
+    expect(typeof api.summaryGetDashboardStats).toBe("function");
+  });
+
   fnTest(["M06.F01.I01"], "inspection specialty endpoint generated", () => {
     expect(typeof api.inspectionDictionaryListSpecialties).toBe("function");
   });

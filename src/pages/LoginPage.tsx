@@ -27,12 +27,12 @@ import type {
 } from "@/api/endpoints/endpoints.schemas";
 
 // OAuth 2.0 client_id：契约必填参数，但真 client_id 由 lab 后端 env 权威持有
-// （springboot LAB_SAAS_CLIENT_ID=UUID V014 seed；nextjs SAAS_OAUTH_CLIENT_ID），
-// 前端传的值会被后端忽略，但 saas-aspnetcore authorize 端点会查 apps.client_id，
-// V014/V015 收敛为固定 UUID '11111111-1111-1111-1111-111111111111' ——
-// 前端必须发同一 UUID，否则 saas 返 401。
+// （springboot LAB_SAAS_CLIENT_ID；nextjs SAAS_OAUTH_CLIENT_ID），
+// 前端传的值会被后端忽略，但 saas authorize 端点会查 oauth_client.client_id ——
+// 2026-09-14 实测库值为字符串 'lab-management'（非 UUID；UUID 行 id 是历史残留，
+// 按 UUID 发起 authorize 必 INVALID_CLIENT）。
 // （2026-08-29 修 prod 401：lab-react 之前硬编码 "lab-mgmt" → 改 env 读；与 lab-nextjs 同款。）
-// ADR-0019：删除 "11111111-..." UUID 字面 fallback。dev 期 .env.local 显式声明
+// ADR-0019：删除 UUID 字面 fallback。dev 期 .env.local 显式声明
 // VITE_SAAS_CLIENT_ID；prod 由 Dockerfile ENV / deploy 脚本注入。
 // 空串视为「显式设空」（测试同源相对 URL 模式），只查 undefined throw。
 const OAUTH_CLIENT_ID = (() => {

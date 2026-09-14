@@ -52,6 +52,7 @@
 | M04.F09.I03 | src/features/dicts/CategoryDictList.tsx (via BrandsPage; 行内 删除) | DELETE /api/catalog/brands/:id | inspection_brands | M04.F09.I03 | – | 已上线 |
 | M05.F01.I01 | src/features/summary/SummaryList.tsx (汇总表 root) | GET /api/summary?categoryCode=... ; GET /api/report-names (下拉) | sample_receipts | M05.F01.I01 | – | 已上线 |
 | M05.F01.I02 | src/features/summary/SummaryList.tsx (仪表盘卡片 grid) | GET /api/summary/stats | – (跨 sample_receipts/contracts 聚合) | M05.F01.I02 | – | 已上线 |
+| M05.F01.I06 | src/features/summary/SummaryList.tsx (仪表盘卡片 grid：stats 基础字段消费) | GET /api/summary/stats（contractCount/receiptCount/sampleCount + 报告状态 3 桶 + pendingTaskCount） | – (跨 sample_receipts/contracts 聚合) | M05.F01.I06 | ADR-0033 阶段二自后端仓改挂 F01（BASE 下沉对齐） | 已上线 |
 | M06.F01.I01 | src/features/inspection-capability/InspectionCapabilityList.tsx (via src/pages/SpecialtiesPage.tsx) | GET /api/inspection-specialties | inspection_specialty | M06.F01.I01 | – | 已上线 |
 | M06.F02.I01 | src/features/inspection-capability/InspectionCapabilityList.tsx (via src/pages/ObjectsPage.tsx) | GET /api/inspection-objects?inspectionSpecialtyCode=... | inspection_object | M06.F02.I01 | – | 已上线 |
 | M06.F02.I02 | src/features/inspection-capability/InspectionCapabilityList.tsx (via ObjectsPage; 新建 + 编辑，form 选专项/参数) | POST /api/inspection-objects ; PUT /api/inspection-objects/:id | inspection_object | M06.F02.I02 | – | 已上线 |

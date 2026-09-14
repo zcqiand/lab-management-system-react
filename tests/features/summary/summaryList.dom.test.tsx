@@ -58,6 +58,24 @@ describe("M05.F01 报告汇总", () => {
   });
 
   fnTest(
+    ["M05.F01.I06"],
+    "I06 仪表盘统计基础端点：GET /summary/stats 基础字段穿透渲染",
+    async () => {
+      render(<SummaryList />);
+      await waitFor(() => {
+        // 基础 4 计数从 /summary/stats 拉到（占位 '-' 消失 → 全数字）
+        const grid = screen.getByText("合同数").closest("div.grid");
+        expect(grid).toBeTruthy();
+        expect(grid!.textContent, "统计卡不应残留加载占位 '-'").not.toContain("-");
+        // 报告状态 3 桶（draft=草稿 / reviewing=审核中 / issued=已发）
+        expect(screen.getByText(/草稿：\d+/)).toBeTruthy();
+        expect(screen.getByText(/审核中：\d+/)).toBeTruthy();
+        expect(screen.getByText(/已发：\d+/)).toBeTruthy();
+      });
+    },
+  );
+
+  fnTest(
     ["M05.F01.I01", "M05.F01.I02"],
     "F01+F02 报告类别下拉存在（5 类 + 全部）",
     async () => {
