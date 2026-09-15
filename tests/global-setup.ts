@@ -10,9 +10,12 @@
 //      按 demo 契约不挂 JWT guard——铸法正确性改用「lab-nextjs 的真验签器
 //      LabJwtSigner.verify 本地闭环验证」+ /api/auth/me 无 Bearer 恒 401 的
 //      ADR-0019 负探针（真服务上活着的 guard 语义证据）双保险。
-//   3. LAB_JWT_SECRET/LAB_JWT_ISSUER/DATABASE_URL 先吃 process.env（CI 注入
-//      通道；nextjs 仓 .env.local gitignored，CI 没有这份文件），缺了再读
-//      sibling .env.local，两头都无 → fail-fast。这是 env 优先级，不是兜底。
+//   3. LAB_JWT_SECRET/LAB_JWT_ISSUER 先吃 process.env（CI 注入通道；nextjs 仓
+//      .env.local gitignored，CI 没有这份文件），缺了再读 sibling .env.local，
+//      两头都无 → fail-fast。这是 env 优先级，不是兜底。
+//   4. DATABASE_URL 例外（T10-R1①）：只认 process.env，绝不回落 .env.local——
+//      该键驱动 seed-db 重灌，顺着 .env.local 跑会 TRUNCATE 真库（saas_dev 事故
+//      实证）。缺失立即 fail-fast，不做任何回读。
 //
 // 进程治理（Phase 2 裁定）：拉起的 nextjs 留活不杀——dev 迭代复用；PID 记到
 // $TMPDIR/lab-react-test-nextjs.pid 供人工清理；绝不反查端口杀树（那会误杀
@@ -29,6 +32,22 @@ const SHARED = resolve(REACT_ROOT, "../lab-management-system-shared");
 const NEXTJS = resolve(REACT_ROOT, "../lab-management-system-nextjs");
 const BASE = "http://localhost:5201";
 const NEXTJS_ENV_FILE = resolve(NEXTJS, ".env.local");
+
+/**
+ * DATABASE_URL 专用读取（T10-R1①）：只认 process.env（gate/CI 注入通道），
+ * 不回落 sibling .env.local——该键驱动 seed-db 全量重灌，顺着 .env.local 跑
+ * 会把重灌打到真库（saas_dev TRUNCATE 事故实证）。缺失立即 fail-fast。
+ */
+const readDbUrl = (): string => {
+  const dbUrl = process.env["DATABASE_URL"];
+  if (!dbUrl)
+    throw new Error(
+      "fail-fast: DATABASE_URL 只认 process.env，缺失（禁 .env.local 回落——该键驱动 " +
+        "seed-db 全量重灌，回落会误伤真库）。gate/CI 会注入 DATABASE_URL；" +
+        "本地裸跑必须显式 export，例：DATABASE_URL=postgresql://… npx --no vitest run（禁兜底，ADR-0019）",
+    );
+  return dbUrl;
+};
 
 /** env 读取：process.env 优先（CI 注入），回落 sibling .env.local；两头皆无 fail-fast。 */
 const readKey = (key: string): string => {
@@ -77,7 +96,7 @@ export default async function ({
 }: {
   provide: (key: string, value: unknown) => void;
 }): Promise<void> {
-  const dbUrl = readKey("DATABASE_URL");
+  const dbUrl = readDbUrl();
 
   // 1. 种子（upsert 幂等；连 nextjs 同一库，seeds/*.json 是 DB 快照权威源）
   console.log("[global-setup] 1/4 灌种子（shared/scripts/seed-db.mjs upsert）…");
