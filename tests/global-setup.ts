@@ -139,7 +139,9 @@ export default async function ({
   console.log("[global-setup] 3/4 真 JWT 铸造 + LabJwtSigner.verify 闭环通过");
 
   // 4. 真服务探针——
-  //    a) 业务路由带 Bearer 200（服务 + 种子数据可达）；
+  //    a) 业务路由带 Bearer 200（服务可达；/api/contracts 数据源是
+  //       @lab/management-system-msw/fixtures 内存数组不读 PG，本探针不证明
+  //       种子数据可达——种子的证据在步骤 1 的 post-flight count 校验）；
   //    b) /api/auth/me 无 Bearer 恒 401（ADR-0019 guard 语义在真服务上活着的证据）。
   const res = await fetch(`${BASE}/api/contracts`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -147,7 +149,7 @@ export default async function ({
   });
   if (!res.ok) {
     throw new Error(
-      `fail-fast: GET /api/contracts 被拒（${res.status}）——核对 nextjs dev 与种子状态`,
+      `fail-fast: GET /api/contracts 被拒（${res.status}）——核对 nextjs dev 状态`,
     );
   }
   const me = await fetch(`${BASE}/api/auth/me`, { signal: AbortSignal.timeout(30_000) });

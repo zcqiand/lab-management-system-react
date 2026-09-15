@@ -72,7 +72,12 @@ jobs:
         run: npm ci
       - name: gen:shared
         run: npm run gen:shared
-      # 真化基座前置：schema 迁移 + 种子灌库（upsert 幂等，对 lab_p2_test）
+      # 真化基座前置：schema 迁移 + 种子灌库（upsert 幂等，对 lab_p2_test）。
+      # seed-db.mjs require pg（dependencies），migrate-db.mjs 走 drizzle-kit
+      # （devDependencies）——不能 --omit=dev，这里必须全量装。
+      - name: Install shared sibling dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+        working-directory: ../lab-management-system-shared
       - name: Migrate DB
         run: node scripts/migrate-db.mjs
         working-directory: ../lab-management-system-shared
