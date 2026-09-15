@@ -7,11 +7,10 @@ import {
   renderedCommissionCodes,
   seedCommissionCodes,
 } from "../../helpers/real-chain";
-import { server } from "../../setup.dom";
 import { TaskAssignmentList } from "@/features/task-assignment/TaskAssignmentList";
 
 /**
- * M03.F02 任务分配 smoke —— 真链路（msw passthrough，直连真 nextjs :5201）。
+ * M03.F02 任务分配 smoke —— 真链路（直连真 nextjs :5201，msw 已拆）。
  *
  * 数据源：lab_dev.sample_receipts，列表按 flowStatus=task_assignment 过滤
  * （GET /api/receipts?flowStatus=task_assignment）。shared 种子固定含 33 条
@@ -20,7 +19,7 @@ import { TaskAssignmentList } from "@/features/task-assignment/TaskAssignmentLis
  */
 
 beforeEach(() => {
-  installRealChain(server);
+  installRealChain();
 });
 
 describe("M03.F02 任务分配", () => {

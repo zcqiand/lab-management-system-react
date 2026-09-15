@@ -3,10 +3,10 @@
 // 镜像 nextjs InspectionCapabilityPage.tsx 的多资源模式（react 仓无
 // react-router useParams，用 prop `resource` 区分；page wrappers 负责传值）。
 //
-// 适配层说明：
-//   - 数据由 tests/helpers/seed.ts installShapeAdapters wrapDict 提供
-//     （id=code、keyword 过滤、inspectionObjectCode / inspectionSpecialtyCode
-//     junction 反查）。组件直读 res.data.items/total 即可。
+// 数据说明：
+//   - 真后端 dict 路由自带 wrapDict 语义（id=code、keyword 过滤、
+//     inspectionObjectCode / inspectionSpecialtyCode junction 反查），
+//     组件直读 res.data.items/total 即可。
 //   - 计算方法 / 技术要求是复合主键独立页，不在本组件范围。
 import { useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";

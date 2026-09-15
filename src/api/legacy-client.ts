@@ -43,7 +43,8 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (r) => r,
   (err: unknown) => {
-    if (err instanceof AxiosError && err.response?.status === 401) unauthorizedHandler?.();
+    if (err instanceof AxiosError && err.response?.status === 401)
+      unauthorizedHandler?.();
     return Promise.reject(err);
   },
 );
@@ -86,8 +87,8 @@ export const API_ROUTES = {
   "/brands": "/api/catalog/brands",
   "/org-info": "/api/org-info",
   // —— M06 检测能力 10 组件 ——
-  // 4 主表 CRUD + 4 类 junction link。msw dictCrud 裸数组 → {items} 由
-  // tests/helpers/seed.ts installShapeAdapters 包（同 nextjs 仓模式）。
+  // 4 主表 CRUD + 4 类 junction link（真后端 wrapDict 直出 {items} 形状，
+  // dom 测试直连真 nextjs :5201，适配层已随 msw 剔除拆除）。
   "/inspection-specialties": "/api/inspection/specialties",
   "/inspection-specialty-objects": "/api/inspection/links/specialty-object",
   "/inspection-object-standards": "/api/inspection/links/object-standard",

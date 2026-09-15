@@ -2,11 +2,10 @@ import { describe, expect, beforeEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { fnTest } from "../../fn";
 import { installRealChain, SEED } from "../../helpers/real-chain";
-import { server } from "../../setup.dom";
 import { ContractsList } from "@/features/contracts/ContractsList";
 
 /**
- * M02.F01 合同管理 smoke —— 真链路（msw passthrough，直连真 nextjs :5201）。
+ * M02.F01 合同管理 smoke —— 真链路（直连真 nextjs :5201，msw 已拆）。
  *
  * GET /api/contracts 已是 REF 形状 {items,page,pageSize,total} + status/keyword
  * 过滤（零适配直连）。数据源是 nextjs 进程内契约 fixtures（探针实测与 shared
@@ -15,7 +14,7 @@ import { ContractsList } from "@/features/contracts/ContractsList";
  */
 
 beforeEach(() => {
-  installRealChain(server);
+  installRealChain();
 });
 
 describe("M02.F01 合同管理", () => {
@@ -31,7 +30,6 @@ describe("M02.F01 合同管理", () => {
       });
       // 种子锚：种子 3 份合同的编号至少渲染出一份（CONTRACT-001 固定在场）
       const seedCodes = SEED.contracts.map((c) => c.contract_code);
-      expect(seedCodes.length).toBeGreaterThan(0);
       expect(screen.getByText(seedCodes[0]!)).toBeTruthy();
     },
   );

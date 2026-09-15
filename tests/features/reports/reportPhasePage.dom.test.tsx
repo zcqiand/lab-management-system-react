@@ -7,15 +7,14 @@ import {
   renderedCommissionCodes,
   seedCommissionCodes,
 } from "../../helpers/real-chain";
-import { server } from "../../setup.dom";
 import ReportReviewPage from "@/pages/ReportReviewPage";
 import ReportApprovePage from "@/pages/ReportApprovePage";
 import ReportIssuePage from "@/pages/ReportIssuePage";
 import ReportArchivePage from "@/pages/ReportArchivePage";
 
 /**
- * M03.F05/F06/F07/F08 报告 4 阶段 smoke —— 真链路（msw passthrough，直连真
- * nextjs :5201）。
+ * M03.F05/F06/F07/F08 报告 4 阶段 smoke —— 真链路（直连真
+ * nextjs :5201，msw 已拆）。
  *
  * 4 页共享 ReportPhasePage 组件，按 flowStatus 过滤同型（GET /api/receipts?
  * flowStatus=<stage>）。shared 种子每阶段固定 30 行，旧版「beforeEach 手工推
@@ -25,7 +24,7 @@ import ReportArchivePage from "@/pages/ReportArchivePage";
 type Phase = "review" | "approval" | "issuance" | "archived";
 
 beforeEach(() => {
-  installRealChain(server);
+  installRealChain();
 });
 
 /** 列表非空 + 渲染编号 ⊆ 该阶段种子编号集（真库数据锚）。 */

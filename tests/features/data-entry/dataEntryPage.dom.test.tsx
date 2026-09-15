@@ -7,11 +7,10 @@ import {
   renderedCommissionCodes,
   seedCommissionCodes,
 } from "../../helpers/real-chain";
-import { server } from "../../setup.dom";
 import { DataEntryPage } from "@/features/data-entry/DataEntryPage";
 
 /**
- * M03.F03 数据录入 smoke —— 真链路（msw passthrough，直连真 nextjs :5201）。
+ * M03.F03 数据录入 smoke —— 真链路（直连真 nextjs :5201，msw 已拆）。
  *
  * 数据源：列表 = lab_dev.sample_receipts（flowStatus=data_entry 过滤，种子固定
  * 33 条）；弹窗 = GET /api/samples、/api/inspection/parameters、/api/test-records
@@ -19,7 +18,7 @@ import { DataEntryPage } from "@/features/data-entry/DataEntryPage";
  */
 
 beforeEach(() => {
-  installRealChain(server);
+  installRealChain();
 });
 
 describe("M03.F03 数据录入", () => {

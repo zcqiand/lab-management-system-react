@@ -49,15 +49,11 @@ jobs:
           registry-url: https://registry.npmmirror.com/
       - name: Checkout shared sibling
         run: git clone --depth 1 https://x-access-token:${GITHUB_TOKEN}@github.com/zcqiand/lab-management-system-shared.git ../lab-management-system-shared
+      # msw sibling 仅为 nextjs sibling 的 file: 依赖 @lab/management-system-msw
+      # 提供目录（部分路由仍吃 fixtures 形状层）；本仓测试已不再引 msw 源码
+      # （Phase 2 拆除），故无需再给 sibling 装依赖。
       - name: Checkout msw sibling
         run: git clone --depth 1 https://x-access-token:${GITHUB_TOKEN}@github.com/zcqiand/lab-management-system-msw.git ../lab-management-system-msw
-      # 测试基建相对路径引 msw sibling 源码（2fa6bda 起），sibling 的 handler 链
-      # import msw/axios/jose——从 sibling 目录向上解析够不到本仓 node_modules，
-      # 必须给 sibling 装依赖（--omit=dev：链上所需全在 dependencies）。
-      # （T8/T9 重写完成、setup.dom.ts 拆 msw 后，msw sibling 两步可删。）
-      - name: Install msw sibling dependencies
-        run: npm ci --omit=dev --ignore-scripts --no-audit --no-fund
-        working-directory: ../lab-management-system-msw
       # nextjs sibling（真化基座起真服务）；其 file: 依赖 @lab/management-system-msw
       # 指向已 clone 的 msw sibling（部分路由仍吃 fixtures 形状层）
       - name: Checkout nextjs sibling

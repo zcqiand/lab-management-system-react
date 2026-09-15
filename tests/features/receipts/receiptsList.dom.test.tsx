@@ -6,14 +6,13 @@ import { fnTest } from "../../fn";
 import {
   installRealChain,
   renderedCommissionCodes,
-  SEED,
+  seedCommissionCodes,
 } from "../../helpers/real-chain";
-import { server } from "../../setup.dom";
 import { apiClient, API_ROUTES } from "@/api/legacy-client";
 import { ReceiptsList } from "@/features/receipts/ReceiptsList";
 
 /**
- * M03.F01 接样管理 smoke —— 真链路（msw passthrough，直连真 nextjs :5201）。
+ * M03.F01 接样管理 smoke —— 真链路（直连真 nextjs :5201，msw 已拆）。
  *
  * 数据源：lab_dev.sample_receipts（globalSetup 每次跑前 upsert shared 种子，
  * receiving 行种子保证 24 条非空）。写路径（POST /api/receipts/flow）用
@@ -22,7 +21,7 @@ import { ReceiptsList } from "@/features/receipts/ReceiptsList";
  */
 
 beforeEach(async () => {
-  installRealChain(server);
+  installRealChain();
   // 清扫上次异常中断残留的 TEST 行（幂等隔离；正常路径 afterEach 已删）
   const stale = await apiClient.get<{ items: Array<{ id: string }> }>(
     API_ROUTES["/receipts"],
@@ -45,10 +44,13 @@ describe("M03.F01 接样管理", () => {
 
   fnTest(
     ["M03.F01.I01"],
-    "接样管理：渲染标题 + 列表行（真库种子数据穿透）",
-    { timeout: 45_000 },
+    "接样管理：渲染标题 + 列表行（真库种子数据穿透，接样中阶段级 subset）",
+    // receipts 是全家族最大表（种子 210 行）+ 本用例两轮 list 加载（默认页
+    // + receiving 过滤页），远程 PG 多 RTT 实测可到 ~50s —— 全文件唯一
+    // 90s 档的用例（CI 服务容器本机 PG 亚秒跑完，不受影响）。
+    { timeout: 90_000 },
     async () => {
-      render(
+      const { container } = render(
         <MemoryRouter>
           <ReceiptsList />
         </MemoryRouter>,
@@ -57,11 +59,28 @@ describe("M03.F01 接样管理", () => {
       await waitFor(() => {
         expect(screen.getAllByRole("row").length).toBeGreaterThan(1);
       });
-      // 种子锚：渲染出的委托书编号必须 ⊆ shared 种子的全量编号集
-      const seedCodes = new Set(SEED.receipts.map((r) => r.commission_code));
-      const rendered = renderedCommissionCodes();
-      expect(rendered.length).toBeGreaterThan(0);
-      for (const code of rendered) expect(seedCodes.has(code)).toBe(true);
+      // 种子锚（阶段级 subset，与 dataEntry/reports/taskAssignment 对齐）：
+      // 切到「接样中」过滤（flowStatus=receiving）后，渲染出的委托书编号
+      // 必须 ⊆ shared 种子的 receiving 编号集。默认「全部状态」页混有全部
+      // 阶段的种子行，subset 断言只在本页主阶段语义下才有意义。
+      const allowed = seedCommissionCodes("receiving");
+      // 切「接样中」过滤：组件语义是 select 只改 state，点「搜索」才 refetch
+      // （onFlowFilterChange={setFlowFilter}，onSearch={() => void load()}）——
+      // 与真用户操作同构；只 change 不点搜索列表永远停在「全部状态」页。
+      fireEvent.change(container.querySelector("select")!, {
+        target: { value: "receiving" },
+      });
+      fireEvent.click(screen.getByRole("button", { name: "搜索" }));
+      // 第二轮 list 加载在首轮渲染之后才触发，慢时 ~20s+ ——这轮 waitFor
+      // 从 ~20s 才开始，全局 30s asyncUtilTimeout 不够，单独给 60s。
+      await waitFor(
+        () => {
+          const rendered = renderedCommissionCodes();
+          expect(rendered.length).toBeGreaterThan(0);
+          for (const code of rendered) expect(allowed.has(code)).toBe(true);
+        },
+        { timeout: 60_000 },
+      );
     },
   );
 
@@ -109,7 +128,9 @@ describe("M03.F01 接样管理", () => {
   fnTest(
     ["M03.F01.I04"],
     "接样管理：提交按钮调真 POST /api/receipts/flow 推进 receiving → task_assignment",
-    { timeout: 45_000 },
+    // 写路径最重用例：建行 + 渲染 + flow 提交 + 列表刷新 + 复查 = 5+ 次
+    // 远程 PG 多 RTT 请求，实测可到 ~52s —— 与 I01 同档放宽到 90s。
+    { timeout: 90_000 },
     async () => {
       // 隔离：新建 TEST 行（不碰种子行），commissionDate 放未来使其稳定排列表首
       const created = await apiClient.post<SampleReceiptDto>(API_ROUTES["/receipts"], {

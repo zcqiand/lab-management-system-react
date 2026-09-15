@@ -1,27 +1,51 @@
 // M06.F07.I02 fnTest — 报告名称↔标准/参数关联（ReportNameLinkDialog toggle）。
 //
 // 报告名称列表行内「关联」→ 弹窗两段列表（标准 role=TESTING / 参数）→
-// toggle POST/DELETE /api/report-names/links/{standard,parameter}。
-
-import { describe, expect, beforeEach } from "vitest";
-import { render, screen, waitFor, cleanup, fireEvent } from "@testing-library/react";
+// toggle POST/DELETE /api/report-names/links/{standard,parameter}
+// （真链路，msw 已拆）。
+//
+// 隔离纪律：nextjs 的 links 端点读写进程内 fixtures 数组（无 DB 落库），
+// toggle POST 会在进程内存里残留关联行——afterEach 按精确 pair DELETE 回收，
+// beforeEach 兜底清场（上次异常中断残留），保证种子锚关联态可复现。
+// 清理走 **query 参数**（真后端 linkDelete 只读 searchParams，见 task-9
+// 报告「组件↔后端 DELETE 契约漂移」）。
+import { describe, expect, beforeEach, afterEach } from "vitest";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { fnTest } from "../../fn";
-import { server } from "../../setup.dom";
-import { installShapeAdapters, resetFixtures } from "../../helpers/seed";
+import { installRealChain, firstUnlinkedParameterFor } from "../../helpers/real-chain";
+import { apiClient, API_ROUTES } from "@/api/legacy-client";
 import { ReportNameLinkDialog } from "@/features/report-names/ReportNameLinkDialog";
 
-beforeEach(() => {
-  cleanup();
-  resetFixtures();
-  installShapeAdapters(server);
+/** 种子锚报告名称：RN-101（水泥），标准/参数两侧在种子中均有关联。 */
+const REPORT_NAME = "RN-101";
+/** toggle 目标：种子层面未关联的首个参数编码（纯种子计算，确定性）。 */
+const TOGGLE_TARGET = firstUnlinkedParameterFor(REPORT_NAME);
+
+function unlinkParamPair(): Promise<unknown> {
+  const qs = new URLSearchParams({
+    reportNameCode: REPORT_NAME,
+    inspectionParameterCode: TOGGLE_TARGET,
+  }).toString();
+  return apiClient.delete(`${API_ROUTES["/inspection-report-name-parameters"]}?${qs}`);
+}
+
+beforeEach(async () => {
+  installRealChain();
+  // 清场：toggle 目标 pair 若因上次异常中断残留在 nextjs 进程内，先解除
+  await unlinkParamPair().catch(() => {});
 });
 
-function renderDialog(reportNameCode: string) {
+afterEach(async () => {
+  // 回收 toggle 产生的关联行（nextjs 进程内存不随测试复位）
+  await unlinkParamPair().catch(() => {});
+});
+
+function renderDialog() {
   return render(
     <ReportNameLinkDialog
       open
       onOpenChange={() => {}}
-      reportNameCode={reportNameCode}
+      reportNameCode={REPORT_NAME}
       reportNameLabel="检测报告"
       onChanged={() => {}}
     />,
@@ -29,28 +53,60 @@ function renderDialog(reportNameCode: string) {
 }
 
 describe("M06.F07.I02 报告名称↔标准/参数关联", () => {
-  fnTest(["M06.F07.I02"], "关联弹窗：两段列表渲染（标准 + 参数，fixtures 真数据穿透）", async () => {
-    renderDialog("RN-0001");
-    await waitFor(() => {
-      // aria-label 形如「关联标准 GB 175-2023」/「关联参数 IP-0001」
-      expect(screen.getAllByRole("button", { name: /^(关联|解除)(标准|参数) / }).length).toBeGreaterThan(1);
-    });
-    expect(screen.getByText("关联维护 — 检测报告")).toBeTruthy();
-    expect(screen.getByText("检测标准（role=检测）")).toBeTruthy();
-    expect(screen.getByText("检测参数")).toBeTruthy();
-  });
+  fnTest(
+    ["M06.F07.I02"],
+    "关联弹窗：两段列表渲染（标准 + 参数，真后端种子数据穿透）",
+    { timeout: 45_000 },
+    async () => {
+      renderDialog();
+      await waitFor(() => {
+        // aria-label 形如「关联标准 GB 175-2023」/「解除参数 IP-0001」
+        expect(
+          screen.getAllByRole("button", { name: /^(关联|解除)(标准|参数) / }).length,
+        ).toBeGreaterThan(1);
+      });
+      // 种子锚：RN-101 两侧关联非空（shared 种子 209 标准 / 261 参数关联行覆盖）
+      expect(screen.getByText("关联维护 — 检测报告")).toBeTruthy();
+      expect(screen.getByText("检测标准（role=检测）")).toBeTruthy();
+      expect(screen.getByText("检测参数")).toBeTruthy();
+      await waitFor(() => {
+        expect(
+          screen.getAllByRole("button", { name: /^解除标准 / }).length,
+        ).toBeGreaterThan(0);
+        expect(
+          screen.getAllByRole("button", { name: /^解除参数 / }).length,
+        ).toBeGreaterThan(0);
+      });
+    },
+  );
 
-  fnTest(["M06.F07.I02"], "toggle 参数：POST 后按钮翻「解除」", async () => {
-    renderDialog("RN-NO-LINK");
-    const paramBtns = await waitFor(() => {
-      // RN-NO-LINK 无既有 links → 全部「关联参数 …」
-      const bs = screen.getAllByRole("button", { name: /^关联参数 / });
-      expect(bs.length).toBeGreaterThan(0);
-      return bs;
-    });
-    fireEvent.click(paramBtns[0]!);
-    await waitFor(() => {
-      expect(screen.getAllByRole("button", { name: /^解除参数 / }).length).toBe(1);
-    });
-  });
+  fnTest(
+    ["M06.F07.I02"],
+    `toggle 参数：未关联参数 ${TOGGLE_TARGET} → POST 后按钮翻「解除」`,
+    // 弹窗首帧要等参数列表（DB 参照路由，587 行，全量并发下实测 >30s）+
+    // 关联集合两路请求——全局 30s asyncUtilTimeout 会先耗尽，本用例
+    // waitFor 单独给 60s、it 给 90s 档（同 receiptsList 慢用例外例）。
+    { timeout: 90_000 },
+    async () => {
+      renderDialog();
+      const btn = await waitFor(
+        () => {
+          const b = screen.getByRole("button", { name: `关联参数 ${TOGGLE_TARGET}` });
+          expect(b).toBeTruthy();
+          return b;
+        },
+        { timeout: 60_000 },
+      );
+      fireEvent.click(btn);
+      // POST 成功后按钮翻转为解除参数（即时保存语义）
+      await waitFor(
+        () => {
+          expect(
+            screen.getAllByRole("button", { name: `解除参数 ${TOGGLE_TARGET}` }),
+          ).toHaveLength(1);
+        },
+        { timeout: 60_000 },
+      );
+    },
+  );
 });

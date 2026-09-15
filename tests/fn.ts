@@ -22,17 +22,38 @@ declare module "vitest" {
  *   - 工程设施的测试不挂任何业务 ID
  *   - 一个测试挂 3 个以上 ID，通常说明它测得太宽
  */
+/** 重载 1：无 options 的常规形态。 */
+export function fnTest(
+  ids: string[],
+  name: string,
+  body: () => void | Promise<void>,
+): ReturnType<typeof base>;
+/** 重载 2：显式放宽 timeout 的形态——第 4 参必须给测试体。 */
+export function fnTest(
+  ids: string[],
+  name: string,
+  options: { timeout?: number },
+  body: () => void | Promise<void>,
+): ReturnType<typeof base>;
 export function fnTest(
   ids: string[],
   name: string,
   bodyOrOptions: (() => void | Promise<void>) | { timeout?: number },
   maybeBody?: () => void | Promise<void>,
-) {
+): ReturnType<typeof base> {
   // 真链路 dom 测试（T8/T9）首跑可能撞 nextjs 惰性编译，需要个别 it 显式放宽
   // timeout（probe14 教训）——可选第 3 参数 options 形式；不传时行为与原签名
   // 完全一致（禁全文件放宽）。
   const timeout = typeof bodyOrOptions === "object" ? bodyOrOptions.timeout : undefined;
-  const body = typeof bodyOrOptions === "function" ? bodyOrOptions : maybeBody!;
+  const body = typeof bodyOrOptions === "function" ? bodyOrOptions : maybeBody;
+  // 类型防御（T8 审查遗留）：`(ids, name, { timeout })` 缺 body 的调用形态在
+  // 旧签名下会被 `maybeBody!` 掩成运行时 undefined 炸；重载已让它过不了
+  // tsc，这里再给运行时一道显式报错（防 JS 调用方/类型断言绕过）。
+  if (typeof body !== "function") {
+    throw new TypeError(
+      `fnTest("${name}")：第 3 参传了 { timeout } 但没有第 4 参测试体——正确形态 fnTest(ids, name, { timeout }, body)`,
+    );
+  }
   return base(
     name,
     (ctx) => {

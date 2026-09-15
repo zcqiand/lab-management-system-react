@@ -2,12 +2,11 @@ import { describe, expect, beforeEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { fnTest } from "../../fn";
 import { installRealChain, SEED } from "../../helpers/real-chain";
-import { server } from "../../setup.dom";
 import { CategoryDictList } from "@/features/dicts/CategoryDictList";
 
 /**
- * M04.F06-F09 型号/规格/等级/牌号维护 4 页 smoke —— 真链路（msw passthrough，
- * 直连真 nextjs :5201）。
+ * M04.F06-F09 型号/规格/等级/牌号维护 4 页 smoke —— 真链路（
+ * 直连真 nextjs :5201，msw 已拆）。
  *
  * GET /api/catalog/{models,specs,grades,brands} 与 /api/inspection/objects 均为
  * DB 参照路由（lab_test 库，Batch1 接真库），返回 {items,page,pageSize,total} +
@@ -24,7 +23,7 @@ const P2_BRAND_NAME = SEED.inspectionBrands
   .sort()[0]!;
 
 beforeEach(() => {
-  installRealChain(server);
+  installRealChain();
 });
 
 describe("M04.F06-F09 码表维护 4 页", () => {
@@ -89,15 +88,21 @@ describe("M04.F06-F09 码表维护 4 页", () => {
   fnTest(
     ["M04.F09.I01"],
     "牌号维护：牌号种子行渲染（真库 OBJ-SP01-P2 种子穿透）",
-    { timeout: 45_000 },
+    // 检测项目树（111 行）+ 牌号列表（35 行）两轮远程 PG 请求，全量并发下
+    // 实测 24-26s，当晚 PG 抖动余量不足 —— 与 receiptsList 同档放宽到 90s。
+    { timeout: 90_000 },
     async () => {
       render(
         <CategoryDictList endpoint="/brands" title="牌号维护" dataFn="M04.F09.I01" />,
       );
       expect(screen.getByText("牌号维护")).toBeTruthy();
-      // 种子锚：选中「钢筋」后其下种子牌号行渲染（牌号全部挂在 P2，水泥下为空）
+      // 种子锚：选中「钢筋」后其下种子牌号行渲染（牌号全部挂在 P2，水泥下为空）。
+      // 文本断言也进 waitFor：行提交与断言之间的响应乱序覆盖窗口（全量并发
+      // 下偶发）由轮询吸收，锚本身不变。
       await selectRebarAndAwaitRows();
-      expect(screen.getAllByText(P2_BRAND_NAME).length).toBeGreaterThan(0);
+      await waitFor(() => {
+        expect(screen.getAllByText(P2_BRAND_NAME).length).toBeGreaterThan(0);
+      });
     },
   );
 

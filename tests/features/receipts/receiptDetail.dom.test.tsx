@@ -3,11 +3,10 @@ import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { fnTest } from "../../fn";
 import { installRealChain, SEED } from "../../helpers/real-chain";
-import { server } from "../../setup.dom";
 import { ReceiptDetail } from "@/features/receipts/ReceiptDetail";
 
 /**
- * M03.F09 接样单详情 smoke —— 真链路（msw passthrough，直连真 nextjs :5201）。
+ * M03.F09 接样单详情 smoke —— 真链路（直连真 nextjs :5201，msw 已拆）。
  *
  * 数据源：lab_dev.sample_receipts（GET /api/receipts/:id）。
  * 锚定 shared 种子首行 RECEIPT-FM-0001（globalSetup 每次跑前 upsert，固定 id +
@@ -18,7 +17,7 @@ const TARGET = SEED.receipts.find((r) => r.id === "RECEIPT-FM-0001")!;
 const TARGET_CODE = TARGET.commission_code;
 
 beforeEach(() => {
-  installRealChain(server);
+  installRealChain();
 });
 
 function renderDetail(id: string) {
