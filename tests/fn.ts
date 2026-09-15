@@ -22,9 +22,23 @@ declare module "vitest" {
  *   - 工程设施的测试不挂任何业务 ID
  *   - 一个测试挂 3 个以上 ID，通常说明它测得太宽
  */
-export function fnTest(ids: string[], name: string, body: () => void | Promise<void>) {
-  return base(name, (ctx) => {
-    ctx.task.meta.fn = ids;
-    return body();
-  });
+export function fnTest(
+  ids: string[],
+  name: string,
+  bodyOrOptions: (() => void | Promise<void>) | { timeout?: number },
+  maybeBody?: () => void | Promise<void>,
+) {
+  // 真链路 dom 测试（T8/T9）首跑可能撞 nextjs 惰性编译，需要个别 it 显式放宽
+  // timeout（probe14 教训）——可选第 3 参数 options 形式；不传时行为与原签名
+  // 完全一致（禁全文件放宽）。
+  const timeout = typeof bodyOrOptions === "object" ? bodyOrOptions.timeout : undefined;
+  const body = typeof bodyOrOptions === "function" ? bodyOrOptions : maybeBody!;
+  return base(
+    name,
+    (ctx) => {
+      ctx.task.meta.fn = ids;
+      return body();
+    },
+    timeout,
+  );
 }
