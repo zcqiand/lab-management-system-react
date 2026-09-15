@@ -33,8 +33,13 @@ export default defineConfig({
         test: {
           name: "jsdom",
           environment: "jsdom",
+          globalSetup: ["./tests/global-setup.ts"],
           include: ["tests/**/*.dom.test.{ts,tsx}"],
           setupFiles: ["tests/setup.dom.ts"],
+          // jsdom url 与真后端 :5201 同源——jsdom 的 XHR 对跨源响应按网络错误
+          // 处理（实测 baseUrl=:5201 + 默认 url 时 dom 测试全挂）；同源化后
+          // msw wildcard 拦截（过渡期）与 T8/T9 真链路请求两不误。
+          environmentOptions: { jsdom: { url: "http://localhost:5201" } },
           testTimeout: 10000,
         },
       },

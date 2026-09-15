@@ -16,6 +16,30 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    # Phase 2 单测真化：jsdom dom 测试经 tests/global-setup.ts 起真 nextjs :5201，
+    # 需要 ephemeral PG（服务容器，凭据随容器销毁，非真实 secret）。
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: lab_p2_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # 真化基座用 DB（migrate + seed + nextjs dev 同一连接串，job 级注入全局生效）
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/lab_p2_test
+      # JWT 铸造（tests/global-setup.ts）：CI 域自洽值（>=32 bytes），只在本 job 的
+      # globalSetup 与 nextjs 进程间保持一致，非部署 secret；改走 GitHub secrets 时
+      # 换 ${{ secrets.LAB_JWT_SECRET }} 即可（缺配置会 fail-fast 而非静默兜底）。
+      LAB_JWT_SECRET: ci-lab-jwt-secret-phase2-0123456789abcdef
+      LAB_JWT_ISSUER: lab-management-system
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -30,13 +54,44 @@ jobs:
       # 测试基建相对路径引 msw sibling 源码（2fa6bda 起），sibling 的 handler 链
       # import msw/axios/jose——从 sibling 目录向上解析够不到本仓 node_modules，
       # 必须给 sibling 装依赖（--omit=dev：链上所需全在 dependencies）。
+      # （T8/T9 重写完成、setup.dom.ts 拆 msw 后，msw sibling 两步可删。）
       - name: Install msw sibling dependencies
         run: npm ci --omit=dev --ignore-scripts --no-audit --no-fund
         working-directory: ../lab-management-system-msw
+      # nextjs sibling（真化基座起真服务）；其 file: 依赖 @lab/management-system-msw
+      # 指向已 clone 的 msw sibling（部分路由仍吃 fixtures 形状层）
+      - name: Checkout nextjs sibling
+        run: git clone --depth 1 https://x-access-token:${GITHUB_TOKEN}@github.com/zcqiand/lab-management-system-nextjs.git ../lab-management-system-nextjs
+      - name: Install nextjs sibling dependencies
+        run: npm ci --no-audit --no-fund
+        working-directory: ../lab-management-system-nextjs
+      - name: gen:shared (nextjs sibling)
+        run: npm run gen:shared
+        working-directory: ../lab-management-system-nextjs
       - name: Install dependencies
         run: npm ci
       - name: gen:shared
         run: npm run gen:shared
+      # 真化基座前置：schema 迁移 + 种子灌库（upsert 幂等，对 lab_p2_test）
+      - name: Migrate DB
+        run: node scripts/migrate-db.mjs
+        working-directory: ../lab-management-system-shared
+      - name: Seed DB
+        run: node scripts/seed-db.mjs
+        working-directory: ../lab-management-system-shared
+      # global-setup 会复用已健康服务：CI 里没有现成的，这里先拉起并探活，
+      # 失败时倒日志便于排障
+      - name: Start nextjs :5201
+        working-directory: ../lab-management-system-nextjs
+        run: |
+          nohup npm run dev > /tmp/nextjs-dev.log 2>&1 &
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:5201/api/health | grep -q '"ok":true'; then
+              echo "nextjs :5201 healthy"; exit 0
+            fi
+            sleep 2
+          done
+          echo "nextjs :5201 探活超时"; tail -50 /tmp/nextjs-dev.log; exit 1
       - name: Build
         run: npm run build
       - name: L1 format
