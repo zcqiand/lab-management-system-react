@@ -1,5 +1,6 @@
 // Trigger shared codegen (emit:openapi) then run local orval to generate
-// src/api/endpoints/{endpoints.ts,endpoints.schemas.ts} from the OpenAPI.yaml.
+// src/api/endpoints/<tag>/<tag>.ts + src/api/endpoints/model/<schema>.ts from
+// the OpenAPI.yaml (spec §2.1 tags-split 形态).
 import { execSync } from "node:child_process";
 import { resolve } from "node:path";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";

@@ -36,13 +36,13 @@ import {
   authLogout,
   authRefresh,
   authSwitchTenant,
-} from "@/api/endpoints/endpoints";
+} from "@/api/endpoints/auth/auth";
 import type {
   ErrorResponse,
   LoginRequest,
   LoginResponse,
   MyTenant,
-} from "@/api/endpoints/endpoints.schemas";
+} from "@/api/endpoints/model";
 import {
   TOKEN_STORAGE_KEYS,
   type AuthState,
@@ -249,7 +249,7 @@ async function doRefresh(): Promise<LoginResponse | ErrorResponse> {
 }
 
 async function doSwitchTenant(
-  req: import("@/api/endpoints/endpoints.schemas").SwitchTenantRequest,
+  req: import("@/api/endpoints/model").SwitchTenantRequest,
 ): Promise<LoginResponse | ErrorResponse> {
   if (store.state.kind !== "awaiting_tenant" && store.state.kind !== "authenticated") {
     return { code: "WRONG_STATE", message: "switchTenant 仅在 awaiting_tenant / authenticated 态可调" };
@@ -329,7 +329,7 @@ export interface AuthContextValue {
   logout: () => Promise<void>;
   refresh: () => Promise<LoginResponse | ErrorResponse>;
   switchTenant: (
-    req: import("@/api/endpoints/endpoints.schemas").SwitchTenantRequest,
+    req: import("@/api/endpoints/model").SwitchTenantRequest,
   ) => Promise<LoginResponse | ErrorResponse>;
   hasPermission: (perm: string) => boolean;
 }

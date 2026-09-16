@@ -1,7 +1,7 @@
 // HTTP client — axios + 1:1 endpoint mapping via local orval codegen.
 //
-// 端点 1:1 映射由 src/api/endpoints/endpoints.ts 提供（orval 从
-// ../lab-management-system-shared/generated/openapi/openapi.yaml 生成）。
+// 端点 1:1 映射由 src/api/endpoints/<tag>/<tag>.ts 提供（orval tags-split 形态，
+// 按 shared 的 @tag 拆多文件，schemas 抽到 src/api/endpoints/model/）。
 // 本文件做两件事：
 //   1) 装 axios 拦截器：每次请求从部署期配置（VITE_API_BASE_URL）拿 baseUrl，
 //      从 getToken callback 拿 token，写进 Authorization 头

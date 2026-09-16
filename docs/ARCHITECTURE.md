@@ -29,7 +29,7 @@
 **本仓 = lab 家族的 react-ts 前端仓**：
 
 - 消费 [`../lab-management-system-shared/generated/openapi/openapi.yaml`](../../lab-management-system-shared/generated/openapi/openapi.yaml)（TypeSpec emit 产物）作为 API 契约唯一真源；
-- 通过 **orval** codegen 出 `src/api/endpoints/endpoints.ts` 具名函数（react-query 形态）；
+- 通过 **orval** codegen 出 `src/api/endpoints/<tag>/<tag>.ts` 具名函数（react-query 形态，按 shared @tag 拆多文件，spec §2.1 tags-split 形态）；
 - 通过 **axios 拦截器** + **`installHttpClient`** bootstrap 注入 baseURL / Authorization；
 - **不实现任何 `/api` route**（[ADR-0001](#6-决策索引)），后端由 lab-msw / lab-nextjs / 未来 springboot / aspnetcore 提供；
 - 26 页 UI（22 业务 + 4 工具页）镜像自 [`../lab-management-system-nextjs/src/app/`](../../lab-management-system-nextjs/src/app/)。
@@ -104,8 +104,8 @@ lab-management-system-react/
 │   ├── api/
 │   │   ├── env.ts → backend-config.ts → http-client.ts → contracts.ts → legacy-client.ts
 │   │   └── endpoints/
-│   │       ├── endpoints.ts           ← orval codegen（gitignored，react-query 形态）
-│   │       └── endpoints.schemas.ts   ← orval codegen（contract 类型 re-export 锚点）
+│   │       ├── <tag>/<tag>.ts          ← orval codegen（gitignored，按 shared @tag 拆 13 个目录）
+│   │       └── model/<schema>.ts       ← orval codegen（schemas 拆 1 文件 1 schema）
 │   ├── state/
 │   │   ├── auth-context.tsx           ← AuthProvider + useAuth + FSM 4 态（idle/anonymous/awaiting_tenant/authenticated）
 │   │   └── require-auth.ts            ← useRequireAuth 守卫
@@ -140,8 +140,8 @@ lab-management-system-react/
 | `lib/env.ts` | env 集中读取（带默认值） | `env.apiBaseUrl` / `env.apiMode` / `env.saasBaseUrl` |
 | `api/backend-config.ts` | env → 后端 URL getter | `getApiBaseUrl()` / `getApiMode()` |
 | `api/http-client.ts` | axios 拦截器 + ApiError 封装 | `installHttpClient(getToken)` / `toApiError(err)` / `apiRequest()` |
-| `api/endpoints/endpoints.ts` | orval codegen 产物（react-query 形态） | `authLogin` / `authGetCurrentUser` / `authGetPermissions` / `authGetMenus` / ... |
-| `api/endpoints/endpoints.schemas.ts` | orval codegen（contract 类型 re-export） | `AuthState` / `BackendId` / `MenuNode` / ... |
+| `api/endpoints/<tag>/<tag>.ts` | orval codegen 产物（react-query 形态，按 @tag 拆） | `authLogin` / `authGetCurrentUser` / `authGetPermissions` / `authGetMenus` / ... |
+| `api/endpoints/model/<schema>.ts` | orval codegen（contract 类型，1 schema 1 文件） | `AuthState` / `BackendId` / `MenuNode` / ... |
 | `api/contracts.ts` | 仓内契约常量 + 4 槽位默认注册表（ADR-0014 信息性保留） | `TOKEN_STORAGE_KEYS` / `BACKEND_REGISTRY_DEFAULT` |
 | `api/legacy-client.ts` | 镜像页数据获取（`apiClient` + `API_ROUTES`，详见 [§5.2](#52-legacy-client--镜像页数据获取-v0x-入口)） | `installLegacyClient(tokenSource, onUnauthorized)` / `apiClient` / `API_ROUTES` |
 
@@ -324,7 +324,7 @@ src/features/
 
 3. [本仓] npm run gen:shared
    → orval 读 ../shared/generated/openapi/openapi.yaml
-   → 生成 src/api/endpoints/endpoints.ts + endpoints.schemas.ts
+   → 生成 src/api/endpoints/<tag>/<tag>.ts + model/<schema>.ts（tags-split 形态）
    ↓ git commit + push（打 tag v<X>-<YYYYMMDD>）
 
 4. [本仓] 业务页 import 新具名函数 + 改 function-tree.md
