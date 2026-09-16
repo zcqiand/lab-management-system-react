@@ -45,7 +45,7 @@ describe("M03.F02 任务分配", () => {
     },
   );
 
-  fnTest(["M03.F02.I02"], "任务分配：安排按钮开弹窗", { timeout: 45_000 }, async () => {
+  fnTest(["M03.F02.I01"], "任务分配：安排按钮开弹窗", { timeout: 45_000 }, async () => {
     render(
       <MemoryRouter>
         <TaskAssignmentList />

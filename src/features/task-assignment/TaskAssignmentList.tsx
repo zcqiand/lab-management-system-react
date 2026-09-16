@@ -4,7 +4,7 @@
 //   - 顶部：标题 + 说明 + 「批量提交到数据录入」按钮
 //   - 筛选条：关键字 + 状态过滤
 //   - 表格：委托书编号 / 工程名称 / 检测人员（assigneeName）/ 计划检测日期 / 流程状态 / 操作
-//   - 「安排」按钮（M03.F02.I02）→ 弹窗录入 assigneeName + plannedTestDate 后 PUT /receipts/:id
+//   - 「安排」按钮（M03.F02.I01）→ 弹窗录入 assigneeName + plannedTestDate 后 PUT /receipts/:id
 //   - 「详情」链接到 /receipts/:id
 //
 // react 仓镜像要点：
@@ -175,7 +175,7 @@ export function TaskAssignmentList() {
                       variant="outline"
                       size="sm"
                       onClick={() => openAssign(r)}
-                      data-fn="M03.F02.I02"
+                      data-fn="M03.F02.I01"
                     >
                       安排
                     </Button>
