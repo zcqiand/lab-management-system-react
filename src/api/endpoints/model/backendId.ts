@@ -6,14 +6,13 @@
  */
 
 /**
- * 已废弃 (ADR-0014);4 个槽位,id 锁定避免拼写漂移
+ * 已废弃 (ADR-0014);3 个槽位,id 锁定避免拼写漂移。msw 成员 2026-09-17 随 msw 仓剔除删除
  */
 export type BackendId = typeof BackendId[keyof typeof BackendId];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const BackendId = {
-  msw: 'msw',
   nextjs: 'nextjs',
   springboot: 'springboot',
   aspnetcore: 'aspnetcore',

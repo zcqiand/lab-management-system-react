@@ -9,7 +9,7 @@
  * 已废弃 (ADR-0014);后端能力矩阵
  */
 export interface BackendFeatures {
-  /** 是否启用 SSO 跳转(msw=false / nextjs=true / springboot/aspnetcore 视实现) */
+  /** 是否启用 SSO 跳转(nextjs=true / springboot/aspnetcore 视实现) */
   sso: boolean;
   /** 是否对接真实数据库(vs mock seed) */
   realDb: boolean;

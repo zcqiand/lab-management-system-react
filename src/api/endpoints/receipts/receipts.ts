@@ -34,6 +34,8 @@ import type {
   AssignTaskRequest,
   CreateSampleReceiptRequest,
   ErrorResponse,
+  FlowActionRequest,
+  FlowActionResult,
   FlowHistoryEntry,
   ReceiptsListReceipts200,
   ReceiptsListReceiptsParams,
@@ -183,6 +185,391 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       > => {
 
       const mutationOptions = getReceiptsCreateReceiptMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const receiptsActFlowApprove = (
+    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<FlowActionResult[]>> => {
+    
+    
+    return axios.default.post(
+      `/api/receipts/approve/act`,
+      flowActionRequest,options
+    );
+  }
+
+
+
+export const getReceiptsActFlowApproveMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowApprove>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowApprove>>, TError,{data: FlowActionRequest}, TContext> => {
+
+const mutationKey = ['receiptsActFlowApprove'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowApprove>>, {data: FlowActionRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  receiptsActFlowApprove(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReceiptsActFlowApproveMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowApprove>>>
+    export type ReceiptsActFlowApproveMutationBody = FlowActionRequest
+    export type ReceiptsActFlowApproveMutationError = AxiosError<ErrorResponse>
+
+    export const useReceiptsActFlowApprove = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowApprove>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof receiptsActFlowApprove>>,
+        TError,
+        {data: FlowActionRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getReceiptsActFlowApproveMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const receiptsActFlowArchived = (
+    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<FlowActionResult[]>> => {
+    
+    
+    return axios.default.post(
+      `/api/receipts/archived/act`,
+      flowActionRequest,options
+    );
+  }
+
+
+
+export const getReceiptsActFlowArchivedMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowArchived>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowArchived>>, TError,{data: FlowActionRequest}, TContext> => {
+
+const mutationKey = ['receiptsActFlowArchived'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowArchived>>, {data: FlowActionRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  receiptsActFlowArchived(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReceiptsActFlowArchivedMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowArchived>>>
+    export type ReceiptsActFlowArchivedMutationBody = FlowActionRequest
+    export type ReceiptsActFlowArchivedMutationError = AxiosError<ErrorResponse>
+
+    export const useReceiptsActFlowArchived = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowArchived>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof receiptsActFlowArchived>>,
+        TError,
+        {data: FlowActionRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getReceiptsActFlowArchivedMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const receiptsActFlowAssigning = (
+    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<FlowActionResult[]>> => {
+    
+    
+    return axios.default.post(
+      `/api/receipts/assigning/act`,
+      flowActionRequest,options
+    );
+  }
+
+
+
+export const getReceiptsActFlowAssigningMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowAssigning>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowAssigning>>, TError,{data: FlowActionRequest}, TContext> => {
+
+const mutationKey = ['receiptsActFlowAssigning'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowAssigning>>, {data: FlowActionRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  receiptsActFlowAssigning(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReceiptsActFlowAssigningMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowAssigning>>>
+    export type ReceiptsActFlowAssigningMutationBody = FlowActionRequest
+    export type ReceiptsActFlowAssigningMutationError = AxiosError<ErrorResponse>
+
+    export const useReceiptsActFlowAssigning = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowAssigning>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof receiptsActFlowAssigning>>,
+        TError,
+        {data: FlowActionRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getReceiptsActFlowAssigningMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const receiptsActFlowDataEntry = (
+    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<FlowActionResult[]>> => {
+    
+    
+    return axios.default.post(
+      `/api/receipts/data-entry/act`,
+      flowActionRequest,options
+    );
+  }
+
+
+
+export const getReceiptsActFlowDataEntryMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowDataEntry>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowDataEntry>>, TError,{data: FlowActionRequest}, TContext> => {
+
+const mutationKey = ['receiptsActFlowDataEntry'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowDataEntry>>, {data: FlowActionRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  receiptsActFlowDataEntry(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReceiptsActFlowDataEntryMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowDataEntry>>>
+    export type ReceiptsActFlowDataEntryMutationBody = FlowActionRequest
+    export type ReceiptsActFlowDataEntryMutationError = AxiosError<ErrorResponse>
+
+    export const useReceiptsActFlowDataEntry = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowDataEntry>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof receiptsActFlowDataEntry>>,
+        TError,
+        {data: FlowActionRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getReceiptsActFlowDataEntryMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const receiptsActFlowIssuance = (
+    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<FlowActionResult[]>> => {
+    
+    
+    return axios.default.post(
+      `/api/receipts/issuance/act`,
+      flowActionRequest,options
+    );
+  }
+
+
+
+export const getReceiptsActFlowIssuanceMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowIssuance>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowIssuance>>, TError,{data: FlowActionRequest}, TContext> => {
+
+const mutationKey = ['receiptsActFlowIssuance'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowIssuance>>, {data: FlowActionRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  receiptsActFlowIssuance(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReceiptsActFlowIssuanceMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowIssuance>>>
+    export type ReceiptsActFlowIssuanceMutationBody = FlowActionRequest
+    export type ReceiptsActFlowIssuanceMutationError = AxiosError<ErrorResponse>
+
+    export const useReceiptsActFlowIssuance = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowIssuance>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof receiptsActFlowIssuance>>,
+        TError,
+        {data: FlowActionRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getReceiptsActFlowIssuanceMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const receiptsActFlowReceiving = (
+    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<FlowActionResult[]>> => {
+    
+    
+    return axios.default.post(
+      `/api/receipts/receiving/act`,
+      flowActionRequest,options
+    );
+  }
+
+
+
+export const getReceiptsActFlowReceivingMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowReceiving>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowReceiving>>, TError,{data: FlowActionRequest}, TContext> => {
+
+const mutationKey = ['receiptsActFlowReceiving'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowReceiving>>, {data: FlowActionRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  receiptsActFlowReceiving(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReceiptsActFlowReceivingMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowReceiving>>>
+    export type ReceiptsActFlowReceivingMutationBody = FlowActionRequest
+    export type ReceiptsActFlowReceivingMutationError = AxiosError<ErrorResponse>
+
+    export const useReceiptsActFlowReceiving = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowReceiving>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof receiptsActFlowReceiving>>,
+        TError,
+        {data: FlowActionRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getReceiptsActFlowReceivingMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const receiptsActFlowReview = (
+    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<FlowActionResult[]>> => {
+    
+    
+    return axios.default.post(
+      `/api/receipts/review/act`,
+      flowActionRequest,options
+    );
+  }
+
+
+
+export const getReceiptsActFlowReviewMutationOptions = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowReview>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowReview>>, TError,{data: FlowActionRequest}, TContext> => {
+
+const mutationKey = ['receiptsActFlowReview'];
+const {mutation: mutationOptions, axios: axiosOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, axios: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowReview>>, {data: FlowActionRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  receiptsActFlowReview(data,axiosOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReceiptsActFlowReviewMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowReview>>>
+    export type ReceiptsActFlowReviewMutationBody = FlowActionRequest
+    export type ReceiptsActFlowReviewMutationError = AxiosError<ErrorResponse>
+
+    export const useReceiptsActFlowReview = <TError = AxiosError<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowReview>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof receiptsActFlowReview>>,
+        TError,
+        {data: FlowActionRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getReceiptsActFlowReviewMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }
