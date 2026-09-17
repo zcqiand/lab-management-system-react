@@ -89,15 +89,9 @@ export const TOKEN_STORAGE_KEYS = {
 import { env } from "@/lib/env";
 
 export const BACKEND_REGISTRY_DEFAULT: BackendRegistry = {
-  active: "msw",
+  // 2026-09-17 msw 仓已删：msw 槽位移除（BackendId 枚举的 msw 成员待 shared tsp 契约清理同步收）
+  active: "nextjs",
   available: [
-    {
-      id: "msw",
-      label: "MSW Mock",
-      baseUrl: env.apiBaseUrl,
-      authHeader: "Authorization",
-      features: { sso: true, realDb: false },
-    },
     {
       id: "nextjs",
       label: "Next.js API",
