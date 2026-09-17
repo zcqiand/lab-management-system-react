@@ -1,9 +1,10 @@
 // ReportNameLinkDialog — M06.F07.I02（报告名称↔标准/参数关联）。
 //
 // 报告名称列表行内「关联」按钮的弹窗：两段列表（标准 / 参数），
-// toggle 关联（POST/DELETE /api/report-names/links/{standard,parameter}）。
+// toggle 关联（orval report-names tag：link/unlink ReportNameStandard /
+// ReportNameParameter，DELETE 走 body）。
 // 标准关联带 role（TESTING 检测 / JUDGMENT 判定）。
-// 已关联集合从 msw GET links（reportNameCode 过滤）拉回。
+// 已关联集合从 GET links（reportNameCode 过滤）拉回。
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -16,9 +17,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
-import type { InspectionStandard } from "@/types/inspection";
-import type { InspectionParameter } from "@/types/inspection";
+import {
+  reportNamesLinkReportNameParameter,
+  reportNamesLinkReportNameStandard,
+  reportNamesListReportNameParameterLinks,
+  reportNamesListReportNameStandardLinks,
+  reportNamesUnlinkReportNameParameter,
+  reportNamesUnlinkReportNameStandard,
+} from "@/api/endpoints/report-names/report-names";
+import {
+  inspectionDictionaryListParameters,
+  inspectionDictionaryListStandards,
+} from "@/api/endpoints/inspection-dictionary/inspection-dictionary";
+import type { InspectionStandard } from "@/api/endpoints/model/inspectionStandard";
+import type { InspectionParameter } from "@/api/endpoints/model/inspectionParameter";
+import type { ReportNameStandardLink } from "@/api/endpoints/model/reportNameStandardLink";
 
 interface Props {
   open: boolean;
@@ -26,17 +39,6 @@ interface Props {
   reportNameCode: string;
   reportNameLabel: string;
   onChanged: () => void;
-}
-
-interface StdLink {
-  reportNameCode: string;
-  inspectionStandardCode: string;
-  role: "TESTING" | "JUDGMENT";
-}
-
-interface ParamLink {
-  reportNameCode: string;
-  inspectionParameterCode: string;
 }
 
 export function ReportNameLinkDialog({
@@ -48,7 +50,7 @@ export function ReportNameLinkDialog({
 }: Props) {
   const [standards, setStandards] = useState<InspectionStandard[]>([]);
   const [parameters, setParameters] = useState<InspectionParameter[]>([]);
-  const [stdLinks, setStdLinks] = useState<StdLink[]>([]);
+  const [stdLinks, setStdLinks] = useState<ReportNameStandardLink[]>([]);
   const [paramLinks, setParamLinks] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
@@ -57,30 +59,19 @@ export function ReportNameLinkDialog({
     setLoading(true);
     try {
       const [stdResp, paramResp, stdLinkResp, paramLinkResp] = await Promise.all([
-        apiClient.get<{ items: InspectionStandard[] }>(API_ROUTES["/inspection-standards"], {
-          params: { page: 1, pageSize: 500 },
-        }),
-        apiClient.get<{ items: InspectionParameter[] }>(API_ROUTES["/inspection-parameters"], {
-          params: { page: 1, pageSize: 500 },
-        }),
-        apiClient.get<StdLink[]>(API_ROUTES["/inspection-report-name-standards"], {
-          params: { reportNameCode },
-        }),
-        apiClient.get<ParamLink[]>(API_ROUTES["/inspection-report-name-parameters"], {
-          params: { reportNameCode },
-        }),
+        inspectionDictionaryListStandards({ page: 1, pageSize: 500 }),
+        inspectionDictionaryListParameters({ page: 1, pageSize: 500 }),
+        reportNamesListReportNameStandardLinks({ reportNameCode }),
+        reportNamesListReportNameParameterLinks({ reportNameCode }),
       ]);
-      setStandards(stdResp.data.items ?? []);
-      setParameters(paramResp.data.items ?? []);
-      // shared 契约已升 Page<T>（items/total/page/pageSize）；裸数组分支保留兼容旧 msw
-      const sl = Array.isArray(stdLinkResp.data)
-        ? stdLinkResp.data
-        : ((stdLinkResp.data as unknown as { items: StdLink[] })?.items ?? []);
-      setStdLinks(sl);
-      const pl = Array.isArray(paramLinkResp.data)
-        ? paramLinkResp.data
-        : ((paramLinkResp.data as unknown as { items: ParamLink[] })?.items ?? []);
-      setParamLinks(new Set(pl.map((l) => l.inspectionParameterCode)));
+      setStandards(stdResp.data?.items ?? []);
+      setParameters(paramResp.data?.items ?? []);
+      setStdLinks(stdLinkResp.data?.items ?? []);
+      setParamLinks(
+        new Set(
+          (paramLinkResp.data?.items ?? []).map((l) => l.inspectionParameterCode),
+        ),
+      );
     } catch (err) {
       toast.error(`加载关联失败：${(err as Error).message}`);
     } finally {
@@ -101,8 +92,10 @@ export function ReportNameLinkDialog({
     setBusy(stdCode);
     try {
       if (existing) {
-        await apiClient.delete(API_ROUTES["/inspection-report-name-standards"], {
-          data: { reportNameCode, inspectionStandardCode: stdCode, role: "TESTING" },
+        await reportNamesUnlinkReportNameStandard({
+          reportNameCode,
+          inspectionStandardCode: stdCode,
+          role: "TESTING",
         });
         setStdLinks((prev) =>
           prev.filter(
@@ -111,7 +104,7 @@ export function ReportNameLinkDialog({
         );
         toast.success(`已解除标准 ${stdCode}`);
       } else {
-        await apiClient.post(API_ROUTES["/inspection-report-name-standards"], {
+        await reportNamesLinkReportNameStandard({
           reportNameCode,
           inspectionStandardCode: stdCode,
           role: "TESTING",
@@ -134,8 +127,9 @@ export function ReportNameLinkDialog({
     setBusy(paramCode);
     try {
       if (paramLinks.has(paramCode)) {
-        await apiClient.delete(API_ROUTES["/inspection-report-name-parameters"], {
-          data: { reportNameCode, inspectionParameterCode: paramCode },
+        await reportNamesUnlinkReportNameParameter({
+          reportNameCode,
+          inspectionParameterCode: paramCode,
         });
         setParamLinks((prev) => {
           const next = new Set(prev);
@@ -144,7 +138,7 @@ export function ReportNameLinkDialog({
         });
         toast.success(`已解除参数 ${paramCode}`);
       } else {
-        await apiClient.post(API_ROUTES["/inspection-report-name-parameters"], {
+        await reportNamesLinkReportNameParameter({
           reportNameCode,
           inspectionParameterCode: paramCode,
         });

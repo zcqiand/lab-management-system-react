@@ -15,9 +15,9 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
-import type { SampleReceipt } from "@/types/process/sample-receipt";
-import { FLOW_STAGE_LABELS } from "@/types/process/flow";
+import { receiptsGetReceipt } from "@/api/endpoints/receipts/receipts";
+import type { SampleReceipt } from "@/api/endpoints/model/sampleReceipt";
+import { FLOW_STAGE_LABELS } from "@/lib/flow-labels";
 import { ReportPreviewModal } from "@/features/data-entry/ReportPreviewModal";
 
 export function ReceiptDetail() {
@@ -34,9 +34,7 @@ export function ReceiptDetail() {
     setError(null);
     (async () => {
       try {
-        const res = await apiClient.get<SampleReceipt>(
-          `${API_ROUTES["/receipts"]}/${id}`,
-        );
+        const res = await receiptsGetReceipt(id);
         setReceipt(res.data ?? null);
       } catch (e) {
         setError(e instanceof Error ? e.message : "加载失败");

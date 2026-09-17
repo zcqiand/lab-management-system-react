@@ -3,10 +3,13 @@
 // 镜像 nextjs InspectionCapabilityPage.tsx 的多资源模式（react 仓无
 // react-router useParams，用 prop `resource` 区分；page wrappers 负责传值）。
 //
-// 数据说明：
-//   - 真后端 dict 路由自带 wrapDict 语义（id=code、keyword 过滤、
-//     inspectionObjectCode / inspectionSpecialtyCode junction 反查），
-//     组件直读 res.data.items/total 即可。
+// 数据说明（orval inspection-dictionary tag，code 主键）：
+//   - specialties/objects 列表支持 keyword（objects 另支持 inspectionSpecialtyCode）；
+//   - parameters/standards 列表契约仅支持 keyword（+sourceType/status）——
+//     专项/项目/标准三维筛选在客户端用 link 端点组合（object-parameter /
+//     object-standard / specialty→objects→links）；
+//   - 契约实体不带 junction 聚合列（parameterNames/standardCodes/objectNames），
+//     旧展示列已移除（关联数据走 *LinkDialog / link 端点）。
 //   - 计算方法 / 技术要求是复合主键独立页，不在本组件范围。
 import { useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
@@ -48,15 +51,34 @@ import {
 } from "@/components/ui/select";
 import { EmptyState } from "@/components/app/empty-state";
 import { ConfirmModal } from "@/components/ConfirmModal";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
+import {
+  inspectionDictionaryCreateObject,
+  inspectionDictionaryCreateParameter,
+  inspectionDictionaryCreateSpecialty,
+  inspectionDictionaryCreateStandard,
+  inspectionDictionaryDeleteObject,
+  inspectionDictionaryDeleteParameter,
+  inspectionDictionaryDeleteSpecialty,
+  inspectionDictionaryDeleteStandard,
+  inspectionDictionaryListObjectParameterLinks,
+  inspectionDictionaryListObjectStandardLinks,
+  inspectionDictionaryListObjects,
+  inspectionDictionaryListParameters,
+  inspectionDictionaryListSpecialties,
+  inspectionDictionaryListStandardParameterLinks,
+  inspectionDictionaryListStandards,
+  inspectionDictionaryUpdateObject,
+  inspectionDictionaryUpdateParameter,
+  inspectionDictionaryUpdateSpecialty,
+  inspectionDictionaryUpdateStandard,
+} from "@/api/endpoints/inspection-dictionary/inspection-dictionary";
+import type { InspectionSpecialty } from "@/api/endpoints/model/inspectionSpecialty";
+import type { InspectionObject } from "@/api/endpoints/model/inspectionObject";
+import type { InspectionParameter } from "@/api/endpoints/model/inspectionParameter";
+import type { InspectionStandard } from "@/api/endpoints/model/inspectionStandard";
+import type { InspectionParameterSourceType } from "@/api/endpoints/model/inspectionParameterSourceType";
+import type { InspectionStandardStatus } from "@/api/endpoints/model/inspectionStandardStatus";
 import { ParameterStandardLinkDialog } from "@/features/inspection-capability/ParameterStandardLinkDialog";
-import { unwrapListResponse } from "@/lib/responses";
-import type {
-  InspectionSpecialty,
-  InspectionObject,
-  InspectionParameter,
-  InspectionStandard,
-} from "@/types/inspection";
 
 export type CapabilityResource = "specialties" | "objects" | "parameters" | "standards";
 
@@ -64,25 +86,19 @@ interface Props {
   resource: CapabilityResource;
 }
 
-interface ListItemBase {
-  id: string;
+/** 列表行视图：4 个字典实体的公共展示面（code 主键，无 id 列）。 */
+interface ListItem {
   code: string;
   name: string;
+  officialNo?: string;
   sortOrder?: number;
   enabled?: boolean;
   isOfficial?: boolean;
-}
-
-type ListItem = ListItemBase & {
-  officialNo?: string;
   sourceType?: string;
   status?: string;
   unit?: string;
   version?: string;
-  parameterNames?: string;
-  standardCodes?: string;
-  objectNames?: string;
-};
+}
 
 const TITLES: Record<CapabilityResource, string> = {
   specialties: "检测专项维护",
@@ -103,13 +119,6 @@ const CREATE_LABELS: Record<CapabilityResource, string> = {
   objects: "新建检测项目",
   parameters: "新建检测参数",
   standards: "新建检测标准",
-};
-
-const ROUTES: Record<CapabilityResource, string> = {
-  specialties: API_ROUTES["/inspection-specialties"],
-  objects: API_ROUTES["/inspection-objects"],
-  parameters: API_ROUTES["/inspection-parameters"],
-  standards: API_ROUTES["/inspection-standards"],
 };
 
 const FN_ID: Record<CapabilityResource, string> = {
@@ -145,6 +154,13 @@ function isOfficialRow(r: CapabilityResource, item: ListItem): boolean {
   if (r === "specialties" || r === "objects") return item.isOfficial === true;
   if (r === "parameters") return item.sourceType === "official";
   return false;
+}
+
+/** 实体 → 行视图归一（契约实体字段比视图宽，裁掉 createdAt/updatedAt 等）。 */
+function toRow(
+  e: InspectionSpecialty | InspectionObject | InspectionParameter | InspectionStandard,
+): ListItem {
+  return { ...e };
 }
 
 // @entry M06.F01.I01
@@ -219,33 +235,121 @@ export function InspectionCapabilityList({ resource }: Props) {
   const load = () => {
     setLoading(true);
     setError(null);
-    const params: Record<string, string> = { page: "1", pageSize: String(PAGE_SIZE) };
-    if (keyword.trim()) params.keyword = keyword.trim();
-    if (resource === "objects" && specialtyFilter) {
-      params.inspectionSpecialtyCode = specialtyFilter;
-    }
-    if (resource === "standards") {
-      if (specialtyFilter) params.inspectionSpecialtyCode = specialtyFilter;
-      if (objectFilter) params.inspectionObjectCode = objectFilter;
-    }
-    if (resource === "parameters") {
-      if (specialtyFilter) params.inspectionSpecialtyCode = specialtyFilter;
-      if (objectFilter) params.inspectionObjectCode = objectFilter;
-      if (standardFilter) params.inspectionStandardCode = standardFilter;
-    }
-    apiClient
-      .get<unknown>(ROUTES[resource], { params })
-      .then((res) => {
-        const { items: listItems, total: listTotal } = unwrapListResponse<ListItem>(res);
-        setItems(listItems);
-        setTotal(listTotal);
-      })
-      .catch((err: unknown) => {
+    const kw = keyword.trim() || undefined;
+    (async () => {
+      try {
+        if (resource === "specialties") {
+          const res = await inspectionDictionaryListSpecialties({
+            page: 1,
+            pageSize: PAGE_SIZE,
+            keyword: kw,
+          });
+          setItems((res.data?.items ?? []).map(toRow));
+          setTotal(res.data?.total ?? 0);
+          return;
+        }
+        if (resource === "objects") {
+          const res = await inspectionDictionaryListObjects({
+            page: 1,
+            pageSize: PAGE_SIZE,
+            keyword: kw,
+            inspectionSpecialtyCode: specialtyFilter || undefined,
+          });
+          setItems((res.data?.items ?? []).map(toRow));
+          setTotal(res.data?.total ?? 0);
+          return;
+        }
+        if (resource === "parameters") {
+          // 契约 list 仅支持 keyword/sourceType——专项/项目/标准三维筛选用
+          // link 端点在客户端组合（交集）。
+          const res = await inspectionDictionaryListParameters({
+            page: 1,
+            pageSize: 500,
+            keyword: kw,
+          });
+          let rows = (res.data?.items ?? []).map(toRow);
+          if (specialtyFilter) {
+            const objRes = await inspectionDictionaryListObjects({
+              page: 1,
+              pageSize: 500,
+              inspectionSpecialtyCode: specialtyFilter,
+            });
+            const objectCodes = new Set((objRes.data?.items ?? []).map((o) => o.code));
+            const linkRes = await inspectionDictionaryListObjectParameterLinks({});
+            const paramCodes = new Set(
+              (linkRes.data?.items ?? [])
+                .filter((l) => objectCodes.has(l.inspectionObjectCode))
+                .map((l) => l.inspectionParameterCode),
+            );
+            rows = rows.filter((r) => paramCodes.has(r.code));
+          }
+          if (objectFilter) {
+            const linkRes = await inspectionDictionaryListObjectParameterLinks({
+              inspectionObjectCode: objectFilter,
+            });
+            const paramCodes = new Set(
+              (linkRes.data?.items ?? []).map((l) => l.inspectionParameterCode),
+            );
+            rows = rows.filter((r) => paramCodes.has(r.code));
+          }
+          if (standardFilter) {
+            const linkRes = await inspectionDictionaryListStandardParameterLinks({
+              inspectionStandardCode: standardFilter,
+            });
+            const paramCodes = new Set(
+              (linkRes.data?.items ?? []).map((l) => l.inspectionParameterCode),
+            );
+            rows = rows.filter((r) => paramCodes.has(r.code));
+          }
+          setItems(rows);
+          setTotal(rows.length);
+          return;
+        }
+        // standards：契约 list 仅支持 keyword/status——专项/项目筛选用
+        // specialty→objects→object-standard links 客户端组合。
+        const res = await inspectionDictionaryListStandards({
+          page: 1,
+          pageSize: PAGE_SIZE,
+          keyword: kw,
+        });
+        let rows = (res.data?.items ?? []).map(toRow);
+        let stdCodes: Set<string> | null = null;
+        if (specialtyFilter) {
+          const objRes = await inspectionDictionaryListObjects({
+            page: 1,
+            pageSize: 500,
+            inspectionSpecialtyCode: specialtyFilter,
+          });
+          const objectCodes = new Set((objRes.data?.items ?? []).map((o) => o.code));
+          const linkRes = await inspectionDictionaryListObjectStandardLinks({});
+          stdCodes = new Set(
+            (linkRes.data?.items ?? [])
+              .filter((l) => objectCodes.has(l.inspectionObjectCode))
+              .map((l) => l.inspectionStandardCode),
+          );
+        }
+        if (objectFilter) {
+          const linkRes = await inspectionDictionaryListObjectStandardLinks({
+            inspectionObjectCode: objectFilter,
+          });
+          const byObject = new Set(
+            (linkRes.data?.items ?? []).map((l) => l.inspectionStandardCode),
+          );
+          stdCodes = stdCodes
+            ? new Set([...stdCodes].filter((c) => byObject.has(c)))
+            : byObject;
+        }
+        if (stdCodes) rows = rows.filter((r) => stdCodes.has(r.code));
+        setItems(rows);
+        setTotal(rows.length);
+      } catch (err: unknown) {
         setError(err instanceof Error ? err.message : "加载失败");
         setItems([]);
         setTotal(0);
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    })();
   };
 
   useEffect(load, [resource, keyword, specialtyFilter, objectFilter, standardFilter]);
@@ -256,13 +360,8 @@ export function InspectionCapabilityList({ resource }: Props) {
       setSpecialtyOptions([]);
       return;
     }
-    apiClient
-      .get<unknown>(ROUTES.specialties, {
-        params: { page: "1", pageSize: "100" },
-      })
-      .then((res) =>
-        setSpecialtyOptions(unwrapListResponse<InspectionSpecialty>(res).items),
-      )
+    inspectionDictionaryListSpecialties({ page: 1, pageSize: 100 })
+      .then((res) => setSpecialtyOptions(res.data?.items ?? []))
       .catch(() => undefined);
   }, [resource]);
 
@@ -272,27 +371,23 @@ export function InspectionCapabilityList({ resource }: Props) {
       setObjectOptions([]);
       return;
     }
-    const params: Record<string, string> = { page: "1", pageSize: "200" };
-    if (specialtyFilter) params.inspectionSpecialtyCode = specialtyFilter;
-    apiClient
-      .get<unknown>(ROUTES.objects, { params })
-      .then((res) => setObjectOptions(unwrapListResponse<InspectionObject>(res).items))
+    inspectionDictionaryListObjects({
+      page: 1,
+      pageSize: 200,
+      inspectionSpecialtyCode: specialtyFilter || undefined,
+    })
+      .then((res) => setObjectOptions(res.data?.items ?? []))
       .catch(() => undefined);
   }, [resource, specialtyFilter]);
 
-  // 标准下拉选项（parameters 视图，按项目过滤）
+  // 标准下拉选项（parameters 视图；契约无按项目过滤参数，全量拉取）
   useEffect(() => {
     if (resource !== "parameters") {
       setStandardOptions([]);
       return;
     }
-    const params: Record<string, string> = { page: "1", pageSize: "200" };
-    if (objectFilter) params.inspectionObjectCode = objectFilter;
-    apiClient
-      .get<unknown>(ROUTES.standards, { params })
-      .then((res) =>
-        setStandardOptions(unwrapListResponse<InspectionStandard>(res).items),
-      )
+    inspectionDictionaryListStandards({ page: 1, pageSize: 200 })
+      .then((res) => setStandardOptions(res.data?.items ?? []))
       .catch(() => undefined);
   }, [resource, objectFilter]);
 
@@ -302,13 +397,8 @@ export function InspectionCapabilityList({ resource }: Props) {
       setParameterOptions([]);
       return;
     }
-    apiClient
-      .get<unknown>(ROUTES.parameters, {
-        params: { page: "1", pageSize: "200" },
-      })
-      .then((res) =>
-        setParameterOptions(unwrapListResponse<InspectionParameter>(res).items),
-      )
+    inspectionDictionaryListParameters({ page: 1, pageSize: 200 })
+      .then((res) => setParameterOptions(res.data?.items ?? []))
       .catch(() => undefined);
   }, [resource]);
 
@@ -334,32 +424,85 @@ export function InspectionCapabilityList({ resource }: Props) {
 
   const save = async () => {
     setSaveError(null);
-    const payload: Record<string, unknown> = { code: form.code, name: form.name };
-    if (resource === "specialties") {
-      payload.officialNo = form.officialNo || undefined;
-      payload.isOfficial = form.isOfficial === true;
-      payload.enabled = form.enabled === true;
-    } else if (resource === "objects") {
-      payload.inspectionSpecialtyCode = form.inspectionSpecialtyCode || undefined;
-      payload.sourceProjectNo = form.sourceProjectNo || undefined;
-      payload.sourceProjectName = form.sourceProjectName || undefined;
-      payload.isOptionalForQualification = form.isOptionalForQualification === true;
-      payload.isOfficial = form.isOfficial === true;
-      payload.enabled = form.enabled === true;
-    } else if (resource === "parameters") {
-      payload.unit = form.unit || undefined;
-      payload.sourceType = form.sourceType || "custom";
-    } else {
-      payload.version = form.version || undefined;
-      payload.status = form.status || "active";
-      payload.sourceDocumentId = form.sourceDocumentId || undefined;
-    }
-    payload.sortOrder = Number(form.sortOrder) || 999;
     try {
       if (editing) {
-        await apiClient.put(`${ROUTES[resource]}/${editing.id}`, payload);
+        if (resource === "specialties") {
+          await inspectionDictionaryUpdateSpecialty(editing.code, {
+            officialNo: (form.officialNo as string) || undefined,
+            name: (form.name as string) || undefined,
+            isOfficial: form.isOfficial === true,
+            enabled: form.enabled === true,
+            sortOrder: Number(form.sortOrder) || 999,
+          });
+        } else if (resource === "objects") {
+          await inspectionDictionaryUpdateObject(editing.code, {
+            inspectionSpecialtyCode: (form.inspectionSpecialtyCode as string) || undefined,
+            sourceProjectNo: (form.sourceProjectNo as string) || undefined,
+            sourceProjectName: (form.sourceProjectName as string) || undefined,
+            name: (form.name as string) || undefined,
+            isOptionalForQualification: form.isOptionalForQualification === true,
+            isOfficial: form.isOfficial === true,
+            enabled: form.enabled === true,
+            sortOrder: Number(form.sortOrder) || 999,
+          });
+        } else if (resource === "parameters") {
+          await inspectionDictionaryUpdateParameter(editing.code, {
+            name: (form.name as string) || undefined,
+            unit: (form.unit as string) || undefined,
+            sourceType: ((form.sourceType as string) || "custom") as InspectionParameterSourceType,
+            sortOrder: Number(form.sortOrder) || 999,
+          });
+        } else {
+          await inspectionDictionaryUpdateStandard(editing.code, {
+            name: (form.name as string) || undefined,
+            version: (form.version as string) || undefined,
+            status: ((form.status as string) || "active") as InspectionStandardStatus,
+            sourceDocumentId: (form.sourceDocumentId as string) || undefined,
+            sortOrder: Number(form.sortOrder) || 999,
+          });
+        }
       } else {
-        await apiClient.post(ROUTES[resource], payload);
+        if (resource === "specialties") {
+          await inspectionDictionaryCreateSpecialty({
+            code: (form.code as string) ?? "",
+            officialNo: (form.officialNo as string) || "",
+            name: (form.name as string) ?? "",
+            isOfficial: form.isOfficial === true,
+            enabled: form.enabled === true,
+            sortOrder: Number(form.sortOrder) || 999,
+          });
+        } else if (resource === "objects") {
+          await inspectionDictionaryCreateObject({
+            code: (form.code as string) ?? "",
+            inspectionSpecialtyCode: (form.inspectionSpecialtyCode as string) || "",
+            sourceProjectNo: (form.sourceProjectNo as string) || "",
+            sourceProjectName: (form.sourceProjectName as string) || "",
+            name: (form.name as string) ?? "",
+            isOptionalForQualification: form.isOptionalForQualification === true,
+            isOfficial: form.isOfficial === true,
+            enabled: form.enabled === true,
+            sortOrder: Number(form.sortOrder) || 999,
+          });
+        } else if (resource === "parameters") {
+          await inspectionDictionaryCreateParameter({
+            code: (form.code as string) ?? "",
+            name: (form.name as string) ?? "",
+            rawName: (form.name as string) ?? "",
+            canonicalName: (form.name as string) ?? "",
+            unit: (form.unit as string) || undefined,
+            sourceType: ((form.sourceType as string) || "custom") as InspectionParameterSourceType,
+            sortOrder: Number(form.sortOrder) || 999,
+          });
+        } else {
+          await inspectionDictionaryCreateStandard({
+            code: (form.code as string) ?? "",
+            name: (form.name as string) ?? "",
+            version: (form.version as string) || undefined,
+            status: ((form.status as string) || "active") as InspectionStandardStatus,
+            sourceDocumentId: (form.sourceDocumentId as string) || undefined,
+            sortOrder: Number(form.sortOrder) || 999,
+          });
+        }
       }
       toast.success(editing ? "已更新" : "已创建");
       setCreateOpen(false);
@@ -378,7 +521,15 @@ export function InspectionCapabilityList({ resource }: Props) {
     setDeletingBusy(true);
     setDeleteError(null);
     try {
-      await apiClient.delete(`${ROUTES[resource]}/${deleting.id}`);
+      if (resource === "specialties") {
+        await inspectionDictionaryDeleteSpecialty(deleting.code);
+      } else if (resource === "objects") {
+        await inspectionDictionaryDeleteObject(deleting.code);
+      } else if (resource === "parameters") {
+        await inspectionDictionaryDeleteParameter(deleting.code);
+      } else {
+        await inspectionDictionaryDeleteStandard(deleting.code);
+      }
       toast.success("已删除");
       setDeleting(null);
       load();
@@ -421,16 +572,6 @@ export function InspectionCapabilityList({ resource }: Props) {
       );
     } else if (resource === "objects") {
       cells.push(
-        <span key="param" className="text-xs text-muted-foreground">
-          {item.parameterNames ?? "-"}
-        </span>,
-      );
-      cells.push(
-        <span key="std" className="text-xs text-muted-foreground">
-          {item.standardCodes ?? "-"}
-        </span>,
-      );
-      cells.push(
         item.enabled ? (
           <Badge key="en">启用</Badge>
         ) : (
@@ -442,14 +583,9 @@ export function InspectionCapabilityList({ resource }: Props) {
     } else if (resource === "parameters") {
       cells.push(<span key="unit">{item.unit ?? "-"}</span>);
       cells.push(
-        <span key="obj" className="text-xs text-muted-foreground">
-          {item.objectNames ?? "-"}
-        </span>,
-      );
-      cells.push(
-        <span key="std" className="text-xs text-muted-foreground">
-          {item.standardCodes ?? "-"}
-        </span>,
+        <Badge key="src" variant={item.sourceType === "official" ? "default" : "outline"}>
+          {item.sourceType === "official" ? "官方" : "自定义"}
+        </Badge>,
       );
     } else {
       cells.push(<span key="ver">{item.version ?? "-"}</span>);
@@ -458,22 +594,15 @@ export function InspectionCapabilityList({ resource }: Props) {
           {STANDARD_STATUS_CN[item.status ?? ""] ?? item.status ?? "-"}
         </Badge>,
       );
-      cells.push(
-        <span key="param" className="text-xs text-muted-foreground">
-          {item.parameterNames ?? "-"}
-        </span>,
-      );
     }
     return cells;
   };
 
   const columnHeaders: string[] = (() => {
-    if (resource === "specialties")
-      return ["编码", "名称", "官方序号", "官方/自定义", "状态"];
-    if (resource === "objects") return ["编码", "名称", "检测参数", "检测标准", "状态"];
-    if (resource === "parameters")
-      return ["编码", "名称", "单位", "检测项目", "检测标准"];
-    return ["编码", "名称", "版本", "状态", "检测参数"];
+    if (resource === "specialties") return ["编码", "名称", "官方序号", "官方/自定义", "状态"];
+    if (resource === "objects") return ["编码", "名称", "状态"];
+    if (resource === "parameters") return ["编码", "名称", "单位", "来源"];
+    return ["编码", "名称", "版本", "状态"];
   })();
 
   return (
@@ -581,7 +710,7 @@ export function InspectionCapabilityList({ resource }: Props) {
               </TableHeader>
               <TableBody>
                 {items.map((item) => (
-                  <TableRow key={item.id}>
+                  <TableRow key={item.code}>
                     {renderColumns(item).map((c, i) => (
                       <TableCell key={i}>{c}</TableCell>
                     ))}

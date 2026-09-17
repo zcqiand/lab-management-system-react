@@ -4,15 +4,16 @@
 // 同源直连真 nextjs :5201（jsdom url 与 baseUrl 同源，T7 实测结论）。
 // 本文件提供三件事：
 //   1. `installRealChain()`：token 双通道（globalSetup provide("TEST_TOKEN") /
-//      process.env，任一在即可）：注入 legacy-client 拦截器 + auth-context 的
-//      localStorage 契约 key（main.tsx bootstrap 在测试里不跑，需自行接桥）。
+//      process.env，任一在即可）：注入 http-client 拦截器（orval 全局 axios）+
+//      auth-context 的 localStorage 契约 key（main.tsx bootstrap 在测试里不跑，
+//      需自行接桥）。
 //   2. 真链路延迟预算：远程 PG / nextjs 惰性编译的 it 级 timeout 由各测试文件
 //      显式传 { timeout } 放宽（禁全文件放宽）；RTL waitFor 统一 30s。
 //   3. `SEED` 锚：shared 种子 JSON（DB 快照权威源，globalSetup 每次跑前 upsert
 //      灌库）。断言一律锚定种子行的固定 id/字段，不许断言易变业务值。
 import { inject } from "vitest";
 import { configure } from "@testing-library/react";
-import { installLegacyClient } from "@/api/legacy-client";
+import { installHttpClient } from "@/api/http-client";
 import { TOKEN_STORAGE_KEYS } from "@/api/contracts";
 
 // globalSetup 双通道之一：provide("TEST_TOKEN", token) 的消费类型声明
@@ -46,7 +47,7 @@ export function installRealChain(): void {
   // PG 在本机，全部测试亚秒跑完，timeout 形同虚设）。
   configure({ asyncUtilTimeout: 30_000 });
   const token = testToken();
-  installLegacyClient(() => token);
+  installHttpClient(() => token);
   localStorage.setItem(TOKEN_STORAGE_KEYS.accessToken, token);
 }
 

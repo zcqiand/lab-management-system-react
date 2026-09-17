@@ -7,7 +7,7 @@
 //   - 「保存检测记录」按钮（M03.F03.I02）→ POST /api/test-records
 //
 // react 仓镜像要点：
-//   - apiClient + API_ROUTES（/receipts?flowStatus=data_entry + /test-records POST/PUT + /samples GET）
+//   - orval 具名函数（receipts/samples/inspection-dictionary/test-records tag）
 //   - 弹窗 Dialog 自实现（同 Batch 2A/2B-1 模式）
 //   - data-fn 静态字面量字符串
 //   - 升级 ReceiptDetail 用的 ReportPreviewModal 弹窗（Batch 2B-2）
@@ -27,12 +27,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
-import type { SampleReceipt } from "@/types/process/sample-receipt";
-import { FLOW_STAGE_LABELS } from "@/types/process/flow";
+import { receiptsListReceipts } from "@/api/endpoints/receipts/receipts";
+import { samplesListSamples } from "@/api/endpoints/samples/samples";
+import { inspectionDictionaryListParameters } from "@/api/endpoints/inspection-dictionary/inspection-dictionary";
+import {
+  testRecordsCreateTestRecord,
+  testRecordsListTestRecords,
+  testRecordsUpdateTestRecord,
+} from "@/api/endpoints/test-records/test-records";
+import type { SampleReceipt } from "@/api/endpoints/model/sampleReceipt";
+import { FLOW_STAGE_LABELS } from "@/lib/flow-labels";
 import { resolveParamInterfaceModel } from "@/features/data-entry/models/registry";
-import type { InspectionParameter } from "@/types/inspection/inspection-parameter";
-import type { TestRecord } from "@/types/process/test-record";
+import type { InspectionParameter } from "@/api/endpoints/model/inspectionParameter";
+import type { TestRecord } from "@/api/endpoints/model/testRecord";
 
 export function DataEntryPage() {
   const [items, setItems] = useState<SampleReceipt[]>([]);
@@ -46,16 +53,12 @@ export function DataEntryPage() {
   const load = async () => {
     setLoading(true);
     try {
-      const params: Record<string, string> = {
-        page: "1",
-        pageSize: "50",
+      const res = await receiptsListReceipts({
+        page: 1,
+        pageSize: 50,
         flowStatus: "data_entry",
-      };
-      if (keyword) params["keyword"] = keyword;
-      const res = await apiClient.get<{ items: SampleReceipt[]; total: number }>(
-        API_ROUTES["/receipts"],
-        { params },
-      );
+        keyword: keyword || undefined,
+      });
       setItems(Array.isArray(res.data?.items) ? res.data.items : []);
       setTotal(typeof res.data?.total === "number" ? res.data.total : 0);
     } finally {
@@ -196,29 +199,24 @@ function EntryModal({
     if (!open || !receipt) return;
     (async () => {
       try {
-        const [sRes, pRes, tRes] = await Promise.all([
-          apiClient
-            .get<{ items: Array<{ id: string; sampleCode: string }> }>(
-              API_ROUTES["/samples"],
-              { params: { receiptId: receipt.id, page: 1, pageSize: 50 } },
-            )
-            .catch(() => ({ data: { items: [] } })),
-          apiClient
-            .get<{ items: InspectionParameter[] }>(
-              API_ROUTES["/inspection-parameters"],
-              { params: { page: 1, pageSize: 200 } },
-            )
-            .catch(() => ({ data: { items: [] } })),
-          apiClient
-            .get<{ items: TestRecord[] }>(
-              API_ROUTES["/test-records"],
-              { params: { receiptId: receipt.id, page: 1, pageSize: 200 } },
-            )
-            .catch(() => ({ data: { items: [] } })),
+        // 样品 + 参数并发；检测记录契约只支持 sampleId 过滤（无 receiptId 参数），
+        // 样品到齐后按 sampleId 归集。
+        const [sItems, pItems] = await Promise.all([
+          samplesListSamples({ receiptId: receipt.id, page: 1, pageSize: 50 })
+            .then((r) => (r.data?.items ?? []) as Array<{ id: string; sampleCode: string }>)
+            .catch(() => [] as Array<{ id: string; sampleCode: string }>),
+          inspectionDictionaryListParameters({ page: 1, pageSize: 200 })
+            .then((r) => (r.data?.items ?? []) as InspectionParameter[])
+            .catch(() => [] as InspectionParameter[]),
         ]);
-        const sItems = sRes.data?.items ?? [];
-        const pItems = pRes.data?.items ?? [];
-        const tItems = tRes.data?.items ?? [];
+        const recordPages = await Promise.all(
+          sItems.map((s) =>
+            testRecordsListTestRecords({ sampleId: s.id, page: 1, pageSize: 200 }).catch(
+              () => null,
+            ),
+          ),
+        );
+        const tItems = recordPages.flatMap((p) => p?.data?.items ?? []);
         setSamples(sItems);
         setParameters(pItems);
         const map: Record<string, TestRecord> = {};
@@ -249,7 +247,6 @@ function EntryModal({
     setSubmitting(true);
     try {
       const body = {
-        receiptId: receipt.id,
         sampleId: selectedSampleId,
         parameterCode: activeParamCode,
         result: rec?.result ?? "",
@@ -258,9 +255,9 @@ function EntryModal({
         requirement: rec?.requirement ?? "",
       };
       if (rec?.id) {
-        await apiClient.put(`${API_ROUTES["/test-records"]}/${rec.id}`, body);
+        await testRecordsUpdateTestRecord(rec.id, body);
       } else {
-        await apiClient.post(API_ROUTES["/test-records"], body);
+        await testRecordsCreateTestRecord(body);
       }
       toast.success("检测记录已保存");
       onSaved();

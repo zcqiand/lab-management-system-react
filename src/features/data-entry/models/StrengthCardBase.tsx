@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ParamModelProps } from './types'
-import type { TestRecord } from '@/types/process/test-record'
-import type { InspectionTechnicalRequirement } from '@/types/inspection/inspection-technical-requirement'
+import { techReqKey } from './types'
+import type { TestRecord } from '@/api/endpoints/model/testRecord'
+import type { TechnicalRequirement } from '@/api/endpoints/model/technicalRequirement'
 import { requirementLabel } from './DefaultParamCard'
 import { autoVerdict, parseStrengthRecord, type StrengthResult } from './cement-strength'
 
@@ -48,15 +49,15 @@ export function StrengthCardBase({
     () => techReqs.filter((r) => r.verificationStatus === 'verified'),
     [techReqs],
   )
-  const [reqId, setReqId] = useState<string>(record?.requirementCode ?? reqOptions[0]?.id ?? '')
-  const selectedReq: InspectionTechnicalRequirement | undefined = reqOptions.find((r) => r.id === reqId)
+  const [reqId, setReqId] = useState<string>(record?.requirementCode ?? (reqOptions[0] ? techReqKey(reqOptions[0]) : ''))
+  const selectedReq: TechnicalRequirement | undefined = reqOptions.find((r) => techReqKey(r) === reqId)
 
   const { strengths, kept, mean, invalid } = useMemo(() => compute(loads), [compute, loads])
   const verdict = reqOptions.length > 0 ? autoVerdict(mean, selectedReq ?? reqOptions[0]) : record?.verdict ?? ''
 
   const emit = (nextLoads: number[], nextReqId: string, manualVerdict?: string) => {
     const res = compute(nextLoads)
-    const req = reqOptions.find((r) => r.id === nextReqId) ?? reqOptions[0]
+    const req = reqOptions.find((r) => techReqKey(r) === nextReqId) ?? reqOptions[0]
     const patch: Partial<TestRecord> = {
       result: JSON.stringify({
         loads: nextLoads,
@@ -148,7 +149,7 @@ export function StrengthCardBase({
             className="border rounded px-1 py-1 text-sm disabled:bg-gray-50 disabled:text-gray-500"
           >
             {reqOptions.map((r) => (
-              <option key={r.id} value={r.id}>
+              <option key={techReqKey(r)} value={techReqKey(r)}>
                 {requirementLabel(r)}
               </option>
             ))}

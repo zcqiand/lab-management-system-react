@@ -1,5 +1,6 @@
-import type { SampleReceipt, Sample, TestRecord } from "@/types/api";
-import type { OrgInfo } from "@/types/system/org-info";
+import type { SampleReceipt } from "@/api/endpoints/model/sampleReceipt";
+import type { Sample } from "@/api/endpoints/model/sample";
+import type { TestRecord } from "@/api/endpoints/model/testRecord";
 import generatedReportNameParameters from "@/data/generated/inspection-report-name-parameter.json";
 import generatedReportNames from "@/data/generated/inspection-report-name.json";
 import generatedParameters from "@/data/generated/inspection-parameter.json";
@@ -18,6 +19,24 @@ const REPORT_FULL_NAME: Map<string, string> = new Map(
     r.fullName,
   ]),
 );
+
+/**
+ * 机构信息（M01.F01）——报告模板表头的检测单位信息。
+ * GAP（TypeSpec SSOT Phase B2+C1）：shared 契约无 org-info 端点/模型（后端
+ * /api/org-info 路由已家族级移除），无 orval 模型可引；此类型仅是报告填充层的
+ * 视图输入（调用方现传 null，模板里机构字段留空），保留在本文件局部，等契约
+ * 补端点后迁到 model。
+ */
+export interface OrgInfo {
+  orgName: string;
+  registeredAddress: string;
+  testingSiteAddress: string;
+  postalCode: string;
+  contactPhone: string;
+  email: string;
+  qualificationCertNo: string;
+  updatedAt: string;
+}
 
 /**
  * 105_混凝土抗压强度检测报告.docx 的填充数据。

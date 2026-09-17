@@ -1,7 +1,7 @@
 // M06.F06 技术要求维护 — 列表 + 多维筛选 + Dialog 弹窗。
 //
-// 复合主键：(inspectionObjectCode, inspectionParameterCode, judgmentStandardCode)
-// 主键由 tests 端 shape adapter 兜底 id=tr-… ；
+// 复合主键：(inspectionObjectCode, inspectionParameterCode, judgmentStandardCode)——
+// 契约 PUT/DELETE /api/technical-requirements/{o}/{p}/{j}（orval 三段组合键寻址，无 id 列）；
 // 多维筛选：brand / model / grade / spec（M06.F06.I01）。
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -42,27 +42,21 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/app/empty-state";
 import { ConfirmModal } from "@/components/ConfirmModal";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
+import {
+  technicalRequirementsCreateTechnicalRequirement,
+  technicalRequirementsDeleteTechnicalRequirement,
+  technicalRequirementsListTechnicalRequirements,
+  technicalRequirementsUpdateTechnicalRequirement,
+} from "@/api/endpoints/technical-requirements/technical-requirements";
+import {
+  inspectionDictionaryListObjects,
+  inspectionDictionaryListParameters,
+} from "@/api/endpoints/inspection-dictionary/inspection-dictionary";
+import type { TechnicalRequirement } from "@/api/endpoints/model/technicalRequirement";
+import type { RequirementComparison } from "@/api/endpoints/model/requirementComparison";
 
-interface TechReq {
-  id: string;
-  inspectionObjectCode: string;
-  inspectionParameterCode: string;
-  judgmentStandardCode: string;
-  brand?: string;
-  model?: string;
-  grade?: string;
-  spec?: string;
-  minValue?: number;
-  maxValue?: number;
-  comparison: string;
-  valueType?: string;
-  judgmentMode?: string;
-  verificationStatus?: string;
-  remark?: string;
-  objectName?: string;
-  parameterName?: string;
-}
+/** 行结构 = 契约 TechnicalRequirement（三段组合键寻址，无 id）。 */
+type TechReq = TechnicalRequirement;
 
 interface Opt {
   code: string;
@@ -106,7 +100,7 @@ export function TechnicalRequirementList() {
   const [specFilter, setSpecFilter] = useState("");
 
   const [open, setOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editing, setEditing] = useState<TechReq | null>(null);
   const [form, setForm] = useState<Record<string, string>>(EMPTY_FORM);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<TechReq | null>(null);
@@ -116,13 +110,10 @@ export function TechnicalRequirementList() {
   const load = () => {
     setLoading(true);
     setError(null);
-    // 服务端无多维过滤（msw 仅支持 object/parameter），客户端按 brand/model/grade/spec 二次过滤
-    apiClient
-      .get<{ items: TechReq[]; total: number }>(API_ROUTES["/inspection-technical-requirements"], {
-        params: { page: "1", pageSize: "500" },
-      })
+    // 契约 list 参数无 brand/model/grade/spec 维度——客户端按四维二次过滤
+    technicalRequirementsListTechnicalRequirements()
       .then((res) => {
-        const all = Array.isArray(res.data?.items) ? res.data.items : [];
+        const all = Array.isArray(res.data) ? res.data : [];
         const filtered = all.filter((it) => {
           if (brandFilter && (it.brand ?? "") !== brandFilter) return false;
           if (modelFilter && (it.model ?? "") !== modelFilter) return false;
@@ -140,31 +131,25 @@ export function TechnicalRequirementList() {
   };
 
   useEffect(() => {
-    apiClient
-      .get<{ items: Opt[] }>(API_ROUTES["/inspection-objects"], {
-        params: { page: "1", pageSize: "500" },
-      })
-      .then((r) => setObjects(Array.isArray(r.data?.items) ? r.data.items : []))
+    inspectionDictionaryListObjects({ page: 1, pageSize: 500 })
+      .then((r) => setObjects(r.data?.items ?? []))
       .catch(() => undefined);
-    apiClient
-      .get<{ items: Opt[] }>(API_ROUTES["/inspection-parameters"], {
-        params: { page: "1", pageSize: "500" },
-      })
-      .then((r) => setParameters(Array.isArray(r.data?.items) ? r.data.items : []))
+    inspectionDictionaryListParameters({ page: 1, pageSize: 500 })
+      .then((r) => setParameters(r.data?.items ?? []))
       .catch(() => undefined);
   }, []);
 
   useEffect(load, [brandFilter, modelFilter, gradeFilter, specFilter]);
 
   const openCreate = () => {
-    setEditingId(null);
+    setEditing(null);
     setForm({ ...EMPTY_FORM });
     setSaveError(null);
     setOpen(true);
   };
 
   const openEdit = (row: TechReq) => {
-    setEditingId(row.id);
+    setEditing(row);
     setForm({
       inspectionObjectCode: row.inspectionObjectCode,
       inspectionParameterCode: row.inspectionParameterCode,
@@ -185,31 +170,30 @@ export function TechnicalRequirementList() {
   const save = async () => {
     setSaveError(null);
     const payload = {
-      inspectionObjectCode: form.inspectionObjectCode,
-      inspectionParameterCode: form.inspectionParameterCode,
-      judgmentStandardCode: form.judgmentStandardCode,
+      inspectionObjectCode: form.inspectionObjectCode ?? "",
+      inspectionParameterCode: form.inspectionParameterCode ?? "",
+      judgmentStandardCode: form.judgmentStandardCode ?? "",
       brand: form.brand || undefined,
       model: form.model || undefined,
       grade: form.grade || undefined,
       spec: form.spec || undefined,
       minValue: form.minValue === "" ? undefined : Number(form.minValue),
       maxValue: form.maxValue === "" ? undefined : Number(form.maxValue),
-      comparison: form.comparison,
+      comparison: form.comparison as RequirementComparison,
       remark: form.remark || undefined,
     };
     try {
-      if (editingId) {
-        await apiClient.put(
-          `${API_ROUTES["/inspection-technical-requirements"]}/${editingId}`,
+      if (editing) {
+        await technicalRequirementsUpdateTechnicalRequirement(
+          editing.inspectionObjectCode,
+          editing.inspectionParameterCode,
+          editing.judgmentStandardCode,
           payload,
         );
       } else {
-        await apiClient.post(
-          API_ROUTES["/inspection-technical-requirements"],
-          payload,
-        );
+        await technicalRequirementsCreateTechnicalRequirement(payload);
       }
-      toast.success(editingId ? "已更新" : "已创建");
+      toast.success(editing ? "已更新" : "已创建");
       setOpen(false);
       load();
     } catch (err: unknown) {
@@ -225,8 +209,10 @@ export function TechnicalRequirementList() {
     setDeletingBusy(true);
     setDeleteError(null);
     try {
-      await apiClient.delete(
-        `${API_ROUTES["/inspection-technical-requirements"]}/${deleting.id}`,
+      await technicalRequirementsDeleteTechnicalRequirement(
+        deleting.inspectionObjectCode,
+        deleting.inspectionParameterCode,
+        deleting.judgmentStandardCode,
       );
       toast.success("已删除");
       setDeleting(null);
@@ -312,7 +298,9 @@ export function TechnicalRequirementList() {
               </TableHeader>
               <TableBody>
                 {items.map((row) => (
-                  <TableRow key={row.id}>
+                  <TableRow
+                    key={`${row.inspectionObjectCode}/${row.inspectionParameterCode}/${row.judgmentStandardCode}|${row.brand ?? ""}|${row.model ?? ""}|${row.grade ?? ""}|${row.spec ?? ""}`}
+                  >
                     <TableCell className="font-mono text-xs">
                       {row.inspectionObjectCode}
                     </TableCell>
@@ -339,7 +327,7 @@ export function TechnicalRequirementList() {
                         size="sm"
                         onClick={() => openEdit(row)}
                         data-fn="M06.F06.I02"
-                        aria-label={`编辑 ${row.id}`}
+                        aria-label={`编辑 ${row.inspectionObjectCode}/${row.inspectionParameterCode}/${row.judgmentStandardCode}`}
                       >
                         编辑
                       </Button>
@@ -351,7 +339,7 @@ export function TechnicalRequirementList() {
                           setDeleteError(null);
                         }}
                         data-fn="M06.F06.I03"
-                        aria-label={`删除 ${row.id}`}
+                        aria-label={`删除 ${row.inspectionObjectCode}/${row.inspectionParameterCode}/${row.judgmentStandardCode}`}
                         className="text-red-600"
                       >
                         删除
@@ -375,7 +363,7 @@ export function TechnicalRequirementList() {
       >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>{editingId ? "编辑技术要求" : "新建技术要求"}</DialogTitle>
+            <DialogTitle>{editing ? "编辑技术要求" : "新建技术要求"}</DialogTitle>
             <DialogDescription>
               复合主键：检测项目 + 检测参数 + 判定标准；引用保护由 M06.F06.I03 兜底
             </DialogDescription>

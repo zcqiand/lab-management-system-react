@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import type { AxiosResponse } from "axios";
 import {
   DndContext,
   PointerSensor,
@@ -14,31 +15,86 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
+import {
+  catalogCreateBrand,
+  catalogCreateGrade,
+  catalogCreateModel,
+  catalogCreateSpec,
+  catalogDeleteBrand,
+  catalogDeleteGrade,
+  catalogDeleteModel,
+  catalogDeleteSpec,
+  catalogListBrands,
+  catalogListGrades,
+  catalogListModels,
+  catalogListSpecs,
+  catalogUpdateBrand,
+  catalogUpdateGrade,
+  catalogUpdateModel,
+  catalogUpdateSpec,
+} from "@/api/endpoints/inspection-catalog/inspection-catalog";
+import { inspectionDictionaryListObjects } from "@/api/endpoints/inspection-dictionary/inspection-dictionary";
+import type { InspectionBrand } from "@/api/endpoints/model/inspectionBrand";
+import type { InspectionGrade } from "@/api/endpoints/model/inspectionGrade";
+import type { InspectionModel } from "@/api/endpoints/model/inspectionModel";
+import type { InspectionSpec } from "@/api/endpoints/model/inspectionSpec";
+import type { InspectionObject } from "@/api/endpoints/model/inspectionObject";
+import type { CreateCatalogEntryRequest } from "@/api/endpoints/model/createCatalogEntryRequest";
+import type { UpdateCatalogEntryRequest } from "@/api/endpoints/model/updateCatalogEntryRequest";
 import { ConfirmModal } from "@/components/ConfirmModal";
-import { unwrapListResponse } from "@/lib/responses";
 
-/** 型号/规格/等级/牌号 通用行结构（4 个 InspectionBrand/Model/Grade/Spec 共用） */
-interface DictItem {
-  id: string;
-  code: string;
-  name: string;
-  inspectionObjectCode?: string;
-  remark?: string;
-  sortOrder?: number;
-  createdAt: string;
-  updatedAt: string;
+/** 型号/规格/等级/牌号 通用行结构（4 个 InspectionModel/Spec/Grade/Brand 同构，code 为主键）。 */
+type CatalogRow = InspectionModel | InspectionSpec | InspectionGrade | InspectionBrand;
+
+/** 码表资源端点（与页路由一一对应；data-testid `${endpoint}-list` 依赖这些字面量）。 */
+type CatalogEndpoint = "/models" | "/specifications" | "/grades" | "/brands";
+
+interface CatalogResource {
+  list(
+    params: {
+      page?: number;
+      pageSize?: number;
+      inspectionObjectCode?: string;
+    },
+  ): Promise<AxiosResponse<{ items: CatalogRow[] }>>;
+  create(req: CreateCatalogEntryRequest): Promise<AxiosResponse<CatalogRow>>;
+  update(
+    code: string,
+    req: UpdateCatalogEntryRequest,
+  ): Promise<AxiosResponse<CatalogRow>>;
+  remove(code: string): Promise<AxiosResponse<void>>;
 }
 
-interface InspectionObject {
-  code: string;
-  name: string;
-  sortOrder?: number;
-}
+const CATALOG_RESOURCE: Record<CatalogEndpoint, CatalogResource> = {
+  "/models": {
+    list: catalogListModels,
+    create: catalogCreateModel,
+    update: catalogUpdateModel,
+    remove: catalogDeleteModel,
+  },
+  "/specifications": {
+    list: catalogListSpecs,
+    create: catalogCreateSpec,
+    update: catalogUpdateSpec,
+    remove: catalogDeleteSpec,
+  },
+  "/grades": {
+    list: catalogListGrades,
+    create: catalogCreateGrade,
+    update: catalogUpdateGrade,
+    remove: catalogDeleteGrade,
+  },
+  "/brands": {
+    list: catalogListBrands,
+    create: catalogCreateBrand,
+    update: catalogUpdateBrand,
+    remove: catalogDeleteBrand,
+  },
+};
 
 interface Props {
-  /** API_ROUTES 键：/models /specifications /grades /brands */
-  endpoint: keyof typeof API_ROUTES;
+  /** 码表资源端点：/models /specifications /grades /brands */
+  endpoint: CatalogEndpoint;
   title: string;
   hint?: string;
   /** 功能 ID（用于 data-fn 入口标记），格式 Mxx.Fyy.Izz */
@@ -59,7 +115,7 @@ interface Props {
  * 4 码表通用页（M04.F06/F07/F08/F09 I01）：
  * 左侧检测项目树（一级）+ 右侧可拖拽排序的列表。
  * 拖拽行后 PUT 持久化 sortOrder；新建项 sortOrder 自动续号。
- * 移植自 REF lab-management-system src/features/dicts/CategoryDictList.tsx。
+ * orval catalog tag（code 主键：PUT/DELETE /api/catalog/{resource}/{code}）。
  */
 export function CategoryDictList({
   endpoint,
@@ -72,28 +128,28 @@ export function CategoryDictList({
 }: Props) {
   const [objects, setObjects] = useState<InspectionObject[]>([]);
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
-  const [list, setList] = useState<DictItem[]>([]);
+  const [list, setList] = useState<CatalogRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [formOpen, setFormOpen] = useState(false);
-  const [editing, setEditing] = useState<DictItem | null>(null);
+  const [editing, setEditing] = useState<CatalogRow | null>(null);
   const [formObject, setFormObject] = useState("");
+  const [formCode, setFormCode] = useState("");
   const [formName, setFormName] = useState("");
   const [formRemark, setFormRemark] = useState("");
   const [saving, setSaving] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState<DictItem | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<CatalogRow | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
 
+  const resource = CATALOG_RESOURCE[endpoint];
+
   useEffect(() => {
-    apiClient
-      .get<unknown>(API_ROUTES["/inspection-objects"], {
-        params: { page: 1, pageSize: "200" },
-      })
+    inspectionDictionaryListObjects({ page: 1, pageSize: 200 })
       .then((r) => {
-        const items = unwrapListResponse<InspectionObject>(r).items;
+        const items = [...(r.data?.items ?? [])];
         // 检测项目按 sortOrder 升序展示
         items.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
         setObjects(items);
@@ -108,8 +164,6 @@ export function CategoryDictList({
     [objects, selectedCode],
   );
 
-  const base = API_ROUTES[endpoint];
-
   const fetchList = useCallback(async () => {
     if (!selectedCode) {
       setList([]);
@@ -118,10 +172,12 @@ export function CategoryDictList({
     setLoading(true);
     setError(null);
     try {
-      const res = await apiClient.get<unknown>(base, {
-        params: { page: "1", pageSize: "200", inspectionObjectCode: selectedCode },
+      const res = await resource.list({
+        page: 1,
+        pageSize: 200,
+        inspectionObjectCode: selectedCode,
       });
-      const items = [...unwrapListResponse<DictItem>(res).items];
+      const items = [...(res.data?.items ?? [])];
       items.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
       setList(items);
     } catch (e: unknown) {
@@ -129,7 +185,7 @@ export function CategoryDictList({
     } finally {
       setLoading(false);
     }
-  }, [base, selectedCode]);
+  }, [resource, selectedCode]);
 
   useEffect(() => {
     fetchList();
@@ -142,14 +198,16 @@ export function CategoryDictList({
   const openCreate = () => {
     setEditing(null);
     setFormObject(selectedCode ?? objects[0]?.code ?? "");
+    setFormCode("");
     setFormName("");
     setFormRemark("");
     setFormOpen(true);
   };
 
-  const openEdit = (item: DictItem) => {
+  const openEdit = (item: CatalogRow) => {
     setEditing(item);
     setFormObject(item.inspectionObjectCode ?? "");
+    setFormCode(item.code);
     setFormName(item.name);
     setFormRemark(item.remark ?? "");
     setFormOpen(true);
@@ -157,16 +215,18 @@ export function CategoryDictList({
 
   const handleSave = async () => {
     if (!formObject || !formName.trim()) return;
+    if (!editing && !formCode.trim()) return;
     setSaving(true);
     setError(null);
     try {
       if (editing) {
-        await apiClient.put(`${base}/${editing.id}`, {
+        await resource.update(editing.code, {
           name: formName.trim(),
           remark: formRemark,
         });
       } else {
-        await apiClient.post(base, {
+        await resource.create({
+          code: formCode.trim(),
           inspectionObjectCode: formObject,
           name: formName.trim(),
           remark: formRemark,
@@ -190,7 +250,7 @@ export function CategoryDictList({
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      await apiClient.delete(`${base}/${deleteTarget.id}`);
+      await resource.remove(deleteTarget.code);
       setDeleteTarget(null);
       await fetchList();
     } catch (e: unknown) {
@@ -201,19 +261,19 @@ export function CategoryDictList({
     }
   };
 
-  // 拖拽结束时：交换前端顺序 + 并行 PUT 所有受影响项的 sortOrder
+  // 拖拽结束时：交换前端顺序 + 并行 PUT 所有受影响项的 sortOrder（code 寻址）
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-    const oldIndex = list.findIndex((i) => i.id === active.id);
-    const newIndex = list.findIndex((i) => i.id === over.id);
+    const oldIndex = list.findIndex((i) => i.code === active.id);
+    const newIndex = list.findIndex((i) => i.code === over.id);
     if (oldIndex < 0 || newIndex < 0) return;
     const next = arrayMove(list, oldIndex, newIndex);
     setList(next); // 立即反馈
     try {
       await Promise.all(
         next.map((item, idx) =>
-          apiClient.put(`${base}/${item.id}`, { sortOrder: (idx + 1) * 10 }),
+          resource.update(item.code, { sortOrder: (idx + 1) * 10 }),
         ),
       );
     } catch (e: unknown) {
@@ -312,13 +372,13 @@ export function CategoryDictList({
               onDragEnd={handleDragEnd}
             >
               <SortableContext
-                items={list.map((i) => i.id)}
+                items={list.map((i) => i.code)}
                 strategy={verticalListSortingStrategy}
               >
                 <ul data-testid={`${String(endpoint)}-list`} className="flex-1 overflow-y-auto">
                   {list.map((item) => (
                     <SortableRow
-                      key={item.id}
+                      key={item.code}
                       item={item}
                       editDataFn={editDataFn}
                       deleteDataFn={deleteDataFn}
@@ -352,6 +412,15 @@ export function CategoryDictList({
                   </option>
                 ))}
               </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">编码</label>
+              <input
+                value={formCode}
+                onChange={(e) => setFormCode(e.target.value)}
+                disabled={Boolean(editing)}
+                className="w-full border rounded px-2 py-1.5 disabled:bg-gray-100 font-mono"
+              />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">名称</label>
@@ -398,14 +467,14 @@ function SortableRow({
   onEdit,
   onDelete,
 }: {
-  item: DictItem;
+  item: CatalogRow;
   editDataFn?: string;
   deleteDataFn?: string;
-  onEdit: (item: DictItem) => void;
-  onDelete: (item: DictItem) => void;
+  onEdit: (item: CatalogRow) => void;
+  onDelete: (item: CatalogRow) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: item.id,
+    id: item.code,
   });
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
@@ -416,7 +485,7 @@ function SortableRow({
     <li
       ref={setNodeRef}
       style={style}
-      data-testid={`row-${item.id}`}
+      data-testid={`row-${item.code}`}
       className={`flex items-center border-b last:border-b-0 px-3 py-2 text-sm bg-white ${
         isDragging ? "shadow-md z-10 relative" : "hover:bg-gray-50"
       }`}
@@ -426,14 +495,14 @@ function SortableRow({
         {...attributes}
         {...listeners}
         aria-label="拖拽手柄"
-        data-testid={`drag-handle-${item.id}`}
+        data-testid={`drag-handle-${item.code}`}
         className="cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 mr-2 select-none"
       >
         ⋮⋮
       </button>
       <span
         className="w-12 text-center text-xs text-gray-500 tabular-nums"
-        data-testid={`sort-${item.id}`}
+        data-testid={`sort-${item.code}`}
       >
         {item.sortOrder ?? "-"}
       </span>

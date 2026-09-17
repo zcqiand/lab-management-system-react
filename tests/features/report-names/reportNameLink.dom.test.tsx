@@ -13,7 +13,7 @@ import { describe, expect, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { fnTest } from "../../fn";
 import { installRealChain, firstUnlinkedParameterFor } from "../../helpers/real-chain";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
+import axios from "axios";
 import { ReportNameLinkDialog } from "@/features/report-names/ReportNameLinkDialog";
 
 /** 种子锚报告名称：RN-101（水泥），标准/参数两侧在种子中均有关联。 */
@@ -26,7 +26,9 @@ function unlinkParamPair(): Promise<unknown> {
     reportNameCode: REPORT_NAME,
     inspectionParameterCode: TOGGLE_TARGET,
   }).toString();
-  return apiClient.delete(`${API_ROUTES["/inspection-report-name-parameters"]}?${qs}`);
+  // 契约路径 /api/report-names/links/parameter（与 orval 生成物一致）；
+  // installRealChain() 装好的拦截器会给这个裸 axios 实例补 baseURL/token。
+  return axios.delete(`/api/report-names/links/parameter?${qs}`);
 }
 
 beforeEach(async () => {

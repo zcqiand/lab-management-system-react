@@ -4,13 +4,14 @@
 // 提供 4 个字段：检测依据（standards by parameter）/ 技术要求 / 检测结果 / 单项评定。
 
 import type { ParamModelProps } from "./types";
-import type { InspectionStandard } from "@/types/inspection/inspection-standard";
-import type { InspectionTechnicalRequirement } from "@/types/inspection/inspection-technical-requirement";
+import { techReqKey } from "./types";
+import type { InspectionStandard } from "@/api/endpoints/model/inspectionStandard";
+import type { TechnicalRequirement } from "@/api/endpoints/model/technicalRequirement";
 
 const VERDICT_OPTIONS = ["合格", "不合格", "符合", "不符合"] as const;
 type Verdict = (typeof VERDICT_OPTIONS)[number];
 
-export function requirementLabel(r: InspectionTechnicalRequirement): string {
+export function requirementLabel(r: TechnicalRequirement): string {
   const unit = r.unit ? ` ${r.unit}` : "";
   if (
     (r.valueType === "range" || r.comparison === "range") &&
@@ -80,7 +81,7 @@ export function DefaultParamCard({
             className="w-full border rounded px-1 py-1 text-sm bg-white"
             value={reqVal}
             onChange={(e) => {
-              const found = reqOptions.find((r) => r.id === e.target.value);
+              const found = reqOptions.find((r) => techReqKey(r) === e.target.value);
               onChange({
                 requirementCode: e.target.value,
                 requirement: found ? requirementLabel(found) : "",
@@ -90,7 +91,7 @@ export function DefaultParamCard({
           >
             <option value="">—</option>
             {reqOptions.map((r) => (
-              <option key={r.id} value={r.id}>
+              <option key={techReqKey(r)} value={techReqKey(r)}>
                 {requirementLabel(r)}
               </option>
             ))}

@@ -4,13 +4,13 @@
 //   - 顶部：标题 + 说明 + 「批量提交到数据录入」按钮
 //   - 筛选条：关键字 + 状态过滤
 //   - 表格：委托书编号 / 工程名称 / 检测人员（assigneeName）/ 计划检测日期 / 流程状态 / 操作
-//   - 「安排」按钮（M03.F02.I01）→ 弹窗录入 assigneeName + plannedTestDate 后 PUT /receipts/:id
+//   - 「安排」按钮（M03.F02.I01）→ 弹窗录入 assigneeName + plannedTestDate 后 PUT /receipts/:id/task
 //   - 「详情」链接到 /receipts/:id
 //
 // react 仓镜像要点：
-//   - apiClient + API_ROUTES 与 nextjs 一致
+//   - orval 具名函数（receipts tag）直连契约端点
 //   - 列表按 flowStatus='task_assignment' 过滤（按 REF 语义）
-//   - 任务信息直接落在 SampleReceipt（assigneeId/assigneeName/plannedTestDate），无独立任务表
+//   - 任务安排走契约专用端点 PUT /api/receipts/{id}/task（receiptsAssignTask）
 //   - data-fn 静态字面量字符串（M03.F02.I01/I02），L5 静态解析能吃到
 
 import { useEffect, useRef, useState } from "react";
@@ -28,9 +28,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
-import type { SampleReceipt } from "@/types/process/sample-receipt";
-import { FLOW_STAGE_LABELS } from "@/types/process/flow";
+import {
+  receiptsAssignTask,
+  receiptsListReceipts,
+} from "@/api/endpoints/receipts/receipts";
+import type { SampleReceipt } from "@/api/endpoints/model/sampleReceipt";
+import { FLOW_STAGE_LABELS } from "@/lib/flow-labels";
 
 export function TaskAssignmentList() {
   const [items, setItems] = useState<SampleReceipt[]>([]);
@@ -46,16 +49,12 @@ export function TaskAssignmentList() {
   const load = async () => {
     setLoading(true);
     try {
-      const params: Record<string, string> = {
-        page: "1",
-        pageSize: "50",
+      const res = await receiptsListReceipts({
+        page: 1,
+        pageSize: 50,
         flowStatus: "task_assignment",
-      };
-      if (keyword) params["keyword"] = keyword;
-      const res = await apiClient.get<{ items: SampleReceipt[]; total: number }>(
-        API_ROUTES["/receipts"],
-        { params },
-      );
+        keyword: keyword || undefined,
+      });
       setItems(Array.isArray(res.data?.items) ? res.data.items : []);
       setTotal(typeof res.data?.total === "number" ? res.data.total : 0);
     } finally {
@@ -81,7 +80,7 @@ export function TaskAssignmentList() {
     if (!assignTarget) return;
     setSaving(true);
     try {
-      await apiClient.put(`${API_ROUTES["/receipts"]}/${assignTarget.id}`, {
+      await receiptsAssignTask(assignTarget.id, {
         assigneeName: assigneeName.trim(),
         assigneeId: assigneeName.trim() ? `u-${assigneeName.trim()}` : undefined,
         plannedTestDate,

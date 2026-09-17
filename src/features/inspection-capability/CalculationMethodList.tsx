@@ -1,7 +1,9 @@
 // M06.F05 计算方法维护 — 列表 + Dialog 弹窗。
 //
-// 复合主键：(inspectionObjectCode, inspectionParameterCode)；
-// 主键由 tests 端 shape adapter 兜底生成 id=`cr-${objectCode}-${parameterCode}`。
+// 复合主键：(inspectionObjectCode, inspectionParameterCode)——契约 PUT/DELETE
+// /api/calculation-methods/{objectCode}/{parameterCode}（orval 组合键寻址，无 id 列）。
+// 契约 list 参数只有 inspectionObjectCode/inspectionParameterCode（无 keyword/
+// page/pageSize）——关键字搜索改为前端过滤。
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
@@ -41,21 +43,22 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/app/empty-state";
 import { ConfirmModal } from "@/components/ConfirmModal";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
+import {
+  calculationMethodsCreateCalculationMethod,
+  calculationMethodsDeleteCalculationMethod,
+  calculationMethodsListCalculationMethods,
+  calculationMethodsUpdateCalculationMethod,
+} from "@/api/endpoints/calculation-methods/calculation-methods";
+import {
+  inspectionDictionaryListObjects,
+  inspectionDictionaryListParameters,
+  inspectionDictionaryListStandards,
+} from "@/api/endpoints/inspection-dictionary/inspection-dictionary";
+import type { CalculationMethod } from "@/api/endpoints/model/calculationMethod";
+import type { CalculationAlgorithmType } from "@/api/endpoints/model/calculationAlgorithmType";
 
-interface CalcRule {
-  id: string;
-  inspectionObjectCode: string;
-  inspectionParameterCode: string;
-  testingStandardCode?: string;
-  algorithmType: string;
-  specimenCount: number;
-  roundingRule?: string;
-  remark?: string;
-  objectName?: string;
-  parameterName?: string;
-  standardName?: string;
-}
+/** 行结构 = 契约 CalculationMethod（复合键寻址，无 id）。 */
+type CalcRule = CalculationMethod;
 
 interface Opt {
   code: string;
@@ -94,7 +97,7 @@ export function CalculationMethodList() {
   const [keyword, setKeyword] = useState("");
 
   const [open, setOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editing, setEditing] = useState<CalcRule | null>(null);
   const [form, setForm] = useState<Record<string, string>>(EMPTY_FORM);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<CalcRule | null>(null);
@@ -104,17 +107,9 @@ export function CalculationMethodList() {
   const load = () => {
     setLoading(true);
     setError(null);
-    const params: Record<string, string> = { page: "1", pageSize: "100" };
-    if (keyword.trim()) params.keyword = keyword.trim();
-    apiClient
-      .get<{ items: CalcRule[]; total: number }>(
-        API_ROUTES["/inspection-calculation-methods"],
-        {
-          params,
-        },
-      )
+    calculationMethodsListCalculationMethods()
       .then((res) => {
-        setItems(Array.isArray(res.data?.items) ? res.data.items : []);
+        setItems(Array.isArray(res.data) ? res.data : []);
       })
       .catch((err: unknown) => {
         setError(err instanceof Error ? err.message : "加载失败");
@@ -123,38 +118,41 @@ export function CalculationMethodList() {
       .finally(() => setLoading(false));
   };
 
+  /** 契约 list 无 keyword 参数——前端按 组合键/备注 模糊过滤。 */
+  const kw = keyword.trim().toLowerCase();
+  const matchesKeyword = (row: CalcRule): boolean =>
+    !kw ||
+    row.inspectionObjectCode.toLowerCase().includes(kw) ||
+    row.inspectionParameterCode.toLowerCase().includes(kw) ||
+    (row.remark ?? "").toLowerCase().includes(kw);
+
+  /** 契约实体不带 objectName/parameterName 冗余列——由字典 code 反查。 */
+  const objectNameByCode = new Map(objects.map((o) => [o.code, o.name]));
+  const parameterNameByCode = new Map(parameters.map((p) => [p.code, p.name]));
+
   useEffect(() => {
-    apiClient
-      .get<{ items: Opt[] }>(API_ROUTES["/inspection-objects"], {
-        params: { page: "1", pageSize: "200" },
-      })
-      .then((r) => setObjects(Array.isArray(r.data?.items) ? r.data.items : []))
+    inspectionDictionaryListObjects({ page: 1, pageSize: 200 })
+      .then((r) => setObjects(r.data?.items ?? []))
       .catch(() => undefined);
-    apiClient
-      .get<{ items: Opt[] }>(API_ROUTES["/inspection-parameters"], {
-        params: { page: "1", pageSize: "200" },
-      })
-      .then((r) => setParameters(Array.isArray(r.data?.items) ? r.data.items : []))
+    inspectionDictionaryListParameters({ page: 1, pageSize: 200 })
+      .then((r) => setParameters(r.data?.items ?? []))
       .catch(() => undefined);
-    apiClient
-      .get<{ items: Opt[] }>(API_ROUTES["/inspection-standards"], {
-        params: { page: "1", pageSize: "200" },
-      })
-      .then((r) => setStandards(Array.isArray(r.data?.items) ? r.data.items : []))
+    inspectionDictionaryListStandards({ page: 1, pageSize: 200 })
+      .then((r) => setStandards(r.data?.items ?? []))
       .catch(() => undefined);
   }, []);
 
-  useEffect(load, [keyword]);
+  useEffect(load, []);
 
   const openCreate = () => {
-    setEditingId(null);
+    setEditing(null);
     setForm({ ...EMPTY_FORM });
     setSaveError(null);
     setOpen(true);
   };
 
   const openEdit = (row: CalcRule) => {
-    setEditingId(row.id);
+    setEditing(row);
     setForm({
       inspectionObjectCode: row.inspectionObjectCode,
       inspectionParameterCode: row.inspectionParameterCode,
@@ -171,24 +169,25 @@ export function CalculationMethodList() {
   const save = async () => {
     setSaveError(null);
     const payload = {
-      inspectionObjectCode: form.inspectionObjectCode,
-      inspectionParameterCode: form.inspectionParameterCode,
+      inspectionObjectCode: form.inspectionObjectCode ?? "",
+      inspectionParameterCode: form.inspectionParameterCode ?? "",
       testingStandardCode: form.testingStandardCode || undefined,
-      algorithmType: form.algorithmType,
+      algorithmType: form.algorithmType as CalculationAlgorithmType,
       specimenCount: Number(form.specimenCount) || 1,
       roundingRule: form.roundingRule || undefined,
       remark: form.remark || undefined,
     };
     try {
-      if (editingId) {
-        await apiClient.put(
-          `${API_ROUTES["/inspection-calculation-methods"]}/${editingId}`,
+      if (editing) {
+        await calculationMethodsUpdateCalculationMethod(
+          editing.inspectionObjectCode,
+          editing.inspectionParameterCode,
           payload,
         );
       } else {
-        await apiClient.post(API_ROUTES["/inspection-calculation-methods"], payload);
+        await calculationMethodsCreateCalculationMethod(payload);
       }
-      toast.success(editingId ? "已更新" : "已创建");
+      toast.success(editing ? "已更新" : "已创建");
       setOpen(false);
       load();
     } catch (err: unknown) {
@@ -204,8 +203,9 @@ export function CalculationMethodList() {
     setDeletingBusy(true);
     setDeleteError(null);
     try {
-      await apiClient.delete(
-        `${API_ROUTES["/inspection-calculation-methods"]}/${deleting.id}`,
+      await calculationMethodsDeleteCalculationMethod(
+        deleting.inspectionObjectCode,
+        deleting.inspectionParameterCode,
       );
       toast.success("已删除");
       setDeleting(null);
@@ -266,13 +266,13 @@ export function CalculationMethodList() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {items.map((row) => (
-                  <TableRow key={row.id}>
+                {items.filter(matchesKeyword).map((row) => (
+                  <TableRow key={`${row.inspectionObjectCode}/${row.inspectionParameterCode}`}>
                     <TableCell>
                       <div className="font-mono text-xs">{row.inspectionObjectCode}</div>
-                      {row.objectName && (
+                      {objectNameByCode.get(row.inspectionObjectCode) && (
                         <div className="text-xs text-muted-foreground">
-                          {row.objectName}
+                          {objectNameByCode.get(row.inspectionObjectCode)}
                         </div>
                       )}
                     </TableCell>
@@ -280,9 +280,9 @@ export function CalculationMethodList() {
                       <div className="font-mono text-xs">
                         {row.inspectionParameterCode}
                       </div>
-                      {row.parameterName && (
+                      {parameterNameByCode.get(row.inspectionParameterCode) && (
                         <div className="text-xs text-muted-foreground">
-                          {row.parameterName}
+                          {parameterNameByCode.get(row.inspectionParameterCode)}
                         </div>
                       )}
                     </TableCell>
@@ -304,7 +304,7 @@ export function CalculationMethodList() {
                         size="sm"
                         onClick={() => openEdit(row)}
                         data-fn="M06.F05.I01"
-                        aria-label={`编辑 ${row.id}`}
+                        aria-label={`编辑 ${row.inspectionObjectCode}/${row.inspectionParameterCode}`}
                       >
                         编辑
                       </Button>
@@ -316,7 +316,7 @@ export function CalculationMethodList() {
                           setDeleteError(null);
                         }}
                         data-fn="M06.F05.I01"
-                        aria-label={`删除 ${row.id}`}
+                        aria-label={`删除 ${row.inspectionObjectCode}/${row.inspectionParameterCode}`}
                         className="text-red-600"
                       >
                         删除
@@ -328,7 +328,9 @@ export function CalculationMethodList() {
             </Table>
           )}
 
-          <div className="text-sm text-muted-foreground">共 {items.length} 条</div>
+          <div className="text-sm text-muted-foreground">
+            共 {items.filter(matchesKeyword).length} 条
+          </div>
         </CardContent>
       </Card>
 
@@ -340,9 +342,9 @@ export function CalculationMethodList() {
       >
         <DialogContent className="max-w-xl">
           <DialogHeader>
-            <DialogTitle>{editingId ? "编辑计算方法" : "新建计算方法"}</DialogTitle>
+            <DialogTitle>{editing ? "编辑计算方法" : "新建计算方法"}</DialogTitle>
             <DialogDescription>
-              复合主键：检测项目 + 检测参数（msw 端以 id=cr-… 兜底）
+              复合主键：检测项目 + 检测参数（PUT/DELETE 按组合键寻址）
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 text-sm">

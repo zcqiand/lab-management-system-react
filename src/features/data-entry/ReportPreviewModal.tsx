@@ -1,9 +1,33 @@
 import { useEffect, useRef, useState } from "react";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
-import type { SampleReceipt, Sample, TestRecord, OrgInfo } from "@/types/api";
+import { samplesListSamples, samplesUpdateSampleExt } from "@/api/endpoints/samples/samples";
+import { testRecordsListTestRecords } from "@/api/endpoints/test-records/test-records";
+import type { SampleReceipt } from "@/api/endpoints/model/sampleReceipt";
+import type { Sample } from "@/api/endpoints/model/sample";
+import type { TestRecord } from "@/api/endpoints/model/testRecord";
+import type { ExtFieldDef } from "@/api/endpoints/model/extFieldDef";
 import generatedReportNames from "@/data/generated/inspection-report-name.json";
-import { assembleReport, flattenForDocx, ensureAllDocxTagsFromBuffer } from "./reportTemplateData";
+import {
+  assembleReport,
+  flattenForDocx,
+  ensureAllDocxTagsFromBuffer,
+  type OrgInfo,
+} from "./reportTemplateData";
 import { SampleExtFieldsModal } from "./SampleExtFieldsModal";
+
+/**
+ * 按样品归集检测记录——契约 list 端点只支持 sampleId/parameterCode 过滤
+ * （无 receiptId 参数），对样品集合逐个取再合并。
+ */
+async function recordsOfSamples(sampleIds: string[]): Promise<TestRecord[]> {
+  const pages = await Promise.all(
+    sampleIds.map((id) =>
+      testRecordsListTestRecords({ sampleId: id, page: 1, pageSize: 200 }).catch(
+        () => null,
+      ),
+    ),
+  );
+  return pages.flatMap((p) => p?.data?.items ?? []);
+}
 
 /** 报告编号(RN) → 模板文件名（来自 generated/inspection-report-name.json 的 templatePath）。
  *  30 个 RN 全部已注入占位符并具备 templatePath。 */
@@ -46,17 +70,7 @@ export function ReportPreviewModal({ open, receipt, onClose }: Props) {
   const [extModalOpen, setExtModalOpen] = useState(false);
   const [extDraftReady, setExtDraftReady] = useState<Record<string, string> | null>(null);
   const [extDraftSample, setExtDraftSample] = useState<Sample | null>(null);
-  const [extDraftFields, setExtDraftFields] = useState<
-    Array<{
-      key: string;
-      label: string;
-      type?: "text" | "number" | "date" | "select";
-      required?: boolean;
-      options?: string[];
-      tag?: string;
-      source?: "sample" | "receipt";
-    }>
-  >([]);
+  const [extDraftFields, setExtDraftFields] = useState<ExtFieldDef[]>([]);
 
   useEffect(() => {
     if (!open) return;
@@ -72,45 +86,34 @@ export function ReportPreviewModal({ open, receipt, onClose }: Props) {
       setNoTemplate(false);
       setLoading(true);
       try {
-        // 机构信息 + 样品 + 检测记录 + 模板文件 并发拉取
-        const [org, samples, records, tplRes] = await Promise.all([
-          apiClient
-            .get<OrgInfo>(API_ROUTES['/org-info'])
-            .then((r) => r.data)
-            .catch(() => null),
-          apiClient
-            .get<{ items: Sample[] }>(API_ROUTES['/samples'], {
-              params: { receiptId: receipt.id, page: 1, pageSize: 100 },
-            })
+        // 样品 + 模板文件 并发拉取；检测记录按样品归集（见 recordsOfSamples）。
+        // 机构信息：契约无 org-info 端点（GAP），org 恒 null，模板机构字段留空。
+        const [samples, tplRes] = await Promise.all([
+          samplesListSamples({ receiptId: receipt.id, page: 1, pageSize: 100 })
             .then((r) => r.data.items ?? [])
             .catch(() => [] as Sample[]),
-          apiClient
-            .get<{ items: TestRecord[] }>(API_ROUTES['/test-records'], {
-              params: { receiptId: receipt.id, page: 1, pageSize: 200 },
-            })
-            .then((r) => r.data.items ?? [])
-            .catch(() => [] as TestRecord[]),
           fetch(templateUrl),
         ]);
         if (!tplRes.ok) throw new Error("模板加载失败：" + tplRes.status);
+        const records = await recordsOfSamples(samples.map((s) => s.id));
+        const org: OrgInfo | null = null;
 
         // 类别级扩展属性补录决策：当前类别若有 extFields 且首个样品未覆盖，
         // 弹窗先开；保存后再继续渲染。
+        // 种子 JSON 的 extFields 条目可能省略 type（契约 ExtFieldDef.type 必填），
+        // 边界处归一为 "text"（与 SampleExtFieldsModal 的 `f.type ?? "text"` 同语义）。
         const rname = (
           generatedReportNames as Array<{
             code: string;
-            extFields?: Array<{
-              key: string;
-              label: string;
-              type?: "text" | "number" | "date" | "select";
-              required?: boolean;
-              options?: string[];
-              tag?: string;
-              source?: "sample" | "receipt";
-            }>;
+            extFields?: Array<
+              Omit<ExtFieldDef, "type"> & { type?: ExtFieldDef["type"] }
+            >;
           }>
         ).find((r) => r.code === receipt.categoryCode);
-        const extFields = rname?.extFields ?? [];
+        const extFields: ExtFieldDef[] = (rname?.extFields ?? []).map((f) => ({
+          ...f,
+          type: f.type ?? "text",
+        }));
         const firstSample = samples[0] ?? null;
         const needExt =
           extFields.length > 0 &&
@@ -195,7 +198,7 @@ export function ReportPreviewModal({ open, receipt, onClose }: Props) {
     });
   }
 
-  // 补录提交：合并 ext → 调 PUT /samples/:id → 用合并后的 samples 重新渲染。
+  // 补录提交：合并 ext → 调 PUT /api/samples/:id/ext → 用合并后的 samples 重新渲染。
   async function handleExtSubmit(mergedExt: Record<string, string>): Promise<void> {
     const target = extDraftSample;
     if (!target) {
@@ -204,7 +207,7 @@ export function ReportPreviewModal({ open, receipt, onClose }: Props) {
     }
     try {
       setLoading(true);
-      await apiClient.put(`${API_ROUTES['/samples']}/${target.id}`, { ext: mergedExt });
+      await samplesUpdateSampleExt(target.id, { ext: mergedExt });
       const updatedSamples: Sample[] = [{ ...target, ext: mergedExt }];
       const templateUrl = pickTemplateUrl(receipt.categoryCode);
       if (!templateUrl) {
@@ -212,27 +215,15 @@ export function ReportPreviewModal({ open, receipt, onClose }: Props) {
         setNoTemplate(true);
         return;
       }
-      // 拉一次 records/org（已经缓存一份到本地更稳）：此处复用原 fetch 仅模板文件即可。
-      // 为避免重新打散 state，最简单是再走一遍完整链路：
-      // —— 用现有 receipt / samples / records / org 重新组装 + 渲染。
-      // 这里通过重建一次 fetch 链路最小化耦合：
-      const [org, records] = await Promise.all([
-        apiClient
-          .get<OrgInfo>(API_ROUTES['/org-info'])
-          .then((r) => r.data)
-          .catch(() => null),
-        apiClient
-          .get<{ items: TestRecord[] }>(API_ROUTES['/test-records'], {
-            params: { receiptId: receipt.id, page: 1, pageSize: 200 },
-          })
-          .then((r) => r.data.items ?? [])
-          .catch(() => [] as TestRecord[]),
+      // 重新拉一次该样品的 records（org 契约无端点，恒 null——见 run() 注释）。
+      const [records] = await Promise.all([
+        recordsOfSamples(updatedSamples.map((s) => s.id)),
       ]);
       await renderPreview({
         templateUrl,
         samples: updatedSamples,
         records,
-        org,
+        org: null,
         receipt,
       });
       setExtModalOpen(false);

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { InspectionParameter, TestRecord } from '@/types/api'
-import type { InspectionTechnicalRequirement } from '@/types/inspection/inspection-technical-requirement'
+import type { InspectionParameter } from '@/api/endpoints/model/inspectionParameter'
+import type { TestRecord } from '@/api/endpoints/model/testRecord'
+import { techReqKey } from './types'
+import type { TechnicalRequirement } from '@/api/endpoints/model/technicalRequirement'
 import { requirementLabel } from './DefaultParamCard'
 import { autoVerdict } from './cement-strength'
 import {
@@ -65,7 +67,7 @@ interface SectionRowProps {
   sub: CompositeSubConfig
   parameter: InspectionParameter | undefined
   state: SectionState
-  reqOptions: InspectionTechnicalRequirement[]
+  reqOptions: TechnicalRequirement[]
   crossRecord?: {
     tensileStrengths?: number[]
     yieldStrengths?: number[]
@@ -114,8 +116,8 @@ function SectionRow({
     return state.loads.slice(0, count).map((v) => (Number.isFinite(v) && v > 0 ? rounder(v) : 0))
   }, [isStrength, isAuto, autoVals, state.loads, state.diameter, count, rounder])
   const mean = meanOf(strengths, rounder)
-  const req: InspectionTechnicalRequirement | undefined =
-    reqOptions.find((r) => r.id === state.techReqId) ?? reqOptions[0]
+  const req: TechnicalRequirement | undefined =
+    reqOptions.find((r) => techReqKey(r) === state.techReqId) ?? reqOptions[0]
   const verdict = autoVerdict(mean, req)
   const verdictClass =
     verdict === '合格'
@@ -181,7 +183,7 @@ function SectionRow({
           >
             <option value="">未选</option>
             {reqOptions.map((r) => (
-              <option key={r.id} value={r.id}>
+              <option key={techReqKey(r)} value={techReqKey(r)}>
                 {requirementLabel(r)}
               </option>
             ))}
@@ -216,7 +218,7 @@ export function RebarMechCompositeCard({
   parameters: InspectionParameter[]
   recordByParam: Map<string, TestRecord>
   sampleId: string
-  techReqs: InspectionTechnicalRequirement[]
+  techReqs: TechnicalRequirement[]
   config?: Record<string, unknown>
   crossRecord?: {
     tensileStrengths?: number[]
@@ -304,7 +306,7 @@ export function RebarMechCompositeCard({
 
   // 共享各子段的 req 选项（按 IP-code 过滤）
   const reqByCodeByParam = useMemo(() => {
-    const map = new Map<string, InspectionTechnicalRequirement[]>()
+    const map = new Map<string, TechnicalRequirement[]>()
     for (const sub of subs) {
       map.set(
         sub.parameterCode,
@@ -346,7 +348,7 @@ export function RebarMechCompositeCard({
       }
       const mean = meanOf(strengths, rounder)
       const reqOptions = reqByCode.filter((r) => r.inspectionParameterCode === sub.parameterCode)
-      const req = reqOptions.find((r) => r.id === state.techReqId) ?? reqOptions[0]
+      const req = reqOptions.find((r) => techReqKey(r) === state.techReqId) ?? reqOptions[0]
       const v = autoVerdict(mean, req)
       const result = {
         loads: state.loads,

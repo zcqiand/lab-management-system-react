@@ -8,7 +8,7 @@
 //   - 删除按钮 → confirm + 调 DELETE
 //
 // react 仓镜像要点：
-//   - apiClient + API_ROUTES 与 nextjs 一致（共享 contracts.ts）
+//   - orval 具名函数（contracts tag）直连契约端点
 //   - toast 用 sonner（与 nextjs 一致）
 //   - Dialog/Button/Input/Card 都从 @/components/ui 走（shadcn 风格）
 //   - data-fn 用静态字面量字符串（M02.F01.I01/I02/I03），L5 静态解析能吃到
@@ -27,13 +27,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
-import type { Contract, ContractStatus } from "@/types/resources/contract";
+import {
+  contractsCreateContract,
+  contractsDeleteContract,
+  contractsListContracts,
+  contractsUpdateContract,
+} from "@/api/endpoints/contracts/contracts";
+import type { Contract } from "@/api/endpoints/model/contract";
+import type { ContractStatus } from "@/api/endpoints/model/contractStatus";
 import { ConfirmModal } from "@/components/ConfirmModal";
 
 type Mode = { kind: "idle" } | { kind: "create" } | { kind: "edit"; id: string };
 
-type ContractBody = Omit<Contract, "id" | "createdAt" | "updatedAt">;
+type ContractBody = Omit<Contract, "id" | "tenantId" | "createdAt" | "updatedAt">;
 
 const EMPTY_BODY: ContractBody = {
   contractCode: "",
@@ -57,17 +63,12 @@ export function ContractsList() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await apiClient.get<{ items: Contract[]; total: number }>(
-        API_ROUTES["/contracts"],
-        {
-          params: {
-            ...(status ? { status } : {}),
-            ...(keyword ? { keyword } : {}),
-            page: 1,
-            pageSize: "50",
-          },
-        },
-      );
+      const res = await contractsListContracts({
+        page: 1,
+        pageSize: 50,
+        status: (status || undefined) as ContractStatus | undefined,
+        keyword: keyword || undefined,
+      });
       setItems(Array.isArray(res.data?.items) ? res.data.items : []);
       setTotal(typeof res.data?.total === "number" ? res.data.total : 0);
     } finally {
@@ -105,7 +106,7 @@ export function ContractsList() {
           <ContractFormBody
             onSubmit={async (body) => {
               try {
-                await apiClient.post(API_ROUTES["/contracts"], body);
+                await contractsCreateContract(body);
                 toast.success("合同已创建");
                 setMode({ kind: "idle" });
                 await load();
@@ -135,7 +136,7 @@ export function ContractsList() {
               initial={editing}
               onSubmit={async (body) => {
                 try {
-                  await apiClient.put(`${API_ROUTES["/contracts"]}/${editing.id}`, body);
+                  await contractsUpdateContract(editing.id, body);
                   toast.success("合同已更新");
                   setMode({ kind: "idle" });
                   await load();
@@ -157,7 +158,7 @@ export function ContractsList() {
           const target = deleteTarget;
           setDeleteTarget(null);
           try {
-            await apiClient.delete(`${API_ROUTES["/contracts"]}/${target.id}`);
+            await contractsDeleteContract(target.id);
             toast.success("合同已删除");
             await load();
           } catch (err) {

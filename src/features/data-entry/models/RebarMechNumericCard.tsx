@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ParamModelProps } from './types'
-import type { InspectionTechnicalRequirement } from '@/types/inspection/inspection-technical-requirement'
+import { techReqKey } from './types'
+import type { TechnicalRequirement } from '@/api/endpoints/model/technicalRequirement'
 import { requirementLabel } from './DefaultParamCard'
 import { autoVerdict } from './cement-strength'
 import {
@@ -70,8 +71,8 @@ export function RebarMechNumericCard({
     () => techReqs.filter((r) => r.verificationStatus === 'verified'),
     [techReqs],
   )
-  const req: InspectionTechnicalRequirement | undefined =
-    reqOptions.find((r) => r.id === state.techReqId) ?? reqOptions[0]
+  const req: TechnicalRequirement | undefined =
+    reqOptions.find((r) => techReqKey(r) === state.techReqId) ?? reqOptions[0]
 
   // 比值卡的自动联立值（抗拉/屈服 或 实测屈服/标准屈服）；缺跨记录数据 → null（回退手动录入）
   const autoStrengths = useMemo<number[] | null>(() => {
@@ -149,7 +150,7 @@ export function RebarMechNumericCard({
   }
   const updateReq = (reqId: string) => {
     if (readOnly) return
-    const r = reqOptions.find((x) => x.id === reqId)
+    const r = reqOptions.find((x) => techReqKey(x) === reqId)
     const next = { ...state, techReqId: reqId, techReqLabel: r ? requirementLabel(r) : '' }
     setState(next)
     emit(next, strengths)
@@ -218,7 +219,7 @@ export function RebarMechNumericCard({
           >
             <option value="">未选</option>
             {reqOptions.map((r) => (
-              <option key={r.id} value={r.id}>
+              <option key={techReqKey(r)} value={techReqKey(r)}>
                 {requirementLabel(r)}
               </option>
             ))}

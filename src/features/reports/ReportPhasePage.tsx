@@ -4,13 +4,16 @@
 // - 共享 ReportPhasePage（参数：stage + submitLabel + i01/i02 I-level data-fn）
 // - 4 个 page wrapper 各传一组 stage/submitLabel/data-fn
 // - 顶部筛选 + 列表（按 flowStatus={stage} 过滤接样单）
-// - 选中行后「{submitLabel}」/「退回」按钮调 /api/receipts/flow 推进状态机
+// - 选中行后「{submitLabel}」/「退回」按钮调阶段 act 端点推进状态机
 //
 // react 仓镜像要点：
 //   - 复用 Batch 2B-1 ReceiptsList 模式（list + Dialog 自实现 + ConfirmModal）
 //   - data-fn 静态字面量字符串
+//   - M03 全 act 模式（ADR-0035）：按页面 stage 调对应 act 端点——
+//     review → POST /api/receipts/review/act；approval → approve/act；
+//     issuance → issuance/act；archived → archived/act
 //   - 「退回」= action=return，批次回退一阶；submit={submitLabel}= action=submit
-//   - 报告发放阶段（F07）额外在提交后生成报告编号（msw handler 已自动生成，此处只显示）
+//   - 报告发放阶段（F07）额外在提交后生成报告编号（后端 act 语义已含，此处只显示）
 
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -26,11 +29,31 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
-import type { SampleReceipt } from "@/types/process/sample-receipt";
-import { FLOW_STAGE_LABELS } from "@/types/process/flow";
+import {
+  receiptsActFlowApprove,
+  receiptsActFlowArchived,
+  receiptsActFlowIssuance,
+  receiptsActFlowReview,
+  receiptsListReceipts,
+} from "@/api/endpoints/receipts/receipts";
+import type { AxiosResponse } from "axios";
+import type { FlowActionRequest } from "@/api/endpoints/model/flowActionRequest";
+import type { FlowActionResult } from "@/api/endpoints/model/flowActionResult";
+import type { SampleReceipt } from "@/api/endpoints/model/sampleReceipt";
+import { FLOW_STAGE_LABELS } from "@/lib/flow-labels";
 
 type PhaseStage = "review" | "approval" | "issuance" | "archived";
+
+/** stage → 该阶段的 act 端点函数（M03 全 act 模式） */
+const STAGE_ACT: Record<
+  PhaseStage,
+  (req: FlowActionRequest) => Promise<AxiosResponse<FlowActionResult[]>>
+> = {
+  review: receiptsActFlowReview,
+  approval: receiptsActFlowApprove,
+  issuance: receiptsActFlowIssuance,
+  archived: receiptsActFlowArchived,
+};
 
 interface Props {
   title: string;
@@ -64,16 +87,12 @@ export function ReportPhasePage({
   const load = async () => {
     setLoading(true);
     try {
-      const params: Record<string, string> = {
-        page: "1",
-        pageSize: "50",
+      const res = await receiptsListReceipts({
+        page: 1,
+        pageSize: 50,
         flowStatus: stage,
-      };
-      if (keyword) params["keyword"] = keyword;
-      const res = await apiClient.get<{ items: SampleReceipt[]; total: number }>(
-        API_ROUTES["/receipts"],
-        { params },
-      );
+        keyword: keyword || undefined,
+      });
       setRows(Array.isArray(res.data?.items) ? res.data.items : []);
       setTotal(typeof res.data?.total === "number" ? res.data.total : 0);
       setSelected(new Set());
@@ -110,14 +129,12 @@ export function ReportPhasePage({
     }
     setSubmitting(true);
     try {
-      const res = await apiClient.post<{
-        results: Array<{ id: string; ok: boolean; message?: string }>;
-      }>(API_ROUTES["/receipts/flow"], {
+      const res = await STAGE_ACT[stage]({
         ids: Array.from(selected),
         action: "submit",
         operator: "current-user",
       });
-      const failed = (res.data?.results ?? []).filter((r) => !r.ok);
+      const failed = (res.data ?? []).filter((r) => !r.ok);
       if (failed.length === 0) {
         toast.success(`${submitLabel}完成（${selected.size} 单）`);
       } else {
@@ -135,7 +152,7 @@ export function ReportPhasePage({
     if (!returnTarget) return;
     setSubmitting(true);
     try {
-      await apiClient.post(API_ROUTES["/receipts/flow"], {
+      await STAGE_ACT[stage]({
         ids: [returnTarget.id],
         action: "return",
         operator: "current-user",

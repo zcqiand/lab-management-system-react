@@ -1,4 +1,5 @@
-import type { ParamInterfaceRow, ParamInterfaceLink } from '@/types/common'
+import type { ParamInterface } from '@/api/endpoints/model/paramInterface'
+import type { ParamInterfaceLink } from '@/api/endpoints/model/paramInterfaceLink'
 
 /**
  * 把「参数↔界面」关联派发成「参数 → 界面组件」查找表。
@@ -13,7 +14,7 @@ import type { ParamInterfaceRow, ParamInterfaceLink } from '@/types/common'
  * 「钢筋力学性能 / 机械连接 / 焊接接头」三类报告里要走不同录入卡，全局单卡无法表达。
  */
 export function resolveInterfaceByParam(
-  interfaces: ParamInterfaceRow[],
+  interfaces: ParamInterface[],
   links: ParamInterfaceLink[],
   categoryCode?: string,
 ): Record<string, { componentPath: string; config?: Record<string, unknown> }> {
@@ -34,7 +35,7 @@ export function resolveInterfaceByParam(
     if (pool.length === 0) continue
     const best = pool
       .map((l) => byCode.get(l.paramInterfaceCode))
-      .filter((i): i is ParamInterfaceRow => !!i)
+      .filter((i): i is ParamInterface => !!i)
       .sort((a, b) => a.sortOrder - b.sortOrder)[0]
     if (best) {
       // 链接上的 config（如 gravel/sampleRows）优先，参数本身 config 作 fallback

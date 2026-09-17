@@ -9,11 +9,12 @@
 //   - 「详情」链接到 /receipts/:id（M03.F09.I01 入口）
 //
 // react 仓镜像要点：
-//   - apiClient + API_ROUTES 与 nextjs 一致（共享 contracts.ts 同款）
+//   - orval 具名函数（receipts tag）直连契约端点
 //   - toast 用 sonner（与 nextjs 一致）
 //   - Dialog/Button/Input/Card 都从 @/components/ui 走（shadcn 风格）
 //   - data-fn 用静态字面量字符串（M03.F01.I01/I02/I03/I04），L5 静态解析能吃到
-//   - submit 流程走 /api/receipts/flow（installShapeAdapters 已含完整 8 阶流转语义）
+//   - submit 流程走阶段 act 端点 POST /api/receipts/receiving/act（M03 全 act 模式：
+//     本页是 receiving 阶段队列，提交 = receiving → task_assignment 前进）
 
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -30,9 +31,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
-import type { SampleReceipt } from "@/types/process/sample-receipt";
-import { FLOW_STAGE_LABELS } from "@/types/process/flow";
+import {
+  receiptsActFlowReceiving,
+  receiptsCreateReceipt,
+  receiptsDeleteReceipt,
+  receiptsListReceipts,
+  receiptsUpdateReceipt,
+} from "@/api/endpoints/receipts/receipts";
+import type { SampleReceipt } from "@/api/endpoints/model/sampleReceipt";
+import { FLOW_STAGE_LABELS } from "@/lib/flow-labels";
 import { ConfirmModal } from "@/components/ConfirmModal";
 
 type Mode = { kind: "idle" } | { kind: "create" } | { kind: "edit"; id: string };
@@ -72,15 +79,19 @@ export function ReceiptsList() {
   const load = async () => {
     setLoading(true);
     try {
-      const params: Record<string, string> = { page: "1", pageSize: "50" };
-      // 三态过滤：接样中 → flowStatus=receiving；已提交 → flowStatus!=receiving
-      if (flowFilter === "receiving") params["flowStatus"] = "receiving";
-      if (flowFilter === "submitted") params["flowStatus"] = "task_assignment";
-      if (keyword) params["keyword"] = keyword;
-      const res = await apiClient.get<{ items: SampleReceipt[]; total: number }>(
-        API_ROUTES["/receipts"],
-        { params },
-      );
+      // 三态过滤：接样中 → flowStatus=receiving；已提交 → flowStatus=task_assignment
+      const flowStatus =
+        flowFilter === "receiving"
+          ? ("receiving" as const)
+          : flowFilter === "submitted"
+            ? ("task_assignment" as const)
+            : undefined;
+      const res = await receiptsListReceipts({
+        page: 1,
+        pageSize: 50,
+        flowStatus,
+        keyword: keyword || undefined,
+      });
       setItems(Array.isArray(res.data?.items) ? res.data.items : []);
       setTotal(typeof res.data?.total === "number" ? res.data.total : 0);
     } finally {
@@ -102,11 +113,12 @@ export function ReceiptsList() {
   const handleSubmitReceipt = async (id: string) => {
     setSubmitting(id);
     try {
-      const res = await apiClient.post<{ results: Array<{ ok: boolean; message?: string }> }>(
-        API_ROUTES["/receipts/flow"],
-        { ids: [id], action: "submit", operator: "current-user" },
-      );
-      const r = res.data?.results?.[0];
+      const res = await receiptsActFlowReceiving({
+        ids: [id],
+        action: "submit",
+        operator: "current-user",
+      });
+      const r = res.data?.[0];
       if (r?.ok) {
         toast.success("接样单已提交到任务安排");
         await load();
@@ -146,7 +158,7 @@ export function ReceiptsList() {
           <ReceiptFormBody
             onSubmit={async (body) => {
               try {
-                await apiClient.post(API_ROUTES["/receipts"], {
+                await receiptsCreateReceipt({
                   ...body,
                   contractId: "placeholder-contract",
                   receivedBy: "current-user",
@@ -188,7 +200,7 @@ export function ReceiptsList() {
               }}
               onSubmit={async (body) => {
                 try {
-                  await apiClient.put(`${API_ROUTES["/receipts"]}/${editing.id}`, body);
+                  await receiptsUpdateReceipt(editing.id, body);
                   toast.success("接样单已更新");
                   setMode({ kind: "idle" });
                   await load();
@@ -210,7 +222,7 @@ export function ReceiptsList() {
           const target = deleteTarget;
           setDeleteTarget(null);
           try {
-            await apiClient.delete(`${API_ROUTES["/receipts"]}/${target.id}`);
+            await receiptsDeleteReceipt(target.id);
             toast.success("接样单已删除");
             await load();
           } catch (err) {

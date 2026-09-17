@@ -34,10 +34,29 @@ export function toApiError(err: unknown): ApiError {
 }
 
 /**
- * 注入运行时 baseUrl + Bearer token。
+ * 注入运行时 baseUrl + Bearer token + 401 处理。
  * 在 main.tsx 启动时调一次；getToken 用 callback 形式避免循环依赖。
+ *
+ * 幂等：拦截器只装一次（ref 单例），重复调用只刷新 getToken/onUnauthorized
+ * 回调——避免拦截器叠加导致旧闭包里的过期 token 盖掉新 token。
+ *
+ * onUnauthorized：任一请求 401 时回调（main.tsx 用它清持久化 token 落
+ * anonymous；不在此直接跳路由——FSM 状态变化由 useRequireAuth 守卫消费）。
  */
-export function installHttpClient(getToken: () => string | null): void {
+type UnauthorizedHandler = () => void;
+let currentGetToken: () => string | null = () => null;
+let currentOnUnauthorized: UnauthorizedHandler | null = null;
+let interceptorsInstalled = false;
+
+export function installHttpClient(
+  getToken: () => string | null,
+  onUnauthorized?: UnauthorizedHandler,
+): void {
+  currentGetToken = getToken;
+  if (onUnauthorized) currentOnUnauthorized = onUnauthorized;
+  if (interceptorsInstalled) return;
+  interceptorsInstalled = true;
+
   axios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     if (!config.baseURL) {
       config.baseURL = getApiBaseUrl();
@@ -46,12 +65,26 @@ export function installHttpClient(getToken: () => string | null): void {
     // 没有它，跨源响应的 Set-Cookie 不被存储、后续请求也不携带（RFC 6749 §10.12
     // 的 cookie 校验会因 "missing lab_sso_state cookie" 失败）。同源模式无副作用。
     config.withCredentials = true;
-    const token = getToken();
+    const token = currentGetToken();
     if (token) {
       config.headers.set("Authorization", `Bearer ${token}`);
     }
     return config;
   });
+
+  axios.interceptors.response.use(
+    (response) => response,
+    (error: unknown) => {
+      if (
+        currentOnUnauthorized &&
+        axios.isAxiosError(error) &&
+        error.response?.status === 401
+      ) {
+        currentOnUnauthorized();
+      }
+      return Promise.reject(error);
+    },
+  );
 }
 
 // 兼容老调用方：低阶 fetch 包装（仅用于不走 axios 的兜底场景）

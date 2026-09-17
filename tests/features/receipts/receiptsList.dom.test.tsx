@@ -8,27 +8,33 @@ import {
   renderedCommissionCodes,
   seedCommissionCodes,
 } from "../../helpers/real-chain";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
+import {
+  receiptsCreateReceipt,
+  receiptsDeleteReceipt,
+  receiptsGetReceipt,
+  receiptsListReceipts,
+} from "@/api/endpoints/receipts/receipts";
 import { ReceiptsList } from "@/features/receipts/ReceiptsList";
 
 /**
  * M03.F01 接样管理 smoke —— 真链路（直连真 nextjs :5201，msw 已拆）。
  *
  * 数据源：lab_dev.sample_receipts（globalSetup 每次跑前 upsert shared 种子，
- * receiving 行种子保证 24 条非空）。写路径（POST /api/receipts/flow）用
- * TEST- 前缀新建行承载：commissionDate=2099 使其稳定排在列表首位，
+ * receiving 行种子保证 24 条非空）。写路径（POST /api/receipts/receiving/act）
+ * 用 TEST- 前缀新建行承载：commissionDate=2099 使其稳定排在列表首位，
  * afterEach 删行回收，不触碰任何种子行。
  */
 
 beforeEach(async () => {
   installRealChain();
   // 清扫上次异常中断残留的 TEST 行（幂等隔离；正常路径 afterEach 已删）
-  const stale = await apiClient.get<{ items: Array<{ id: string }> }>(
-    API_ROUTES["/receipts"],
-    { params: { keyword: "WS-TEST-T8", page: 1, pageSize: 100 } },
-  );
+  const stale = await receiptsListReceipts({
+    keyword: "WS-TEST-T8",
+    page: 1,
+    pageSize: 100,
+  });
   for (const row of stale.data.items) {
-    await apiClient.delete(`${API_ROUTES["/receipts"]}/${row.id}`);
+    await receiptsDeleteReceipt(row.id);
   }
 });
 
@@ -37,7 +43,7 @@ describe("M03.F01 接样管理", () => {
   let createdId: string | null = null;
   afterEach(async () => {
     if (createdId) {
-      await apiClient.delete(`${API_ROUTES["/receipts"]}/${createdId}`).catch(() => {});
+      await receiptsDeleteReceipt(createdId).catch(() => {});
       createdId = null;
     }
   });
@@ -127,13 +133,13 @@ describe("M03.F01 接样管理", () => {
 
   fnTest(
     ["M03.F01.I04"],
-    "接样管理：提交按钮调真 POST /api/receipts/flow 推进 receiving → task_assignment",
+    "接样管理：提交按钮调真 POST /api/receipts/receiving/act 推进 receiving → task_assignment",
     // 写路径最重用例：建行 + 渲染 + flow 提交 + 列表刷新 + 复查 = 5+ 次
     // 远程 PG 多 RTT 请求，实测可到 ~52s —— 与 I01 同档放宽到 90s。
     { timeout: 90_000 },
     async () => {
       // 隔离：新建 TEST 行（不碰种子行），commissionDate 放未来使其稳定排列表首
-      const created = await apiClient.post<SampleReceiptDto>(API_ROUTES["/receipts"], {
+      const created = await receiptsCreateReceipt({
         contractId: "CONTRACT-001",
         commissionCode: "WS-TEST-T8-0001",
         commissionDate: "2099-12-31",
@@ -174,16 +180,8 @@ describe("M03.F01 接样管理", () => {
           beforeSubmit - 1,
         );
       });
-      const after = await apiClient.get<SampleReceiptDto>(
-        `${API_ROUTES["/receipts"]}/${createdId}`,
-      );
+      const after = await receiptsGetReceipt(createdId);
       expect(after.data.flowStatus).toBe("task_assignment");
     },
   );
 });
-
-interface SampleReceiptDto {
-  id: string;
-  flowStatus: string;
-  commissionCode: string;
-}

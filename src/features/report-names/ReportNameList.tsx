@@ -27,14 +27,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
+import {
+  reportNamesCreateReportName,
+  reportNamesDeleteReportName,
+  reportNamesListReportNames,
+  reportNamesUpdateReportName,
+} from "@/api/endpoints/report-names/report-names";
 import { ReportNameLinkDialog } from "@/features/report-names/ReportNameLinkDialog";
-import type { InspectionReportName } from "@/types/inspection/inspection-report-name";
-import { unwrapListResponse } from "@/lib/responses";
-import type { ExtFieldDef } from "@/types/api";
+import type { InspectionReportName } from "@/api/endpoints/model/inspectionReportName";
+import type { ExtFieldDef } from "@/api/endpoints/model/extFieldDef";
 import { ConfirmModal } from "@/components/ConfirmModal";
 
-type Mode = { kind: "idle" } | { kind: "create" } | { kind: "edit"; id: string };
+type Mode = { kind: "idle" } | { kind: "create" } | { kind: "edit"; code: string };
 
 interface ReportNameBody {
   code: string;
@@ -69,23 +73,20 @@ export function ReportNameList() {
   const load = async () => {
     setLoading(true);
     try {
-      const res = await apiClient.get<unknown>(API_ROUTES["/report-names"], {
-        params: {
-          ...(keyword ? { keyword } : {}),
-          page: 1,
-          pageSize: "50",
-        },
+      const res = await reportNamesListReportNames({
+        page: 1,
+        pageSize: 50,
+        keyword: keyword || undefined,
       });
-      const { items, total } = unwrapListResponse<InspectionReportName>(res);
-      setItems(items);
-      setTotal(total);
+      setItems(res.data?.items ?? []);
+      setTotal(res.data?.total ?? 0);
     } finally {
       setLoading(false);
     }
   };
 
   const editing =
-    mode.kind === "edit" ? (items.find((r) => r.id === mode.id) ?? null) : null;
+    mode.kind === "edit" ? (items.find((r) => r.code === mode.code) ?? null) : null;
 
   return (
     <>
@@ -119,7 +120,7 @@ export function ReportNameList() {
                 return;
               }
               try {
-                await apiClient.post(API_ROUTES["/report-names"], toPayload(body, parsed.value));
+                await reportNamesCreateReportName(toPayload(body, parsed.value));
                 toast.success("报告名称已创建");
                 setMode({ kind: "idle" });
                 await load();
@@ -154,8 +155,8 @@ export function ReportNameList() {
                   return;
                 }
                 try {
-                  await apiClient.put(
-                    `${API_ROUTES["/report-names"]}/${editing.id}`,
+                  await reportNamesUpdateReportName(
+                    editing.code,
                     toPayload(body, parsed.value),
                   );
                   toast.success("报告名称已更新");
@@ -179,7 +180,7 @@ export function ReportNameList() {
           const target = deleteTarget;
           setDeleteTarget(null);
           try {
-            await apiClient.delete(`${API_ROUTES["/report-names"]}/${target.id}`);
+            await reportNamesDeleteReportName(target.code);
             toast.success("报告名称已删除");
             await load();
           } catch (err) {
@@ -217,7 +218,7 @@ export function ReportNameList() {
                 </tr>
               )}
               {items.map((r) => (
-                <tr key={r.id} data-fn="M06.F07.I01" className="border-t hover:bg-slate-50">
+                <tr key={r.code} data-fn="M06.F07.I01" className="border-t hover:bg-slate-50">
                   <td className="px-4 py-2 font-mono text-xs">{r.code}</td>
                   <td className="px-4 py-2">{r.name}</td>
                   <td className="px-4 py-2">{r.fullName ?? "—"}</td>
@@ -243,7 +244,7 @@ export function ReportNameList() {
                       className="ml-2"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setMode({ kind: "edit", id: r.id });
+                        setMode({ kind: "edit", code: r.code });
                       }}
                     >
                       编辑

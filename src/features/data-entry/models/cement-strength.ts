@@ -1,7 +1,7 @@
 // 来源：lab-management-system-shared/mocks/domain/cement-strength.ts（逐字拷入）。
 // REF 的本文件是 `export * from '../../../../shared/mocks/domain/cement-strength'` re-export 壳；
 // 本仓家族 shared v0.2.0 已瘦身无 mocks/domain，故去壳直拷实现（仅改类型 import 路径）。
-import type { InspectionTechnicalRequirement } from '@/types/inspection/inspection-technical-requirement'
+import type { TechnicalRequirement } from '@/api/endpoints/model/technicalRequirement'
 
 /** 一次强度试验的计算产物。strengths/kept 与录入荷载同序、同长度。 */
 export interface StrengthResult {
@@ -80,7 +80,7 @@ export function computeCementCompress(loads: number[], area = 1600): StrengthRes
  */
 export function autoVerdict(
   mean: number | undefined,
-  req: InspectionTechnicalRequirement | undefined,
+  req: TechnicalRequirement | undefined,
 ): '合格' | '不合格' | '' {
   if (mean === undefined || !req) return ''
   const { comparison, minValue, maxValue, valueType } = req

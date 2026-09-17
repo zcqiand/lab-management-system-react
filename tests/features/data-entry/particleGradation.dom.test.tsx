@@ -6,7 +6,7 @@ import { render, fireEvent, cleanup, act } from "@testing-library/react";
 import { fnTest } from "../../fn";
 import { ParticleGradationCard } from "@/features/data-entry/models/ParticleGradationCard";
 import type { ParamModelProps } from "@/features/data-entry/models/types";
-import type { InspectionParameter } from "@/types/api";
+import type { InspectionParameter } from "@/api/endpoints/model/inspectionParameter";
 
 const param = (
   code: string,
@@ -14,7 +14,6 @@ const param = (
   unit?: string,
 ): InspectionParameter =>
   ({
-    id: code,
     code,
     name,
     rawName: name,

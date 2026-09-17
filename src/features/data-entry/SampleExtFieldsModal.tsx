@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent, type ReactElement } from "react";
-import type { ExtFieldDef } from "@/types/common/ext-field-def";
-import type { Sample } from "@/types/api";
+import type { ExtFieldDef } from "@/api/endpoints/model/extFieldDef";
+import type { Sample } from "@/api/endpoints/model/sample";
 
 export interface SampleExtFieldsModalProps {
   open: boolean;

@@ -4,11 +4,26 @@
 // Batch 2B-7 补足 12 卡：含 calcRule + crossRecord 入参（强屈比/超强比比值卡用）。
 
 import type { ReactElement } from "react";
-import type { InspectionParameter } from "@/types/inspection/inspection-parameter";
-import type { TestRecord } from "@/types/process/test-record";
-import type { InspectionStandard } from "@/types/inspection/inspection-standard";
-import type { InspectionStandardParameter } from "@/types/inspection/inspection-standard-parameter";
-import type { InspectionTechnicalRequirement } from "@/types/inspection/inspection-technical-requirement";
+import type { InspectionParameter } from "@/api/endpoints/model/inspectionParameter";
+import type { TestRecord } from "@/api/endpoints/model/testRecord";
+import type { InspectionStandard } from "@/api/endpoints/model/inspectionStandard";
+import type { StandardParameterLink } from "@/api/endpoints/model/standardParameterLink";
+import type { TechnicalRequirement } from "@/api/endpoints/model/technicalRequirement";
+
+/**
+ * 技术要求行键——契约实体（TechnicalRequirement）无 id 字段（复合业务键：
+ * inspectionObjectCode + inspectionParameterCode + judgmentStandardCode ± 品牌/
+ * 型号/等级/规格），UI 选择框 value / React key 用该复合键字符串。
+ */
+export function techReqKey(r: TechnicalRequirement): string {
+  return [
+    r.judgmentStandardCode,
+    r.brand ?? "",
+    r.model ?? "",
+    r.grade ?? "",
+    r.spec ?? "",
+  ].join("|");
+}
 
 /**
  * 钢筋力学性能「比值卡」（强屈比/超强比）跨记录联立入参：
@@ -29,8 +44,8 @@ export interface ParamModelProps {
   /** 当前选中的样品 id——模型卡用此区分不同样品的本地状态（如混凝土抗压的 loads）。 */
   sampleId: string;
   standards: InspectionStandard[];
-  stdParams: InspectionStandardParameter[];
-  techReqs: InspectionTechnicalRequirement[];
+  stdParams: StandardParameterLink[];
+  techReqs: TechnicalRequirement[];
   config: Record<string, unknown> | undefined;
   /**
    * 该参数的计算方法（M06.F05，按项目+参数+检测依据）。仅取 specimenCount 驱动「做几组数据」。

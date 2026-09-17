@@ -27,7 +27,7 @@ describe("Infrastructure anchor registration", () => {
   });
 
   it("axios interceptor module source file exists", () => {
-    expect(fs.existsSync(path.join(SRC, "src/api/legacy-client.ts"))).toBe(true);
+    expect(fs.existsSync(path.join(SRC, "src/api/http-client.ts"))).toBe(true);
   });
 
   it("orval-generated auth endpoint directory exists", () => {

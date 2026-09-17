@@ -28,30 +28,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { EmptyState } from "@/components/app/empty-state";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
-
-interface SummaryColumn {
-  key: string;
-  label: string;
-}
-
-interface SummaryData {
-  summaryName: string;
-  columns: SummaryColumn[];
-  rows: Array<Record<string, string>>;
-}
-
-interface DashboardStats {
-  contractCount: number;
-  receiptCount: number;
-  sampleCount: number;
-  reportCountByStatus: {
-    draft: number;
-    reviewing: number;
-    issued: number;
-  };
-  pendingTaskCount: number;
-}
+import {
+  summaryGetDashboardStats,
+  summaryGetReportSummary,
+} from "@/api/endpoints/summary/summary";
+import type { SummaryData } from "@/api/endpoints/model/summaryData";
+import type { DashboardStats } from "@/api/endpoints/model/dashboardStats";
 
 const STATUS_LABEL: Record<string, string> = {
   receiving: "接样",
@@ -77,17 +59,15 @@ export function SummaryList() {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    const params: Record<string, string> = {};
-    if (categoryCode && categoryCode !== "ALL") params.categoryCode = categoryCode;
+    const categoryParam =
+      categoryCode && categoryCode !== "ALL" ? categoryCode : undefined;
     Promise.all([
-      apiClient
-        .get<SummaryData>(API_ROUTES["/summary"], { params })
+      summaryGetReportSummary({ categoryCode: categoryParam })
         .then((res) => setData(res.data ?? null))
         .catch((e: unknown) => {
           setError(e instanceof Error ? e.message : "汇总加载失败");
         }),
-      apiClient
-        .get<DashboardStats>(`${API_ROUTES["/summary"]}/stats`)
+      summaryGetDashboardStats()
         .then((res) => setStats(res.data ?? null))
         .catch(() => undefined),
     ]).finally(() => setLoading(false));

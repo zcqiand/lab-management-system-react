@@ -18,8 +18,8 @@ import {
 import { CementCompressCard } from "@/features/data-entry/models/CementCompressCard";
 import { CementFlexuralCard } from "@/features/data-entry/models/CementFlexuralCard";
 import type { ParamModelProps } from "@/features/data-entry/models/types";
-import type { InspectionParameter } from "@/types/api";
-import type { InspectionTechnicalRequirement } from "@/types/inspection/inspection-technical-requirement";
+import type { InspectionParameter } from "@/api/endpoints/model/inspectionParameter";
+import type { TechnicalRequirement } from "@/api/endpoints/model/technicalRequirement";
 
 fnTest(["M03.F03.I01"], "水泥胶砂强度：抗折 Rf=1.5·F·L/b³（2kN → 4.7 MPa）", () => {
   expect(flexuralStrength(2)).toBe(4.7);
@@ -78,10 +78,10 @@ describe("computeCementFlexural / computeCementCompress", () => {
 
 describe("autoVerdict 均值 vs 技术要求", () => {
   const req = (
-    over: Partial<InspectionTechnicalRequirement>,
-  ): InspectionTechnicalRequirement =>
+    over: Partial<TechnicalRequirement>,
+  ): TechnicalRequirement =>
     ({
-      id: "req-1",
+      tenantId: "TENANT-TEST",
       inspectionObjectCode: "OBJ-SP01-P1",
       inspectionParameterCode: "IP-0556",
       judgmentStandardCode: "GB 175-2023",
@@ -94,7 +94,7 @@ describe("autoVerdict 均值 vs 技术要求", () => {
       createdAt: "",
       updatedAt: "",
       ...over,
-    }) as InspectionTechnicalRequirement;
+    }) as TechnicalRequirement;
 
   it("≥：均值达标→合格，不达标→不合格", () => {
     expect(autoVerdict(20, req({}))).toBe("合格");
@@ -121,7 +121,6 @@ describe("parseStrengthRecord", () => {
 
 const param = (code: string, name: string): InspectionParameter =>
   ({
-    id: code,
     code,
     name,
     rawName: name,
@@ -149,8 +148,8 @@ function makeProps(over: Partial<ParamModelProps> = {}): ParamModelProps {
   };
 }
 
-const verifiedReq: InspectionTechnicalRequirement = {
-  id: "req-42.5",
+const verifiedReq: TechnicalRequirement = {
+  tenantId: "TENANT-TEST",
   inspectionObjectCode: "OBJ-SP01-P1",
   inspectionParameterCode: "IP-0556",
   judgmentStandardCode: "GB 175-2023",
@@ -184,7 +183,8 @@ fnTest(["M03.F03.I02"], "CementCompressCard 有技术要求：录入均值达标
   inputs.forEach((el) => fireEvent.change(el, { target: { value: "80" } })); // → 50 MPa ≥ 17
   const last = onChange.mock.calls.at(-1)![0];
   expect(last.verdict).toBe("合格");
-  expect(last.requirementCode).toBe("req-42.5");
+  // 契约实体无 id：requirementCode 现在是复合键 techReqKey（判定标准|品牌|型号|等级|规格）
+  expect(last.requirementCode).toBe("GB 175-2023||||");
 });
 
 fnTest(["M03.F03.I03"], "CementCompressCard 无技术要求：回退手选单项评定", () => {

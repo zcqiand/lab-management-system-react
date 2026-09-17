@@ -1,8 +1,9 @@
 // ParameterStandardLinkDialog — M06.F03.I02（参数↔标准关联）。
 //
 // parameters 列表行内「关联标准」按钮的弹窗：列出全部检测标准（含状态），
-// toggle 该参数的关联（POST/DELETE /api/inspection/links/standard-parameter）。
-// 已关联集合从 msw GET links/standard-parameter 全量拉回后按
+// toggle 该参数的关联（orval inspection-dictionary tag：
+// linkStandardParameter / unlinkStandardParameter，DELETE 走 body）。
+// 已关联集合从 GET links/standard-parameter 全量拉回后按
 // inspectionParameterCode 过滤（契约 GET 只有 standardCode 过滤，客户端补）。
 
 import { useEffect, useState } from "react";
@@ -24,9 +25,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
-import type { InspectionStandard } from "@/types/inspection";
-import { unwrapListResponse } from "@/lib/responses";
+import {
+  inspectionDictionaryLinkStandardParameter,
+  inspectionDictionaryListStandardParameterLinks,
+  inspectionDictionaryListStandards,
+  inspectionDictionaryUnlinkStandardParameter,
+} from "@/api/endpoints/inspection-dictionary/inspection-dictionary";
+import type { InspectionStandard } from "@/api/endpoints/model/inspectionStandard";
 
 const STANDARD_STATUS_CN: Record<string, string> = {
   active: "现行",
@@ -62,16 +67,11 @@ export function ParameterStandardLinkDialog({
     try {
       // 标准全量（无分页上限的 keyword 空查询）+ 关联全量（客户端过滤）
       const [stdResp, linkResp] = await Promise.all([
-        apiClient.get<unknown>(API_ROUTES["/inspection-standards"], {
-          params: { page: 1, pageSize: 500 },
-        }),
-        apiClient.get<unknown>(API_ROUTES["/inspection-standard-parameters"]),
+        inspectionDictionaryListStandards({ page: 1, pageSize: 500 }),
+        inspectionDictionaryListStandardParameterLinks({}),
       ]);
-      const linkList = unwrapListResponse<{
-        inspectionStandardCode: string;
-        inspectionParameterCode: string;
-      }>(linkResp).items;
-      setStandards(unwrapListResponse<InspectionStandard>(stdResp).items);
+      const linkList = linkResp.data?.items ?? [];
+      setStandards(stdResp.data?.items ?? []);
       setLinked(
         new Set(
           linkList
@@ -95,11 +95,9 @@ export function ParameterStandardLinkDialog({
     setBusyCode(stdCode);
     try {
       if (linked.has(stdCode)) {
-        await apiClient.delete(API_ROUTES["/inspection-standard-parameters"], {
-          data: {
-            inspectionStandardCode: stdCode,
-            inspectionParameterCode: parameterCode,
-          },
+        await inspectionDictionaryUnlinkStandardParameter({
+          inspectionStandardCode: stdCode,
+          inspectionParameterCode: parameterCode,
         });
         setLinked((prev) => {
           const next = new Set(prev);
@@ -108,7 +106,7 @@ export function ParameterStandardLinkDialog({
         });
         toast.success(`已解除关联 ${stdCode}`);
       } else {
-        await apiClient.post(API_ROUTES["/inspection-standard-parameters"], {
+        await inspectionDictionaryLinkStandardParameter({
           inspectionStandardCode: stdCode,
           inspectionParameterCode: parameterCode,
         });

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ParamModelProps } from './types'
-import type { InspectionTechnicalRequirement } from '@/types/inspection/inspection-technical-requirement'
+import { techReqKey } from './types'
+import type { TechnicalRequirement } from '@/api/endpoints/model/technicalRequirement'
 import { requirementLabel } from './DefaultParamCard'
 import {
   parseTensileRecord,
@@ -16,7 +17,7 @@ const FRACTURE_OPTIONS = ['母材断裂', '焊缝断裂', '热影响区断裂', 
 /** 均值 vs 技术要求 → 合格/不合格；无法判定返回 ''。 */
 function autoVerdict(
   mean: number | undefined,
-  req: InspectionTechnicalRequirement | undefined,
+  req: TechnicalRequirement | undefined,
 ): '合格' | '不合格' | '' {
   if (mean === undefined || !req) return ''
   const { comparison, minValue, maxValue, valueType } = req
@@ -59,7 +60,7 @@ export function RebarWeldingTensileCard({
   )
 
   const mean = useMemo(() => meanOfSpecimen(spec), [spec])
-  const req = reqOptions.find((r) => r.id === spec.techReqId) ?? reqOptions[0]
+  const req = reqOptions.find((r) => techReqKey(r) === spec.techReqId) ?? reqOptions[0]
   const verdict = autoVerdict(mean, req)
 
   const emit = (next: TensileSpecimen) => {
@@ -102,7 +103,7 @@ export function RebarWeldingTensileCard({
   }
   const updateReq = (reqId: string) => {
     if (readOnly) return
-    const r = reqOptions.find((x) => x.id === reqId)
+    const r = reqOptions.find((x) => techReqKey(x) === reqId)
     update({
       techReqId: reqId,
       techReqLabel: r ? requirementLabel(r) : '',
@@ -163,7 +164,7 @@ export function RebarWeldingTensileCard({
           >
             <option value="">未选</option>
             {reqOptions.map((r) => (
-              <option key={r.id} value={r.id}>
+              <option key={techReqKey(r)} value={techReqKey(r)}>
                 {requirementLabel(r)}
               </option>
             ))}

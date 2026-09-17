@@ -26,10 +26,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
-import type { ParamInterfaceRow } from "@/types/common/inspection-param-interface";
+import {
+  paramInterfacesCreateParamInterface,
+  paramInterfacesDeleteParamInterface,
+  paramInterfacesListParamInterfaces,
+  paramInterfacesUpdateParamInterface,
+} from "@/api/endpoints/param-interfaces/param-interfaces";
+import type { ParamInterface } from "@/api/endpoints/model/paramInterface";
 import { ConfirmModal } from "@/components/ConfirmModal";
-import { unwrapListResponse } from "@/lib/responses";
 
 type Mode = { kind: "idle" } | { kind: "create" } | { kind: "edit"; id: string };
 
@@ -46,26 +50,23 @@ const EMPTY_BODY: ParamInterfaceBody = {
 };
 
 export function ParamInterfaceList() {
-  const [items, setItems] = useState<ParamInterfaceRow[]>([]);
+  const [items, setItems] = useState<ParamInterface[]>([]);
   const [total, setTotal] = useState(0);
   const [keyword, setKeyword] = useState("");
   const [mode, setMode] = useState<Mode>({ kind: "idle" });
   const [loading, setLoading] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState<ParamInterfaceRow | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<ParamInterface | null>(null);
 
   const load = async () => {
     setLoading(true);
     try {
-      const res = await apiClient.get<unknown>(API_ROUTES["/inspection-param-interfaces"], {
-        params: {
-          ...(keyword ? { keyword } : {}),
-          page: 1,
-          pageSize: "50",
-        },
+      const res = await paramInterfacesListParamInterfaces({
+        page: 1,
+        pageSize: 50,
+        keyword: keyword || undefined,
       });
-      const { items: listItems, total: listTotal } = unwrapListResponse<ParamInterfaceRow>(res);
-      setItems(listItems);
-      setTotal(listTotal);
+      setItems(res.data?.items ?? []);
+      setTotal(res.data?.total ?? 0);
     } finally {
       setLoading(false);
     }
@@ -100,7 +101,7 @@ export function ParamInterfaceList() {
           <ParamInterfaceFormBody
             onSubmit={async (body) => {
               try {
-                await apiClient.post(API_ROUTES["/inspection-param-interfaces"], body);
+                await paramInterfacesCreateParamInterface(body);
                 toast.success("参数界面已创建");
                 setMode({ kind: "idle" });
                 await load();
@@ -130,10 +131,7 @@ export function ParamInterfaceList() {
               initial={editing}
               onSubmit={async (body) => {
                 try {
-                  await apiClient.put(
-                    `${API_ROUTES["/inspection-param-interfaces"]}/${editing.code}`,
-                    body,
-                  );
+                  await paramInterfacesUpdateParamInterface(editing.code, body);
                   toast.success("参数界面已更新");
                   setMode({ kind: "idle" });
                   await load();
@@ -155,9 +153,7 @@ export function ParamInterfaceList() {
           const target = deleteTarget;
           setDeleteTarget(null);
           try {
-            await apiClient.delete(
-              `${API_ROUTES["/inspection-param-interfaces"]}/${target.code}`,
-            );
+            await paramInterfacesDeleteParamInterface(target.code);
             toast.success("参数界面已删除");
             await load();
           } catch (err) {
@@ -290,7 +286,7 @@ function ParamInterfaceFormBody({
   initial,
   onSubmit,
 }: {
-  initial?: ParamInterfaceRow;
+  initial?: ParamInterface;
   onSubmit: (body: ParamInterfaceBody) => Promise<void> | void;
 }) {
   const [body, setBody] = useState<ParamInterfaceBody>(

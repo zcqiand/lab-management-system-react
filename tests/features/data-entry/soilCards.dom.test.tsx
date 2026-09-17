@@ -12,7 +12,7 @@ import {
   computeCompactionDegree,
 } from "@/features/data-entry/models/SoilCompactionDegreeCard";
 import type { ParamModelProps } from "@/features/data-entry/models/types";
-import type { InspectionParameter } from "@/types/api";
+import type { InspectionParameter } from "@/api/endpoints/model/inspectionParameter";
 
 const param = (
   code: string,
@@ -20,7 +20,6 @@ const param = (
   unit?: string,
 ): InspectionParameter =>
   ({
-    id: code,
     code,
     name,
     rawName: name,

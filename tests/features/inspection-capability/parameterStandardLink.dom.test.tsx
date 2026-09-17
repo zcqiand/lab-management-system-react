@@ -14,7 +14,7 @@ import {
   SEED,
   firstUnlinkedStandardFor,
 } from "../../helpers/real-chain";
-import { apiClient, API_ROUTES } from "@/api/legacy-client";
+import axios from "axios";
 import { ParameterStandardLinkDialog } from "@/features/inspection-capability/ParameterStandardLinkDialog";
 
 /** 种子锚参数：IP-0001（凝结时间），GB 175-2023 在种子中已关联它。 */
@@ -36,7 +36,9 @@ function unlinkPair(stdCode: string): Promise<unknown> {
     inspectionStandardCode: stdCode,
     inspectionParameterCode: PARAM.code,
   }).toString();
-  return apiClient.delete(`${API_ROUTES["/inspection-standard-parameters"]}?${qs}`);
+  // 契约路径 /api/inspection/links/standard-parameter（与 orval 生成物一致）；
+  // installRealChain() 装好的拦截器会给这个裸 axios 实例补 baseURL/token。
+  return axios.delete(`/api/inspection/links/standard-parameter?${qs}`);
 }
 
 beforeEach(async () => {
