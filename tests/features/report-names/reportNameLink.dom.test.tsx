@@ -31,16 +31,18 @@ function unlinkParamPair(): Promise<unknown> {
   return axios.delete(`/api/report-names/links/parameter?${qs}`);
 }
 
+// hook 级 30s：清场/回收 DELETE 走 :5201→远程 PG 多 RTT，与下方 it 级 45s
+// 放宽同源（真链路延迟预算见 tests/helpers/real-chain.ts 文件头）
 beforeEach(async () => {
   installRealChain();
   // 清场：toggle 目标 pair 若因上次异常中断残留在 nextjs 进程内，先解除
   await unlinkParamPair().catch(() => {});
-});
+}, 30_000);
 
 afterEach(async () => {
   // 回收 toggle 产生的关联行（nextjs 进程内存不随测试复位）
   await unlinkParamPair().catch(() => {});
-});
+}, 30_000);
 
 function renderDialog() {
   return render(
@@ -57,8 +59,10 @@ function renderDialog() {
 describe("M06.F07.I02 报告名称↔标准/参数关联", () => {
   fnTest(
     ["M06.F07.I02"],
+    // 90s 档（同 receiptsList 首用例）：两段列表 = standards + parameters 两次
+    // 聚合请求，:5201 冷编译 + 远程 PG 多 RTT 实测可到 ~56s
     "关联弹窗：两段列表渲染（标准 + 参数，真后端种子数据穿透）",
-    { timeout: 45_000 },
+    { timeout: 90_000 },
     async () => {
       renderDialog();
       await waitFor(() => {

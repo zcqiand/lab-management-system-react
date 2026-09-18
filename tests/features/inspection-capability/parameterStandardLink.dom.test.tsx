@@ -41,16 +41,18 @@ function unlinkPair(stdCode: string): Promise<unknown> {
   return axios.delete(`/api/inspection/links/standard-parameter?${qs}`);
 }
 
+// hook 级 30s：清场/回收 DELETE 走 :5201→远程 PG 多 RTT，与下方 it 级 45s
+// 放宽同源（真链路延迟预算见 tests/helpers/real-chain.ts 文件头）
 beforeEach(async () => {
   installRealChain();
   // 清场：toggle 目标 pair 若因上次异常中断残留在 nextjs 进程内，先解除
   await unlinkPair(TOGGLE_TARGET).catch(() => {});
-});
+}, 30_000);
 
 afterEach(async () => {
   // 回收 toggle 产生的关联行（nextjs 进程内存不随测试复位）
   await unlinkPair(TOGGLE_TARGET).catch(() => {});
-});
+}, 30_000);
 
 function renderDialog() {
   return render(

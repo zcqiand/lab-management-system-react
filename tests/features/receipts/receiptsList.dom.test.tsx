@@ -25,6 +25,8 @@ import { ReceiptsList } from "@/features/receipts/ReceiptsList";
  * afterEach 删行回收，不触碰任何种子行。
  */
 
+// hook 级 30s：清场 list + 逐行 DELETE 走 :5201→远程 PG 多 RTT，与下方
+// it 级 45s/90s 放宽同源（真链路延迟预算见 tests/helpers/real-chain.ts 文件头）
 beforeEach(async () => {
   installRealChain();
   // 清扫上次异常中断残留的 TEST 行（幂等隔离；正常路径 afterEach 已删）
@@ -36,7 +38,7 @@ beforeEach(async () => {
   for (const row of stale.data.items) {
     await receiptsDeleteReceipt(row.id);
   }
-});
+}, 30_000);
 
 describe("M03.F01 接样管理", () => {
   // 写路径隔离：TEST 行按精确 id 回收（POST 由服务端生成 id，客户端持有）
@@ -46,7 +48,7 @@ describe("M03.F01 接样管理", () => {
       await receiptsDeleteReceipt(createdId).catch(() => {});
       createdId = null;
     }
-  });
+  }, 30_000);
 
   fnTest(
     ["M03.F01.I01"],
