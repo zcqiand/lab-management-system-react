@@ -98,9 +98,9 @@
 | M03.F01.I04 | 提交接样单（receiving → task_assignment） | 按钮 | 前端+后端 |  | 已上线 |
 | M03.F01.I07 | 接样单 ext 字段补录 | 接口 | 前端+后端 |  | 已上线 |
 | M03.F01.I06 | 接样单流程历史 | 接口 | 前端+后端 | GET /api/receipts/{id}/history：返回 FlowHistoryEntry[]（jsonb 展开为 List） | 规划 |
-| M03.F01.I08 | 接样-提交 | 接口 | 前端+后端 | POST /api/receipts/receiving/act with body.action=SUBMIT（2026-09-17：与 I09/I10 共 F01 新 act 端点；7 阶段全 act 模式统一） | 已上线 |
-| M03.F01.I09 | 接样-退回 | 接口 | 前端+后端 | POST /api/receipts/receiving/act with body.action=RETURN（2026-09-17：与 I08/I10 共 F01 新 act 端点；前置阶段退回，无前置则 422） | 已上线 |
-| M03.F01.I10 | 接样-撤回 | 接口 | 前端+后端 | POST /api/receipts/receiving/act with body.action=WITHDRAW（2026-09-17：与 I08/I09 共 F01 新 act 端点；提交人撤回回到原阶段） | 已上线 |
+| M03.F01.I08 | 接样-提交 | 接口 | 前端+后端 | POST /api/receipts/receiving/act，body.action={SUBMIT、RETURN、WITHDRAW} 三动作统一（2026-09-18：I09 退回/I10 撤回语义并入本行；7 阶段全 act 模式） | 已上线 |
+| M03.F01.I09 | 接样-退回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F01.I08（act 端点以 body.action=RETURN 区分，无独立端点） | 已废弃 |
+| M03.F01.I10 | 接样-撤回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F01.I08（act 端点以 body.action=WITHDRAW 区分，无独立端点） | 已废弃 |
 
 ### M03.F02 任务分配（安排检测人员/计划日期）
 
@@ -110,9 +110,9 @@
 | M03.F02.I02 | 安排/取消检测人员与计划日期 | 按钮 | 前端+后端 |  | 已上线 |
 | M03.F02.I03 | 任务取消（清空分配） | 接口 | 前端+后端 | 清空 assignee/assigneeId/plannedTestDate，把已分配单子在本阶段重置为未分配（非退回接样；退回接样走 FlowStagePage 通用退回按钮） | 规划 |
 | M03.F02.I04 | 任务分配三态过滤器 | 接口 | 前端+后端 | 全部/未提交/已提交：按 flowStatus 过滤任务分配列表 | 规划 |
-| M03.F02.I05 | 任务分配-提交 | 接口 | 前端+后端 | POST /api/receipts/assigning/act with body.action=SUBMIT（2026-09-17：与 I06/I07 共 F02 新 act 端点；7 阶段全 act 模式统一） | 已上线 |
-| M03.F02.I06 | 任务分配-退回 | 接口 | 前端+后端 | POST /api/receipts/assigning/act with body.action=RETURN（2026-09-17：与 I05/I07 共 F02 新 act 端点；退回到 receiving） | 已上线 |
-| M03.F02.I07 | 任务分配-撤回 | 接口 | 前端+后端 | POST /api/receipts/assigning/act with body.action=WITHDRAW（2026-09-17：与 I05/I06 共 F02 新 act 端点） | 已上线 |
+| M03.F02.I05 | 任务分配-提交 | 接口 | 前端+后端 | POST /api/receipts/assigning/act，body.action={SUBMIT、RETURN、WITHDRAW} 三动作统一（2026-09-18：I06 退回/I07 撤回语义并入本行；7 阶段全 act 模式） | 已上线 |
+| M03.F02.I06 | 任务分配-退回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F02.I05（act 端点以 body.action=RETURN 区分，无独立端点） | 已废弃 |
+| M03.F02.I07 | 任务分配-撤回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F02.I05（act 端点以 body.action=WITHDRAW 区分，无独立端点） | 已废弃 |
 
 ### M03.F03 数据录入（样品检测数据 + 人工改判）
 
@@ -126,9 +126,9 @@
 | M03.F03.I07 | 检测记录详情 | 接口 | 前端+后端 | GET /api/test-records/{id}：返回 TestRecord | 规划 |
 | M03.F03.I08 | 创建检测记录 | 接口 | 前端+后端 | POST /api/test-records：sampleId/parameterCode/requirement/result 必填；tenant 从 token claim 注入 | 规划 |
 | M03.F03.I09 | 更新检测记录 | 接口 | 前端+后端 | PUT /api/test-records/{id}：PATCH 语义，未传字段保留 | 规划 |
-| M03.F03.I12 | 数据录入-提交 | 接口 | 前端+后端 | POST /api/receipts/data-entry/act with body.action=SUBMIT（2026-09-17：与 I13/I14 共 F03 新 act 端点；7 阶段全 act 模式统一） | 已上线 |
-| M03.F03.I13 | 数据录入-退回 | 接口 | 前端+后端 | POST /api/receipts/data-entry/act with body.action=RETURN（2026-09-17：与 I12/I14 共 F03 新 act 端点；退回到 assigning） | 已上线 |
-| M03.F03.I14 | 数据录入-撤回 | 接口 | 前端+后端 | POST /api/receipts/data-entry/act with body.action=WITHDRAW（2026-09-17：与 I12/I13 共 F03 新 act 端点） | 已上线 |
+| M03.F03.I12 | 数据录入-提交 | 接口 | 前端+后端 | POST /api/receipts/data-entry/act，body.action={SUBMIT、RETURN、WITHDRAW} 三动作统一（2026-09-18：I13 退回/I14 撤回语义并入本行；7 阶段全 act 模式） | 已上线 |
+| M03.F03.I13 | 数据录入-退回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F03.I12（act 端点以 body.action=RETURN 区分，无独立端点） | 已废弃 |
+| M03.F03.I14 | 数据录入-撤回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F03.I12（act 端点以 body.action=WITHDRAW 区分，无独立端点） | 已废弃 |
 | M03.F03.I15 | 数据录入三态过滤器 | 按钮 | 仅前端 | 全部/未提交/已提交：按 flowStatus 过滤数据录入列表（前端过滤器，触发 GET /api/receipts?flowStatus=…） | 开发中 |
 
 ### M03.F05 报告审核流程
@@ -137,13 +137,13 @@
 |---|---|---|---|---|---|
 | M03.F05.I01 | 审核队列（review 阶段） | 页面 | 前端+后端 |  | 已上线 |
 | M03.F05.I02 | 审核通过/驳回（submit/return） | 按钮 | 前端+后端 |  | 已上线 |
-| M03.F05.I03 | 报告审核-通过/退回 | 接口 | 前端+后端 | POST /api/receipts/flow：FlowActionRequest{ids, action, operator, reason}；review 视角下 action=SUBMIT 推进到 approval / RETURN 退回 data_entry | 规划 |
+| M03.F05.I03 | 报告审核-通过/退回 | 接口 | 前端+后端 | 2026-09-17 标记 已废弃（/flow 端点删除，ReportFlowApi 并入 ReceiptsApi）；2026-09-18 端点锚定收敛至 M03.F05.I07，本行无独立端点 | 已废弃 |
 | M03.F05.I04 | 报告审核三态过滤器 | 接口 | 前端+后端 | 全部/未提交/已提交：按 flowStatus 过滤报告审核列表 | 规划 |
 | M03.F05.I05 | 报告审核-批量提交（已废） | 接口 | 前端+后端 | POST /api/receipts/review/batch-submit：2026-09-17 标记 已废弃，删 op（未实现） | 已废弃 |
 | M03.F05.I06 | 报告审核-批量退回（已废） | 接口 | 前端+后端 | POST /api/receipts/review/batch-return：2026-09-17 标记 已废弃，删 op（未实现） | 已废弃 |
-| M03.F05.I07 | 报告审核-提交 | 接口 | 前端+后端 | POST /api/receipts/review/act with body.action=SUBMIT（2026-09-17 新增，与 I08/I09 共 F05.I03 旧端点；4 阶段全 act 合并方案 B） | 已上线 |
-| M03.F05.I08 | 报告审核-退回 | 接口 | 前端+后端 | POST /api/receipts/review/act with body.action=RETURN（2026-09-17 新增，与 I07/I09 共 F05.I03 旧端点） | 已上线 |
-| M03.F05.I09 | 报告审核-撤回 | 接口 | 前端+后端 | POST /api/receipts/review/act with body.action=WITHDRAW（2026-09-17 新增，与 I07/I08 共 F05.I03 旧端点；同阶段 3 动作统一走 act） | 已上线 |
+| M03.F05.I07 | 报告审核-提交 | 接口 | 前端+后端 | POST /api/receipts/review/act，body.action={SUBMIT、RETURN、WITHDRAW} 三动作统一（2026-09-18：I08 退回/I09 撤回语义并入本行；4 阶段全 act 合并方案 B） | 已上线 |
+| M03.F05.I08 | 报告审核-退回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F05.I07（act 端点以 body.action=RETURN 区分，无独立端点） | 已废弃 |
+| M03.F05.I09 | 报告审核-撤回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F05.I07（act 端点以 body.action=WITHDRAW 区分，无独立端点） | 已废弃 |
 
 ### M03.F06 报告批准流程
 
@@ -151,11 +151,11 @@
 |---|---|---|---|---|---|
 | M03.F06.I01 | 批准队列（approval 阶段） | 页面 | 前端+后端 |  | 已上线 |
 | M03.F06.I02 | 批准/驳回 | 按钮 | 前端+后端 |  | 已上线 |
-| M03.F06.I03 | 报告批准-批准/退回 | 接口 | 前端+后端 | POST /api/receipts/flow：approval 视角下 action=SUBMIT 推进到 issuance / RETURN 退回 review | 规划 |
+| M03.F06.I03 | 报告批准-批准/退回 | 接口 | 前端+后端 | 2026-09-17 标记 已废弃（/flow 端点删除，ReportFlowApi 并入 ReceiptsApi）；2026-09-18 端点锚定收敛至 M03.F06.I05，本行无独立端点 | 已废弃 |
 | M03.F06.I04 | 报告批准三态过滤器 | 接口 | 前端+后端 | 全部/未提交/已提交：按 flowStatus 过滤报告批准列表 | 规划 |
-| M03.F06.I05 | 报告批准-提交 | 接口 | 前端+后端 | POST /api/receipts/approve/act with body.action=SUBMIT（2026-09-17 新增，与 I06/I07 共 F06.I03 旧端点；4 阶段全 act 合并方案 B） | 已上线 |
-| M03.F06.I06 | 报告批准-退回 | 接口 | 前端+后端 | POST /api/receipts/approve/act with body.action=RETURN（2026-09-17 新增，与 I05/I07 共 F06.I03 旧端点） | 已上线 |
-| M03.F06.I07 | 报告批准-撤回 | 接口 | 前端+后端 | POST /api/receipts/approve/act with body.action=WITHDRAW（2026-09-17 新增，与 I05/I06 共 F06.I03 旧端点） | 已上线 |
+| M03.F06.I05 | 报告批准-提交 | 接口 | 前端+后端 | POST /api/receipts/approve/act，body.action={SUBMIT、RETURN、WITHDRAW} 三动作统一（2026-09-18：I06 退回/I07 撤回语义并入本行；4 阶段全 act 合并方案 B） | 已上线 |
+| M03.F06.I06 | 报告批准-退回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F06.I05（act 端点以 body.action=RETURN 区分，无独立端点） | 已废弃 |
+| M03.F06.I07 | 报告批准-撤回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F06.I05（act 端点以 body.action=WITHDRAW 区分，无独立端点） | 已废弃 |
 
 ### M03.F07 报告发放流程
 
@@ -163,11 +163,11 @@
 |---|---|---|---|---|---|
 | M03.F07.I01 | 发放队列（issuance 阶段） | 页面 | 前端+后端 |  | 已上线 |
 | M03.F07.I02 | 发放（生成报告编号） | 按钮 | 前端+后端 |  | 已上线 |
-| M03.F07.I03 | 报告发放-发放/退回 | 接口 | 前端+后端 | POST /api/receipts/flow：issuance 视角下 action=SUBMIT 推进到 archived / RETURN 退回 approval | 规划 |
+| M03.F07.I03 | 报告发放-发放/退回 | 接口 | 前端+后端 | 2026-09-17 标记 已废弃（/flow 端点删除，ReportFlowApi 并入 ReceiptsApi）；2026-09-18 端点锚定收敛至 M03.F07.I05，本行无独立端点 | 已废弃 |
 | M03.F07.I04 | 报告发放三态过滤器 | 接口 | 前端+后端 | 全部/未提交/已提交：按 flowStatus 过滤报告发放列表 | 规划 |
-| M03.F07.I05 | 报告发放-提交 | 接口 | 前端+后端 | POST /api/receipts/issuance/act with body.action=SUBMIT（2026-09-17 新增，与 I06/I07 共 F07.I03 旧端点；4 阶段全 act 合并方案 B） | 已上线 |
-| M03.F07.I06 | 报告发放-退回 | 接口 | 前端+后端 | POST /api/receipts/issuance/act with body.action=RETURN（2026-09-17 新增，与 I05/I07 共 F07.I03 旧端点） | 已上线 |
-| M03.F07.I07 | 报告发放-撤回 | 接口 | 前端+后端 | POST /api/receipts/issuance/act with body.action=WITHDRAW（2026-09-17 新增，与 I05/I06 共 F07.I03 旧端点） | 已上线 |
+| M03.F07.I05 | 报告发放-提交 | 接口 | 前端+后端 | POST /api/receipts/issuance/act，body.action={SUBMIT、RETURN、WITHDRAW} 三动作统一（2026-09-18：I06 退回/I07 撤回语义并入本行；4 阶段全 act 合并方案 B） | 已上线 |
+| M03.F07.I06 | 报告发放-退回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F07.I05（act 端点以 body.action=RETURN 区分，无独立端点） | 已废弃 |
+| M03.F07.I07 | 报告发放-撤回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F07.I05（act 端点以 body.action=WITHDRAW 区分，无独立端点） | 已废弃 |
 
 ### M03.F08 报告归档流程
 
@@ -175,11 +175,11 @@
 |---|---|---|---|---|---|
 | M03.F08.I01 | 归档队列（archived 阶段） | 页面 | 前端+后端 |  | 已上线 |
 | M03.F08.I02 | 归档完成 | 按钮 | 前端+后端 |  | 已上线 |
-| M03.F08.I03 | 报告归档-归档/退回 | 接口 | 前端+后端 | POST /api/receipts/flow：archived 视角下 action=SUBMIT 推进终态 / RETURN 退回 issuance | 规划 |
+| M03.F08.I03 | 报告归档-归档/退回 | 接口 | 前端+后端 | 2026-09-17 标记 已废弃（/flow 端点删除，ReportFlowApi 并入 ReceiptsApi）；2026-09-18 端点锚定收敛至 M03.F08.I05，本行无独立端点 | 已废弃 |
 | M03.F08.I04 | 报告归档三态过滤器 | 接口 | 前端+后端 | 全部/未提交/已提交：按 flowStatus 过滤报告归档列表 | 规划 |
-| M03.F08.I05 | 报告归档-提交 | 接口 | 前端+后端 | POST /api/receipts/archived/act with body.action=SUBMIT（2026-09-17 新增，与 I06/I07 共 F08.I03 旧端点；4 阶段全 act 合并方案 B） | 已上线 |
-| M03.F08.I06 | 报告归档-退回 | 接口 | 前端+后端 | POST /api/receipts/archived/act with body.action=RETURN（2026-09-17 新增，与 I05/I07 共 F08.I03 旧端点） | 已上线 |
-| M03.F08.I07 | 报告归档-撤回 | 接口 | 前端+后端 | POST /api/receipts/archived/act with body.action=WITHDRAW（2026-09-17 新增，与 I05/I06 共 F08.I03 旧端点） | 已上线 |
+| M03.F08.I05 | 报告归档-提交 | 接口 | 前端+后端 | POST /api/receipts/archived/act，body.action={SUBMIT、RETURN、WITHDRAW} 三动作统一（2026-09-18：I06 退回/I07 撤回语义并入本行；4 阶段全 act 合并方案 B） | 已上线 |
+| M03.F08.I06 | 报告归档-退回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F08.I05（act 端点以 body.action=RETURN 区分，无独立端点） | 已废弃 |
+| M03.F08.I07 | 报告归档-撤回 | 接口 | 前端+后端 | 2026-09-18 标记 已废弃：语义并入 M03.F08.I05（act 端点以 body.action=WITHDRAW 区分，无独立端点） | 已废弃 |
 
 ### M03.F09 接样单详情（接样+样品+检测数据+预览）
 
@@ -206,7 +206,8 @@
 |---|---|---|---|---|---|
 | M04.F06.I01 | 型号列表（按专项过滤 + 拖拽排序） | 页面 | 前端+后端 |  | 已上线 |
 | M04.F06.I02 | 新建/编辑型号 | 按钮 | 前端+后端 |  | 已上线 |
-| M04.F06.I03 | 删除型号（引用保护） | 按钮 | 前端+后端 |  | 已上线 |
+| M04.F06.I03 | 删除型号（引用保护） | 按钮 | 前端+后端 | 2026-09-18 标记 已废弃：编号错位收敛（BASE I03=更新型号）；删除语义迁至 M04.F06.I04，本行 ID 保留作历史，不再挂新引用 | 已废弃 |
+| M04.F06.I04 | 删除型号（引用保护） | 按钮 | 前端+后端 | BASE 编号对齐：DELETE /api/catalog/models/{code}（实现即原 M04.F06.I03） | 已上线 |
 
 ### M04.F07 规格维护
 
@@ -214,7 +215,8 @@
 |---|---|---|---|---|---|
 | M04.F07.I01 | 规格列表 | 页面 | 前端+后端 |  | 已上线 |
 | M04.F07.I02 | 新建/编辑规格 | 按钮 | 前端+后端 |  | 已上线 |
-| M04.F07.I03 | 删除规格 | 按钮 | 前端+后端 |  | 已上线 |
+| M04.F07.I03 | 删除规格 | 按钮 | 前端+后端 | 2026-09-18 标记 已废弃：编号错位收敛（BASE I03=更新规格）；删除语义迁至 M04.F07.I04，本行 ID 保留作历史，不再挂新引用 | 已废弃 |
+| M04.F07.I04 | 删除规格 | 按钮 | 前端+后端 | BASE 编号对齐：DELETE /api/catalog/specs/{code}（实现即原 M04.F07.I03） | 已上线 |
 
 ### M04.F08 等级维护
 
@@ -222,7 +224,8 @@
 |---|---|---|---|---|---|
 | M04.F08.I01 | 等级列表 | 页面 | 前端+后端 |  | 已上线 |
 | M04.F08.I02 | 新建/编辑等级 | 按钮 | 前端+后端 |  | 已上线 |
-| M04.F08.I03 | 删除等级 | 按钮 | 前端+后端 |  | 已上线 |
+| M04.F08.I03 | 删除等级 | 按钮 | 前端+后端 | 2026-09-18 标记 已废弃：编号错位收敛（BASE I03=更新等级）；删除语义迁至 M04.F08.I04，本行 ID 保留作历史，不再挂新引用 | 已废弃 |
+| M04.F08.I04 | 删除等级 | 按钮 | 前端+后端 | BASE 编号对齐：DELETE /api/catalog/grades/{code}（实现即原 M04.F08.I03） | 已上线 |
 
 ### M04.F09 牌号维护
 
@@ -317,7 +320,8 @@
 |---|---|---|---|---|---|
 | M06.F06.I01 | 技术要求列表（多维过滤） | 页面 | 前端+后端 |  | 已上线 |
 | M06.F06.I02 | 新建/编辑技术要求 | 按钮 | 前端+后端 |  | 已上线 |
-| M06.F06.I03 | 删除技术要求（引用保护） | 按钮 | 前端+后端 |  | 已上线 |
+| M06.F06.I03 | 删除技术要求（引用保护） | 按钮 | 前端+后端 | 2026-09-18 标记 已废弃：编号错位收敛（BASE I03=创建技术要求）；删除语义迁至 M06.F06.I05，本行 ID 保留作历史，不再挂新引用 | 已废弃 |
+| M06.F06.I05 | 删除技术要求（引用保护） | 按钮 | 前端+后端 | BASE 编号对齐：DELETE /api/technical-requirements/{object}/{param}/{standard}（实现即原 M06.F06.I03） | 已上线 |
 
 ### M06.F07 报告名称维护
 

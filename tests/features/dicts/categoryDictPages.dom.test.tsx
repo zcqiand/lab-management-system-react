@@ -129,7 +129,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
   );
 
   fnTest(
-    ["M04.F06.I03"],
+    ["M04.F06.I04"],
     "型号维护：行内删除按钮开确认弹窗",
     { timeout: 45_000 },
     async () => {
@@ -137,7 +137,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
         <CategoryDictList
           endpoint="/models"
           title="型号维护"
-          deleteDataFn="M04.F06.I03"
+          deleteDataFn="M04.F06.I04"
         />,
       );
       await selectRebarAndAwaitRows();
@@ -166,7 +166,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
   });
 
   fnTest(
-    ["M04.F07.I03"],
+    ["M04.F07.I04"],
     "规格维护：行内删除按钮开确认弹窗",
     { timeout: 45_000 },
     async () => {
@@ -174,7 +174,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
         <CategoryDictList
           endpoint="/specifications"
           title="规格维护"
-          deleteDataFn="M04.F07.I03"
+          deleteDataFn="M04.F07.I04"
         />,
       );
       await selectRebarAndAwaitRows();
@@ -199,7 +199,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
   });
 
   fnTest(
-    ["M04.F08.I03"],
+    ["M04.F08.I04"],
     "等级维护：行内删除按钮开确认弹窗",
     { timeout: 45_000 },
     async () => {
@@ -207,7 +207,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
         <CategoryDictList
           endpoint="/grades"
           title="等级维护"
-          deleteDataFn="M04.F08.I03"
+          deleteDataFn="M04.F08.I04"
         />,
       );
       await selectRebarAndAwaitRows();

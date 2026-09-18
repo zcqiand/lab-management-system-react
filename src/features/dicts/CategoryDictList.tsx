@@ -242,9 +242,9 @@ export function CategoryDictList({
     }
   };
 
-  // @entry M04.F06.I03
-  // @entry M04.F07.I03
-  // @entry M04.F08.I03
+  // @entry M04.F06.I04
+  // @entry M04.F07.I04
+  // @entry M04.F08.I04
   // @entry M04.F09.I03
   const handleDelete = async () => {
     if (!deleteTarget) return;

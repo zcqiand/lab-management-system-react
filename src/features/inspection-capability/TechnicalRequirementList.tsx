@@ -338,7 +338,7 @@ export function TechnicalRequirementList() {
                           setDeleting(row);
                           setDeleteError(null);
                         }}
-                        data-fn="M06.F06.I03"
+                        data-fn="M06.F06.I05"
                         aria-label={`删除 ${row.inspectionObjectCode}/${row.inspectionParameterCode}/${row.judgmentStandardCode}`}
                         className="text-red-600"
                       >
@@ -365,7 +365,7 @@ export function TechnicalRequirementList() {
           <DialogHeader>
             <DialogTitle>{editing ? "编辑技术要求" : "新建技术要求"}</DialogTitle>
             <DialogDescription>
-              复合主键：检测项目 + 检测参数 + 判定标准；引用保护由 M06.F06.I03 兜底
+              复合主键：检测项目 + 检测参数 + 判定标准；引用保护由 M06.F06.I05 兜底
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 text-sm">
@@ -528,7 +528,7 @@ export function TechnicalRequirementList() {
               {" "}
               {deleting?.inspectionObjectCode}/{deleting?.inspectionParameterCode}
             </span>{" "}
-            的技术要求？被引用的技术要求不可删除（M06.F06.I03 引用保护）。
+            的技术要求？被引用的技术要求不可删除（M06.F06.I05 引用保护）。
             {deleteError && (
               <div role="alert" className="mt-2 text-red-600">
                 {deleteError}

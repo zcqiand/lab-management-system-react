@@ -40,13 +40,13 @@
 | M03.F09.I03 | src/features/receipts/ReceiptDetail.tsx (报告预览 button) | – (本地渲染，复用缓存 receipt) | sample_receipts | M03.F09.I03 | – | 已上线 |
 | M04.F06.I01 | src/features/dicts/CategoryDictList.tsx (via src/pages/ModelsPage.tsx) | GET /api/catalog/models?inspectionObjectCode=... ; GET /api/inspection-objects | inspection_models | M04.F06.I01 | – | 已上线 |
 | M04.F06.I02 | src/features/dicts/CategoryDictList.tsx (via ModelsPage; 新建 + 编辑) | POST /api/catalog/models ; PUT /api/catalog/models/:id | inspection_models | M04.F06.I02 | – | 已上线 |
-| M04.F06.I03 | src/features/dicts/CategoryDictList.tsx (via ModelsPage; 行内 删除) | DELETE /api/catalog/models/:id | inspection_models | M04.F06.I03 | – | 已上线 |
+| M04.F06.I04 | src/features/dicts/CategoryDictList.tsx (via ModelsPage; 行内 删除) | DELETE /api/catalog/models/:id | inspection_models | M04.F06.I04 | – | 已上线 |
 | M04.F07.I01 | src/features/dicts/CategoryDictList.tsx (via src/pages/SpecificationsPage.tsx) | GET /api/catalog/specs?inspectionObjectCode=... | inspection_specs | M04.F07.I01 | – | 已上线 |
 | M04.F07.I02 | src/features/dicts/CategoryDictList.tsx (via SpecificationsPage; 新建 + 编辑) | POST /api/catalog/specs ; PUT /api/catalog/specs/:id | inspection_specs | M04.F07.I02 | – | 已上线 |
-| M04.F07.I03 | src/features/dicts/CategoryDictList.tsx (via SpecificationsPage; 行内 删除) | DELETE /api/catalog/specs/:id | inspection_specs | M04.F07.I03 | – | 已上线 |
+| M04.F07.I04 | src/features/dicts/CategoryDictList.tsx (via SpecificationsPage; 行内 删除) | DELETE /api/catalog/specs/:id | inspection_specs | M04.F07.I04 | – | 已上线 |
 | M04.F08.I01 | src/features/dicts/CategoryDictList.tsx (via src/pages/GradesPage.tsx) | GET /api/catalog/grades?inspectionObjectCode=... | inspection_grades | M04.F08.I01 | – | 已上线 |
 | M04.F08.I02 | src/features/dicts/CategoryDictList.tsx (via GradesPage; 新建 + 编辑) | POST /api/catalog/grades ; PUT /api/catalog/grades/:id | inspection_grades | M04.F08.I02 | – | 已上线 |
-| M04.F08.I03 | src/features/dicts/CategoryDictList.tsx (via GradesPage; 行内 删除) | DELETE /api/catalog/grades/:id | inspection_grades | M04.F08.I03 | – | 已上线 |
+| M04.F08.I04 | src/features/dicts/CategoryDictList.tsx (via GradesPage; 行内 删除) | DELETE /api/catalog/grades/:id | inspection_grades | M04.F08.I04 | – | 已上线 |
 | M04.F09.I01 | src/features/dicts/CategoryDictList.tsx (via src/pages/BrandsPage.tsx) | GET /api/catalog/brands?inspectionObjectCode=... | inspection_brands | M04.F09.I01 | – | 已上线 |
 | M04.F09.I02 | src/features/dicts/CategoryDictList.tsx (via BrandsPage; 新建 + 编辑) | POST /api/catalog/brands ; PUT /api/catalog/brands/:id | inspection_brands | M04.F09.I02 | – | 已上线 |
 | M04.F09.I03 | src/features/dicts/CategoryDictList.tsx (via BrandsPage; 行内 删除) | DELETE /api/catalog/brands/:id | inspection_brands | M04.F09.I03 | – | 已上线 |
@@ -63,7 +63,7 @@
 | M06.F05.I01 | src/features/inspection-capability/CalculationRuleList.tsx (via src/pages/CalculationRulesPage.tsx) | GET /api/inspection-calculation-rules ; POST/PUT/DELETE 同 | inspection_calculation_rule | M06.F05.I01 | – | 已上线 |
 | M06.F06.I01 | src/features/inspection-capability/TechnicalRequirementList.tsx (via src/pages/TechnicalRequirementsPage.tsx) | GET /api/inspection-technical-requirements | inspection_technical_requirement | M06.F06.I01 | – | 已上线 |
 | M06.F06.I02 | src/features/inspection-capability/TechnicalRequirementList.tsx (新建 + 编辑) | POST /api/inspection-technical-requirements ; PUT /api/inspection-technical-requirements/:id | inspection_technical_requirement | M06.F06.I02 | – | 已上线 |
-| M06.F06.I03 | src/features/inspection-capability/TechnicalRequirementList.tsx (行内 删除) | DELETE /api/inspection-technical-requirements/:id | inspection_technical_requirement | M06.F06.I03 | – | 已上线 |
+| M06.F06.I05 | src/features/inspection-capability/TechnicalRequirementList.tsx (行内 删除) | DELETE /api/inspection-technical-requirements/:id | inspection_technical_requirement | M06.F06.I05 | – | 已上线 |
 | M06.F07.I01 | src/features/report-names/ReportNameList.tsx (via src/pages/ReportNamesPage.tsx) | GET /api/inspection-report-names ; POST/PUT/DELETE 同 | inspection_report_name | M06.F07.I01 | – | 已上线 |
 | M06.F07.I02 | src/features/report-names/ReportNameList.tsx + ReportNameLinkDialog.tsx (行内 关联 button) | POST /api/inspection-report-name-standards ; DELETE 同 ; POST /api/inspection-report-name-parameters ; DELETE 同 | inspection_report_name_standard + inspection_report_name_parameter | M06.F07.I02 | – | 已上线 |
 | M06.F08.I01 | src/features/param-interfaces/ParamInterfaceList.tsx (via src/pages/ParamInterfacesPage.tsx) | GET /api/inspection-param-interfaces ; POST/PUT/DELETE 同 | inspection_param_interface | M06.F08.I01 | – | 已上线 |

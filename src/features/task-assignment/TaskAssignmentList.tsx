@@ -219,6 +219,7 @@ export function TaskAssignmentList() {
             <Button
               onClick={() => void handleSave()}
               disabled={saving || !assigneeName.trim() || !plannedTestDate}
+              data-fn="M03.F02.I02"
             >
               保存
             </Button>

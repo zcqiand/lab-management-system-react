@@ -10,7 +10,7 @@ export default function SpecificationsPage() {
       dataFn="M04.F07.I01"
       createDataFn="M04.F07.I02"
       editDataFn="M04.F07.I02"
-      deleteDataFn="M04.F07.I03"
+      deleteDataFn="M04.F07.I04"
     />
   );
 }

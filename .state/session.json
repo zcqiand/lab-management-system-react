@@ -1,18 +1,27 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "REQ-2026-001：legacy-client 映射收敛契约路径——已上线",
+  "current_task": "批次 2 功能树变更全链路收口——门已绿，全部改动未提交",
   "done": [
-    "API_ROUTES 两键 /inspection-param-interfaces、/inspection-parameter-param-interfaces 恒等映射改契约路径",
-    "引用旧路径字面量的测试同步修；commit 83f2f4e"
+    "docs/functions/function-tree.md 批次 1+2 落盘（编号错位收敛 + act-merge）",
+    "悬空锚点迁移 18 处（CategoryDictList @entry M04.F06/F07/F08.I03→I04、3 个列表页 deleteDataFn→I04、TechnicalRequirementList ×3→M06.F06.I05、测试 7 处、design/flow map 各 4 行）；M04.F09.I03 本树仍在线未动",
+    ".state/trace.json 再生成：193 tests / 61 fn ids / 废弃 ID 0 命中（按状态列精确反查）/ 新 ID 全在场 / 失败测试 fns 不丢",
+    "gate.py exit 0 全绿（L0-L5，165 条目引用完整；L4 首跑 3 个真链路测试轮换假红，探活定性为到 PG VPS 链路丢包 10-40%，干净窗口复跑即绿）"
   ],
   "next": [
-    "无遗留；候选 REQ 见 shared §7.1"
+    "提交：树 + 锚点 + tests + vitest.config.ts（此前遗留）+ .state 一批",
+    "真链路 dom 测试（categoryDictPages/receiptsList 等）直连 :5201→远程 PG，30-90s 等待窗；跑 gate 前先 ping PG VPS 确认丢包 ~0%"
   ],
-  "open_questions": [],
+  "open_questions": [
+    "gate.py --all exit 2：saas family-env.json members 仍列 msw 但本地无仓——删 member 还是建仓，需人裁",
+    "批次 1+2 改动何时提交、按什么粒度分组"
+  ],
   "dont": [
-    "规划行不得标已上线——L5 会要求 UI 入口（data-fn/@entry），后端实现不等于前端上线"
+    "真链路 dom 测试批量 30s 超时且每轮挂的测试不重样 = 环境假红（链路丢包），隔离复跑同批全绿即证——别改 selector",
+    "隔离复跑带 TRACE_MAP=1 会把 trace.json 覆盖成部分版",
+    "it() 标题禁写 Mxx.Fxx.Ixx 字面",
+    "规划行不得标已上线——L5 会要求 UI 入口"
   ],
   "active_branch": "master",
-  "last_session_at": "2026-09-14"
+  "last_session_at": "2026-09-18"
 }

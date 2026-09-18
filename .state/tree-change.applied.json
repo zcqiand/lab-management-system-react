@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "approved": true,
+  "base_sha": "26e041e031b3e506",
+  "summary": "批次 2 双胞收敛（react）：M04.F06/F07/F08.I03 与 M06.F06.I03 删除行撞 BASE「更新/创建」编号——废弃 + BASE 对齐号新增（同批次 1 M03.F05-F08.I03 收敛模式）",
+  "changes": [
+    {
+      "id": "M04.F06.I03",
+      "action": "废弃",
+      "name": "删除型号（引用保护）",
+      "reason": "编号错位收敛：BASE I03=更新型号；删除语义迁至 BASE 编号行 I04（本行 ID 保留作历史，锚点迁移另批）"
+    },
+    {
+      "id": "M04.F06.I04",
+      "action": "新增",
+      "name": "删除型号（引用保护）",
+      "reason": "BASE 编号对齐：DELETE /api/catalog/models/{code}（实现即原 M04.F06.I03）"
+    },
+    {
+      "id": "M04.F07.I03",
+      "action": "废弃",
+      "name": "删除规格",
+      "reason": "编号错位收敛：BASE I03=更新规格；删除语义迁至 BASE 编号行 I04"
+    },
+    {
+      "id": "M04.F07.I04",
+      "action": "新增",
+      "name": "删除规格",
+      "reason": "BASE 编号对齐：DELETE /api/catalog/specs/{code}（实现即原 M04.F07.I03）"
+    },
+    {
+      "id": "M04.F08.I03",
+      "action": "废弃",
+      "name": "删除等级",
+      "reason": "编号错位收敛：BASE I03=更新等级；删除语义迁至 BASE 编号行 I04"
+    },
+    {
+      "id": "M04.F08.I04",
+      "action": "新增",
+      "name": "删除等级",
+      "reason": "BASE 编号对齐：DELETE /api/catalog/grades/{code}（实现即原 M04.F08.I03）"
+    },
+    {
+      "id": "M06.F06.I03",
+      "action": "废弃",
+      "name": "删除技术要求（引用保护）",
+      "reason": "编号错位收敛：BASE I03=创建技术要求；删除语义迁至 BASE 编号行 I05"
+    },
+    {
+      "id": "M06.F06.I05",
+      "action": "新增",
+      "name": "删除技术要求（引用保护）",
+      "reason": "BASE 编号对齐：DELETE /api/technical-requirements/{object}/{param}/{standard}（实现即原 M06.F06.I03）"
+    }
+  ],
+  "sync_files": [
+    "docs/design/design-function-map.md"
+  ]
+}
