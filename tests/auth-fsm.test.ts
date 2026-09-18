@@ -103,9 +103,10 @@ describe("Sprint 1 前端绑定契约", () => {
     });
   });
 
-  it("BackendId 契约 4 槽位锁定（工程设施断言，不挂功能 ID）", () => {
+  it("BackendId 契约 3 槽位锁定（工程设施断言，不挂功能 ID）", () => {
+    // 2026-09-17 msw 剔除（3832f0e）：切换器去 msw 槽位，剩真后端 3 槽
     expect(Object.values(BackendId)).toEqual(
-      expect.arrayContaining(["msw", "nextjs", "springboot", "aspnetcore"]),
+      expect.arrayContaining(["nextjs", "springboot", "aspnetcore"]),
     );
   });
 });

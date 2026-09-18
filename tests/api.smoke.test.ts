@@ -23,14 +23,15 @@ describe("backend-config (env-driven 单 URL — ADR-0014)", () => {
     }
   }
 
-  it("无 env 时（VITE_* 全 delete） getApiBaseUrl 回退 msw-http :5200", async () => {
+  it("无 env 时（VITE_* 全 delete） getApiBaseUrl 回退真 nextjs :5201", async () => {
     // beforeEach 删除所有 VITE_* → import.meta.env.VITE_API_BASE_URL === undefined →
-    // readEnv 走 fallback。dev（无 .env.local）也是相同路径（Vite 给 "" 默认，
+    // readEnv 走 fallback 到真 nextjs :5201（2026-09-17 msw 剔除后，3832f0e）。
+    // dev（无 .env.local）也是相同路径（Vite 给 "" 默认，
     // 但若 .env 完全没设则是 undefined 走 fallback）。
     stubEnvs({});
     const { getApiBaseUrl, getApiMode } = await import("@/api/backend-config");
-    expect(getApiBaseUrl()).toBe("http://localhost:5200");
-    expect(getApiMode()).toBe("msw-http");
+    expect(getApiBaseUrl()).toBe("http://localhost:5201");
+    expect(getApiMode()).toBe("nextjs");
   });
 
   it("VITE_API_BASE_URL=http://localhost:3001 → getApiBaseUrl 切到 nextjs 仓", async () => {

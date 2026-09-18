@@ -35,14 +35,15 @@ describe("src/lib/env", () => {
     }
   }
 
-  it("无 VITE_* 时回退默认端口 5202 + msw-http :5200 + msw-http 模式", async () => {
+  it("无 VITE_* 时回退默认端口 5202 + 真 nextjs :5201 + nextjs 模式", async () => {
     // beforeEach 删除所有 VITE_* → import.meta.env.VITE_API_BASE_URL === undefined →
-    // readEnv 走 fallback 到 msw-http :5200。dev（无 .env.local）走相同路径。
+    // readEnv 走 fallback 到真 nextjs :5201（2026-09-17 msw 剔除后，3832f0e）。
+    // dev（无 .env.local）走相同路径。
     stubEnvs({});
     const { env } = await import("@/lib/env");
     expect(env.devPort).toBe(5202);
-    expect(env.apiBaseUrl).toBe("http://localhost:5200");
-    expect(env.apiMode).toBe("msw-http");
+    expect(env.apiBaseUrl).toBe("http://localhost:5201");
+    expect(env.apiMode).toBe("nextjs");
     expect(env.saasBaseUrl).toBe("http://localhost:5101");
   });
 
