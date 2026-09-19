@@ -32,8 +32,9 @@ describe("M03.F03 数据录入", () => {
           <DataEntryPage />
         </MemoryRouter>,
       );
-      expect(screen.getByText("数据录入")).toBeTruthy();
+      // B6 加载态：整页 PageLoading 门控后，标题随数据一起出现 → waitFor 断言
       await waitFor(() => {
+        expect(screen.getByText("数据录入")).toBeTruthy();
         expect(screen.getAllByRole("row").length).toBeGreaterThan(1);
       });
       // 种子锚：渲染出的委托书编号非空且 ⊆ shared 种子的 data_entry 编号集

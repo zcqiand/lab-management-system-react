@@ -63,8 +63,9 @@ describe("M03.F01 接样管理", () => {
           <ReceiptsList />
         </MemoryRouter>,
       );
-      expect(screen.getByText("接样管理")).toBeTruthy();
+      // B6 加载态：整页 PageLoading 门控后，标题随数据一起出现 → waitFor 断言
       await waitFor(() => {
+        expect(screen.getByText("接样管理")).toBeTruthy();
         expect(screen.getAllByRole("row").length).toBeGreaterThan(1);
       });
       // 种子锚（阶段级 subset，与 dataEntry/reports/taskAssignment 对齐）：

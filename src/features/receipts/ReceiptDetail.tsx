@@ -19,12 +19,14 @@ import { receiptsGetReceipt } from "@/api/endpoints/receipts/receipts";
 import type { SampleReceipt } from "@/api/endpoints/model/sampleReceipt";
 import { FLOW_STAGE_LABELS } from "@/lib/flow-labels";
 import { ReportPreviewModal } from "@/features/data-entry/ReportPreviewModal";
+import { PageLoading } from "@/components/app/page-loading";
 
 export function ReceiptDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [receipt, setReceipt] = useState<SampleReceipt | null>(null);
-  const [loading, setLoading] = useState(false);
+  // B6 加载态：首屏即视为加载中（详情未到前不渲染 null/壳）
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
 
@@ -44,7 +46,7 @@ export function ReceiptDetail() {
     })();
   }, [id]);
 
-  if (loading) return <div className="p-8 text-center text-slate-500">加载中…</div>;
+  if (loading) return <PageLoading />;
   if (error) return <div className="p-8 text-red-600">{error}</div>;
   if (!receipt) return null;
 

@@ -27,11 +27,12 @@ beforeEach(() => {
   installRealChain();
 });
 
-/** 列表非空 + 渲染编号 ⊆ 该阶段种子编号集（真库数据锚）。 */
+/** 列表非空 + 渲染编号 ⊆ 该阶段种子编号集（真库数据锚）。
+ *  B6 加载态：整页 PageLoading 门控后，标题随数据一起出现 → waitFor 断言。 */
 async function expectStageRendered(title: string, stage: Phase, timeout = 30_000) {
-  expect(screen.getByText(title)).toBeTruthy();
   await waitFor(
     () => {
+      expect(screen.getByText(title)).toBeTruthy();
       expect(screen.getAllByRole("row").length).toBeGreaterThan(1);
     },
     { timeout },

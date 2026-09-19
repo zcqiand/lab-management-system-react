@@ -34,6 +34,7 @@ import {
 } from "@/api/endpoints/param-interfaces/param-interfaces";
 import type { ParamInterface } from "@/api/endpoints/model/paramInterface";
 import { ConfirmModal } from "@/components/ConfirmModal";
+import { PageLoading } from "@/components/app/page-loading";
 
 type Mode = { kind: "idle" } | { kind: "create" } | { kind: "edit"; id: string };
 
@@ -54,7 +55,8 @@ export function ParamInterfaceList() {
   const [total, setTotal] = useState(0);
   const [keyword, setKeyword] = useState("");
   const [mode, setMode] = useState<Mode>({ kind: "idle" });
-  const [loading, setLoading] = useState(false);
+  // B6 加载态：首屏即视为加载中（首帧不渲染空表壳；refetch 走 per-widget 加载中）
+  const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<ParamInterface | null>(null);
 
   const load = async () => {
@@ -72,13 +74,26 @@ export function ParamInterfaceList() {
     }
   };
 
+  // B6 加载态：首屏取数触发器上移到门控之前（原 LoadTrigger 渲染在门控后的
+  // JSX 里，整页加载态时它不挂载，load 永远不会触发 —— 死锁）。
+  const loadTriggered = useRef(false);
+  useEffect(() => {
+    if (!loadTriggered.current) {
+      loadTriggered.current = true;
+      void load();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const editing =
     mode.kind === "edit" ? (items.find((r) => r.code === mode.id) ?? null) : null;
+
+  // B6 加载态：首次数据到达前整页 PageLoading，不渲染空表壳
+  if (loading && items.length === 0) return <PageLoading />;
 
   return (
     <>
       <Header onNew={() => setMode({ kind: "create" })} />
-      <LoadTrigger load={load} />
       <Filters
         keyword={keyword}
         onKeywordChange={setKeyword}
@@ -226,18 +241,7 @@ export function ParamInterfaceList() {
   );
 }
 
-function LoadTrigger({ load }: { load: () => Promise<void> }) {
-  const mounted = useRef(false);
-  useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
-      void load();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  return null;
-}
-
+// LoadTrigger（首次挂载触发 load 的子组件）已上移为主组件顶层 useEffect（B6 加载态门控）。
 function Header({ onNew }: { onNew: () => void }) {
   return (
     <div className="mb-4 flex items-center justify-between">

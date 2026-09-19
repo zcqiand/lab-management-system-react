@@ -27,8 +27,9 @@ describe("M06.F01 检测专项维护", () => {
     { timeout: 45_000 },
     async () => {
       render(<InspectionCapabilityList resource="specialties" />);
-      expect(screen.getByText("检测专项维护")).toBeTruthy();
+      // B6 加载态：整页 PageLoading 门控后，标题随数据一起出现 → waitFor 断言
       await waitFor(() => {
+        expect(screen.getByText("检测专项维护")).toBeTruthy();
         const rows = screen.getAllByRole("row");
         expect(rows.length).toBeGreaterThan(1);
       });
@@ -41,8 +42,8 @@ describe("M06.F01 检测专项维护", () => {
     { timeout: 45_000 },
     async () => {
       render(<InspectionCapabilityList resource="specialties" />);
-      expect(screen.getByRole("button", { name: /新建检测专项/ })).toBeTruthy();
       await waitFor(() => {
+        expect(screen.getByRole("button", { name: /新建检测专项/ })).toBeTruthy();
         expect(screen.getByText("SP01")).toBeTruthy();
       });
     },
@@ -56,8 +57,8 @@ describe("M06.F02 检测项目维护", () => {
     { timeout: 45_000 },
     async () => {
       render(<InspectionCapabilityList resource="objects" />);
-      expect(screen.getByText("检测项目维护")).toBeTruthy();
       await waitFor(() => {
+        expect(screen.getByText("检测项目维护")).toBeTruthy();
         expect(screen.getByLabelText("检测专项筛选")).toBeTruthy();
       });
     },
@@ -69,8 +70,8 @@ describe("M06.F02 检测项目维护", () => {
     { timeout: 45_000 },
     async () => {
       render(<InspectionCapabilityList resource="objects" />);
-      expect(screen.getByRole("button", { name: /新建检测项目/ })).toBeTruthy();
       await waitFor(() => {
+        expect(screen.getByRole("button", { name: /新建检测项目/ })).toBeTruthy();
         const editBtns = screen.getAllByRole("button", { name: /^编辑 / });
         expect(editBtns.length).toBeGreaterThan(0);
       });
@@ -85,8 +86,8 @@ describe("M06.F03 检测参数维护", () => {
     { timeout: 45_000 },
     async () => {
       render(<InspectionCapabilityList resource="parameters" />);
-      expect(screen.getByText("检测参数维护")).toBeTruthy();
       await waitFor(() => {
+        expect(screen.getByText("检测参数维护")).toBeTruthy();
         expect(screen.getByLabelText("检测专项筛选")).toBeTruthy();
         expect(screen.getByLabelText("检测项目筛选")).toBeTruthy();
         expect(screen.getByLabelText("检测标准筛选")).toBeTruthy();
@@ -98,8 +99,8 @@ describe("M06.F03 检测参数维护", () => {
 describe("M06.F04 检测标准维护", () => {
   fnTest(["M06.F04.I01"], "F04 渲染标题 + 列表行", { timeout: 45_000 }, async () => {
     render(<InspectionCapabilityList resource="standards" />);
-    expect(screen.getByText("检测标准维护")).toBeTruthy();
     await waitFor(() => {
+      expect(screen.getByText("检测标准维护")).toBeTruthy();
       const rows = screen.getAllByRole("row");
       expect(rows.length).toBeGreaterThan(1);
     });
@@ -111,8 +112,8 @@ describe("M06.F04 检测标准维护", () => {
     { timeout: 45_000 },
     async () => {
       render(<InspectionCapabilityList resource="standards" />);
-      expect(screen.getByRole("button", { name: /新建检测标准/ })).toBeTruthy();
       await waitFor(() => {
+        expect(screen.getByRole("button", { name: /新建检测标准/ })).toBeTruthy();
         // shared 种子固定含 GB 175-2023（水泥通用标准，首屏 50 条内）
         expect(screen.getByText("GB 175-2023")).toBeTruthy();
       });
@@ -127,8 +128,8 @@ describe("M06.F05 计算方法维护", () => {
     { timeout: 45_000 },
     async () => {
       render(<CalculationMethodList />);
-      expect(screen.getByText("计算方法维护")).toBeTruthy();
       await waitFor(() => {
+        expect(screen.getByText("计算方法维护")).toBeTruthy();
         const rows = screen.getAllByRole("row");
         expect(rows.length).toBeGreaterThan(1);
       });
@@ -141,8 +142,8 @@ describe("M06.F05 计算方法维护", () => {
     { timeout: 45_000 },
     async () => {
       render(<CalculationMethodList />);
-      expect(screen.getByRole("button", { name: /新建计算方法/ })).toBeTruthy();
       await waitFor(() => {
+        expect(screen.getByRole("button", { name: /新建计算方法/ })).toBeTruthy();
         const delBtns = screen.getAllByRole("button", { name: /^删除 / });
         expect(delBtns.length).toBeGreaterThan(0);
       });
@@ -157,11 +158,14 @@ describe("M06.F06 技术要求维护", () => {
     { timeout: 45_000 },
     async () => {
       render(<TechnicalRequirementList />);
-      expect(screen.getByText("技术要求维护")).toBeTruthy();
-      expect(screen.getByLabelText("牌号筛选")).toBeTruthy();
-      expect(screen.getByLabelText("型号筛选")).toBeTruthy();
-      expect(screen.getByLabelText("等级筛选")).toBeTruthy();
-      expect(screen.getByLabelText("规格筛选")).toBeTruthy();
+      // B6 加载态：整页 PageLoading 门控后，标题/筛选随数据一起出现 → waitFor 断言
+      await waitFor(() => {
+        expect(screen.getByText("技术要求维护")).toBeTruthy();
+        expect(screen.getByLabelText("牌号筛选")).toBeTruthy();
+        expect(screen.getByLabelText("型号筛选")).toBeTruthy();
+        expect(screen.getByLabelText("等级筛选")).toBeTruthy();
+        expect(screen.getByLabelText("规格筛选")).toBeTruthy();
+      });
     },
   );
 
@@ -171,8 +175,8 @@ describe("M06.F06 技术要求维护", () => {
     { timeout: 45_000 },
     async () => {
       render(<TechnicalRequirementList />);
-      expect(screen.getByRole("button", { name: /新建技术要求/ })).toBeTruthy();
       await waitFor(() => {
+        expect(screen.getByRole("button", { name: /新建技术要求/ })).toBeTruthy();
         const rows = screen.getAllByRole("row");
         expect(rows.length).toBeGreaterThan(1);
       });

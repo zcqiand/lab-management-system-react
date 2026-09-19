@@ -28,6 +28,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { EmptyState } from "@/components/app/empty-state";
+import { PageLoading } from "@/components/app/page-loading";
 import {
   summaryGetDashboardStats,
   summaryGetReportSummary,
@@ -72,6 +73,9 @@ export function SummaryList() {
         .catch(() => undefined),
     ]).finally(() => setLoading(false));
   }, [categoryCode]);
+
+  // B6 加载态：聚合 flag —— 汇总表 + 统计两个源任一未到且首载未出错时整页加载
+  if (loading && !data && !error) return <PageLoading />;
 
   return (
     <div className="space-y-4" data-fn="M05.F01.I01">

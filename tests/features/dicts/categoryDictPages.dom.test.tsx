@@ -27,25 +27,39 @@ beforeEach(() => {
 });
 
 describe("M04.F06-F09 码表维护 4 页", () => {
-  /** 等左侧检测项目树真实加载（真库 inspection_objects 渲染出可选节点） */
+  /** 等左侧检测项目树真实加载（真库 inspection_objects 渲染出可选节点）。
+   *  B6 加载态：整页 PageLoading 门控后，树随首屏数据一起出现 → 放宽 waitFor 窗口。 */
   async function waitForTree() {
-    await waitFor(() => {
-      const nodes = document.querySelectorAll("aside ul li button");
-      expect(nodes.length).toBeGreaterThan(0);
-    });
+    await waitFor(
+      () => {
+        const nodes = document.querySelectorAll("aside ul li button");
+        expect(nodes.length).toBeGreaterThan(0);
+      },
+      { timeout: 30_000 },
+    );
   }
 
-  /** 点左侧树「钢筋（含焊接与机械连接）」节点，等右侧列表行渲染 */
+  /** 点左侧树「钢筋（含焊接与机械连接）」节点，等右侧列表行渲染。
+   *  B6 加载态：树与列表随门控一起出现，节点查找进 waitFor 轮询（真链路
+   *  下标题/树/行的提交与断言之间有响应乱序窗口，锚不变）。 */
   async function selectRebarAndAwaitRows() {
-    await waitForTree();
-    const treeBtn = [...document.querySelectorAll("aside ul li button")].find((b) =>
-      b.textContent?.includes("钢筋"),
+    const treeBtn = await waitFor(
+      () => {
+        const btn = [...document.querySelectorAll("aside ul li button")].find((b) =>
+          b.textContent?.includes("钢筋"),
+        );
+        expect(btn).toBeTruthy();
+        return btn;
+      },
+      { timeout: 30_000 },
     );
-    expect(treeBtn).toBeTruthy();
     fireEvent.click(treeBtn as HTMLElement);
-    await waitFor(() => {
-      expect(screen.getAllByRole("button", { name: "删除" }).length).toBeGreaterThan(0);
-    });
+    await waitFor(
+      () => {
+        expect(screen.getAllByRole("button", { name: "删除" }).length).toBeGreaterThan(0);
+      },
+      { timeout: 45_000 },
+    );
   }
 
   fnTest(
@@ -56,7 +70,10 @@ describe("M04.F06-F09 码表维护 4 页", () => {
       render(
         <CategoryDictList endpoint="/models" title="型号维护" dataFn="M04.F06.I01" />,
       );
-      expect(screen.getByText("型号维护")).toBeTruthy();
+      // B6 加载态：整页 PageLoading 门控后，标题随数据一起出现 → 并入 waitForTree
+      await waitFor(() => {
+        expect(screen.getByText("型号维护")).toBeTruthy();
+      });
       await waitForTree();
       // 种子锚：默认选中首个检测项目（水泥），其下种子型号行渲染（真库 1 行）
       await waitFor(() => {
@@ -75,13 +92,18 @@ describe("M04.F06-F09 码表维护 4 页", () => {
         dataFn="M04.F07.I01"
       />,
     );
-    expect(screen.getByText("规格维护")).toBeTruthy();
+    // B6 加载态：整页 PageLoading 门控后，标题随数据一起出现 → 并入 waitForTree
+    await waitFor(() => {
+      expect(screen.getByText("规格维护")).toBeTruthy();
+    });
     await waitForTree();
   });
 
   fnTest(["M04.F08.I01"], "等级维护：渲染标题不炸", { timeout: 45_000 }, async () => {
     render(<CategoryDictList endpoint="/grades" title="等级维护" dataFn="M04.F08.I01" />);
-    expect(screen.getByText("等级维护")).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText("等级维护")).toBeTruthy();
+    });
     await waitForTree();
   });
 
@@ -95,7 +117,10 @@ describe("M04.F06-F09 码表维护 4 页", () => {
       render(
         <CategoryDictList endpoint="/brands" title="牌号维护" dataFn="M04.F09.I01" />,
       );
-      expect(screen.getByText("牌号维护")).toBeTruthy();
+      // B6 加载态：整页 PageLoading 门控后，标题随数据一起出现 → 并入 waitForTree
+      await waitFor(() => {
+        expect(screen.getByText("牌号维护")).toBeTruthy();
+      });
       // 种子锚：选中「钢筋」后其下种子牌号行渲染（牌号全部挂在 P2，水泥下为空）。
       // 文本断言也进 waitFor：行提交与断言之间的响应乱序覆盖窗口（全量并发
       // 下偶发）由轮询吸收，锚本身不变。

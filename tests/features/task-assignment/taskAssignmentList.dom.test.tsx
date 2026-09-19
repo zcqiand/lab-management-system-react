@@ -33,8 +33,9 @@ describe("M03.F02 任务分配", () => {
           <TaskAssignmentList />
         </MemoryRouter>,
       );
-      expect(screen.getByText("任务分配")).toBeTruthy();
+      // B6 加载态：整页 PageLoading 门控后，标题随数据一起出现 → waitFor 断言
       await waitFor(() => {
+        expect(screen.getByText("任务分配")).toBeTruthy();
         expect(screen.getAllByRole("row").length).toBeGreaterThan(1);
       });
       // 种子锚：渲染出的委托书编号非空且 ⊆ shared 种子的 task_assignment 编号集

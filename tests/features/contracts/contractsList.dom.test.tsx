@@ -24,8 +24,9 @@ describe("M02.F01 合同管理", () => {
     { timeout: 45_000 },
     async () => {
       render(<ContractsList />);
-      expect(screen.getByText("合同管理")).toBeTruthy();
+      // B6 加载态：整页 PageLoading 门控后，标题随数据一起出现 → waitFor 断言
       await waitFor(() => {
+        expect(screen.getByText("合同管理")).toBeTruthy();
         expect(screen.getAllByRole("row").length).toBeGreaterThan(1);
       });
       // 种子锚：种子 3 份合同的编号至少渲染出一份（CONTRACT-001 固定在场）

@@ -79,6 +79,7 @@ import type { InspectionStandard } from "@/api/endpoints/model/inspectionStandar
 import type { InspectionParameterSourceType } from "@/api/endpoints/model/inspectionParameterSourceType";
 import type { InspectionStandardStatus } from "@/api/endpoints/model/inspectionStandardStatus";
 import { ParameterStandardLinkDialog } from "@/features/inspection-capability/ParameterStandardLinkDialog";
+import { PageLoading } from "@/components/app/page-loading";
 
 export type CapabilityResource = "specialties" | "objects" | "parameters" | "standards";
 
@@ -604,6 +605,9 @@ export function InspectionCapabilityList({ resource }: Props) {
     if (resource === "parameters") return ["编码", "名称", "单位", "来源"];
     return ["编码", "名称", "版本", "状态"];
   })();
+
+  // B6 加载态：首次数据到达前整页 PageLoading，不渲染空表壳
+  if (loading && items.length === 0) return <PageLoading />;
 
   return (
     <div className="space-y-4" data-fn={FN_ID[resource]}>

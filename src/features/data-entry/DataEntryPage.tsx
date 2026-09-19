@@ -40,12 +40,14 @@ import { FLOW_STAGE_LABELS } from "@/lib/flow-labels";
 import { resolveParamInterfaceModel } from "@/features/data-entry/models/registry";
 import type { InspectionParameter } from "@/api/endpoints/model/inspectionParameter";
 import type { TestRecord } from "@/api/endpoints/model/testRecord";
+import { PageLoading } from "@/components/app/page-loading";
 
 export function DataEntryPage() {
   const [items, setItems] = useState<SampleReceipt[]>([]);
   const [total, setTotal] = useState(0);
   const [keyword, setKeyword] = useState("");
-  const [loading, setLoading] = useState(false);
+  // B6 加载态：首屏即视为加载中（首帧不渲染空表壳；refetch 走 per-widget 加载中）
+  const [loading, setLoading] = useState(true);
   const [entryTarget, setEntryTarget] = useState<SampleReceipt | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const mounted = useRef(false);
@@ -73,6 +75,9 @@ export function DataEntryPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // B6 加载态：首次数据到达前整页 PageLoading，不渲染空表壳
+  if (loading && items.length === 0) return <PageLoading />;
 
   return (
     <>

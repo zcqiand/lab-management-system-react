@@ -42,6 +42,7 @@ import type { InspectionObject } from "@/api/endpoints/model/inspectionObject";
 import type { CreateCatalogEntryRequest } from "@/api/endpoints/model/createCatalogEntryRequest";
 import type { UpdateCatalogEntryRequest } from "@/api/endpoints/model/updateCatalogEntryRequest";
 import { ConfirmModal } from "@/components/ConfirmModal";
+import { PageLoading } from "@/components/app/page-loading";
 
 /** 型号/规格/等级/牌号 通用行结构（4 个 InspectionModel/Spec/Grade/Brand 同构，code 为主键）。 */
 type CatalogRow = InspectionModel | InspectionSpec | InspectionGrade | InspectionBrand;
@@ -127,9 +128,12 @@ export function CategoryDictList({
   deleteDataFn,
 }: Props) {
   const [objects, setObjects] = useState<InspectionObject[]>([]);
+  // B6 加载态：检测项目树未就绪也视为整页加载中（树与列表都到齐才出界面）
+  const [objectsReady, setObjectsReady] = useState(false);
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
   const [list, setList] = useState<CatalogRow[]>([]);
-  const [loading, setLoading] = useState(false);
+  // B6 加载态：首屏即视为加载中（首帧不渲染空表壳；refetch 走 per-widget 加载中）
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [formOpen, setFormOpen] = useState(false);
@@ -156,7 +160,8 @@ export function CategoryDictList({
         // 默认选中第一个
         setSelectedCode((prev) => prev ?? items[0]?.code ?? null);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setObjectsReady(true));
   }, []);
 
   const selectedObject = useMemo(
@@ -167,6 +172,8 @@ export function CategoryDictList({
   const fetchList = useCallback(async () => {
     if (!selectedCode) {
       setList([]);
+      // B6 加载态：loading 初值改 true 后，无选中对象分支也必须落定，避免整页加载态卡死
+      setLoading(false);
       return;
     }
     setLoading(true);
@@ -283,6 +290,10 @@ export function CategoryDictList({
       await fetchList();
     }
   };
+
+  // B6 加载态：检测项目树 + 码表列表都到齐才出界面（loading 由 loading init true 覆盖
+  // 首载，objectsReady 覆盖树未就绪窗口；二者任一未定且列表为空 → 整页加载态）
+  if ((loading || !objectsReady) && list.length === 0) return <PageLoading />;
 
   return (
     <div className="flex flex-col flex-1 min-h-0" data-fn={dataFn}>

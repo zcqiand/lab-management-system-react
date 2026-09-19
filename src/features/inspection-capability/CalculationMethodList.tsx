@@ -56,6 +56,7 @@ import {
 } from "@/api/endpoints/inspection-dictionary/inspection-dictionary";
 import type { CalculationMethod } from "@/api/endpoints/model/calculationMethod";
 import type { CalculationAlgorithmType } from "@/api/endpoints/model/calculationAlgorithmType";
+import { PageLoading } from "@/components/app/page-loading";
 
 /** 行结构 = 契约 CalculationMethod（复合键寻址，无 id）。 */
 type CalcRule = CalculationMethod;
@@ -219,6 +220,9 @@ export function CalculationMethodList() {
       setDeletingBusy(false);
     }
   };
+
+  // B6 加载态：首次数据到达前整页 PageLoading，不渲染空表壳
+  if (loading && items.length === 0) return <PageLoading />;
 
   return (
     <div className="space-y-4" data-fn="M06.F05.I01">

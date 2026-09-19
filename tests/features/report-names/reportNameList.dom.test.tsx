@@ -19,8 +19,9 @@ describe("M06.F07 报告名称维护", () => {
     { timeout: 45_000 },
     async () => {
       render(<ReportNameList />);
-      expect(screen.getByText("报告名称维护")).toBeTruthy();
+      // B6 加载态：整页 PageLoading 门控后，标题随数据一起出现 → waitFor 断言
       await waitFor(() => {
+        expect(screen.getByText("报告名称维护")).toBeTruthy();
         expect(screen.getAllByRole("row").length).toBeGreaterThan(1);
       });
     },

@@ -41,6 +41,7 @@ import {
 import type { SampleReceipt } from "@/api/endpoints/model/sampleReceipt";
 import { FLOW_STAGE_LABELS } from "@/lib/flow-labels";
 import { ConfirmModal } from "@/components/ConfirmModal";
+import { PageLoading } from "@/components/app/page-loading";
 
 type Mode = { kind: "idle" } | { kind: "create" } | { kind: "edit"; id: string };
 type FlowFilter = "" | "receiving" | "submitted";
@@ -71,7 +72,8 @@ export function ReceiptsList() {
   const [flowFilter, setFlowFilter] = useState<FlowFilter>("");
   const [keyword, setKeyword] = useState("");
   const [mode, setMode] = useState<Mode>({ kind: "idle" });
-  const [loading, setLoading] = useState(false);
+  // B6 加载态：首屏即视为加载中（首帧不渲染空表壳；refetch 走 per-widget 加载中）
+  const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<SampleReceipt | null>(null);
   const [submitting, setSubmitting] = useState<string | null>(null);
   const mounted = useRef(false);
@@ -131,6 +133,9 @@ export function ReceiptsList() {
       setSubmitting(null);
     }
   };
+
+  // B6 加载态：首次数据到达前整页 PageLoading，不渲染空表壳
+  if (loading && items.length === 0) return <PageLoading />;
 
   return (
     <>

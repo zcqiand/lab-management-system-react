@@ -54,6 +54,7 @@ import {
 } from "@/api/endpoints/inspection-dictionary/inspection-dictionary";
 import type { TechnicalRequirement } from "@/api/endpoints/model/technicalRequirement";
 import type { RequirementComparison } from "@/api/endpoints/model/requirementComparison";
+import { PageLoading } from "@/components/app/page-loading";
 
 /** 行结构 = 契约 TechnicalRequirement（三段组合键寻址，无 id）。 */
 type TechReq = TechnicalRequirement;
@@ -226,6 +227,9 @@ export function TechnicalRequirementList() {
       setDeletingBusy(false);
     }
   };
+
+  // B6 加载态：首次数据到达前整页 PageLoading，统一 testid 标记
+  if (loading && items.length === 0) return <PageLoading />;
 
   return (
     <div className="space-y-4" data-fn="M06.F06.I01">

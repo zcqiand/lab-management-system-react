@@ -25,8 +25,9 @@ describe("M05.F01 报告汇总", () => {
     { timeout: 45_000 },
     async () => {
       render(<SummaryList />);
-      expect(screen.getByText("报告汇总")).toBeTruthy();
+      // B6 加载态：整页 PageLoading 门控后，标题随数据一起出现 → waitFor 断言
       await waitFor(() => {
+        expect(screen.getByText("报告汇总")).toBeTruthy();
         // 真后端 columns 6 列：commissionCode/categoryCode/projectName/flowStatus/result/reportCode
         // 用 getAllByRole 找 columnheader 避免「报告类别」既在 label 又在表头
         const headers = screen.getAllByRole("columnheader");
@@ -99,9 +100,12 @@ describe("M05.F01 报告汇总", () => {
     { timeout: 45_000 },
     async () => {
       render(<SummaryList />);
-      const select = screen.getByLabelText("报告类别");
-      expect(select).toBeTruthy();
-      expect(select.textContent).toContain("全部");
+      // B6 加载态：整页 PageLoading 门控后，筛选区随数据一起出现 → waitFor 断言
+      await waitFor(() => {
+        const select = screen.getByLabelText("报告类别");
+        expect(select).toBeTruthy();
+        expect(select.textContent).toContain("全部");
+      });
     },
   );
 });

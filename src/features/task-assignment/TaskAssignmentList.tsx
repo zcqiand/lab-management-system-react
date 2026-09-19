@@ -34,12 +34,14 @@ import {
 } from "@/api/endpoints/receipts/receipts";
 import type { SampleReceipt } from "@/api/endpoints/model/sampleReceipt";
 import { FLOW_STAGE_LABELS } from "@/lib/flow-labels";
+import { PageLoading } from "@/components/app/page-loading";
 
 export function TaskAssignmentList() {
   const [items, setItems] = useState<SampleReceipt[]>([]);
   const [total, setTotal] = useState(0);
   const [keyword, setKeyword] = useState("");
-  const [loading, setLoading] = useState(false);
+  // B6 加载态：首屏即视为加载中（首帧不渲染空表壳；refetch 走 per-widget 加载中）
+  const [loading, setLoading] = useState(true);
   const [assignTarget, setAssignTarget] = useState<SampleReceipt | null>(null);
   const [assigneeName, setAssigneeName] = useState("");
   const [plannedTestDate, setPlannedTestDate] = useState("");
@@ -94,6 +96,9 @@ export function TaskAssignmentList() {
       setSaving(false);
     }
   };
+
+  // B6 加载态：首次数据到达前整页 PageLoading，不渲染空表壳
+  if (loading && items.length === 0) return <PageLoading />;
 
   return (
     <>

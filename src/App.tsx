@@ -12,6 +12,7 @@
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppShell } from "@/components/app/app-shell";
+import { PageLoading } from "@/components/app/page-loading";
 import { LoginPage } from "@/pages/LoginPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { BadPathRedirect } from "@/components/app/bad-path-redirect";
@@ -54,7 +55,8 @@ const ReportArchivePage = lazy(() => import("@/pages/ReportArchivePage"));
 const SummaryPage = lazy(() => import("@/pages/SummaryPage"));
 
 function RouteSuspense({ children }: { children: React.ReactNode }) {
-  return <Suspense fallback={null}>{children}</Suspense>;
+  // B6 加载态：切路由 chunk 加载期间显示页面级加载态（原 fallback=null 渲染空白）
+  return <Suspense fallback={<PageLoading />}>{children}</Suspense>;
 }
 
 export default function App() {
