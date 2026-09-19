@@ -7,6 +7,7 @@
 //   - SummaryList 聚合：两个数据源任一未到仍整页加载，全部到齐才显示
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, act } from "@testing-library/react";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 import type { Contract } from "@/api/endpoints/model/contract";
 
 const contractApi = vi.hoisted(() => ({
@@ -118,5 +119,21 @@ describe("页面级加载态（PageLoading 门控）", () => {
     });
     expect(screen.getByText("报告汇总")).toBeTruthy();
     expect(screen.getByText("RC-001")).toBeTruthy();
+  });
+
+  it("ReceiptDetail：路由无 id 时不得永久卡在整页加载态（B6 修复 R1）", async () => {
+    // RED（改前）：loading 初值 true 且 fetch 在 !id 时早退不落定 → 永久 PageLoading
+    const { ReceiptDetail } = await import("@/features/receipts/ReceiptDetail");
+    render(
+      <MemoryRouter initialEntries={["/detail"]}>
+        <Routes>
+          {/* 无 :id 段的路由 → useParams().id 为 undefined（早退分支） */}
+          <Route path="/detail" element={<ReceiptDetail />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    await waitFor(() => {
+      expect(screen.queryByTestId("page-loading")).toBeNull();
+    });
   });
 });
