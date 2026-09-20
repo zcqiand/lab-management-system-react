@@ -12,4 +12,5 @@ pageSize?: number;
 keyword?: string;
 contractId?: string;
 flowStatus?: FlowStatus;
+filter?: string;
 };
