@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { InspectionGrade } from './inspectionGrade';
+import type { InspectionGrade } from "./inspectionGrade";
 
 export type CatalogListGrades200 = {
   items: InspectionGrade[];

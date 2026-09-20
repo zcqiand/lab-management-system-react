@@ -4,9 +4,9 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { BackendRegistry } from './backendRegistry';
-import type { AuthContext } from './authContext';
-import type { TokenStorageKeys } from './tokenStorageKeys';
+import type { BackendRegistry } from "./backendRegistry";
+import type { AuthContext } from "./authContext";
+import type { TokenStorageKeys } from "./tokenStorageKeys";
 
 export interface FrontendBindMetaFrontendBindSnapshot {
   /** 已废弃 (ADR-0014);保留以维持 BackendRegistry schema 在 openapi.yaml 里的可达性 */

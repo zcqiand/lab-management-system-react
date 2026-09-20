@@ -4,10 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -20,15 +17,11 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
+import * as axios from "axios";
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 import type {
   Contract,
@@ -36,346 +29,483 @@ import type {
   ContractsListContractsParams,
   CreateContractRequest,
   ErrorResponse,
-  UpdateContractRequest
-} from '.././model';
-
-
-
-
+  UpdateContractRequest,
+} from ".././model";
 
 export const contractsListContracts = (
-    params?: ContractsListContractsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ContractsListContracts200>> => {
-    
-    
-    return axios.default.get(
-      `/api/contracts`,{
+  params?: ContractsListContractsParams,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<ContractsListContracts200>> => {
+  return axios.default.get(`/api/contracts`, {
     ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
+    params: { ...params, ...options?.params },
+  });
+};
 
-
-
-
-export const getContractsListContractsQueryKey = (params?: ContractsListContractsParams,) => {
-    return [
-    `/api/contracts`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getContractsListContractsQueryOptions = <TData = Awaited<ReturnType<typeof contractsListContracts>>, TError = AxiosError<ErrorResponse>>(params?: ContractsListContractsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof contractsListContracts>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getContractsListContractsQueryKey = (
+  params?: ContractsListContractsParams,
 ) => {
+  return [`/api/contracts`, ...(params ? [params] : [])] as const;
+};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+export const getContractsListContractsQueryOptions = <
+  TData = Awaited<ReturnType<typeof contractsListContracts>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ContractsListContractsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof contractsListContracts>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getContractsListContractsQueryKey(params);
+  const queryKey = queryOptions?.queryKey ?? getContractsListContractsQueryKey(params);
 
-  
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof contractsListContracts>>> = ({
+    signal,
+  }) => contractsListContracts(params, { signal, ...axiosOptions });
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof contractsListContracts>>> = ({ signal }) => contractsListContracts(params, { signal, ...axiosOptions });
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof contractsListContracts>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-      
+export type ContractsListContractsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof contractsListContracts>>
+>;
+export type ContractsListContractsQueryError = AxiosError<ErrorResponse>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof contractsListContracts>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ContractsListContractsQueryResult = NonNullable<Awaited<ReturnType<typeof contractsListContracts>>>
-export type ContractsListContractsQueryError = AxiosError<ErrorResponse>
-
-
-export function useContractsListContracts<TData = Awaited<ReturnType<typeof contractsListContracts>>, TError = AxiosError<ErrorResponse>>(
- params: undefined |  ContractsListContractsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof contractsListContracts>>, TError, TData>> & Pick<
+export function useContractsListContracts<
+  TData = Awaited<ReturnType<typeof contractsListContracts>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params: undefined | ContractsListContractsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof contractsListContracts>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof contractsListContracts>>,
           TError,
           Awaited<ReturnType<typeof contractsListContracts>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useContractsListContracts<TData = Awaited<ReturnType<typeof contractsListContracts>>, TError = AxiosError<ErrorResponse>>(
- params?: ContractsListContractsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof contractsListContracts>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useContractsListContracts<
+  TData = Awaited<ReturnType<typeof contractsListContracts>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ContractsListContractsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof contractsListContracts>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof contractsListContracts>>,
           TError,
           Awaited<ReturnType<typeof contractsListContracts>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useContractsListContracts<TData = Awaited<ReturnType<typeof contractsListContracts>>, TError = AxiosError<ErrorResponse>>(
- params?: ContractsListContractsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof contractsListContracts>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useContractsListContracts<
+  TData = Awaited<ReturnType<typeof contractsListContracts>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ContractsListContractsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof contractsListContracts>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useContractsListContracts<TData = Awaited<ReturnType<typeof contractsListContracts>>, TError = AxiosError<ErrorResponse>>(
- params?: ContractsListContractsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof contractsListContracts>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useContractsListContracts<
+  TData = Awaited<ReturnType<typeof contractsListContracts>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ContractsListContractsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof contractsListContracts>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getContractsListContractsQueryOptions(params, options);
 
-  const queryOptions = getContractsListContractsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const contractsCreateContract = (
-    createContractRequest: CreateContractRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Contract>> => {
-    
-    
-    return axios.default.post(
-      `/api/contracts`,
-      createContractRequest,options
-    );
-  }
+  createContractRequest: CreateContractRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<Contract>> => {
+  return axios.default.post(`/api/contracts`, createContractRequest, options);
+};
 
+export const getContractsCreateContractMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof contractsCreateContract>>,
+    TError,
+    { data: CreateContractRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof contractsCreateContract>>,
+  TError,
+  { data: CreateContractRequest },
+  TContext
+> => {
+  const mutationKey = ["contractsCreateContract"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof contractsCreateContract>>,
+    { data: CreateContractRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-export const getContractsCreateContractMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof contractsCreateContract>>, TError,{data: CreateContractRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof contractsCreateContract>>, TError,{data: CreateContractRequest}, TContext> => {
+    return contractsCreateContract(data, axiosOptions);
+  };
 
-const mutationKey = ['contractsCreateContract'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type ContractsCreateContractMutationResult = NonNullable<
+  Awaited<ReturnType<typeof contractsCreateContract>>
+>;
+export type ContractsCreateContractMutationBody = CreateContractRequest;
+export type ContractsCreateContractMutationError = AxiosError<ErrorResponse>;
 
+export const useContractsCreateContract = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof contractsCreateContract>>,
+      TError,
+      { data: CreateContractRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof contractsCreateContract>>,
+  TError,
+  { data: CreateContractRequest },
+  TContext
+> => {
+  const mutationOptions = getContractsCreateContractMutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof contractsCreateContract>>, {data: CreateContractRequest}> = (props) => {
-          const {data} = props ?? {};
+  return useMutation(mutationOptions, queryClient);
+};
+export const contractsGetContract = (
+  id: string,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<Contract>> => {
+  return axios.default.get(`/api/contracts/${id}`, options);
+};
 
-          return  contractsCreateContract(data,axiosOptions)
-        }
+export const getContractsGetContractQueryKey = (id?: string) => {
+  return [`/api/contracts/${id}`] as const;
+};
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ContractsCreateContractMutationResult = NonNullable<Awaited<ReturnType<typeof contractsCreateContract>>>
-    export type ContractsCreateContractMutationBody = CreateContractRequest
-    export type ContractsCreateContractMutationError = AxiosError<ErrorResponse>
-
-    export const useContractsCreateContract = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof contractsCreateContract>>, TError,{data: CreateContractRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof contractsCreateContract>>,
-        TError,
-        {data: CreateContractRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getContractsCreateContractMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const contractsGetContract = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Contract>> => {
-    
-    
-    return axios.default.get(
-      `/api/contracts/${id}`,options
-    );
-  }
-
-
-
-
-export const getContractsGetContractQueryKey = (id?: string,) => {
-    return [
-    `/api/contracts/${id}`
-    ] as const;
-    }
-
-    
-export const getContractsGetContractQueryOptions = <TData = Awaited<ReturnType<typeof contractsGetContract>>, TError = AxiosError<ErrorResponse>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof contractsGetContract>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getContractsGetContractQueryOptions = <
+  TData = Awaited<ReturnType<typeof contractsGetContract>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof contractsGetContract>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
 ) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getContractsGetContractQueryKey(id);
 
-  const queryKey =  queryOptions?.queryKey ?? getContractsGetContractQueryKey(id);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof contractsGetContract>>> = ({
+    signal,
+  }) => contractsGetContract(id, { signal, ...axiosOptions });
 
-  
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof contractsGetContract>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof contractsGetContract>>> = ({ signal }) => contractsGetContract(id, { signal, ...axiosOptions });
+export type ContractsGetContractQueryResult = NonNullable<
+  Awaited<ReturnType<typeof contractsGetContract>>
+>;
+export type ContractsGetContractQueryError = AxiosError<ErrorResponse>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof contractsGetContract>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ContractsGetContractQueryResult = NonNullable<Awaited<ReturnType<typeof contractsGetContract>>>
-export type ContractsGetContractQueryError = AxiosError<ErrorResponse>
-
-
-export function useContractsGetContract<TData = Awaited<ReturnType<typeof contractsGetContract>>, TError = AxiosError<ErrorResponse>>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof contractsGetContract>>, TError, TData>> & Pick<
+export function useContractsGetContract<
+  TData = Awaited<ReturnType<typeof contractsGetContract>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof contractsGetContract>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof contractsGetContract>>,
           TError,
           Awaited<ReturnType<typeof contractsGetContract>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useContractsGetContract<TData = Awaited<ReturnType<typeof contractsGetContract>>, TError = AxiosError<ErrorResponse>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof contractsGetContract>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useContractsGetContract<
+  TData = Awaited<ReturnType<typeof contractsGetContract>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof contractsGetContract>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof contractsGetContract>>,
           TError,
           Awaited<ReturnType<typeof contractsGetContract>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useContractsGetContract<TData = Awaited<ReturnType<typeof contractsGetContract>>, TError = AxiosError<ErrorResponse>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof contractsGetContract>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useContractsGetContract<
+  TData = Awaited<ReturnType<typeof contractsGetContract>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof contractsGetContract>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useContractsGetContract<TData = Awaited<ReturnType<typeof contractsGetContract>>, TError = AxiosError<ErrorResponse>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof contractsGetContract>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useContractsGetContract<
+  TData = Awaited<ReturnType<typeof contractsGetContract>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof contractsGetContract>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getContractsGetContractQueryOptions(id, options);
 
-  const queryOptions = getContractsGetContractQueryOptions(id,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-
 export const contractsUpdateContract = (
-    id: string,
-    updateContractRequest: UpdateContractRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Contract>> => {
-    
-    
-    return axios.default.put(
-      `/api/contracts/${id}`,
-      updateContractRequest,options
-    );
-  }
+  id: string,
+  updateContractRequest: UpdateContractRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<Contract>> => {
+  return axios.default.put(`/api/contracts/${id}`, updateContractRequest, options);
+};
 
+export const getContractsUpdateContractMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof contractsUpdateContract>>,
+    TError,
+    { id: string; data: UpdateContractRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof contractsUpdateContract>>,
+  TError,
+  { id: string; data: UpdateContractRequest },
+  TContext
+> => {
+  const mutationKey = ["contractsUpdateContract"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof contractsUpdateContract>>,
+    { id: string; data: UpdateContractRequest }
+  > = (props) => {
+    const { id, data } = props ?? {};
 
-export const getContractsUpdateContractMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof contractsUpdateContract>>, TError,{id: string;data: UpdateContractRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof contractsUpdateContract>>, TError,{id: string;data: UpdateContractRequest}, TContext> => {
+    return contractsUpdateContract(id, data, axiosOptions);
+  };
 
-const mutationKey = ['contractsUpdateContract'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type ContractsUpdateContractMutationResult = NonNullable<
+  Awaited<ReturnType<typeof contractsUpdateContract>>
+>;
+export type ContractsUpdateContractMutationBody = UpdateContractRequest;
+export type ContractsUpdateContractMutationError = AxiosError<ErrorResponse>;
 
+export const useContractsUpdateContract = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof contractsUpdateContract>>,
+      TError,
+      { id: string; data: UpdateContractRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof contractsUpdateContract>>,
+  TError,
+  { id: string; data: UpdateContractRequest },
+  TContext
+> => {
+  const mutationOptions = getContractsUpdateContractMutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof contractsUpdateContract>>, {id: string;data: UpdateContractRequest}> = (props) => {
-          const {id,data} = props ?? {};
+  return useMutation(mutationOptions, queryClient);
+};
+export const contractsDeleteContract = (
+  id: string,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<void>> => {
+  return axios.default.delete(`/api/contracts/${id}`, options);
+};
 
-          return  contractsUpdateContract(id,data,axiosOptions)
-        }
+export const getContractsDeleteContractMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof contractsDeleteContract>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof contractsDeleteContract>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ["contractsDeleteContract"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
-        
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof contractsDeleteContract>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
 
+    return contractsDeleteContract(id, axiosOptions);
+  };
 
-  return  { mutationFn, ...mutationOptions }}
+  return { mutationFn, ...mutationOptions };
+};
 
-    export type ContractsUpdateContractMutationResult = NonNullable<Awaited<ReturnType<typeof contractsUpdateContract>>>
-    export type ContractsUpdateContractMutationBody = UpdateContractRequest
-    export type ContractsUpdateContractMutationError = AxiosError<ErrorResponse>
+export type ContractsDeleteContractMutationResult = NonNullable<
+  Awaited<ReturnType<typeof contractsDeleteContract>>
+>;
 
-    export const useContractsUpdateContract = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof contractsUpdateContract>>, TError,{id: string;data: UpdateContractRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof contractsUpdateContract>>,
-        TError,
-        {id: string;data: UpdateContractRequest},
-        TContext
-      > => {
+export type ContractsDeleteContractMutationError = AxiosError<ErrorResponse>;
 
-      const mutationOptions = getContractsUpdateContractMutationOptions(options);
+export const useContractsDeleteContract = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof contractsDeleteContract>>,
+      TError,
+      { id: string },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof contractsDeleteContract>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions = getContractsDeleteContractMutationOptions(options);
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const contractsDeleteContract = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    
-    return axios.default.delete(
-      `/api/contracts/${id}`,options
-    );
-  }
-
-
-
-export const getContractsDeleteContractMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof contractsDeleteContract>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof contractsDeleteContract>>, TError,{id: string}, TContext> => {
-
-const mutationKey = ['contractsDeleteContract'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof contractsDeleteContract>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
-
-          return  contractsDeleteContract(id,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ContractsDeleteContractMutationResult = NonNullable<Awaited<ReturnType<typeof contractsDeleteContract>>>
-    
-    export type ContractsDeleteContractMutationError = AxiosError<ErrorResponse>
-
-    export const useContractsDeleteContract = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof contractsDeleteContract>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof contractsDeleteContract>>,
-        TError,
-        {id: string},
-        TContext
-      > => {
-
-      const mutationOptions = getContractsDeleteContractMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
+  return useMutation(mutationOptions, queryClient);
+};

@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { SpecialtyObjectLink } from './specialtyObjectLink';
+import type { SpecialtyObjectLink } from "./specialtyObjectLink";
 
 export type InspectionDictionaryListSpecialtyObjectLinks200 = {
   items: SpecialtyObjectLink[];

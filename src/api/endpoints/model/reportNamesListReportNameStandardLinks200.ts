@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { ReportNameStandardLink } from './reportNameStandardLink';
+import type { ReportNameStandardLink } from "./reportNameStandardLink";
 
 export type ReportNamesListReportNameStandardLinks200 = {
   items: ReportNameStandardLink[];

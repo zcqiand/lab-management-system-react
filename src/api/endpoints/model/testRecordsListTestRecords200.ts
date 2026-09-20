@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { TestRecord } from './testRecord';
+import type { TestRecord } from "./testRecord";
 
 export type TestRecordsListTestRecords200 = {
   items: TestRecord[];

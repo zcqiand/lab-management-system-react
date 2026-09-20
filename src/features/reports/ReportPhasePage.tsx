@@ -210,7 +210,9 @@ export function ReportPhasePage({
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-base">{title}（{total || "…"}）</CardTitle>
+          <CardTitle className="text-base">
+            {title}（{total || "…"}）
+          </CardTitle>
           {loading && <span className="text-xs text-slate-400">加载中…</span>}
         </CardHeader>
         <CardContent className="p-0">
@@ -260,11 +262,7 @@ export function ReportPhasePage({
                   </td>
                   <td className="px-4 py-2">{r.projectName ?? "—"}</td>
                   <td className="px-4 py-2">
-                    {r.result === "pass"
-                      ? "合格"
-                      : r.result === "fail"
-                        ? "不合格"
-                        : "—"}
+                    {r.result === "pass" ? "合格" : r.result === "fail" ? "不合格" : "—"}
                   </td>
                   <td className="px-4 py-2 text-xs">
                     {FLOW_STAGE_LABELS[r.flowStatus] ?? r.flowStatus}
@@ -302,11 +300,20 @@ export function ReportPhasePage({
           <DialogHeader>
             <DialogTitle>退回 — {returnTarget?.commissionCode ?? ""}</DialogTitle>
             <DialogDescription>
-              退回后该接样单回到上一环节（{returnTarget
+              退回后该接样单回到上一环节（
+              {returnTarget
                 ? FLOW_STAGE_LABELS[
-                    ({ review: "data_entry", approval: "review", issuance: "approval", archived: "issuance" } as const)[returnTarget.flowStatus as PhaseStage] ?? "上一环节"
+                    (
+                      {
+                        review: "data_entry",
+                        approval: "review",
+                        issuance: "approval",
+                        archived: "issuance",
+                      } as const
+                    )[returnTarget.flowStatus as PhaseStage] ?? "上一环节"
                   ]
-                : ""}）。
+                : ""}
+              ）。
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-2">

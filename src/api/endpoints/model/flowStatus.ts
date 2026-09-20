@@ -5,17 +5,16 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type FlowStatus = typeof FlowStatus[keyof typeof FlowStatus];
-
+export type FlowStatus = (typeof FlowStatus)[keyof typeof FlowStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const FlowStatus = {
-  receiving: 'receiving',
-  task_assignment: 'task_assignment',
-  data_entry: 'data_entry',
-  review: 'review',
-  approval: 'approval',
-  issuance: 'issuance',
-  archived: 'archived',
-  completed: 'completed',
+  receiving: "receiving",
+  task_assignment: "task_assignment",
+  data_entry: "data_entry",
+  review: "review",
+  approval: "approval",
+  issuance: "issuance",
+  archived: "archived",
+  completed: "completed",
 } as const;

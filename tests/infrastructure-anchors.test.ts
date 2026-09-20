@@ -8,22 +8,16 @@ import { fnTest } from "./fn";
 const SRC = path.resolve(__dirname, "..");
 
 describe("Infrastructure anchor registration", () => {
-  fnTest(
-    ["M03.F01.I07"],
-    "SampleExtFieldsModal module source file exists",
-    () => {
-      expect(
-        fs.existsSync(
-          path.join(SRC, "src/features/data-entry/SampleExtFieldsModal.tsx"),
-        ),
-      ).toBe(true);
-    },
-  );
+  fnTest(["M03.F01.I07"], "SampleExtFieldsModal module source file exists", () => {
+    expect(
+      fs.existsSync(path.join(SRC, "src/features/data-entry/SampleExtFieldsModal.tsx")),
+    ).toBe(true);
+  });
 
   it("BackendBadge module source file exists (replaces BackendSwitcher — ADR-0014)", () => {
-    expect(
-      fs.existsSync(path.join(SRC, "src/components/app/backend-badge.tsx")),
-    ).toBe(true);
+    expect(fs.existsSync(path.join(SRC, "src/components/app/backend-badge.tsx"))).toBe(
+      true,
+    );
   });
 
   it("axios interceptor module source file exists", () => {

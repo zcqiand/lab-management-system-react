@@ -4,11 +4,11 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { RequirementVerificationStatus } from './requirementVerificationStatus';
+import type { RequirementVerificationStatus } from "./requirementVerificationStatus";
 
 export type TechnicalRequirementsListTechnicalRequirementsParams = {
-inspectionObjectCode?: string;
-inspectionParameterCode?: string;
-judgmentStandardCode?: string;
-verificationStatus?: RequirementVerificationStatus;
+  inspectionObjectCode?: string;
+  inspectionParameterCode?: string;
+  judgmentStandardCode?: string;
+  verificationStatus?: RequirementVerificationStatus;
 };

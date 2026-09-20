@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { InspectionParameterSourceType } from './inspectionParameterSourceType';
+import type { InspectionParameterSourceType } from "./inspectionParameterSourceType";
 
 export interface InspectionParameter {
   code: string;

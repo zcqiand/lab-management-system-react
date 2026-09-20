@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { MaterialQualifiedRate } from './materialQualifiedRate';
+import type { MaterialQualifiedRate } from "./materialQualifiedRate";
 
 export type DashboardStatsQualifiedRateByMaterial = {
   concrete: MaterialQualifiedRate;

@@ -5,16 +5,16 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type CalculationAlgorithmType = typeof CalculationAlgorithmType[keyof typeof CalculationAlgorithmType];
-
+export type CalculationAlgorithmType =
+  (typeof CalculationAlgorithmType)[keyof typeof CalculationAlgorithmType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CalculationAlgorithmType = {
-  simple_avg: 'simple_avg',
-  compressive_strength: 'compressive_strength',
-  flexural_strength: 'flexural_strength',
-  steel_tensile: 'steel_tensile',
-  formula: 'formula',
-  manual: 'manual',
-  auto_calc_ratio: 'auto_calc_ratio',
+  simple_avg: "simple_avg",
+  compressive_strength: "compressive_strength",
+  flexural_strength: "flexural_strength",
+  steel_tensile: "steel_tensile",
+  formula: "formula",
+  manual: "manual",
+  auto_calc_ratio: "auto_calc_ratio",
 } as const;

@@ -5,11 +5,11 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type InspectionStandardRole = typeof InspectionStandardRole[keyof typeof InspectionStandardRole];
-
+export type InspectionStandardRole =
+  (typeof InspectionStandardRole)[keyof typeof InspectionStandardRole];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const InspectionStandardRole = {
-  TESTING: 'TESTING',
-  JUDGMENT: 'JUDGMENT',
+  TESTING: "TESTING",
+  JUDGMENT: "JUDGMENT",
 } as const;

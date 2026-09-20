@@ -5,4 +5,4 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type UpdateSampleExtRequestExt = {[key: string]: string};
+export type UpdateSampleExtRequestExt = { [key: string]: string };

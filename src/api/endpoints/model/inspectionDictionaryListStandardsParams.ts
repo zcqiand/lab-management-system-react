@@ -4,11 +4,11 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { InspectionStandardStatus } from './inspectionStandardStatus';
+import type { InspectionStandardStatus } from "./inspectionStandardStatus";
 
 export type InspectionDictionaryListStandardsParams = {
-page?: number;
-pageSize?: number;
-keyword?: string;
-status?: InspectionStandardStatus;
+  page?: number;
+  pageSize?: number;
+  keyword?: string;
+  status?: InspectionStandardStatus;
 };

@@ -4,12 +4,13 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { AuthStateIdle } from './authStateIdle';
-import type { AuthStateAnonymous } from './authStateAnonymous';
-import type { AuthStateAwaitingTenant } from './authStateAwaitingTenant';
-import type { AuthStateAuthenticated } from './authStateAuthenticated';
+import type { AuthStateIdle } from "./authStateIdle";
+import type { AuthStateAnonymous } from "./authStateAnonymous";
+import type { AuthStateAwaitingTenant } from "./authStateAwaitingTenant";
+import type { AuthStateAuthenticated } from "./authStateAuthenticated";
 
 /**
  * auth 状态机 4 态。Vue: pinia store / React: Context;两侧实现可同构
  */
-export type AuthState = AuthStateIdle | AuthStateAnonymous | AuthStateAwaitingTenant | AuthStateAuthenticated;
+export type AuthState =
+  AuthStateIdle | AuthStateAnonymous | AuthStateAwaitingTenant | AuthStateAuthenticated;

@@ -5,10 +5,10 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type AuthStateAnonymousValueKind = typeof AuthStateAnonymousValueKind[keyof typeof AuthStateAnonymousValueKind];
-
+export type AuthStateAnonymousValueKind =
+  (typeof AuthStateAnonymousValueKind)[keyof typeof AuthStateAnonymousValueKind];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateAnonymousValueKind = {
-  anonymous: 'anonymous',
+  anonymous: "anonymous",
 } as const;

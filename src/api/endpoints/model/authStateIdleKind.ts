@@ -5,10 +5,10 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type AuthStateIdleKind = typeof AuthStateIdleKind[keyof typeof AuthStateIdleKind];
-
+export type AuthStateIdleKind =
+  (typeof AuthStateIdleKind)[keyof typeof AuthStateIdleKind];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateIdleKind = {
-  idle: 'idle',
+  idle: "idle",
 } as const;

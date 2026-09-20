@@ -5,10 +5,10 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type OAuthResponseType = typeof OAuthResponseType[keyof typeof OAuthResponseType];
-
+export type OAuthResponseType =
+  (typeof OAuthResponseType)[keyof typeof OAuthResponseType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const OAuthResponseType = {
-  code: 'code',
+  code: "code",
 } as const;

@@ -8,10 +8,10 @@
 /**
  * 当前选中租户 ID(authenticated 态缓存)
  */
-export type TokenStorageKeysActiveTenantId = typeof TokenStorageKeysActiveTenantId[keyof typeof TokenStorageKeysActiveTenantId];
-
+export type TokenStorageKeysActiveTenantId =
+  (typeof TokenStorageKeysActiveTenantId)[keyof typeof TokenStorageKeysActiveTenantId];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TokenStorageKeysActiveTenantId = {
-  labactiveTenantId: 'lab.activeTenantId',
+  labactiveTenantId: "lab.activeTenantId",
 } as const;

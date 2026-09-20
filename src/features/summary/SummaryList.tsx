@@ -9,7 +9,13 @@
 // （{summaryName, columns, rows} 与 {contractCount, ...reportCountByStatus}），
 // 无需 installShapeAdapters 额外兜底。
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import {
@@ -129,7 +135,10 @@ export function SummaryList() {
                     {data.columns.map((c) => (
                       <TableCell key={c.key}>
                         {c.key === "flowStatus" ? (
-                          <Badge variant="outline">{(STATUS_LABEL[String(row[c.key] ?? "")] ?? (String(row[c.key] ?? "") || "-"))}</Badge>
+                          <Badge variant="outline">
+                            {STATUS_LABEL[String(row[c.key] ?? "")] ??
+                              (String(row[c.key] ?? "") || "-")}
+                          </Badge>
                         ) : c.key === "result" ? (
                           row[c.key] === "qualified" ? (
                             <Badge>合格</Badge>
@@ -178,7 +187,9 @@ export function SummaryList() {
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>待办任务</CardDescription>
-            <CardTitle className="text-3xl text-amber-600">{stats?.pendingTaskCount ?? "-"}</CardTitle>
+            <CardTitle className="text-3xl text-amber-600">
+              {stats?.pendingTaskCount ?? "-"}
+            </CardTitle>
           </CardHeader>
         </Card>
         <Card>

@@ -4,8 +4,8 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { SummaryColumn } from './summaryColumn';
-import type { SummaryDataRowsItem } from './summaryDataRowsItem';
+import type { SummaryColumn } from "./summaryColumn";
+import type { SummaryDataRowsItem } from "./summaryDataRowsItem";
 
 export interface SummaryData {
   summaryName: string;

@@ -14,11 +14,7 @@ import {
 import type { ParamModelProps } from "@/features/data-entry/models/types";
 import type { InspectionParameter } from "@/api/endpoints/model/inspectionParameter";
 
-const param = (
-  code: string,
-  name: string,
-  unit?: string,
-): InspectionParameter =>
+const param = (code: string, name: string, unit?: string): InspectionParameter =>
   ({
     code,
     name,
@@ -111,63 +107,83 @@ describe("computeCompactionDegree", () => {
 describe("SoilCompactionCard 渲染", () => {
   beforeEach(() => cleanup());
 
-  fnTest(["M03.F03.I01"], "SoilCompactionCard 渲染 5 组（默认 pointCount=5）+ GB/T 50123-2019 标识", () => {
-    const { container } = render(<SoilCompactionCard {...makeProps()} />);
-    expect(
-      container.querySelectorAll('input[aria-label^="第"][aria-label$="组含水率"]').length,
-    ).toBe(5);
-    expect(container.textContent).toContain("GB/T 50123-2019");
-  });
+  fnTest(
+    ["M03.F03.I01"],
+    "SoilCompactionCard 渲染 5 组（默认 pointCount=5）+ GB/T 50123-2019 标识",
+    () => {
+      const { container } = render(<SoilCompactionCard {...makeProps()} />);
+      expect(
+        container.querySelectorAll('input[aria-label^="第"][aria-label$="组含水率"]')
+          .length,
+      ).toBe(5);
+      expect(container.textContent).toContain("GB/T 50123-2019");
+    },
+  );
 
-  fnTest(["M03.F03.I02"], "SoilCompactionCard 录入含水率 + 干密度 → 最大干密度上屏", () => {
-    const { container } = render(<SoilCompactionCard {...makeProps()} />);
-    const moistureInputs = container.querySelectorAll<HTMLInputElement>(
-      'input[aria-label^="第"][aria-label$="组含水率"]',
-    );
-    const densityInputs = container.querySelectorAll<HTMLInputElement>(
-      'input[aria-label^="第"][aria-label$="组干密度"]',
-    );
-    act(() => {
-      [
-        [10, 1.7],
-        [12, 1.9],
-        [14, 1.8],
-      ].forEach(([w, d], i) => {
-        fireEvent.change(moistureInputs[i]!, { target: { value: String(w) } });
-        fireEvent.change(densityInputs[i]!, { target: { value: String(d) } });
+  fnTest(
+    ["M03.F03.I02"],
+    "SoilCompactionCard 录入含水率 + 干密度 → 最大干密度上屏",
+    () => {
+      const { container } = render(<SoilCompactionCard {...makeProps()} />);
+      const moistureInputs = container.querySelectorAll<HTMLInputElement>(
+        'input[aria-label^="第"][aria-label$="组含水率"]',
+      );
+      const densityInputs = container.querySelectorAll<HTMLInputElement>(
+        'input[aria-label^="第"][aria-label$="组干密度"]',
+      );
+      act(() => {
+        [
+          [10, 1.7],
+          [12, 1.9],
+          [14, 1.8],
+        ].forEach(([w, d], i) => {
+          fireEvent.change(moistureInputs[i]!, { target: { value: String(w) } });
+          fireEvent.change(densityInputs[i]!, { target: { value: String(d) } });
+        });
       });
-    });
-    expect(screen.getByTestId("max-dry-density").textContent).toBeTruthy();
-    expect(screen.getByTestId("optimal-moisture").textContent).toBeTruthy();
-  });
+      expect(screen.getByTestId("max-dry-density").textContent).toBeTruthy();
+      expect(screen.getByTestId("optimal-moisture").textContent).toBeTruthy();
+    },
+  );
 });
 
 describe("SoilCompactionDegreeCard 渲染", () => {
   beforeEach(() => cleanup());
 
-  fnTest(["M03.F03.I01"], "SoilCompactionDegreeCard 渲染 6 行（默认 rowCount=6）+ 最大干密度输入", () => {
-    const { container } = render(<SoilCompactionDegreeCard {...makeProps()} />);
-    expect(
-      container.querySelectorAll('input[aria-label^="第"][aria-label$="行试样编号"]').length,
-    ).toBe(6);
-    expect(container.querySelector('input[aria-label="最大干密度"]')).toBeTruthy();
-  });
+  fnTest(
+    ["M03.F03.I01"],
+    "SoilCompactionDegreeCard 渲染 6 行（默认 rowCount=6）+ 最大干密度输入",
+    () => {
+      const { container } = render(<SoilCompactionDegreeCard {...makeProps()} />);
+      expect(
+        container.querySelectorAll('input[aria-label^="第"][aria-label$="行试样编号"]')
+          .length,
+      ).toBe(6);
+      expect(container.querySelector('input[aria-label="最大干密度"]')).toBeTruthy();
+    },
+  );
 
-  fnTest(["M03.F03.I02"], "SoilCompactionDegreeCard 录入湿密度 + 含水率 → 干密度 + 压实度上屏", () => {
-    const { container } = render(<SoilCompactionDegreeCard {...makeProps()} />);
-    const maxDia = container.querySelector<HTMLInputElement>('input[aria-label="最大干密度"]')!;
-    const wetDensity = container.querySelectorAll<HTMLInputElement>(
-      'input[aria-label^="第"][aria-label$="行湿密度"]',
-    );
-    const moisture = container.querySelectorAll<HTMLInputElement>(
-      'input[aria-label^="第"][aria-label$="行含水率"]',
-    );
-    act(() => {
-      fireEvent.change(maxDia, { target: { value: "1.9" } });
-      fireEvent.change(wetDensity[0]!, { target: { value: "1.92" } });
-      fireEvent.change(moisture[0]!, { target: { value: "10" } });
-    });
-    expect(screen.getByTestId("dry-density-0").textContent).toBeTruthy();
-    expect(screen.getByTestId("degree-0").textContent).toBeTruthy();
-  });
+  fnTest(
+    ["M03.F03.I02"],
+    "SoilCompactionDegreeCard 录入湿密度 + 含水率 → 干密度 + 压实度上屏",
+    () => {
+      const { container } = render(<SoilCompactionDegreeCard {...makeProps()} />);
+      const maxDia = container.querySelector<HTMLInputElement>(
+        'input[aria-label="最大干密度"]',
+      )!;
+      const wetDensity = container.querySelectorAll<HTMLInputElement>(
+        'input[aria-label^="第"][aria-label$="行湿密度"]',
+      );
+      const moisture = container.querySelectorAll<HTMLInputElement>(
+        'input[aria-label^="第"][aria-label$="行含水率"]',
+      );
+      act(() => {
+        fireEvent.change(maxDia, { target: { value: "1.9" } });
+        fireEvent.change(wetDensity[0]!, { target: { value: "1.92" } });
+        fireEvent.change(moisture[0]!, { target: { value: "10" } });
+      });
+      expect(screen.getByTestId("dry-density-0").textContent).toBeTruthy();
+      expect(screen.getByTestId("degree-0").textContent).toBeTruthy();
+    },
+  );
 });

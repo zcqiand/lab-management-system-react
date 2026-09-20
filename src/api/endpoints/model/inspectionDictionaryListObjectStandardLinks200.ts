@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { ObjectStandardLink } from './objectStandardLink';
+import type { ObjectStandardLink } from "./objectStandardLink";
 
 export type InspectionDictionaryListObjectStandardLinks200 = {
   items: ObjectStandardLink[];

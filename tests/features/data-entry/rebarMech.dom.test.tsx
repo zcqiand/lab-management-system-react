@@ -15,11 +15,7 @@ import { RebarMechNumericCard } from "@/features/data-entry/models/RebarMechNume
 import type { ParamModelProps } from "@/features/data-entry/models/types";
 import type { InspectionParameter } from "@/api/endpoints/model/inspectionParameter";
 
-const param = (
-  code: string,
-  name: string,
-  unit?: string,
-): InspectionParameter =>
+const param = (code: string, name: string, unit?: string): InspectionParameter =>
   ({
     code,
     name,
@@ -48,12 +44,16 @@ function makeProps(over: Partial<ParamModelProps> = {}): ParamModelProps {
   };
 }
 
-fnTest(["M03.F03.I01"], "rebar-mechanics：tensile_strength 算子（R = 4000·F/(π·d²)）", () => {
-  // d=22, F=[100,110] → [263.2, 289.5] MPa
-  const s = computeStrengths([100, 110], 22);
-  expect(s[0]).toBeCloseTo(263.2, 0);
-  expect(s[1]).toBeCloseTo(289.5, 0);
-});
+fnTest(
+  ["M03.F03.I01"],
+  "rebar-mechanics：tensile_strength 算子（R = 4000·F/(π·d²)）",
+  () => {
+    // d=22, F=[100,110] → [263.2, 289.5] MPa
+    const s = computeStrengths([100, 110], 22);
+    expect(s[0]).toBeCloseTo(263.2, 0);
+    expect(s[1]).toBeCloseTo(289.5, 0);
+  },
+);
 
 fnTest(["M03.F03.I01"], "rebar-mechanics：强屈比 ratioTensileOverYield", () => {
   const t = [540, 560]; // 抗拉
@@ -79,30 +79,45 @@ fnTest(["M03.F03.I01"], "rebar-mechanics：meanOf 算术平均", () => {
 describe("RebarMechNumericCard 渲染（tensile_strength）", () => {
   beforeEach(() => cleanup());
 
-  fnTest(["M03.F03.I01"], "RebarMechNumericCard tensile_strength：2 组 + 公称直径输入", () => {
-    const { container } = render(<RebarMechNumericCard {...makeProps()} />);
-    expect(
-      container.querySelectorAll('input[aria-label^="第"][aria-label$="组 数值"]').length,
-    ).toBe(2);
-    expect(container.querySelector('input[aria-label="公称直径"]')).toBeTruthy();
-  });
+  fnTest(
+    ["M03.F03.I01"],
+    "RebarMechNumericCard tensile_strength：2 组 + 公称直径输入",
+    () => {
+      const { container } = render(<RebarMechNumericCard {...makeProps()} />);
+      expect(
+        container.querySelectorAll('input[aria-label^="第"][aria-label$="组 数值"]')
+          .length,
+      ).toBe(2);
+      expect(container.querySelector('input[aria-label="公称直径"]')).toBeTruthy();
+    },
+  );
 
-  fnTest(["M03.F03.I02"], "RebarMechNumericCard 录入最大力 + 直径 → 强度 + 均值上屏", () => {
-    const { container } = render(<RebarMechNumericCard {...makeProps()} />);
-    const dia = container.querySelector<HTMLInputElement>('input[aria-label="公称直径"]')!;
-    const inputs = container.querySelectorAll<HTMLInputElement>(
-      'input[aria-label^="第"][aria-label$="组 数值"]',
-    );
-    act(() => {
-      fireEvent.change(dia, { target: { value: "22" } });
-      fireEvent.change(inputs[0]!, { target: { value: "100" } });
-    });
-    expect(container.textContent).toContain("263.1");
-  });
+  fnTest(
+    ["M03.F03.I02"],
+    "RebarMechNumericCard 录入最大力 + 直径 → 强度 + 均值上屏",
+    () => {
+      const { container } = render(<RebarMechNumericCard {...makeProps()} />);
+      const dia = container.querySelector<HTMLInputElement>(
+        'input[aria-label="公称直径"]',
+      )!;
+      const inputs = container.querySelectorAll<HTMLInputElement>(
+        'input[aria-label^="第"][aria-label$="组 数值"]',
+      );
+      act(() => {
+        fireEvent.change(dia, { target: { value: "22" } });
+        fireEvent.change(inputs[0]!, { target: { value: "100" } });
+      });
+      expect(container.textContent).toContain("263.1");
+    },
+  );
 
   fnTest(["M03.F03.I01"], "RebarMechNumericCard readOnly：禁用输入", () => {
-    const { container } = render(<RebarMechNumericCard {...makeProps({ readOnly: true })} />);
-    const input = container.querySelector<HTMLInputElement>('input[aria-label="公称直径"]')!;
+    const { container } = render(
+      <RebarMechNumericCard {...makeProps({ readOnly: true })} />,
+    );
+    const input = container.querySelector<HTMLInputElement>(
+      'input[aria-label="公称直径"]',
+    )!;
     expect(input.readOnly).toBe(true);
   });
 });

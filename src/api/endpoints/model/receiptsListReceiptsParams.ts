@@ -4,13 +4,13 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { FlowStatus } from './flowStatus';
+import type { FlowStatus } from "./flowStatus";
 
 export type ReceiptsListReceiptsParams = {
-page?: number;
-pageSize?: number;
-keyword?: string;
-contractId?: string;
-flowStatus?: FlowStatus;
-filter?: string;
+  page?: number;
+  pageSize?: number;
+  keyword?: string;
+  contractId?: string;
+  flowStatus?: FlowStatus;
+  filter?: string;
 };

@@ -59,7 +59,7 @@ describe("src/lib/env", () => {
     expect(env.apiBaseUrl).toBe("http://localhost:3001");
   });
 
-  it("VITE_API_BASE_URL 空字符串保留为 \"\"（不走 fallback）", async () => {
+  it('VITE_API_BASE_URL 空字符串保留为 ""（不走 fallback）', async () => {
     // ADR-0012 v0.3.0：readEnv 区分 undefined vs ""，空字符串保留供 .env.test
     // 用（相对 URL + @mswjs/node setupServer）。
     stubEnvs({ VITE_API_BASE_URL: "" });

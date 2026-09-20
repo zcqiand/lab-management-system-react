@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { Contract } from './contract';
+import type { Contract } from "./contract";
 
 export type ContractsListContracts200 = {
   items: Contract[];

@@ -4,10 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -20,15 +17,11 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
+import * as axios from "axios";
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 import type {
   CreateParamInterfaceRequest,
@@ -40,542 +33,841 @@ import type {
   ParamInterfacesListParamInterfaces200,
   ParamInterfacesListParamInterfacesParams,
   ParamInterfacesUnlinkParamInterfaceBody,
-  UpdateParamInterfaceRequest
-} from '.././model';
-
-
-
-
+  UpdateParamInterfaceRequest,
+} from ".././model";
 
 export const paramInterfacesListParamInterfaces = (
-    params?: ParamInterfacesListParamInterfacesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ParamInterfacesListParamInterfaces200>> => {
-    
-    
-    return axios.default.get(
-      `/api/param-interfaces`,{
+  params?: ParamInterfacesListParamInterfacesParams,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<ParamInterfacesListParamInterfaces200>> => {
+  return axios.default.get(`/api/param-interfaces`, {
     ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
+    params: { ...params, ...options?.params },
+  });
+};
 
-
-
-
-export const getParamInterfacesListParamInterfacesQueryKey = (params?: ParamInterfacesListParamInterfacesParams,) => {
-    return [
-    `/api/param-interfaces`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getParamInterfacesListParamInterfacesQueryOptions = <TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError = AxiosError<ErrorResponse>>(params?: ParamInterfacesListParamInterfacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getParamInterfacesListParamInterfacesQueryKey = (
+  params?: ParamInterfacesListParamInterfacesParams,
 ) => {
+  return [`/api/param-interfaces`, ...(params ? [params] : [])] as const;
+};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+export const getParamInterfacesListParamInterfacesQueryOptions = <
+  TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ParamInterfacesListParamInterfacesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getParamInterfacesListParamInterfacesQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getParamInterfacesListParamInterfacesQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>
+  > = ({ signal }) =>
+    paramInterfacesListParamInterfaces(params, { signal, ...axiosOptions });
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>> = ({ signal }) => paramInterfacesListParamInterfaces(params, { signal, ...axiosOptions });
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-      
+export type ParamInterfacesListParamInterfacesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>
+>;
+export type ParamInterfacesListParamInterfacesQueryError = AxiosError<ErrorResponse>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ParamInterfacesListParamInterfacesQueryResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>>
-export type ParamInterfacesListParamInterfacesQueryError = AxiosError<ErrorResponse>
-
-
-export function useParamInterfacesListParamInterfaces<TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError = AxiosError<ErrorResponse>>(
- params: undefined |  ParamInterfacesListParamInterfacesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError, TData>> & Pick<
+export function useParamInterfacesListParamInterfaces<
+  TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params: undefined | ParamInterfacesListParamInterfacesParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
           TError,
           Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useParamInterfacesListParamInterfaces<TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError = AxiosError<ErrorResponse>>(
- params?: ParamInterfacesListParamInterfacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useParamInterfacesListParamInterfaces<
+  TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ParamInterfacesListParamInterfacesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
           TError,
           Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useParamInterfacesListParamInterfaces<TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError = AxiosError<ErrorResponse>>(
- params?: ParamInterfacesListParamInterfacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useParamInterfacesListParamInterfaces<
+  TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ParamInterfacesListParamInterfacesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useParamInterfacesListParamInterfaces<TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError = AxiosError<ErrorResponse>>(
- params?: ParamInterfacesListParamInterfacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useParamInterfacesListParamInterfaces<
+  TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ParamInterfacesListParamInterfacesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesListParamInterfaces>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getParamInterfacesListParamInterfacesQueryOptions(params, options);
 
-  const queryOptions = getParamInterfacesListParamInterfacesQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const paramInterfacesCreateParamInterface = (
-    createParamInterfaceRequest: CreateParamInterfaceRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ParamInterface>> => {
-    
-    
-    return axios.default.post(
-      `/api/param-interfaces`,
-      createParamInterfaceRequest,options
-    );
-  }
+  createParamInterfaceRequest: CreateParamInterfaceRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<ParamInterface>> => {
+  return axios.default.post(
+    `/api/param-interfaces`,
+    createParamInterfaceRequest,
+    options,
+  );
+};
 
+export const getParamInterfacesCreateParamInterfaceMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>,
+    TError,
+    { data: CreateParamInterfaceRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>,
+  TError,
+  { data: CreateParamInterfaceRequest },
+  TContext
+> => {
+  const mutationKey = ["paramInterfacesCreateParamInterface"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>,
+    { data: CreateParamInterfaceRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-export const getParamInterfacesCreateParamInterfaceMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>, TError,{data: CreateParamInterfaceRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>, TError,{data: CreateParamInterfaceRequest}, TContext> => {
+    return paramInterfacesCreateParamInterface(data, axiosOptions);
+  };
 
-const mutationKey = ['paramInterfacesCreateParamInterface'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type ParamInterfacesCreateParamInterfaceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>
+>;
+export type ParamInterfacesCreateParamInterfaceMutationBody = CreateParamInterfaceRequest;
+export type ParamInterfacesCreateParamInterfaceMutationError = AxiosError<ErrorResponse>;
 
+export const useParamInterfacesCreateParamInterface = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>,
+      TError,
+      { data: CreateParamInterfaceRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>,
+  TError,
+  { data: CreateParamInterfaceRequest },
+  TContext
+> => {
+  const mutationOptions = getParamInterfacesCreateParamInterfaceMutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>, {data: CreateParamInterfaceRequest}> = (props) => {
-          const {data} = props ?? {};
+  return useMutation(mutationOptions, queryClient);
+};
+export const paramInterfacesLinkParamInterface = (
+  paramInterfaceLink: ParamInterfaceLink,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<void>> => {
+  return axios.default.post(`/api/param-interfaces/links`, paramInterfaceLink, options);
+};
 
-          return  paramInterfacesCreateParamInterface(data,axiosOptions)
-        }
+export const getParamInterfacesLinkParamInterfaceMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>,
+    TError,
+    { data: ParamInterfaceLink },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>,
+  TError,
+  { data: ParamInterfaceLink },
+  TContext
+> => {
+  const mutationKey = ["paramInterfacesLinkParamInterface"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
-        
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>,
+    { data: ParamInterfaceLink }
+  > = (props) => {
+    const { data } = props ?? {};
 
+    return paramInterfacesLinkParamInterface(data, axiosOptions);
+  };
 
-  return  { mutationFn, ...mutationOptions }}
+  return { mutationFn, ...mutationOptions };
+};
 
-    export type ParamInterfacesCreateParamInterfaceMutationResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>>
-    export type ParamInterfacesCreateParamInterfaceMutationBody = CreateParamInterfaceRequest
-    export type ParamInterfacesCreateParamInterfaceMutationError = AxiosError<ErrorResponse>
+export type ParamInterfacesLinkParamInterfaceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>
+>;
+export type ParamInterfacesLinkParamInterfaceMutationBody = ParamInterfaceLink;
+export type ParamInterfacesLinkParamInterfaceMutationError = AxiosError<ErrorResponse>;
 
-    export const useParamInterfacesCreateParamInterface = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>, TError,{data: CreateParamInterfaceRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof paramInterfacesCreateParamInterface>>,
-        TError,
-        {data: CreateParamInterfaceRequest},
-        TContext
-      > => {
+export const useParamInterfacesLinkParamInterface = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>,
+      TError,
+      { data: ParamInterfaceLink },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>,
+  TError,
+  { data: ParamInterfaceLink },
+  TContext
+> => {
+  const mutationOptions = getParamInterfacesLinkParamInterfaceMutationOptions(options);
 
-      const mutationOptions = getParamInterfacesCreateParamInterfaceMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const paramInterfacesLinkParamInterface = (
-    paramInterfaceLink: ParamInterfaceLink, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    
-    return axios.default.post(
-      `/api/param-interfaces/links`,
-      paramInterfaceLink,options
-    );
-  }
-
-
-
-export const getParamInterfacesLinkParamInterfaceMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>, TError,{data: ParamInterfaceLink}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>, TError,{data: ParamInterfaceLink}, TContext> => {
-
-const mutationKey = ['paramInterfacesLinkParamInterface'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>, {data: ParamInterfaceLink}> = (props) => {
-          const {data} = props ?? {};
-
-          return  paramInterfacesLinkParamInterface(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ParamInterfacesLinkParamInterfaceMutationResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>>
-    export type ParamInterfacesLinkParamInterfaceMutationBody = ParamInterfaceLink
-    export type ParamInterfacesLinkParamInterfaceMutationError = AxiosError<ErrorResponse>
-
-    export const useParamInterfacesLinkParamInterface = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>, TError,{data: ParamInterfaceLink}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof paramInterfacesLinkParamInterface>>,
-        TError,
-        {data: ParamInterfaceLink},
-        TContext
-      > => {
-
-      const mutationOptions = getParamInterfacesLinkParamInterfaceMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const paramInterfacesUnlinkParamInterface = (
-    paramInterfacesUnlinkParamInterfaceBody: ParamInterfacesUnlinkParamInterfaceBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    
-    return axios.default.delete(
-      `/api/param-interfaces/links`,{data:
-      paramInterfacesUnlinkParamInterfaceBody, ...options}
-    );
-  }
-
-
-
-export const getParamInterfacesUnlinkParamInterfaceMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>, TError,{data: ParamInterfacesUnlinkParamInterfaceBody}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>, TError,{data: ParamInterfacesUnlinkParamInterfaceBody}, TContext> => {
-
-const mutationKey = ['paramInterfacesUnlinkParamInterface'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>, {data: ParamInterfacesUnlinkParamInterfaceBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  paramInterfacesUnlinkParamInterface(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ParamInterfacesUnlinkParamInterfaceMutationResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>>
-    export type ParamInterfacesUnlinkParamInterfaceMutationBody = ParamInterfacesUnlinkParamInterfaceBody
-    export type ParamInterfacesUnlinkParamInterfaceMutationError = AxiosError<ErrorResponse>
-
-    export const useParamInterfacesUnlinkParamInterface = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>, TError,{data: ParamInterfacesUnlinkParamInterfaceBody}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>,
-        TError,
-        {data: ParamInterfacesUnlinkParamInterfaceBody},
-        TContext
-      > => {
-
-      const mutationOptions = getParamInterfacesUnlinkParamInterfaceMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const paramInterfacesListParamInterfaceLinks = (
-    params?: ParamInterfacesListParamInterfaceLinksParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ParamInterfacesListParamInterfaceLinks200>> => {
-    
-    
-    return axios.default.get(
-      `/api/param-interfaces/links`,{
+  return useMutation(mutationOptions, queryClient);
+};
+export const paramInterfacesUnlinkParamInterface = (
+  paramInterfacesUnlinkParamInterfaceBody: ParamInterfacesUnlinkParamInterfaceBody,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<void>> => {
+  return axios.default.delete(`/api/param-interfaces/links`, {
+    data: paramInterfacesUnlinkParamInterfaceBody,
     ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
+  });
+};
 
+export const getParamInterfacesUnlinkParamInterfaceMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>,
+    TError,
+    { data: ParamInterfacesUnlinkParamInterfaceBody },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>,
+  TError,
+  { data: ParamInterfacesUnlinkParamInterfaceBody },
+  TContext
+> => {
+  const mutationKey = ["paramInterfacesUnlinkParamInterface"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>,
+    { data: ParamInterfacesUnlinkParamInterfaceBody }
+  > = (props) => {
+    const { data } = props ?? {};
 
+    return paramInterfacesUnlinkParamInterface(data, axiosOptions);
+  };
 
-export const getParamInterfacesListParamInterfaceLinksQueryKey = (params?: ParamInterfacesListParamInterfaceLinksParams,) => {
-    return [
-    `/api/param-interfaces/links`, ...(params ? [params]: [])
-    ] as const;
-    }
+  return { mutationFn, ...mutationOptions };
+};
 
-    
-export const getParamInterfacesListParamInterfaceLinksQueryOptions = <TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>, TError = AxiosError<ErrorResponse>>(params?: ParamInterfacesListParamInterfaceLinksParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>, TError, TData>>, axios?: AxiosRequestConfig}
+export type ParamInterfacesUnlinkParamInterfaceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>
+>;
+export type ParamInterfacesUnlinkParamInterfaceMutationBody =
+  ParamInterfacesUnlinkParamInterfaceBody;
+export type ParamInterfacesUnlinkParamInterfaceMutationError = AxiosError<ErrorResponse>;
+
+export const useParamInterfacesUnlinkParamInterface = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>,
+      TError,
+      { data: ParamInterfacesUnlinkParamInterfaceBody },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof paramInterfacesUnlinkParamInterface>>,
+  TError,
+  { data: ParamInterfacesUnlinkParamInterfaceBody },
+  TContext
+> => {
+  const mutationOptions = getParamInterfacesUnlinkParamInterfaceMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+export const paramInterfacesListParamInterfaceLinks = (
+  params?: ParamInterfacesListParamInterfaceLinksParams,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<ParamInterfacesListParamInterfaceLinks200>> => {
+  return axios.default.get(`/api/param-interfaces/links`, {
+    ...options,
+    params: { ...params, ...options?.params },
+  });
+};
+
+export const getParamInterfacesListParamInterfaceLinksQueryKey = (
+  params?: ParamInterfacesListParamInterfaceLinksParams,
 ) => {
+  return [`/api/param-interfaces/links`, ...(params ? [params] : [])] as const;
+};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+export const getParamInterfacesListParamInterfaceLinksQueryOptions = <
+  TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ParamInterfacesListParamInterfaceLinksParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getParamInterfacesListParamInterfaceLinksQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getParamInterfacesListParamInterfaceLinksQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>
+  > = ({ signal }) =>
+    paramInterfacesListParamInterfaceLinks(params, { signal, ...axiosOptions });
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>> = ({ signal }) => paramInterfacesListParamInterfaceLinks(params, { signal, ...axiosOptions });
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-      
+export type ParamInterfacesListParamInterfaceLinksQueryResult = NonNullable<
+  Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>
+>;
+export type ParamInterfacesListParamInterfaceLinksQueryError = AxiosError<ErrorResponse>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ParamInterfacesListParamInterfaceLinksQueryResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>>
-export type ParamInterfacesListParamInterfaceLinksQueryError = AxiosError<ErrorResponse>
-
-
-export function useParamInterfacesListParamInterfaceLinks<TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>, TError = AxiosError<ErrorResponse>>(
- params: undefined |  ParamInterfacesListParamInterfaceLinksParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>, TError, TData>> & Pick<
+export function useParamInterfacesListParamInterfaceLinks<
+  TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params: undefined | ParamInterfacesListParamInterfaceLinksParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
           TError,
           Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useParamInterfacesListParamInterfaceLinks<TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>, TError = AxiosError<ErrorResponse>>(
- params?: ParamInterfacesListParamInterfaceLinksParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useParamInterfacesListParamInterfaceLinks<
+  TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ParamInterfacesListParamInterfaceLinksParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
           TError,
           Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useParamInterfacesListParamInterfaceLinks<TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>, TError = AxiosError<ErrorResponse>>(
- params?: ParamInterfacesListParamInterfaceLinksParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useParamInterfacesListParamInterfaceLinks<
+  TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ParamInterfacesListParamInterfaceLinksParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useParamInterfacesListParamInterfaceLinks<TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>, TError = AxiosError<ErrorResponse>>(
- params?: ParamInterfacesListParamInterfaceLinksParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useParamInterfacesListParamInterfaceLinks<
+  TData = Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ParamInterfacesListParamInterfaceLinksParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesListParamInterfaceLinks>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getParamInterfacesListParamInterfaceLinksQueryOptions(
+    params,
+    options,
+  );
 
-  const queryOptions = getParamInterfacesListParamInterfaceLinksQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const paramInterfacesGetParamInterface = (
-    code: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ParamInterface>> => {
-    
-    
-    return axios.default.get(
-      `/api/param-interfaces/${code}`,options
-    );
-  }
+  code: string,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<ParamInterface>> => {
+  return axios.default.get(`/api/param-interfaces/${code}`, options);
+};
 
+export const getParamInterfacesGetParamInterfaceQueryKey = (code?: string) => {
+  return [`/api/param-interfaces/${code}`] as const;
+};
 
-
-
-export const getParamInterfacesGetParamInterfaceQueryKey = (code?: string,) => {
-    return [
-    `/api/param-interfaces/${code}`
-    ] as const;
-    }
-
-    
-export const getParamInterfacesGetParamInterfaceQueryOptions = <TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError = AxiosError<ErrorResponse>>(code: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getParamInterfacesGetParamInterfaceQueryOptions = <
+  TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  code: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
 ) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getParamInterfacesGetParamInterfaceQueryKey(code);
 
-  const queryKey =  queryOptions?.queryKey ?? getParamInterfacesGetParamInterfaceQueryKey(code);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>
+  > = ({ signal }) => paramInterfacesGetParamInterface(code, { signal, ...axiosOptions });
 
-  
+  return { queryKey, queryFn, enabled: !!code, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>> = ({ signal }) => paramInterfacesGetParamInterface(code, { signal, ...axiosOptions });
+export type ParamInterfacesGetParamInterfaceQueryResult = NonNullable<
+  Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>
+>;
+export type ParamInterfacesGetParamInterfaceQueryError = AxiosError<ErrorResponse>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(code), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ParamInterfacesGetParamInterfaceQueryResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>>
-export type ParamInterfacesGetParamInterfaceQueryError = AxiosError<ErrorResponse>
-
-
-export function useParamInterfacesGetParamInterface<TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError = AxiosError<ErrorResponse>>(
- code: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError, TData>> & Pick<
+export function useParamInterfacesGetParamInterface<
+  TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  code: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
           TError,
           Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useParamInterfacesGetParamInterface<TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError = AxiosError<ErrorResponse>>(
- code: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useParamInterfacesGetParamInterface<
+  TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  code: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
           TError,
           Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useParamInterfacesGetParamInterface<TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError = AxiosError<ErrorResponse>>(
- code: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useParamInterfacesGetParamInterface<
+  TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  code: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useParamInterfacesGetParamInterface<TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError = AxiosError<ErrorResponse>>(
- code: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useParamInterfacesGetParamInterface<
+  TData = Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  code: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof paramInterfacesGetParamInterface>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getParamInterfacesGetParamInterfaceQueryOptions(code, options);
 
-  const queryOptions = getParamInterfacesGetParamInterfaceQueryOptions(code,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-
 export const paramInterfacesUpdateParamInterface = (
-    code: string,
-    updateParamInterfaceRequest: UpdateParamInterfaceRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ParamInterface>> => {
-    
-    
-    return axios.default.put(
-      `/api/param-interfaces/${code}`,
-      updateParamInterfaceRequest,options
-    );
-  }
+  code: string,
+  updateParamInterfaceRequest: UpdateParamInterfaceRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<ParamInterface>> => {
+  return axios.default.put(
+    `/api/param-interfaces/${code}`,
+    updateParamInterfaceRequest,
+    options,
+  );
+};
 
+export const getParamInterfacesUpdateParamInterfaceMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>,
+    TError,
+    { code: string; data: UpdateParamInterfaceRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>,
+  TError,
+  { code: string; data: UpdateParamInterfaceRequest },
+  TContext
+> => {
+  const mutationKey = ["paramInterfacesUpdateParamInterface"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>,
+    { code: string; data: UpdateParamInterfaceRequest }
+  > = (props) => {
+    const { code, data } = props ?? {};
 
-export const getParamInterfacesUpdateParamInterfaceMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>, TError,{code: string;data: UpdateParamInterfaceRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>, TError,{code: string;data: UpdateParamInterfaceRequest}, TContext> => {
+    return paramInterfacesUpdateParamInterface(code, data, axiosOptions);
+  };
 
-const mutationKey = ['paramInterfacesUpdateParamInterface'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type ParamInterfacesUpdateParamInterfaceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>
+>;
+export type ParamInterfacesUpdateParamInterfaceMutationBody = UpdateParamInterfaceRequest;
+export type ParamInterfacesUpdateParamInterfaceMutationError = AxiosError<ErrorResponse>;
 
+export const useParamInterfacesUpdateParamInterface = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>,
+      TError,
+      { code: string; data: UpdateParamInterfaceRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>,
+  TError,
+  { code: string; data: UpdateParamInterfaceRequest },
+  TContext
+> => {
+  const mutationOptions = getParamInterfacesUpdateParamInterfaceMutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>, {code: string;data: UpdateParamInterfaceRequest}> = (props) => {
-          const {code,data} = props ?? {};
+  return useMutation(mutationOptions, queryClient);
+};
+export const paramInterfacesDeleteParamInterface = (
+  code: string,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<void>> => {
+  return axios.default.delete(`/api/param-interfaces/${code}`, options);
+};
 
-          return  paramInterfacesUpdateParamInterface(code,data,axiosOptions)
-        }
+export const getParamInterfacesDeleteParamInterfaceMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>,
+    TError,
+    { code: string },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>,
+  TError,
+  { code: string },
+  TContext
+> => {
+  const mutationKey = ["paramInterfacesDeleteParamInterface"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
-        
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>,
+    { code: string }
+  > = (props) => {
+    const { code } = props ?? {};
 
+    return paramInterfacesDeleteParamInterface(code, axiosOptions);
+  };
 
-  return  { mutationFn, ...mutationOptions }}
+  return { mutationFn, ...mutationOptions };
+};
 
-    export type ParamInterfacesUpdateParamInterfaceMutationResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>>
-    export type ParamInterfacesUpdateParamInterfaceMutationBody = UpdateParamInterfaceRequest
-    export type ParamInterfacesUpdateParamInterfaceMutationError = AxiosError<ErrorResponse>
+export type ParamInterfacesDeleteParamInterfaceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>
+>;
 
-    export const useParamInterfacesUpdateParamInterface = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>, TError,{code: string;data: UpdateParamInterfaceRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof paramInterfacesUpdateParamInterface>>,
-        TError,
-        {code: string;data: UpdateParamInterfaceRequest},
-        TContext
-      > => {
+export type ParamInterfacesDeleteParamInterfaceMutationError = AxiosError<ErrorResponse>;
 
-      const mutationOptions = getParamInterfacesUpdateParamInterfaceMutationOptions(options);
+export const useParamInterfacesDeleteParamInterface = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>,
+      TError,
+      { code: string },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>,
+  TError,
+  { code: string },
+  TContext
+> => {
+  const mutationOptions = getParamInterfacesDeleteParamInterfaceMutationOptions(options);
 
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const paramInterfacesDeleteParamInterface = (
-    code: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    
-    return axios.default.delete(
-      `/api/param-interfaces/${code}`,options
-    );
-  }
-
-
-
-export const getParamInterfacesDeleteParamInterfaceMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>, TError,{code: string}, TContext> => {
-
-const mutationKey = ['paramInterfacesDeleteParamInterface'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>, {code: string}> = (props) => {
-          const {code} = props ?? {};
-
-          return  paramInterfacesDeleteParamInterface(code,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ParamInterfacesDeleteParamInterfaceMutationResult = NonNullable<Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>>
-    
-    export type ParamInterfacesDeleteParamInterfaceMutationError = AxiosError<ErrorResponse>
-
-    export const useParamInterfacesDeleteParamInterface = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>, TError,{code: string}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof paramInterfacesDeleteParamInterface>>,
-        TError,
-        {code: string},
-        TContext
-      > => {
-
-      const mutationOptions = getParamInterfacesDeleteParamInterfaceMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
+  return useMutation(mutationOptions, queryClient);
+};

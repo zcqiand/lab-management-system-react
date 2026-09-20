@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { UpdateParamInterfaceRequestConfig } from './updateParamInterfaceRequestConfig';
+import type { UpdateParamInterfaceRequestConfig } from "./updateParamInterfaceRequestConfig";
 
 export interface UpdateParamInterfaceRequest {
   name?: string;

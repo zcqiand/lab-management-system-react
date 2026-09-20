@@ -6,6 +6,6 @@
  */
 
 export type ReportNamesListObjectReportNameLinksParams = {
-inspectionObjectCode?: string;
-reportNameCode?: string;
+  inspectionObjectCode?: string;
+  reportNameCode?: string;
 };

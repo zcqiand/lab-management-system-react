@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { CreateSampleRequestExt } from './createSampleRequestExt';
+import type { CreateSampleRequestExt } from "./createSampleRequestExt";
 
 export interface CreateSampleRequest {
   receiptId: string;

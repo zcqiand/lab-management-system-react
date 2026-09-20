@@ -43,11 +43,7 @@ import type {
   LoginResponse,
   MyTenant,
 } from "@/api/endpoints/model";
-import {
-  TOKEN_STORAGE_KEYS,
-  type AuthState,
-  type UnsubscribeFn,
-} from "@/api/contracts";
+import { TOKEN_STORAGE_KEYS, type AuthState, type UnsubscribeFn } from "@/api/contracts";
 import { toApiError } from "@/api/http-client";
 
 // ---------------------------------------------------------------------------
@@ -198,12 +194,14 @@ async function doLogin(req: LoginRequest): Promise<LoginResponse | ErrorResponse
  * 取 partial LoginResponse：saas 已经换好 token 的话只带 token + user + tenants
  * （缺 refreshToken / currentTenantId 时用 readKey 兜底）。
  */
-async function doSetSession(
-  partial: { accessToken: string; refreshToken?: string; user?: LoginResponse["user"]; tenants?: LoginResponse["tenants"] },
-): Promise<void> {
+async function doSetSession(partial: {
+  accessToken: string;
+  refreshToken?: string;
+  user?: LoginResponse["user"];
+  tenants?: LoginResponse["tenants"];
+}): Promise<void> {
   // refreshToken / user / tenants 兜底
-  const refreshToken =
-    partial.refreshToken ?? readKey(TOKEN_STORAGE_KEYS.refreshToken);
+  const refreshToken = partial.refreshToken ?? readKey(TOKEN_STORAGE_KEYS.refreshToken);
   const user = partial.user;
   const tenants = partial.tenants ?? [];
   if (!refreshToken || !user) {
@@ -252,7 +250,10 @@ async function doSwitchTenant(
   req: import("@/api/endpoints/model").SwitchTenantRequest,
 ): Promise<LoginResponse | ErrorResponse> {
   if (store.state.kind !== "awaiting_tenant" && store.state.kind !== "authenticated") {
-    return { code: "WRONG_STATE", message: "switchTenant 仅在 awaiting_tenant / authenticated 态可调" };
+    return {
+      code: "WRONG_STATE",
+      message: "switchTenant 仅在 awaiting_tenant / authenticated 态可调",
+    };
   }
   try {
     const resp = await authSwitchTenant(req);
@@ -288,7 +289,8 @@ export async function hydrateAuth(): Promise<void> {
       headers: { Authorization: `Bearer ${token}` },
     });
     const session = resp.data;
-    const tenantId = readKey(TOKEN_STORAGE_KEYS.activeTenantId) ?? session.currentTenantId ?? undefined;
+    const tenantId =
+      readKey(TOKEN_STORAGE_KEYS.activeTenantId) ?? session.currentTenantId ?? undefined;
     const tenant = session.tenants.find((t) => t.tenantId === tenantId);
     if (tenant) {
       writeKey(TOKEN_STORAGE_KEYS.activeTenantId, tenant.tenantId);

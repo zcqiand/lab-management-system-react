@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { FlowAction } from './flowAction';
+import type { FlowAction } from "./flowAction";
 
 export interface FlowActionRequest {
   ids: string[];

@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { InspectionStandardStatus } from './inspectionStandardStatus';
+import type { InspectionStandardStatus } from "./inspectionStandardStatus";
 
 export interface UpdateInspectionStandardRequest {
   name?: string;

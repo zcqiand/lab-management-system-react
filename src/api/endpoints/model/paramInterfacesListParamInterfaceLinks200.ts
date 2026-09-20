@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { ParamInterfaceLink } from './paramInterfaceLink';
+import type { ParamInterfaceLink } from "./paramInterfaceLink";
 
 export type ParamInterfacesListParamInterfaceLinks200 = {
   items: ParamInterfaceLink[];

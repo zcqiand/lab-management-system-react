@@ -4,10 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -20,370 +17,623 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
+import * as axios from "axios";
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 import type {
   CalculationMethod,
   CalculationMethodsListCalculationMethodsParams,
   CreateCalculationMethodRequest,
   ErrorResponse,
-  UpdateCalculationMethodRequest
-} from '.././model';
-
-
-
-
+  UpdateCalculationMethodRequest,
+} from ".././model";
 
 export const calculationMethodsListCalculationMethods = (
-    params?: CalculationMethodsListCalculationMethodsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CalculationMethod[]>> => {
-    
-    
-    return axios.default.get(
-      `/api/calculation-methods`,{
+  params?: CalculationMethodsListCalculationMethodsParams,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<CalculationMethod[]>> => {
+  return axios.default.get(`/api/calculation-methods`, {
     ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
+    params: { ...params, ...options?.params },
+  });
+};
 
-
-
-
-export const getCalculationMethodsListCalculationMethodsQueryKey = (params?: CalculationMethodsListCalculationMethodsParams,) => {
-    return [
-    `/api/calculation-methods`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getCalculationMethodsListCalculationMethodsQueryOptions = <TData = Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>, TError = AxiosError<ErrorResponse>>(params?: CalculationMethodsListCalculationMethodsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getCalculationMethodsListCalculationMethodsQueryKey = (
+  params?: CalculationMethodsListCalculationMethodsParams,
 ) => {
+  return [`/api/calculation-methods`, ...(params ? [params] : [])] as const;
+};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+export const getCalculationMethodsListCalculationMethodsQueryOptions = <
+  TData = Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: CalculationMethodsListCalculationMethodsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getCalculationMethodsListCalculationMethodsQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getCalculationMethodsListCalculationMethodsQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>
+  > = ({ signal }) =>
+    calculationMethodsListCalculationMethods(params, { signal, ...axiosOptions });
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>> = ({ signal }) => calculationMethodsListCalculationMethods(params, { signal, ...axiosOptions });
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-      
+export type CalculationMethodsListCalculationMethodsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>
+>;
+export type CalculationMethodsListCalculationMethodsQueryError =
+  AxiosError<ErrorResponse>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type CalculationMethodsListCalculationMethodsQueryResult = NonNullable<Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>>
-export type CalculationMethodsListCalculationMethodsQueryError = AxiosError<ErrorResponse>
-
-
-export function useCalculationMethodsListCalculationMethods<TData = Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>, TError = AxiosError<ErrorResponse>>(
- params: undefined |  CalculationMethodsListCalculationMethodsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>, TError, TData>> & Pick<
+export function useCalculationMethodsListCalculationMethods<
+  TData = Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params: undefined | CalculationMethodsListCalculationMethodsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
           TError,
           Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCalculationMethodsListCalculationMethods<TData = Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>, TError = AxiosError<ErrorResponse>>(
- params?: CalculationMethodsListCalculationMethodsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useCalculationMethodsListCalculationMethods<
+  TData = Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: CalculationMethodsListCalculationMethodsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
           TError,
           Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCalculationMethodsListCalculationMethods<TData = Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>, TError = AxiosError<ErrorResponse>>(
- params?: CalculationMethodsListCalculationMethodsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useCalculationMethodsListCalculationMethods<
+  TData = Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: CalculationMethodsListCalculationMethodsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useCalculationMethodsListCalculationMethods<TData = Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>, TError = AxiosError<ErrorResponse>>(
- params?: CalculationMethodsListCalculationMethodsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useCalculationMethodsListCalculationMethods<
+  TData = Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: CalculationMethodsListCalculationMethodsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof calculationMethodsListCalculationMethods>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getCalculationMethodsListCalculationMethodsQueryOptions(
+    params,
+    options,
+  );
 
-  const queryOptions = getCalculationMethodsListCalculationMethodsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const calculationMethodsCreateCalculationMethod = (
-    createCalculationMethodRequest: CreateCalculationMethodRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CalculationMethod>> => {
-    
-    
-    return axios.default.post(
-      `/api/calculation-methods`,
-      createCalculationMethodRequest,options
-    );
-  }
+  createCalculationMethodRequest: CreateCalculationMethodRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<CalculationMethod>> => {
+  return axios.default.post(
+    `/api/calculation-methods`,
+    createCalculationMethodRequest,
+    options,
+  );
+};
 
+export const getCalculationMethodsCreateCalculationMethodMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof calculationMethodsCreateCalculationMethod>>,
+    TError,
+    { data: CreateCalculationMethodRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof calculationMethodsCreateCalculationMethod>>,
+  TError,
+  { data: CreateCalculationMethodRequest },
+  TContext
+> => {
+  const mutationKey = ["calculationMethodsCreateCalculationMethod"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof calculationMethodsCreateCalculationMethod>>,
+    { data: CreateCalculationMethodRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-export const getCalculationMethodsCreateCalculationMethodMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculationMethodsCreateCalculationMethod>>, TError,{data: CreateCalculationMethodRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof calculationMethodsCreateCalculationMethod>>, TError,{data: CreateCalculationMethodRequest}, TContext> => {
+    return calculationMethodsCreateCalculationMethod(data, axiosOptions);
+  };
 
-const mutationKey = ['calculationMethodsCreateCalculationMethod'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type CalculationMethodsCreateCalculationMethodMutationResult = NonNullable<
+  Awaited<ReturnType<typeof calculationMethodsCreateCalculationMethod>>
+>;
+export type CalculationMethodsCreateCalculationMethodMutationBody =
+  CreateCalculationMethodRequest;
+export type CalculationMethodsCreateCalculationMethodMutationError =
+  AxiosError<ErrorResponse>;
 
+export const useCalculationMethodsCreateCalculationMethod = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof calculationMethodsCreateCalculationMethod>>,
+      TError,
+      { data: CreateCalculationMethodRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof calculationMethodsCreateCalculationMethod>>,
+  TError,
+  { data: CreateCalculationMethodRequest },
+  TContext
+> => {
+  const mutationOptions =
+    getCalculationMethodsCreateCalculationMethodMutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof calculationMethodsCreateCalculationMethod>>, {data: CreateCalculationMethodRequest}> = (props) => {
-          const {data} = props ?? {};
+  return useMutation(mutationOptions, queryClient);
+};
+export const calculationMethodsGetCalculationMethod = (
+  inspectionObjectCode: string,
+  inspectionParameterCode: string,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<CalculationMethod>> => {
+  return axios.default.get(
+    `/api/calculation-methods/${inspectionObjectCode}/${inspectionParameterCode}`,
+    options,
+  );
+};
 
-          return  calculationMethodsCreateCalculationMethod(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CalculationMethodsCreateCalculationMethodMutationResult = NonNullable<Awaited<ReturnType<typeof calculationMethodsCreateCalculationMethod>>>
-    export type CalculationMethodsCreateCalculationMethodMutationBody = CreateCalculationMethodRequest
-    export type CalculationMethodsCreateCalculationMethodMutationError = AxiosError<ErrorResponse>
-
-    export const useCalculationMethodsCreateCalculationMethod = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculationMethodsCreateCalculationMethod>>, TError,{data: CreateCalculationMethodRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof calculationMethodsCreateCalculationMethod>>,
-        TError,
-        {data: CreateCalculationMethodRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getCalculationMethodsCreateCalculationMethodMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const calculationMethodsGetCalculationMethod = (
-    inspectionObjectCode: string,
-    inspectionParameterCode: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CalculationMethod>> => {
-    
-    
-    return axios.default.get(
-      `/api/calculation-methods/${inspectionObjectCode}/${inspectionParameterCode}`,options
-    );
-  }
-
-
-
-
-export const getCalculationMethodsGetCalculationMethodQueryKey = (inspectionObjectCode?: string,
-    inspectionParameterCode?: string,) => {
-    return [
-    `/api/calculation-methods/${inspectionObjectCode}/${inspectionParameterCode}`
-    ] as const;
-    }
-
-    
-export const getCalculationMethodsGetCalculationMethodQueryOptions = <TData = Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>, TError = AxiosError<ErrorResponse>>(inspectionObjectCode: string,
-    inspectionParameterCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getCalculationMethodsGetCalculationMethodQueryKey = (
+  inspectionObjectCode?: string,
+  inspectionParameterCode?: string,
 ) => {
+  return [
+    `/api/calculation-methods/${inspectionObjectCode}/${inspectionParameterCode}`,
+  ] as const;
+};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+export const getCalculationMethodsGetCalculationMethodQueryOptions = <
+  TData = Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  inspectionObjectCode: string,
+  inspectionParameterCode: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getCalculationMethodsGetCalculationMethodQueryKey(inspectionObjectCode,inspectionParameterCode);
+  const queryKey =
+    queryOptions?.queryKey ??
+    getCalculationMethodsGetCalculationMethodQueryKey(
+      inspectionObjectCode,
+      inspectionParameterCode,
+    );
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>
+  > = ({ signal }) =>
+    calculationMethodsGetCalculationMethod(
+      inspectionObjectCode,
+      inspectionParameterCode,
+      { signal, ...axiosOptions },
+    );
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>> = ({ signal }) => calculationMethodsGetCalculationMethod(inspectionObjectCode,inspectionParameterCode, { signal, ...axiosOptions });
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(inspectionObjectCode && inspectionParameterCode),
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-      
+export type CalculationMethodsGetCalculationMethodQueryResult = NonNullable<
+  Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>
+>;
+export type CalculationMethodsGetCalculationMethodQueryError = AxiosError<ErrorResponse>;
 
-      
-
-   return  { queryKey, queryFn, enabled: !!(inspectionObjectCode && inspectionParameterCode), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type CalculationMethodsGetCalculationMethodQueryResult = NonNullable<Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>>
-export type CalculationMethodsGetCalculationMethodQueryError = AxiosError<ErrorResponse>
-
-
-export function useCalculationMethodsGetCalculationMethod<TData = Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>, TError = AxiosError<ErrorResponse>>(
- inspectionObjectCode: string,
-    inspectionParameterCode: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>, TError, TData>> & Pick<
+export function useCalculationMethodsGetCalculationMethod<
+  TData = Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  inspectionObjectCode: string,
+  inspectionParameterCode: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
           TError,
           Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCalculationMethodsGetCalculationMethod<TData = Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>, TError = AxiosError<ErrorResponse>>(
- inspectionObjectCode: string,
-    inspectionParameterCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useCalculationMethodsGetCalculationMethod<
+  TData = Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  inspectionObjectCode: string,
+  inspectionParameterCode: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
           TError,
           Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCalculationMethodsGetCalculationMethod<TData = Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>, TError = AxiosError<ErrorResponse>>(
- inspectionObjectCode: string,
-    inspectionParameterCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useCalculationMethodsGetCalculationMethod<
+  TData = Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  inspectionObjectCode: string,
+  inspectionParameterCode: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useCalculationMethodsGetCalculationMethod<TData = Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>, TError = AxiosError<ErrorResponse>>(
- inspectionObjectCode: string,
-    inspectionParameterCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useCalculationMethodsGetCalculationMethod<
+  TData = Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  inspectionObjectCode: string,
+  inspectionParameterCode: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof calculationMethodsGetCalculationMethod>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getCalculationMethodsGetCalculationMethodQueryOptions(
+    inspectionObjectCode,
+    inspectionParameterCode,
+    options,
+  );
 
-  const queryOptions = getCalculationMethodsGetCalculationMethodQueryOptions(inspectionObjectCode,inspectionParameterCode,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-
 export const calculationMethodsUpdateCalculationMethod = (
-    inspectionObjectCode: string,
-    inspectionParameterCode: string,
-    updateCalculationMethodRequest: UpdateCalculationMethodRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CalculationMethod>> => {
-    
-    
-    return axios.default.put(
-      `/api/calculation-methods/${inspectionObjectCode}/${inspectionParameterCode}`,
-      updateCalculationMethodRequest,options
-    );
-  }
+  inspectionObjectCode: string,
+  inspectionParameterCode: string,
+  updateCalculationMethodRequest: UpdateCalculationMethodRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<CalculationMethod>> => {
+  return axios.default.put(
+    `/api/calculation-methods/${inspectionObjectCode}/${inspectionParameterCode}`,
+    updateCalculationMethodRequest,
+    options,
+  );
+};
 
+export const getCalculationMethodsUpdateCalculationMethodMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof calculationMethodsUpdateCalculationMethod>>,
+    TError,
+    {
+      inspectionObjectCode: string;
+      inspectionParameterCode: string;
+      data: UpdateCalculationMethodRequest;
+    },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof calculationMethodsUpdateCalculationMethod>>,
+  TError,
+  {
+    inspectionObjectCode: string;
+    inspectionParameterCode: string;
+    data: UpdateCalculationMethodRequest;
+  },
+  TContext
+> => {
+  const mutationKey = ["calculationMethodsUpdateCalculationMethod"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
-
-export const getCalculationMethodsUpdateCalculationMethodMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculationMethodsUpdateCalculationMethod>>, TError,{inspectionObjectCode: string;inspectionParameterCode: string;data: UpdateCalculationMethodRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof calculationMethodsUpdateCalculationMethod>>, TError,{inspectionObjectCode: string;inspectionParameterCode: string;data: UpdateCalculationMethodRequest}, TContext> => {
-
-const mutationKey = ['calculationMethodsUpdateCalculationMethod'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof calculationMethodsUpdateCalculationMethod>>, {inspectionObjectCode: string;inspectionParameterCode: string;data: UpdateCalculationMethodRequest}> = (props) => {
-          const {inspectionObjectCode,inspectionParameterCode,data} = props ?? {};
-
-          return  calculationMethodsUpdateCalculationMethod(inspectionObjectCode,inspectionParameterCode,data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CalculationMethodsUpdateCalculationMethodMutationResult = NonNullable<Awaited<ReturnType<typeof calculationMethodsUpdateCalculationMethod>>>
-    export type CalculationMethodsUpdateCalculationMethodMutationBody = UpdateCalculationMethodRequest
-    export type CalculationMethodsUpdateCalculationMethodMutationError = AxiosError<ErrorResponse>
-
-    export const useCalculationMethodsUpdateCalculationMethod = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculationMethodsUpdateCalculationMethod>>, TError,{inspectionObjectCode: string;inspectionParameterCode: string;data: UpdateCalculationMethodRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof calculationMethodsUpdateCalculationMethod>>,
-        TError,
-        {inspectionObjectCode: string;inspectionParameterCode: string;data: UpdateCalculationMethodRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getCalculationMethodsUpdateCalculationMethodMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof calculationMethodsUpdateCalculationMethod>>,
+    {
+      inspectionObjectCode: string;
+      inspectionParameterCode: string;
+      data: UpdateCalculationMethodRequest;
     }
-    export const calculationMethodsDeleteCalculationMethod = (
-    inspectionObjectCode: string,
-    inspectionParameterCode: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    
-    return axios.default.delete(
-      `/api/calculation-methods/${inspectionObjectCode}/${inspectionParameterCode}`,options
+  > = (props) => {
+    const { inspectionObjectCode, inspectionParameterCode, data } = props ?? {};
+
+    return calculationMethodsUpdateCalculationMethod(
+      inspectionObjectCode,
+      inspectionParameterCode,
+      data,
+      axiosOptions,
     );
-  }
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
+export type CalculationMethodsUpdateCalculationMethodMutationResult = NonNullable<
+  Awaited<ReturnType<typeof calculationMethodsUpdateCalculationMethod>>
+>;
+export type CalculationMethodsUpdateCalculationMethodMutationBody =
+  UpdateCalculationMethodRequest;
+export type CalculationMethodsUpdateCalculationMethodMutationError =
+  AxiosError<ErrorResponse>;
 
-export const getCalculationMethodsDeleteCalculationMethodMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculationMethodsDeleteCalculationMethod>>, TError,{inspectionObjectCode: string;inspectionParameterCode: string}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof calculationMethodsDeleteCalculationMethod>>, TError,{inspectionObjectCode: string;inspectionParameterCode: string}, TContext> => {
+export const useCalculationMethodsUpdateCalculationMethod = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof calculationMethodsUpdateCalculationMethod>>,
+      TError,
+      {
+        inspectionObjectCode: string;
+        inspectionParameterCode: string;
+        data: UpdateCalculationMethodRequest;
+      },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof calculationMethodsUpdateCalculationMethod>>,
+  TError,
+  {
+    inspectionObjectCode: string;
+    inspectionParameterCode: string;
+    data: UpdateCalculationMethodRequest;
+  },
+  TContext
+> => {
+  const mutationOptions =
+    getCalculationMethodsUpdateCalculationMethodMutationOptions(options);
 
-const mutationKey = ['calculationMethodsDeleteCalculationMethod'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+  return useMutation(mutationOptions, queryClient);
+};
+export const calculationMethodsDeleteCalculationMethod = (
+  inspectionObjectCode: string,
+  inspectionParameterCode: string,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<void>> => {
+  return axios.default.delete(
+    `/api/calculation-methods/${inspectionObjectCode}/${inspectionParameterCode}`,
+    options,
+  );
+};
 
-      
+export const getCalculationMethodsDeleteCalculationMethodMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof calculationMethodsDeleteCalculationMethod>>,
+    TError,
+    { inspectionObjectCode: string; inspectionParameterCode: string },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof calculationMethodsDeleteCalculationMethod>>,
+  TError,
+  { inspectionObjectCode: string; inspectionParameterCode: string },
+  TContext
+> => {
+  const mutationKey = ["calculationMethodsDeleteCalculationMethod"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof calculationMethodsDeleteCalculationMethod>>,
+    { inspectionObjectCode: string; inspectionParameterCode: string }
+  > = (props) => {
+    const { inspectionObjectCode, inspectionParameterCode } = props ?? {};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof calculationMethodsDeleteCalculationMethod>>, {inspectionObjectCode: string;inspectionParameterCode: string}> = (props) => {
-          const {inspectionObjectCode,inspectionParameterCode} = props ?? {};
+    return calculationMethodsDeleteCalculationMethod(
+      inspectionObjectCode,
+      inspectionParameterCode,
+      axiosOptions,
+    );
+  };
 
-          return  calculationMethodsDeleteCalculationMethod(inspectionObjectCode,inspectionParameterCode,axiosOptions)
-        }
+  return { mutationFn, ...mutationOptions };
+};
 
-        
+export type CalculationMethodsDeleteCalculationMethodMutationResult = NonNullable<
+  Awaited<ReturnType<typeof calculationMethodsDeleteCalculationMethod>>
+>;
 
+export type CalculationMethodsDeleteCalculationMethodMutationError =
+  AxiosError<ErrorResponse>;
 
-  return  { mutationFn, ...mutationOptions }}
+export const useCalculationMethodsDeleteCalculationMethod = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof calculationMethodsDeleteCalculationMethod>>,
+      TError,
+      { inspectionObjectCode: string; inspectionParameterCode: string },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof calculationMethodsDeleteCalculationMethod>>,
+  TError,
+  { inspectionObjectCode: string; inspectionParameterCode: string },
+  TContext
+> => {
+  const mutationOptions =
+    getCalculationMethodsDeleteCalculationMethodMutationOptions(options);
 
-    export type CalculationMethodsDeleteCalculationMethodMutationResult = NonNullable<Awaited<ReturnType<typeof calculationMethodsDeleteCalculationMethod>>>
-    
-    export type CalculationMethodsDeleteCalculationMethodMutationError = AxiosError<ErrorResponse>
-
-    export const useCalculationMethodsDeleteCalculationMethod = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculationMethodsDeleteCalculationMethod>>, TError,{inspectionObjectCode: string;inspectionParameterCode: string}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof calculationMethodsDeleteCalculationMethod>>,
-        TError,
-        {inspectionObjectCode: string;inspectionParameterCode: string},
-        TContext
-      > => {
-
-      const mutationOptions = getCalculationMethodsDeleteCalculationMethodMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
+  return useMutation(mutationOptions, queryClient);
+};

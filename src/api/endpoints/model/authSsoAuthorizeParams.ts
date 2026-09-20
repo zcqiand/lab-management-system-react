@@ -4,11 +4,11 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { OAuthResponseType } from './oAuthResponseType';
+import type { OAuthResponseType } from "./oAuthResponseType";
 
 export type AuthSsoAuthorizeParams = {
-response_type: OAuthResponseType;
-client_id: string;
-redirect_uri: string;
-state: string;
+  response_type: OAuthResponseType;
+  client_id: string;
+  redirect_uri: string;
+  state: string;
 };

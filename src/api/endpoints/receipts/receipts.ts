@@ -4,10 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -20,15 +17,11 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
+import * as axios from "axios";
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 import type {
   AssignTaskRequest,
@@ -40,871 +33,1225 @@ import type {
   ReceiptsListReceipts200,
   ReceiptsListReceiptsParams,
   SampleReceipt,
-  UpdateSampleReceiptRequest
-} from '.././model';
-
-
-
-
+  UpdateSampleReceiptRequest,
+} from ".././model";
 
 export const receiptsListReceipts = (
-    params?: ReceiptsListReceiptsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ReceiptsListReceipts200>> => {
-    
-    
-    return axios.default.get(
-      `/api/receipts`,{
+  params?: ReceiptsListReceiptsParams,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<ReceiptsListReceipts200>> => {
+  return axios.default.get(`/api/receipts`, {
     ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
+    params: { ...params, ...options?.params },
+  });
+};
 
+export const getReceiptsListReceiptsQueryKey = (params?: ReceiptsListReceiptsParams) => {
+  return [`/api/receipts`, ...(params ? [params] : [])] as const;
+};
 
-
-
-export const getReceiptsListReceiptsQueryKey = (params?: ReceiptsListReceiptsParams,) => {
-    return [
-    `/api/receipts`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getReceiptsListReceiptsQueryOptions = <TData = Awaited<ReturnType<typeof receiptsListReceipts>>, TError = AxiosError<ErrorResponse>>(params?: ReceiptsListReceiptsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsListReceipts>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getReceiptsListReceiptsQueryOptions = <
+  TData = Awaited<ReturnType<typeof receiptsListReceipts>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ReceiptsListReceiptsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof receiptsListReceipts>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
 ) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getReceiptsListReceiptsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getReceiptsListReceiptsQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof receiptsListReceipts>>> = ({
+    signal,
+  }) => receiptsListReceipts(params, { signal, ...axiosOptions });
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof receiptsListReceipts>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof receiptsListReceipts>>> = ({ signal }) => receiptsListReceipts(params, { signal, ...axiosOptions });
+export type ReceiptsListReceiptsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsListReceipts>>
+>;
+export type ReceiptsListReceiptsQueryError = AxiosError<ErrorResponse>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof receiptsListReceipts>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ReceiptsListReceiptsQueryResult = NonNullable<Awaited<ReturnType<typeof receiptsListReceipts>>>
-export type ReceiptsListReceiptsQueryError = AxiosError<ErrorResponse>
-
-
-export function useReceiptsListReceipts<TData = Awaited<ReturnType<typeof receiptsListReceipts>>, TError = AxiosError<ErrorResponse>>(
- params: undefined |  ReceiptsListReceiptsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsListReceipts>>, TError, TData>> & Pick<
+export function useReceiptsListReceipts<
+  TData = Awaited<ReturnType<typeof receiptsListReceipts>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params: undefined | ReceiptsListReceiptsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof receiptsListReceipts>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof receiptsListReceipts>>,
           TError,
           Awaited<ReturnType<typeof receiptsListReceipts>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useReceiptsListReceipts<TData = Awaited<ReturnType<typeof receiptsListReceipts>>, TError = AxiosError<ErrorResponse>>(
- params?: ReceiptsListReceiptsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsListReceipts>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useReceiptsListReceipts<
+  TData = Awaited<ReturnType<typeof receiptsListReceipts>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ReceiptsListReceiptsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof receiptsListReceipts>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof receiptsListReceipts>>,
           TError,
           Awaited<ReturnType<typeof receiptsListReceipts>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useReceiptsListReceipts<TData = Awaited<ReturnType<typeof receiptsListReceipts>>, TError = AxiosError<ErrorResponse>>(
- params?: ReceiptsListReceiptsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsListReceipts>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useReceiptsListReceipts<
+  TData = Awaited<ReturnType<typeof receiptsListReceipts>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ReceiptsListReceiptsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof receiptsListReceipts>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useReceiptsListReceipts<TData = Awaited<ReturnType<typeof receiptsListReceipts>>, TError = AxiosError<ErrorResponse>>(
- params?: ReceiptsListReceiptsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsListReceipts>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useReceiptsListReceipts<
+  TData = Awaited<ReturnType<typeof receiptsListReceipts>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: ReceiptsListReceiptsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof receiptsListReceipts>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getReceiptsListReceiptsQueryOptions(params, options);
 
-  const queryOptions = getReceiptsListReceiptsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const receiptsCreateReceipt = (
-    createSampleReceiptRequest: CreateSampleReceiptRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<SampleReceipt>> => {
-    
-    
-    return axios.default.post(
-      `/api/receipts`,
-      createSampleReceiptRequest,options
-    );
-  }
-
-
-
-export const getReceiptsCreateReceiptMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsCreateReceipt>>, TError,{data: CreateSampleReceiptRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof receiptsCreateReceipt>>, TError,{data: CreateSampleReceiptRequest}, TContext> => {
-
-const mutationKey = ['receiptsCreateReceipt'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsCreateReceipt>>, {data: CreateSampleReceiptRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  receiptsCreateReceipt(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ReceiptsCreateReceiptMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsCreateReceipt>>>
-    export type ReceiptsCreateReceiptMutationBody = CreateSampleReceiptRequest
-    export type ReceiptsCreateReceiptMutationError = AxiosError<ErrorResponse>
-
-    export const useReceiptsCreateReceipt = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsCreateReceipt>>, TError,{data: CreateSampleReceiptRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof receiptsCreateReceipt>>,
-        TError,
-        {data: CreateSampleReceiptRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getReceiptsCreateReceiptMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const receiptsActFlowApprove = (
-    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FlowActionResult[]>> => {
-    
-    
-    return axios.default.post(
-      `/api/receipts/approve/act`,
-      flowActionRequest,options
-    );
-  }
-
-
-
-export const getReceiptsActFlowApproveMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowApprove>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowApprove>>, TError,{data: FlowActionRequest}, TContext> => {
-
-const mutationKey = ['receiptsActFlowApprove'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowApprove>>, {data: FlowActionRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  receiptsActFlowApprove(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ReceiptsActFlowApproveMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowApprove>>>
-    export type ReceiptsActFlowApproveMutationBody = FlowActionRequest
-    export type ReceiptsActFlowApproveMutationError = AxiosError<ErrorResponse>
-
-    export const useReceiptsActFlowApprove = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowApprove>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof receiptsActFlowApprove>>,
-        TError,
-        {data: FlowActionRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getReceiptsActFlowApproveMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const receiptsActFlowArchived = (
-    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FlowActionResult[]>> => {
-    
-    
-    return axios.default.post(
-      `/api/receipts/archived/act`,
-      flowActionRequest,options
-    );
-  }
-
-
-
-export const getReceiptsActFlowArchivedMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowArchived>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowArchived>>, TError,{data: FlowActionRequest}, TContext> => {
-
-const mutationKey = ['receiptsActFlowArchived'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowArchived>>, {data: FlowActionRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  receiptsActFlowArchived(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ReceiptsActFlowArchivedMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowArchived>>>
-    export type ReceiptsActFlowArchivedMutationBody = FlowActionRequest
-    export type ReceiptsActFlowArchivedMutationError = AxiosError<ErrorResponse>
-
-    export const useReceiptsActFlowArchived = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowArchived>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof receiptsActFlowArchived>>,
-        TError,
-        {data: FlowActionRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getReceiptsActFlowArchivedMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const receiptsActFlowAssigning = (
-    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FlowActionResult[]>> => {
-    
-    
-    return axios.default.post(
-      `/api/receipts/assigning/act`,
-      flowActionRequest,options
-    );
-  }
-
-
-
-export const getReceiptsActFlowAssigningMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowAssigning>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowAssigning>>, TError,{data: FlowActionRequest}, TContext> => {
-
-const mutationKey = ['receiptsActFlowAssigning'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowAssigning>>, {data: FlowActionRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  receiptsActFlowAssigning(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ReceiptsActFlowAssigningMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowAssigning>>>
-    export type ReceiptsActFlowAssigningMutationBody = FlowActionRequest
-    export type ReceiptsActFlowAssigningMutationError = AxiosError<ErrorResponse>
-
-    export const useReceiptsActFlowAssigning = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowAssigning>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof receiptsActFlowAssigning>>,
-        TError,
-        {data: FlowActionRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getReceiptsActFlowAssigningMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const receiptsActFlowDataEntry = (
-    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FlowActionResult[]>> => {
-    
-    
-    return axios.default.post(
-      `/api/receipts/data-entry/act`,
-      flowActionRequest,options
-    );
-  }
-
-
-
-export const getReceiptsActFlowDataEntryMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowDataEntry>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowDataEntry>>, TError,{data: FlowActionRequest}, TContext> => {
-
-const mutationKey = ['receiptsActFlowDataEntry'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowDataEntry>>, {data: FlowActionRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  receiptsActFlowDataEntry(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ReceiptsActFlowDataEntryMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowDataEntry>>>
-    export type ReceiptsActFlowDataEntryMutationBody = FlowActionRequest
-    export type ReceiptsActFlowDataEntryMutationError = AxiosError<ErrorResponse>
-
-    export const useReceiptsActFlowDataEntry = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowDataEntry>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof receiptsActFlowDataEntry>>,
-        TError,
-        {data: FlowActionRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getReceiptsActFlowDataEntryMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const receiptsActFlowIssuance = (
-    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FlowActionResult[]>> => {
-    
-    
-    return axios.default.post(
-      `/api/receipts/issuance/act`,
-      flowActionRequest,options
-    );
-  }
-
-
-
-export const getReceiptsActFlowIssuanceMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowIssuance>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowIssuance>>, TError,{data: FlowActionRequest}, TContext> => {
-
-const mutationKey = ['receiptsActFlowIssuance'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowIssuance>>, {data: FlowActionRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  receiptsActFlowIssuance(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ReceiptsActFlowIssuanceMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowIssuance>>>
-    export type ReceiptsActFlowIssuanceMutationBody = FlowActionRequest
-    export type ReceiptsActFlowIssuanceMutationError = AxiosError<ErrorResponse>
-
-    export const useReceiptsActFlowIssuance = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowIssuance>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof receiptsActFlowIssuance>>,
-        TError,
-        {data: FlowActionRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getReceiptsActFlowIssuanceMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const receiptsActFlowReceiving = (
-    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FlowActionResult[]>> => {
-    
-    
-    return axios.default.post(
-      `/api/receipts/receiving/act`,
-      flowActionRequest,options
-    );
-  }
-
-
-
-export const getReceiptsActFlowReceivingMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowReceiving>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowReceiving>>, TError,{data: FlowActionRequest}, TContext> => {
-
-const mutationKey = ['receiptsActFlowReceiving'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowReceiving>>, {data: FlowActionRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  receiptsActFlowReceiving(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ReceiptsActFlowReceivingMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowReceiving>>>
-    export type ReceiptsActFlowReceivingMutationBody = FlowActionRequest
-    export type ReceiptsActFlowReceivingMutationError = AxiosError<ErrorResponse>
-
-    export const useReceiptsActFlowReceiving = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowReceiving>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof receiptsActFlowReceiving>>,
-        TError,
-        {data: FlowActionRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getReceiptsActFlowReceivingMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const receiptsActFlowReview = (
-    flowActionRequest: FlowActionRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FlowActionResult[]>> => {
-    
-    
-    return axios.default.post(
-      `/api/receipts/review/act`,
-      flowActionRequest,options
-    );
-  }
-
-
-
-export const getReceiptsActFlowReviewMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowReview>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowReview>>, TError,{data: FlowActionRequest}, TContext> => {
-
-const mutationKey = ['receiptsActFlowReview'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsActFlowReview>>, {data: FlowActionRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  receiptsActFlowReview(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ReceiptsActFlowReviewMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsActFlowReview>>>
-    export type ReceiptsActFlowReviewMutationBody = FlowActionRequest
-    export type ReceiptsActFlowReviewMutationError = AxiosError<ErrorResponse>
-
-    export const useReceiptsActFlowReview = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsActFlowReview>>, TError,{data: FlowActionRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof receiptsActFlowReview>>,
-        TError,
-        {data: FlowActionRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getReceiptsActFlowReviewMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const receiptsGetReceipt = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<SampleReceipt>> => {
-    
-    
-    return axios.default.get(
-      `/api/receipts/${id}`,options
-    );
-  }
-
-
-
-
-export const getReceiptsGetReceiptQueryKey = (id?: string,) => {
-    return [
-    `/api/receipts/${id}`
-    ] as const;
-    }
-
-    
-export const getReceiptsGetReceiptQueryOptions = <TData = Awaited<ReturnType<typeof receiptsGetReceipt>>, TError = AxiosError<ErrorResponse>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceipt>>, TError, TData>>, axios?: AxiosRequestConfig}
+  createSampleReceiptRequest: CreateSampleReceiptRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<SampleReceipt>> => {
+  return axios.default.post(`/api/receipts`, createSampleReceiptRequest, options);
+};
+
+export const getReceiptsCreateReceiptMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof receiptsCreateReceipt>>,
+    TError,
+    { data: CreateSampleReceiptRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof receiptsCreateReceipt>>,
+  TError,
+  { data: CreateSampleReceiptRequest },
+  TContext
+> => {
+  const mutationKey = ["receiptsCreateReceipt"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof receiptsCreateReceipt>>,
+    { data: CreateSampleReceiptRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return receiptsCreateReceipt(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ReceiptsCreateReceiptMutationResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsCreateReceipt>>
+>;
+export type ReceiptsCreateReceiptMutationBody = CreateSampleReceiptRequest;
+export type ReceiptsCreateReceiptMutationError = AxiosError<ErrorResponse>;
+
+export const useReceiptsCreateReceipt = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof receiptsCreateReceipt>>,
+      TError,
+      { data: CreateSampleReceiptRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof receiptsCreateReceipt>>,
+  TError,
+  { data: CreateSampleReceiptRequest },
+  TContext
+> => {
+  const mutationOptions = getReceiptsCreateReceiptMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+export const receiptsActFlowApprove = (
+  flowActionRequest: FlowActionRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<FlowActionResult[]>> => {
+  return axios.default.post(`/api/receipts/approve/act`, flowActionRequest, options);
+};
+
+export const getReceiptsActFlowApproveMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof receiptsActFlowApprove>>,
+    TError,
+    { data: FlowActionRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof receiptsActFlowApprove>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationKey = ["receiptsActFlowApprove"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof receiptsActFlowApprove>>,
+    { data: FlowActionRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return receiptsActFlowApprove(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ReceiptsActFlowApproveMutationResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsActFlowApprove>>
+>;
+export type ReceiptsActFlowApproveMutationBody = FlowActionRequest;
+export type ReceiptsActFlowApproveMutationError = AxiosError<ErrorResponse>;
+
+export const useReceiptsActFlowApprove = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof receiptsActFlowApprove>>,
+      TError,
+      { data: FlowActionRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof receiptsActFlowApprove>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationOptions = getReceiptsActFlowApproveMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+export const receiptsActFlowArchived = (
+  flowActionRequest: FlowActionRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<FlowActionResult[]>> => {
+  return axios.default.post(`/api/receipts/archived/act`, flowActionRequest, options);
+};
+
+export const getReceiptsActFlowArchivedMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof receiptsActFlowArchived>>,
+    TError,
+    { data: FlowActionRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof receiptsActFlowArchived>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationKey = ["receiptsActFlowArchived"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof receiptsActFlowArchived>>,
+    { data: FlowActionRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return receiptsActFlowArchived(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ReceiptsActFlowArchivedMutationResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsActFlowArchived>>
+>;
+export type ReceiptsActFlowArchivedMutationBody = FlowActionRequest;
+export type ReceiptsActFlowArchivedMutationError = AxiosError<ErrorResponse>;
+
+export const useReceiptsActFlowArchived = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof receiptsActFlowArchived>>,
+      TError,
+      { data: FlowActionRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof receiptsActFlowArchived>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationOptions = getReceiptsActFlowArchivedMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+export const receiptsActFlowAssigning = (
+  flowActionRequest: FlowActionRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<FlowActionResult[]>> => {
+  return axios.default.post(`/api/receipts/assigning/act`, flowActionRequest, options);
+};
+
+export const getReceiptsActFlowAssigningMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof receiptsActFlowAssigning>>,
+    TError,
+    { data: FlowActionRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof receiptsActFlowAssigning>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationKey = ["receiptsActFlowAssigning"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof receiptsActFlowAssigning>>,
+    { data: FlowActionRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return receiptsActFlowAssigning(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ReceiptsActFlowAssigningMutationResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsActFlowAssigning>>
+>;
+export type ReceiptsActFlowAssigningMutationBody = FlowActionRequest;
+export type ReceiptsActFlowAssigningMutationError = AxiosError<ErrorResponse>;
+
+export const useReceiptsActFlowAssigning = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof receiptsActFlowAssigning>>,
+      TError,
+      { data: FlowActionRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof receiptsActFlowAssigning>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationOptions = getReceiptsActFlowAssigningMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+export const receiptsActFlowDataEntry = (
+  flowActionRequest: FlowActionRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<FlowActionResult[]>> => {
+  return axios.default.post(`/api/receipts/data-entry/act`, flowActionRequest, options);
+};
+
+export const getReceiptsActFlowDataEntryMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof receiptsActFlowDataEntry>>,
+    TError,
+    { data: FlowActionRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof receiptsActFlowDataEntry>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationKey = ["receiptsActFlowDataEntry"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof receiptsActFlowDataEntry>>,
+    { data: FlowActionRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return receiptsActFlowDataEntry(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ReceiptsActFlowDataEntryMutationResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsActFlowDataEntry>>
+>;
+export type ReceiptsActFlowDataEntryMutationBody = FlowActionRequest;
+export type ReceiptsActFlowDataEntryMutationError = AxiosError<ErrorResponse>;
+
+export const useReceiptsActFlowDataEntry = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof receiptsActFlowDataEntry>>,
+      TError,
+      { data: FlowActionRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof receiptsActFlowDataEntry>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationOptions = getReceiptsActFlowDataEntryMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+export const receiptsActFlowIssuance = (
+  flowActionRequest: FlowActionRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<FlowActionResult[]>> => {
+  return axios.default.post(`/api/receipts/issuance/act`, flowActionRequest, options);
+};
+
+export const getReceiptsActFlowIssuanceMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof receiptsActFlowIssuance>>,
+    TError,
+    { data: FlowActionRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof receiptsActFlowIssuance>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationKey = ["receiptsActFlowIssuance"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof receiptsActFlowIssuance>>,
+    { data: FlowActionRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return receiptsActFlowIssuance(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ReceiptsActFlowIssuanceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsActFlowIssuance>>
+>;
+export type ReceiptsActFlowIssuanceMutationBody = FlowActionRequest;
+export type ReceiptsActFlowIssuanceMutationError = AxiosError<ErrorResponse>;
+
+export const useReceiptsActFlowIssuance = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof receiptsActFlowIssuance>>,
+      TError,
+      { data: FlowActionRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof receiptsActFlowIssuance>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationOptions = getReceiptsActFlowIssuanceMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+export const receiptsActFlowReceiving = (
+  flowActionRequest: FlowActionRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<FlowActionResult[]>> => {
+  return axios.default.post(`/api/receipts/receiving/act`, flowActionRequest, options);
+};
+
+export const getReceiptsActFlowReceivingMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof receiptsActFlowReceiving>>,
+    TError,
+    { data: FlowActionRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof receiptsActFlowReceiving>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationKey = ["receiptsActFlowReceiving"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof receiptsActFlowReceiving>>,
+    { data: FlowActionRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return receiptsActFlowReceiving(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ReceiptsActFlowReceivingMutationResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsActFlowReceiving>>
+>;
+export type ReceiptsActFlowReceivingMutationBody = FlowActionRequest;
+export type ReceiptsActFlowReceivingMutationError = AxiosError<ErrorResponse>;
+
+export const useReceiptsActFlowReceiving = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof receiptsActFlowReceiving>>,
+      TError,
+      { data: FlowActionRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof receiptsActFlowReceiving>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationOptions = getReceiptsActFlowReceivingMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+export const receiptsActFlowReview = (
+  flowActionRequest: FlowActionRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<FlowActionResult[]>> => {
+  return axios.default.post(`/api/receipts/review/act`, flowActionRequest, options);
+};
+
+export const getReceiptsActFlowReviewMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof receiptsActFlowReview>>,
+    TError,
+    { data: FlowActionRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof receiptsActFlowReview>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationKey = ["receiptsActFlowReview"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof receiptsActFlowReview>>,
+    { data: FlowActionRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return receiptsActFlowReview(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ReceiptsActFlowReviewMutationResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsActFlowReview>>
+>;
+export type ReceiptsActFlowReviewMutationBody = FlowActionRequest;
+export type ReceiptsActFlowReviewMutationError = AxiosError<ErrorResponse>;
+
+export const useReceiptsActFlowReview = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof receiptsActFlowReview>>,
+      TError,
+      { data: FlowActionRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof receiptsActFlowReview>>,
+  TError,
+  { data: FlowActionRequest },
+  TContext
+> => {
+  const mutationOptions = getReceiptsActFlowReviewMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+export const receiptsGetReceipt = (
+  id: string,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<SampleReceipt>> => {
+  return axios.default.get(`/api/receipts/${id}`, options);
+};
+
+export const getReceiptsGetReceiptQueryKey = (id?: string) => {
+  return [`/api/receipts/${id}`] as const;
+};
+
+export const getReceiptsGetReceiptQueryOptions = <
+  TData = Awaited<ReturnType<typeof receiptsGetReceipt>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceipt>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
 ) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getReceiptsGetReceiptQueryKey(id);
 
-  const queryKey =  queryOptions?.queryKey ?? getReceiptsGetReceiptQueryKey(id);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof receiptsGetReceipt>>> = ({
+    signal,
+  }) => receiptsGetReceipt(id, { signal, ...axiosOptions });
 
-  
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof receiptsGetReceipt>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof receiptsGetReceipt>>> = ({ signal }) => receiptsGetReceipt(id, { signal, ...axiosOptions });
+export type ReceiptsGetReceiptQueryResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsGetReceipt>>
+>;
+export type ReceiptsGetReceiptQueryError = AxiosError<ErrorResponse>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceipt>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ReceiptsGetReceiptQueryResult = NonNullable<Awaited<ReturnType<typeof receiptsGetReceipt>>>
-export type ReceiptsGetReceiptQueryError = AxiosError<ErrorResponse>
-
-
-export function useReceiptsGetReceipt<TData = Awaited<ReturnType<typeof receiptsGetReceipt>>, TError = AxiosError<ErrorResponse>>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceipt>>, TError, TData>> & Pick<
+export function useReceiptsGetReceipt<
+  TData = Awaited<ReturnType<typeof receiptsGetReceipt>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceipt>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof receiptsGetReceipt>>,
           TError,
           Awaited<ReturnType<typeof receiptsGetReceipt>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useReceiptsGetReceipt<TData = Awaited<ReturnType<typeof receiptsGetReceipt>>, TError = AxiosError<ErrorResponse>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceipt>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useReceiptsGetReceipt<
+  TData = Awaited<ReturnType<typeof receiptsGetReceipt>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceipt>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof receiptsGetReceipt>>,
           TError,
           Awaited<ReturnType<typeof receiptsGetReceipt>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useReceiptsGetReceipt<TData = Awaited<ReturnType<typeof receiptsGetReceipt>>, TError = AxiosError<ErrorResponse>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceipt>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useReceiptsGetReceipt<
+  TData = Awaited<ReturnType<typeof receiptsGetReceipt>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceipt>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useReceiptsGetReceipt<TData = Awaited<ReturnType<typeof receiptsGetReceipt>>, TError = AxiosError<ErrorResponse>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceipt>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useReceiptsGetReceipt<
+  TData = Awaited<ReturnType<typeof receiptsGetReceipt>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceipt>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getReceiptsGetReceiptQueryOptions(id, options);
 
-  const queryOptions = getReceiptsGetReceiptQueryOptions(id,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const receiptsUpdateReceipt = (
-    id: string,
-    updateSampleReceiptRequest: UpdateSampleReceiptRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<SampleReceipt>> => {
-    
-    
-    return axios.default.put(
-      `/api/receipts/${id}`,
-      updateSampleReceiptRequest,options
-    );
-  }
+  id: string,
+  updateSampleReceiptRequest: UpdateSampleReceiptRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<SampleReceipt>> => {
+  return axios.default.put(`/api/receipts/${id}`, updateSampleReceiptRequest, options);
+};
 
+export const getReceiptsUpdateReceiptMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof receiptsUpdateReceipt>>,
+    TError,
+    { id: string; data: UpdateSampleReceiptRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof receiptsUpdateReceipt>>,
+  TError,
+  { id: string; data: UpdateSampleReceiptRequest },
+  TContext
+> => {
+  const mutationKey = ["receiptsUpdateReceipt"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof receiptsUpdateReceipt>>,
+    { id: string; data: UpdateSampleReceiptRequest }
+  > = (props) => {
+    const { id, data } = props ?? {};
 
-export const getReceiptsUpdateReceiptMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsUpdateReceipt>>, TError,{id: string;data: UpdateSampleReceiptRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof receiptsUpdateReceipt>>, TError,{id: string;data: UpdateSampleReceiptRequest}, TContext> => {
+    return receiptsUpdateReceipt(id, data, axiosOptions);
+  };
 
-const mutationKey = ['receiptsUpdateReceipt'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type ReceiptsUpdateReceiptMutationResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsUpdateReceipt>>
+>;
+export type ReceiptsUpdateReceiptMutationBody = UpdateSampleReceiptRequest;
+export type ReceiptsUpdateReceiptMutationError = AxiosError<ErrorResponse>;
 
+export const useReceiptsUpdateReceipt = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof receiptsUpdateReceipt>>,
+      TError,
+      { id: string; data: UpdateSampleReceiptRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof receiptsUpdateReceipt>>,
+  TError,
+  { id: string; data: UpdateSampleReceiptRequest },
+  TContext
+> => {
+  const mutationOptions = getReceiptsUpdateReceiptMutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsUpdateReceipt>>, {id: string;data: UpdateSampleReceiptRequest}> = (props) => {
-          const {id,data} = props ?? {};
+  return useMutation(mutationOptions, queryClient);
+};
+export const receiptsDeleteReceipt = (
+  id: string,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<void>> => {
+  return axios.default.delete(`/api/receipts/${id}`, options);
+};
 
-          return  receiptsUpdateReceipt(id,data,axiosOptions)
-        }
+export const getReceiptsDeleteReceiptMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof receiptsDeleteReceipt>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof receiptsDeleteReceipt>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ["receiptsDeleteReceipt"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
-        
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof receiptsDeleteReceipt>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
 
+    return receiptsDeleteReceipt(id, axiosOptions);
+  };
 
-  return  { mutationFn, ...mutationOptions }}
+  return { mutationFn, ...mutationOptions };
+};
 
-    export type ReceiptsUpdateReceiptMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsUpdateReceipt>>>
-    export type ReceiptsUpdateReceiptMutationBody = UpdateSampleReceiptRequest
-    export type ReceiptsUpdateReceiptMutationError = AxiosError<ErrorResponse>
+export type ReceiptsDeleteReceiptMutationResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsDeleteReceipt>>
+>;
 
-    export const useReceiptsUpdateReceipt = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsUpdateReceipt>>, TError,{id: string;data: UpdateSampleReceiptRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof receiptsUpdateReceipt>>,
+export type ReceiptsDeleteReceiptMutationError = AxiosError<ErrorResponse>;
+
+export const useReceiptsDeleteReceipt = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof receiptsDeleteReceipt>>,
+      TError,
+      { id: string },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof receiptsDeleteReceipt>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions = getReceiptsDeleteReceiptMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+export const receiptsGetReceiptHistory = (
+  id: string,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<FlowHistoryEntry[]>> => {
+  return axios.default.get(`/api/receipts/${id}/history`, options);
+};
+
+export const getReceiptsGetReceiptHistoryQueryKey = (id?: string) => {
+  return [`/api/receipts/${id}/history`] as const;
+};
+
+export const getReceiptsGetReceiptHistoryQueryOptions = <
+  TData = Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
         TError,
-        {id: string;data: UpdateSampleReceiptRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getReceiptsUpdateReceiptMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const receiptsDeleteReceipt = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    
-    return axios.default.delete(
-      `/api/receipts/${id}`,options
-    );
-  }
-
-
-
-export const getReceiptsDeleteReceiptMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsDeleteReceipt>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof receiptsDeleteReceipt>>, TError,{id: string}, TContext> => {
-
-const mutationKey = ['receiptsDeleteReceipt'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsDeleteReceipt>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
-
-          return  receiptsDeleteReceipt(id,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ReceiptsDeleteReceiptMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsDeleteReceipt>>>
-    
-    export type ReceiptsDeleteReceiptMutationError = AxiosError<ErrorResponse>
-
-    export const useReceiptsDeleteReceipt = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsDeleteReceipt>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof receiptsDeleteReceipt>>,
-        TError,
-        {id: string},
-        TContext
-      > => {
-
-      const mutationOptions = getReceiptsDeleteReceiptMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const receiptsGetReceiptHistory = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FlowHistoryEntry[]>> => {
-    
-    
-    return axios.default.get(
-      `/api/receipts/${id}/history`,options
-    );
-  }
-
-
-
-
-export const getReceiptsGetReceiptHistoryQueryKey = (id?: string,) => {
-    return [
-    `/api/receipts/${id}/history`
-    ] as const;
-    }
-
-    
-export const getReceiptsGetReceiptHistoryQueryOptions = <TData = Awaited<ReturnType<typeof receiptsGetReceiptHistory>>, TError = AxiosError<ErrorResponse>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceiptHistory>>, TError, TData>>, axios?: AxiosRequestConfig}
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
 ) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getReceiptsGetReceiptHistoryQueryKey(id);
 
-  const queryKey =  queryOptions?.queryKey ?? getReceiptsGetReceiptHistoryQueryKey(id);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof receiptsGetReceiptHistory>>> = ({
+    signal,
+  }) => receiptsGetReceiptHistory(id, { signal, ...axiosOptions });
 
-  
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof receiptsGetReceiptHistory>>> = ({ signal }) => receiptsGetReceiptHistory(id, { signal, ...axiosOptions });
+export type ReceiptsGetReceiptHistoryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsGetReceiptHistory>>
+>;
+export type ReceiptsGetReceiptHistoryQueryError = AxiosError<ErrorResponse>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceiptHistory>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ReceiptsGetReceiptHistoryQueryResult = NonNullable<Awaited<ReturnType<typeof receiptsGetReceiptHistory>>>
-export type ReceiptsGetReceiptHistoryQueryError = AxiosError<ErrorResponse>
-
-
-export function useReceiptsGetReceiptHistory<TData = Awaited<ReturnType<typeof receiptsGetReceiptHistory>>, TError = AxiosError<ErrorResponse>>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceiptHistory>>, TError, TData>> & Pick<
+export function useReceiptsGetReceiptHistory<
+  TData = Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
           TError,
           Awaited<ReturnType<typeof receiptsGetReceiptHistory>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useReceiptsGetReceiptHistory<TData = Awaited<ReturnType<typeof receiptsGetReceiptHistory>>, TError = AxiosError<ErrorResponse>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceiptHistory>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useReceiptsGetReceiptHistory<
+  TData = Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
           TError,
           Awaited<ReturnType<typeof receiptsGetReceiptHistory>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useReceiptsGetReceiptHistory<TData = Awaited<ReturnType<typeof receiptsGetReceiptHistory>>, TError = AxiosError<ErrorResponse>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceiptHistory>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useReceiptsGetReceiptHistory<
+  TData = Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useReceiptsGetReceiptHistory<TData = Awaited<ReturnType<typeof receiptsGetReceiptHistory>>, TError = AxiosError<ErrorResponse>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof receiptsGetReceiptHistory>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useReceiptsGetReceiptHistory<
+  TData = Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof receiptsGetReceiptHistory>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getReceiptsGetReceiptHistoryQueryOptions(id, options);
 
-  const queryOptions = getReceiptsGetReceiptHistoryQueryOptions(id,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-
 export const receiptsAssignTask = (
-    id: string,
-    assignTaskRequest: AssignTaskRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<SampleReceipt>> => {
-    
-    
-    return axios.default.put(
-      `/api/receipts/${id}/task`,
-      assignTaskRequest,options
-    );
-  }
+  id: string,
+  assignTaskRequest: AssignTaskRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<SampleReceipt>> => {
+  return axios.default.put(`/api/receipts/${id}/task`, assignTaskRequest, options);
+};
 
+export const getReceiptsAssignTaskMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof receiptsAssignTask>>,
+    TError,
+    { id: string; data: AssignTaskRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof receiptsAssignTask>>,
+  TError,
+  { id: string; data: AssignTaskRequest },
+  TContext
+> => {
+  const mutationKey = ["receiptsAssignTask"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof receiptsAssignTask>>,
+    { id: string; data: AssignTaskRequest }
+  > = (props) => {
+    const { id, data } = props ?? {};
 
-export const getReceiptsAssignTaskMutationOptions = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsAssignTask>>, TError,{id: string;data: AssignTaskRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof receiptsAssignTask>>, TError,{id: string;data: AssignTaskRequest}, TContext> => {
+    return receiptsAssignTask(id, data, axiosOptions);
+  };
 
-const mutationKey = ['receiptsAssignTask'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type ReceiptsAssignTaskMutationResult = NonNullable<
+  Awaited<ReturnType<typeof receiptsAssignTask>>
+>;
+export type ReceiptsAssignTaskMutationBody = AssignTaskRequest;
+export type ReceiptsAssignTaskMutationError = AxiosError<ErrorResponse>;
 
+export const useReceiptsAssignTask = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof receiptsAssignTask>>,
+      TError,
+      { id: string; data: AssignTaskRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof receiptsAssignTask>>,
+  TError,
+  { id: string; data: AssignTaskRequest },
+  TContext
+> => {
+  const mutationOptions = getReceiptsAssignTaskMutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof receiptsAssignTask>>, {id: string;data: AssignTaskRequest}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  receiptsAssignTask(id,data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ReceiptsAssignTaskMutationResult = NonNullable<Awaited<ReturnType<typeof receiptsAssignTask>>>
-    export type ReceiptsAssignTaskMutationBody = AssignTaskRequest
-    export type ReceiptsAssignTaskMutationError = AxiosError<ErrorResponse>
-
-    export const useReceiptsAssignTask = <TError = AxiosError<ErrorResponse>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof receiptsAssignTask>>, TError,{id: string;data: AssignTaskRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof receiptsAssignTask>>,
-        TError,
-        {id: string;data: AssignTaskRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getReceiptsAssignTaskMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
+  return useMutation(mutationOptions, queryClient);
+};

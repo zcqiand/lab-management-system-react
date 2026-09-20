@@ -4,9 +4,9 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { InspectionStandardRole } from './inspectionStandardRole';
+import type { InspectionStandardRole } from "./inspectionStandardRole";
 
 export type InspectionDictionaryListObjectStandardLinksParams = {
-inspectionObjectCode?: string;
-role?: InspectionStandardRole;
+  inspectionObjectCode?: string;
+  role?: InspectionStandardRole;
 };

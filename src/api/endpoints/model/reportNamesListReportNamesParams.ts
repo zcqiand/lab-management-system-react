@@ -6,7 +6,7 @@
  */
 
 export type ReportNamesListReportNamesParams = {
-page?: number;
-pageSize?: number;
-keyword?: string;
+  page?: number;
+  pageSize?: number;
+  keyword?: string;
 };

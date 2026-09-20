@@ -5,14 +5,14 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type RequirementValueType = typeof RequirementValueType[keyof typeof RequirementValueType];
-
+export type RequirementValueType =
+  (typeof RequirementValueType)[keyof typeof RequirementValueType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RequirementValueType = {
-  numeric: 'numeric',
-  string: 'string',
-  range: 'range',
-  formula: 'formula',
-  manual: 'manual',
+  numeric: "numeric",
+  string: "string",
+  range: "range",
+  formula: "formula",
+  manual: "manual",
 } as const;

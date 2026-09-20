@@ -5,4 +5,4 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type SummaryDataRowsItem = {[key: string]: string};
+export type SummaryDataRowsItem = { [key: string]: string };

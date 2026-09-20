@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { InspectionModel } from './inspectionModel';
+import type { InspectionModel } from "./inspectionModel";
 
 export type CatalogListModels200 = {
   items: InspectionModel[];

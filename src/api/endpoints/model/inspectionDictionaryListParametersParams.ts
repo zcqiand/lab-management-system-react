@@ -4,11 +4,11 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { InspectionParameterSourceType } from './inspectionParameterSourceType';
+import type { InspectionParameterSourceType } from "./inspectionParameterSourceType";
 
 export type InspectionDictionaryListParametersParams = {
-page?: number;
-pageSize?: number;
-keyword?: string;
-sourceType?: InspectionParameterSourceType;
+  page?: number;
+  pageSize?: number;
+  keyword?: string;
+  sourceType?: InspectionParameterSourceType;
 };

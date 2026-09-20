@@ -4,10 +4,10 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { DashboardStatsReportCountByStatus } from './dashboardStatsReportCountByStatus';
-import type { DashboardStatsQualifiedRateByMaterial } from './dashboardStatsQualifiedRateByMaterial';
-import type { DashboardStatsReportOutputByStatus } from './dashboardStatsReportOutputByStatus';
-import type { DashboardStatsFunnelByStage } from './dashboardStatsFunnelByStage';
+import type { DashboardStatsReportCountByStatus } from "./dashboardStatsReportCountByStatus";
+import type { DashboardStatsQualifiedRateByMaterial } from "./dashboardStatsQualifiedRateByMaterial";
+import type { DashboardStatsReportOutputByStatus } from "./dashboardStatsReportOutputByStatus";
+import type { DashboardStatsFunnelByStage } from "./dashboardStatsFunnelByStage";
 
 export interface DashboardStats {
   contractCount: number;

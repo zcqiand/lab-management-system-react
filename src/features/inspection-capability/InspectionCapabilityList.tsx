@@ -437,7 +437,8 @@ export function InspectionCapabilityList({ resource }: Props) {
           });
         } else if (resource === "objects") {
           await inspectionDictionaryUpdateObject(editing.code, {
-            inspectionSpecialtyCode: (form.inspectionSpecialtyCode as string) || undefined,
+            inspectionSpecialtyCode:
+              (form.inspectionSpecialtyCode as string) || undefined,
             sourceProjectNo: (form.sourceProjectNo as string) || undefined,
             sourceProjectName: (form.sourceProjectName as string) || undefined,
             name: (form.name as string) || undefined,
@@ -450,7 +451,8 @@ export function InspectionCapabilityList({ resource }: Props) {
           await inspectionDictionaryUpdateParameter(editing.code, {
             name: (form.name as string) || undefined,
             unit: (form.unit as string) || undefined,
-            sourceType: ((form.sourceType as string) || "custom") as InspectionParameterSourceType,
+            sourceType: ((form.sourceType as string) ||
+              "custom") as InspectionParameterSourceType,
             sortOrder: Number(form.sortOrder) || 999,
           });
         } else {
@@ -491,7 +493,8 @@ export function InspectionCapabilityList({ resource }: Props) {
             rawName: (form.name as string) ?? "",
             canonicalName: (form.name as string) ?? "",
             unit: (form.unit as string) || undefined,
-            sourceType: ((form.sourceType as string) || "custom") as InspectionParameterSourceType,
+            sourceType: ((form.sourceType as string) ||
+              "custom") as InspectionParameterSourceType,
             sortOrder: Number(form.sortOrder) || 999,
           });
         } else {
@@ -600,7 +603,8 @@ export function InspectionCapabilityList({ resource }: Props) {
   };
 
   const columnHeaders: string[] = (() => {
-    if (resource === "specialties") return ["编码", "名称", "官方序号", "官方/自定义", "状态"];
+    if (resource === "specialties")
+      return ["编码", "名称", "官方序号", "官方/自定义", "状态"];
     if (resource === "objects") return ["编码", "名称", "状态"];
     if (resource === "parameters") return ["编码", "名称", "单位", "来源"];
     return ["编码", "名称", "版本", "状态"];

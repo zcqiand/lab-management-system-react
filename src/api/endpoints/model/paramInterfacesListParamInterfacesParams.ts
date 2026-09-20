@@ -6,7 +6,7 @@
  */
 
 export type ParamInterfacesListParamInterfacesParams = {
-page?: number;
-pageSize?: number;
-keyword?: string;
+  page?: number;
+  pageSize?: number;
+  keyword?: string;
 };

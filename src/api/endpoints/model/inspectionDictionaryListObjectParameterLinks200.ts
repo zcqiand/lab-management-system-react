@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { ObjectParameterLink } from './objectParameterLink';
+import type { ObjectParameterLink } from "./objectParameterLink";
 
 export type InspectionDictionaryListObjectParameterLinks200 = {
   items: ObjectParameterLink[];

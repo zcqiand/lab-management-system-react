@@ -5,10 +5,10 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type AuthStateAwaitingTenantKind = typeof AuthStateAwaitingTenantKind[keyof typeof AuthStateAwaitingTenantKind];
-
+export type AuthStateAwaitingTenantKind =
+  (typeof AuthStateAwaitingTenantKind)[keyof typeof AuthStateAwaitingTenantKind];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateAwaitingTenantKind = {
-  awaiting_tenant: 'awaiting_tenant',
+  awaiting_tenant: "awaiting_tenant",
 } as const;

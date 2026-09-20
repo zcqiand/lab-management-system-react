@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { SampleExt } from './sampleExt';
+import type { SampleExt } from "./sampleExt";
 
 export interface Sample {
   id: string;

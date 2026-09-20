@@ -189,7 +189,9 @@ export function ReportNameList() {
       <ConfirmModal
         open={deleteTarget !== null}
         title="删除报告名称"
-        message={deleteTarget ? `确认删除报告名称 ${deleteTarget.code}？此操作不可撤销。` : ""}
+        message={
+          deleteTarget ? `确认删除报告名称 ${deleteTarget.code}？此操作不可撤销。` : ""
+        }
         onConfirm={async () => {
           if (!deleteTarget) return;
           const target = deleteTarget;
@@ -207,9 +209,7 @@ export function ReportNameList() {
 
       <Card className="mt-4">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-base">
-            报告名称列表（{total || "…"}）
-          </CardTitle>
+          <CardTitle className="text-base">报告名称列表（{total || "…"}）</CardTitle>
           {loading && <span className="text-xs text-slate-400">加载中…</span>}
         </CardHeader>
         <CardContent className="p-0">
@@ -233,13 +233,15 @@ export function ReportNameList() {
                 </tr>
               )}
               {items.map((r) => (
-                <tr key={r.code} data-fn="M06.F07.I01" className="border-t hover:bg-slate-50">
+                <tr
+                  key={r.code}
+                  data-fn="M06.F07.I01"
+                  className="border-t hover:bg-slate-50"
+                >
                   <td className="px-4 py-2 font-mono text-xs">{r.code}</td>
                   <td className="px-4 py-2">{r.name}</td>
                   <td className="px-4 py-2">{r.fullName ?? "—"}</td>
-                  <td className="px-4 py-2 font-mono text-xs">
-                    {r.templatePath ?? "—"}
-                  </td>
+                  <td className="px-4 py-2 font-mono text-xs">{r.templatePath ?? "—"}</td>
                   <td className="px-4 py-2 text-xs text-slate-500">{r.sortOrder}</td>
                   <td className="px-4 py-2 text-right">
                     <Button
@@ -344,7 +346,9 @@ function Filters({
   );
 }
 
-function parseExtFields(text: string): { ok: true; value: ExtFieldDef[] } | { ok: false; error: string } {
+function parseExtFields(
+  text: string,
+): { ok: true; value: ExtFieldDef[] } | { ok: false; error: string } {
   try {
     const v = JSON.parse(text);
     if (!Array.isArray(v)) return { ok: false, error: "extFields 必须是 JSON 数组" };

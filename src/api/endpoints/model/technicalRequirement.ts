@@ -4,10 +4,10 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { RequirementValueType } from './requirementValueType';
-import type { RequirementComparison } from './requirementComparison';
-import type { RequirementJudgmentMode } from './requirementJudgmentMode';
-import type { RequirementVerificationStatus } from './requirementVerificationStatus';
+import type { RequirementValueType } from "./requirementValueType";
+import type { RequirementComparison } from "./requirementComparison";
+import type { RequirementJudgmentMode } from "./requirementJudgmentMode";
+import type { RequirementVerificationStatus } from "./requirementVerificationStatus";
 
 export interface TechnicalRequirement {
   tenantId: string;

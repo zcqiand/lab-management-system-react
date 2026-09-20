@@ -6,8 +6,8 @@
  */
 
 export type TestRecordsListTestRecordsParams = {
-page?: number;
-pageSize?: number;
-sampleId?: string;
-parameterCode?: string;
+  page?: number;
+  pageSize?: number;
+  sampleId?: string;
+  parameterCode?: string;
 };

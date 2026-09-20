@@ -4,9 +4,9 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { BackendId } from './backendId';
-import type { AuthHeaderKind } from './authHeaderKind';
-import type { BackendFeatures } from './backendFeatures';
+import type { BackendId } from "./backendId";
+import type { AuthHeaderKind } from "./authHeaderKind";
+import type { BackendFeatures } from "./backendFeatures";
 
 /**
  * 已废弃 (ADR-0014):用 VITE_API_BASE_URL / NEXT_PUBLIC_API_BASE_URL 替代;4-backend 运行时切换配置

@@ -4,8 +4,8 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { ExtFieldDefType } from './extFieldDefType';
-import type { ExtFieldDefSource } from './extFieldDefSource';
+import type { ExtFieldDefType } from "./extFieldDefType";
+import type { ExtFieldDefSource } from "./extFieldDefSource";
 
 export interface ExtFieldDef {
   key: string;

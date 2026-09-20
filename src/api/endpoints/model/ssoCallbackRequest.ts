@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { OAuthGrantType } from './oAuthGrantType';
+import type { OAuthGrantType } from "./oAuthGrantType";
 
 export interface SsoCallbackRequest {
   grant_type: OAuthGrantType;

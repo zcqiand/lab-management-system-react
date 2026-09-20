@@ -84,31 +84,52 @@ beforeEach(() => {
 });
 
 describe("useRequireAuth 路由守卫", () => {
-  fnTest(["M01.F04.I03"], "anonymous 访问受守卫路由 → 跳 /login 带 from 回跳", async () => {
-    // 先落 anonymous：无 token hydrate
-    __testReset();
-    localStorage.removeItem("lab.accessToken");
-    await __testActions.logout(); // 无 token 时也把 store 落到 anonymous
-    renderGuard();
-    await flush();
-    expect(screen.getByTestId("test-location").textContent).toBe("/login?from=%2Fsecret");
-    expect(screen.getByTestId("login-page")).toBeTruthy();
-  });
+  fnTest(
+    ["M01.F04.I03"],
+    "anonymous 访问受守卫路由 → 跳 /login 带 from 回跳",
+    async () => {
+      // 先落 anonymous：无 token hydrate
+      __testReset();
+      localStorage.removeItem("lab.accessToken");
+      await __testActions.logout(); // 无 token 时也把 store 落到 anonymous
+      renderGuard();
+      await flush();
+      expect(screen.getByTestId("test-location").textContent).toBe(
+        "/login?from=%2Fsecret",
+      );
+      expect(screen.getByTestId("login-page")).toBeTruthy();
+    },
+  );
 
-  fnTest(["M01.F04.I03"], "awaiting_tenant 访问受守卫路由 → 拦在 /login（选租户页已移除，M00.F02 保持规划）", async () => {
-    // login 多租户（无记忆租户）→ awaiting_tenant（此路径不发 permissions 请求）
-    queue.push({ status: 200, data: { token: "t2", refreshToken: "r2", user: USER, tenants: [TENANT_A, TENANT_B] } });
-    await __testActions.login({ username: "admin", password: "x" });
-    renderGuard();
-    await flush();
-    expect(screen.getByTestId("test-location").textContent).toBe("/login");
-    expect(screen.getByTestId("login-page")).toBeTruthy();
-  });
+  fnTest(
+    ["M01.F04.I03"],
+    "awaiting_tenant 访问受守卫路由 → 拦在 /login（选租户页已移除，M00.F02 保持规划）",
+    async () => {
+      // login 多租户（无记忆租户）→ awaiting_tenant（此路径不发 permissions 请求）
+      queue.push({
+        status: 200,
+        data: {
+          token: "t2",
+          refreshToken: "r2",
+          user: USER,
+          tenants: [TENANT_A, TENANT_B],
+        },
+      });
+      await __testActions.login({ username: "admin", password: "x" });
+      renderGuard();
+      await flush();
+      expect(screen.getByTestId("test-location").textContent).toBe("/login");
+      expect(screen.getByTestId("login-page")).toBeTruthy();
+    },
+  );
 
   fnTest(["M01.F04.I03"], "authenticated 缺权限 → 拦在 /403", async () => {
     // login 单租户 + permissions []（空权限）→ authenticated
     queue.push(
-      { status: 200, data: { token: "t1", refreshToken: "r1", user: USER, tenants: [TENANT_A] } },
+      {
+        status: 200,
+        data: { token: "t1", refreshToken: "r1", user: USER, tenants: [TENANT_A] },
+      },
       { status: 200, data: { permissions: [] } },
     );
     await __testActions.login({ username: "admin", password: "x" });
@@ -120,7 +141,10 @@ describe("useRequireAuth 路由守卫", () => {
 
   fnTest(["M01.F04.I03"], "authenticated 权限齐 → allowed=true 留在原地", async () => {
     queue.push(
-      { status: 200, data: { token: "t1", refreshToken: "r1", user: USER, tenants: [TENANT_A] } },
+      {
+        status: 200,
+        data: { token: "t1", refreshToken: "r1", user: USER, tenants: [TENANT_A] },
+      },
       { status: 200, data: { permissions: ["report:approve"] } },
     );
     await __testActions.login({ username: "admin", password: "x" });

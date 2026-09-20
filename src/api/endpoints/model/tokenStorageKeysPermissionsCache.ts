@@ -8,10 +8,10 @@
 /**
  * permissions 缓存(避免每次路由跳转都打 /auth/permissions)
  */
-export type TokenStorageKeysPermissionsCache = typeof TokenStorageKeysPermissionsCache[keyof typeof TokenStorageKeysPermissionsCache];
-
+export type TokenStorageKeysPermissionsCache =
+  (typeof TokenStorageKeysPermissionsCache)[keyof typeof TokenStorageKeysPermissionsCache];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TokenStorageKeysPermissionsCache = {
-  labpermissions: 'lab.permissions',
+  labpermissions: "lab.permissions",
 } as const;

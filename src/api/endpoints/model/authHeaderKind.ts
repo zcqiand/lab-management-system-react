@@ -8,11 +8,10 @@
 /**
  * 已废弃 (ADR-0014)
  */
-export type AuthHeaderKind = typeof AuthHeaderKind[keyof typeof AuthHeaderKind];
-
+export type AuthHeaderKind = (typeof AuthHeaderKind)[keyof typeof AuthHeaderKind];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthHeaderKind = {
-  Authorization: 'Authorization',
-  'X-Auth-Token': 'X-Auth-Token',
+  Authorization: "Authorization",
+  "X-Auth-Token": "X-Auth-Token",
 } as const;

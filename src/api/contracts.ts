@@ -4,10 +4,7 @@
 //       → orval → src/api/endpoints/model/（按 schema 拆 1 文件，此处只 re-export + 派生）
 // 本文件不引入 runtime 库；行为签名见 shared/.state/decision-log.md §2。
 
-import {
-  AuthHeaderKind,
-  BackendId,
-} from "./endpoints/model";
+import { AuthHeaderKind, BackendId } from "./endpoints/model";
 import type {
   AuthState,
   BackendRegistry,
@@ -54,7 +51,9 @@ export type UnsubscribeFn = () => void;
 
 /** AuthContext 行为签名（React 侧由 src/state/auth-context.tsx 实现） */
 export interface AuthContextActions {
-  login(req: import("./endpoints/model").LoginRequest): Promise<
+  login(
+    req: import("./endpoints/model").LoginRequest,
+  ): Promise<
     import("./endpoints/model").LoginResponse | import("./endpoints/model").ErrorResponse
   >;
   logout(): Promise<void>;
@@ -63,7 +62,9 @@ export interface AuthContextActions {
     import("./endpoints/model").LoginResponse | import("./endpoints/model").ErrorResponse
   >;
   /** 登录后选租户（仅在 awaiting_tenant 态可调） */
-  switchTenant(req: import("./endpoints/model").SwitchTenantRequest): Promise<
+  switchTenant(
+    req: import("./endpoints/model").SwitchTenantRequest,
+  ): Promise<
     import("./endpoints/model").LoginResponse | import("./endpoints/model").ErrorResponse
   >;
   /** RBAC 单点判断（来自 /auth/permissions 缓存） */

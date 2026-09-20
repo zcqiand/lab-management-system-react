@@ -4,8 +4,8 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { AuthStateAwaitingTenantKind } from './authStateAwaitingTenantKind';
-import type { AuthStateAwaitingTenantValue } from './authStateAwaitingTenantValue';
+import type { AuthStateAwaitingTenantKind } from "./authStateAwaitingTenantKind";
+import type { AuthStateAwaitingTenantValue } from "./authStateAwaitingTenantValue";
 
 export interface AuthStateAwaitingTenant {
   kind: AuthStateAwaitingTenantKind;

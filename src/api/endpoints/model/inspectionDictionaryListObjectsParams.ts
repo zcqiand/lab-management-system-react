@@ -6,8 +6,8 @@
  */
 
 export type InspectionDictionaryListObjectsParams = {
-page?: number;
-pageSize?: number;
-inspectionSpecialtyCode?: string;
-keyword?: string;
+  page?: number;
+  pageSize?: number;
+  inspectionSpecialtyCode?: string;
+  keyword?: string;
 };

@@ -4,8 +4,8 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { CurrentUser } from './currentUser';
-import type { MyTenant } from './myTenant';
+import type { CurrentUser } from "./currentUser";
+import type { MyTenant } from "./myTenant";
 
 export interface LoginResponse {
   token: string;

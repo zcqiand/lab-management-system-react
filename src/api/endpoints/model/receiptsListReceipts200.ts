@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { SampleReceipt } from './sampleReceipt';
+import type { SampleReceipt } from "./sampleReceipt";
 
 export type ReceiptsListReceipts200 = {
   items: SampleReceipt[];

@@ -6,5 +6,5 @@
  */
 
 export type InspectionDictionaryListSpecialtyObjectLinksParams = {
-inspectionSpecialtyCode?: string;
+  inspectionSpecialtyCode?: string;
 };

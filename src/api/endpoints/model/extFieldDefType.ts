@@ -5,13 +5,12 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type ExtFieldDefType = typeof ExtFieldDefType[keyof typeof ExtFieldDefType];
-
+export type ExtFieldDefType = (typeof ExtFieldDefType)[keyof typeof ExtFieldDefType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ExtFieldDefType = {
-  text: 'text',
-  number: 'number',
-  date: 'date',
-  select: 'select',
+  text: "text",
+  number: "number",
+  date: "date",
+  select: "select",
 } as const;

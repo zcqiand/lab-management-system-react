@@ -167,7 +167,11 @@ export function ContractsList() {
       <ConfirmModal
         open={deleteTarget !== null}
         title="删除合同"
-        message={deleteTarget ? `确认删除合同 ${deleteTarget.contractCode}？此操作不可撤销。` : ""}
+        message={
+          deleteTarget
+            ? `确认删除合同 ${deleteTarget.contractCode}？此操作不可撤销。`
+            : ""
+        }
         onConfirm={async () => {
           if (!deleteTarget) return;
           const target = deleteTarget;
@@ -185,9 +189,7 @@ export function ContractsList() {
 
       <Card className="mt-4">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-base">
-            合同列表（{total || "…"}）
-          </CardTitle>
+          <CardTitle className="text-base">合同列表（{total || "…"}）</CardTitle>
           {loading && <span className="text-xs text-slate-400">加载中…</span>}
         </CardHeader>
         <CardContent className="p-0">
@@ -212,7 +214,11 @@ export function ContractsList() {
                 </tr>
               )}
               {items.map((c) => (
-                <tr key={c.id} data-fn="M02.F01.I01" className="border-t hover:bg-slate-50">
+                <tr
+                  key={c.id}
+                  data-fn="M02.F01.I01"
+                  className="border-t hover:bg-slate-50"
+                >
                   <td className="px-4 py-2 font-mono text-xs">{c.contractCode}</td>
                   <td className="px-4 py-2">{c.projectName}</td>
                   <td className="px-4 py-2">{c.clientUnit}</td>
@@ -368,9 +374,21 @@ function ContractFormBody({
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto">
-        <Field label="合同编号 *" value={body.contractCode} onChange={(v) => patch("contractCode", v)} />
-        <Field label="委托单位 *" value={body.clientUnit} onChange={(v) => patch("clientUnit", v)} />
-        <Field label="项目名称 *" value={body.projectName} onChange={(v) => patch("projectName", v)} />
+        <Field
+          label="合同编号 *"
+          value={body.contractCode}
+          onChange={(v) => patch("contractCode", v)}
+        />
+        <Field
+          label="委托单位 *"
+          value={body.clientUnit}
+          onChange={(v) => patch("clientUnit", v)}
+        />
+        <Field
+          label="项目名称 *"
+          value={body.projectName}
+          onChange={(v) => patch("projectName", v)}
+        />
         <Field
           label="项目地点"
           value={body.projectLocation ?? ""}
@@ -406,8 +424,16 @@ function ContractFormBody({
           value={body.inspectionPhone ?? ""}
           onChange={(v) => patch("inspectionPhone", v)}
         />
-        <Field label="见证单位 *" value={body.witnessUnit} onChange={(v) => patch("witnessUnit", v)} />
-        <Field label="见证人 *" value={body.witness} onChange={(v) => patch("witness", v)} />
+        <Field
+          label="见证单位 *"
+          value={body.witnessUnit}
+          onChange={(v) => patch("witnessUnit", v)}
+        />
+        <Field
+          label="见证人 *"
+          value={body.witness}
+          onChange={(v) => patch("witness", v)}
+        />
         <Field
           label="见证人电话"
           value={body.witnessPhone ?? ""}

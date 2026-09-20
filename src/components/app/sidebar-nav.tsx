@@ -110,7 +110,11 @@ export function SidebarNav({
       for (const n of nodes) {
         if (n.path !== undefined) {
           if (n.path === "" && pathname === "/") return n.code;
-          if (n.path !== "" && (pathname === `/${n.path}` || pathname.startsWith(`/${n.path}/`))) return n.code;
+          if (
+            n.path !== "" &&
+            (pathname === `/${n.path}` || pathname.startsWith(`/${n.path}/`))
+          )
+            return n.code;
         }
         if (n.children.length > 0) {
           const hit = findMatch(n.children);
@@ -157,7 +161,9 @@ export function SidebarNav({
       if (raw) {
         const arr = JSON.parse(raw) as unknown;
         if (Array.isArray(arr))
-          setGroupCollapsed(new Set(arr.filter((x): x is string => typeof x === "string")));
+          setGroupCollapsed(
+            new Set(arr.filter((x): x is string => typeof x === "string")),
+          );
       }
     } catch {
       /* ignore */
@@ -194,13 +200,21 @@ export function SidebarNav({
           effectiveCollapsed ? "px-2 justify-center" : "px-5",
         )}
       >
-        <div className={cn("flex items-center gap-2", effectiveCollapsed && "justify-center")}>
+        <div
+          className={cn(
+            "flex items-center gap-2",
+            effectiveCollapsed && "justify-center",
+          )}
+        >
           <div className="h-8 w-8 rounded-md bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold shrink-0">
             L
           </div>
           {!effectiveCollapsed && (
             <div className="flex-1 min-w-0">
-              <h1 className="text-sm font-bold leading-tight truncate" data-testid="sidebar-app-name">
+              <h1
+                className="text-sm font-bold leading-tight truncate"
+                data-testid="sidebar-app-name"
+              >
                 {appName ?? "Lab-Management"}
               </h1>
               <p className="text-xs text-white/50 truncate">appCode = {appCode}</p>
@@ -229,13 +243,21 @@ export function SidebarNav({
       <nav className="flex-1 px-2 py-3 overflow-y-auto" aria-label="菜单树">
         {!menus ? (
           <p
-            className={cn("text-xs text-white/40", effectiveCollapsed ? "text-center" : "px-3")}
+            className={cn(
+              "text-xs text-white/40",
+              effectiveCollapsed ? "text-center" : "px-3",
+            )}
             data-testid="sidebar-menus-loading"
           >
             {effectiveCollapsed ? "…" : "（菜单加载中）"}
           </p>
         ) : menus.length === 0 ? (
-          <p className={cn("text-xs text-white/40", effectiveCollapsed ? "text-center" : "px-3")}>
+          <p
+            className={cn(
+              "text-xs text-white/40",
+              effectiveCollapsed ? "text-center" : "px-3",
+            )}
+          >
             {effectiveCollapsed ? "—" : "（无菜单）"}
           </p>
         ) : (
@@ -331,7 +353,9 @@ function NavLeaf({
               type="button"
               onClick={() => onToggleGroup(node.code)}
               title={isGroupCollapsed ? `展开「${node.name}」` : `收起「${node.name}」`}
-              aria-label={isGroupCollapsed ? `展开「${node.name}」` : `收起「${node.name}」`}
+              aria-label={
+                isGroupCollapsed ? `展开「${node.name}」` : `收起「${node.name}」`
+              }
               aria-expanded={!isGroupCollapsed}
               className="flex items-center gap-1.5 hover:text-white/80 transition-colors text-left flex-1 min-w-0"
               data-testid={`sidebar-group-toggle-${node.code}`}
@@ -386,7 +410,9 @@ function NavLeaf({
         className={cn(
           "relative w-full text-left flex items-center gap-2 rounded text-sm transition-colors",
           collapsed ? "justify-center px-0 py-2" : "px-3 py-1.5",
-          isSelected ? "bg-slate-700 text-white" : "text-white/70 hover:bg-white/10 hover:text-white",
+          isSelected
+            ? "bg-slate-700 text-white"
+            : "text-white/70 hover:bg-white/10 hover:text-white",
           !node.path && node.path !== "" && "opacity-50 cursor-not-allowed",
         )}
       >
@@ -405,7 +431,10 @@ function ChevronToggle({ expanded }: { expanded: boolean }) {
       width="10"
       height="10"
       viewBox="0 0 10 10"
-      className={cn("transition-transform duration-150", expanded ? "rotate-0" : "-rotate-90")}
+      className={cn(
+        "transition-transform duration-150",
+        expanded ? "rotate-0" : "-rotate-90",
+      )}
     >
       <path
         d="M2 3.5 L5 7 L8 3.5"

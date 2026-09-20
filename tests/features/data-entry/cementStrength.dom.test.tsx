@@ -26,10 +26,14 @@ fnTest(["M03.F03.I01"], "水泥胶砂强度：抗折 Rf=1.5·F·L/b³（2kN → 
   expect(flexuralStrength(0)).toBe(0);
 });
 
-fnTest(["M03.F03.I01"], "水泥胶砂强度：抗压 Rc=F/A（16kN → 10.0；80kN → 50.0 MPa）", () => {
-  expect(compressStrength(16)).toBe(10);
-  expect(compressStrength(80)).toBe(50);
-});
+fnTest(
+  ["M03.F03.I01"],
+  "水泥胶砂强度：抗压 Rc=F/A（16kN → 10.0；80kN → 50.0 MPa）",
+  () => {
+    expect(compressStrength(16)).toBe(10);
+    expect(compressStrength(80)).toBe(50);
+  },
+);
 
 describe("reduceStrengths ±10% 剔除", () => {
   it("全部一致 → 无剔除、均值即该值、有效", () => {
@@ -77,9 +81,7 @@ describe("computeCementFlexural / computeCementCompress", () => {
 });
 
 describe("autoVerdict 均值 vs 技术要求", () => {
-  const req = (
-    over: Partial<TechnicalRequirement>,
-  ): TechnicalRequirement =>
+  const req = (over: Partial<TechnicalRequirement>): TechnicalRequirement =>
     ({
       tenantId: "TENANT-TEST",
       inspectionObjectCode: "OBJ-SP01-P1",
@@ -167,25 +169,30 @@ fnTest(["M03.F03.I01"], "CementCompressCard 渲染 6 个破坏荷载输入框", 
   beforeEach(() => cleanup());
   const { container } = render(<CementCompressCard {...makeProps()} />);
   expect(
-    container.querySelectorAll('input[type="number"][placeholder="破坏荷载 (kN)"]').length,
+    container.querySelectorAll('input[type="number"][placeholder="破坏荷载 (kN)"]')
+      .length,
   ).toBe(6);
 });
 
-fnTest(["M03.F03.I02"], "CementCompressCard 有技术要求：录入均值达标 → 自动判合格", () => {
-  beforeEach(() => cleanup());
-  const onChange = vi.fn();
-  const { container } = render(
-    <CementCompressCard {...makeProps({ techReqs: [verifiedReq], onChange })} />,
-  );
-  const inputs = container.querySelectorAll<HTMLInputElement>(
-    'input[type="number"][placeholder="破坏荷载 (kN)"]',
-  );
-  inputs.forEach((el) => fireEvent.change(el, { target: { value: "80" } })); // → 50 MPa ≥ 17
-  const last = onChange.mock.calls.at(-1)![0];
-  expect(last.verdict).toBe("合格");
-  // 契约实体无 id：requirementCode 现在是复合键 techReqKey（判定标准|品牌|型号|等级|规格）
-  expect(last.requirementCode).toBe("GB 175-2023||||");
-});
+fnTest(
+  ["M03.F03.I02"],
+  "CementCompressCard 有技术要求：录入均值达标 → 自动判合格",
+  () => {
+    beforeEach(() => cleanup());
+    const onChange = vi.fn();
+    const { container } = render(
+      <CementCompressCard {...makeProps({ techReqs: [verifiedReq], onChange })} />,
+    );
+    const inputs = container.querySelectorAll<HTMLInputElement>(
+      'input[type="number"][placeholder="破坏荷载 (kN)"]',
+    );
+    inputs.forEach((el) => fireEvent.change(el, { target: { value: "80" } })); // → 50 MPa ≥ 17
+    const last = onChange.mock.calls.at(-1)![0];
+    expect(last.verdict).toBe("合格");
+    // 契约实体无 id：requirementCode 现在是复合键 techReqKey（判定标准|品牌|型号|等级|规格）
+    expect(last.requirementCode).toBe("GB 175-2023||||");
+  },
+);
 
 fnTest(["M03.F03.I03"], "CementCompressCard 无技术要求：回退手选单项评定", () => {
   beforeEach(() => cleanup());
@@ -197,7 +204,9 @@ fnTest(["M03.F03.I01"], "CementCompressCard readOnly：输入吞掉 onChange", (
   beforeEach(() => cleanup());
   const onChange = vi.fn();
   const { container } = render(
-    <CementCompressCard {...makeProps({ techReqs: [verifiedReq], onChange, readOnly: true })} />,
+    <CementCompressCard
+      {...makeProps({ techReqs: [verifiedReq], onChange, readOnly: true })}
+    />,
   );
   const input = container.querySelector<HTMLInputElement>(
     'input[type="number"][placeholder="破坏荷载 (kN)"]',
@@ -209,10 +218,13 @@ fnTest(["M03.F03.I01"], "CementCompressCard readOnly：输入吞掉 onChange", (
 fnTest(["M03.F03.I01"], "CementFlexuralCard 渲染 3 个破坏荷载 + 抗折强度列", () => {
   beforeEach(() => cleanup());
   const { container } = render(
-    <CementFlexuralCard {...makeProps({ parameter: param("IP-0555", "3 天抗折强度") })} />,
+    <CementFlexuralCard
+      {...makeProps({ parameter: param("IP-0555", "3 天抗折强度") })}
+    />,
   );
   expect(
-    container.querySelectorAll('input[type="number"][placeholder="破坏荷载 (kN)"]').length,
+    container.querySelectorAll('input[type="number"][placeholder="破坏荷载 (kN)"]')
+      .length,
   ).toBe(3);
   expect(screen.getByText("抗折强度 (MPa)")).toBeInTheDocument();
 });

@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { InspectionObject } from './inspectionObject';
+import type { InspectionObject } from "./inspectionObject";
 
 export type InspectionDictionaryListObjects200 = {
   items: InspectionObject[];

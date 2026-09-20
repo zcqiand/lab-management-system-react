@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { UpdateSampleExtRequestExt } from './updateSampleExtRequestExt';
+import type { UpdateSampleExtRequestExt } from "./updateSampleExtRequestExt";
 
 export interface UpdateSampleExtRequest {
   ext: UpdateSampleExtRequestExt;

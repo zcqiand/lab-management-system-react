@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { samplesListSamples, samplesUpdateSampleExt } from "@/api/endpoints/samples/samples";
+import {
+  samplesListSamples,
+  samplesUpdateSampleExt,
+} from "@/api/endpoints/samples/samples";
 import { testRecordsListTestRecords } from "@/api/endpoints/test-records/test-records";
 import type { SampleReceipt } from "@/api/endpoints/model/sampleReceipt";
 import type { Sample } from "@/api/endpoints/model/sample";
@@ -105,9 +108,7 @@ export function ReportPreviewModal({ open, receipt, onClose }: Props) {
         const rname = (
           generatedReportNames as Array<{
             code: string;
-            extFields?: Array<
-              Omit<ExtFieldDef, "type"> & { type?: ExtFieldDef["type"] }
-            >;
+            extFields?: Array<Omit<ExtFieldDef, "type"> & { type?: ExtFieldDef["type"] }>;
           }>
         ).find((r) => r.code === receipt.categoryCode);
         const extFields: ExtFieldDef[] = (rname?.extFields ?? []).map((f) => ({
@@ -181,7 +182,13 @@ export function ReportPreviewModal({ open, receipt, onClose }: Props) {
     const data = assembleReport({ receipt: rcpt, samples: displaySamples, records, org });
     const fname = REPORT_NAME_TEMPLATE[rcpt.categoryCode];
     const basename = fname ? fname.replace(/\.docx$/, "") : null;
-    const flat = flattenForDocx(rcpt.categoryCode, basename, data, displaySamples, records);
+    const flat = flattenForDocx(
+      rcpt.categoryCode,
+      basename,
+      data,
+      displaySamples,
+      records,
+    );
     // 兜底：manifest 漏登记的 {tag} 也补成「—」，避免 docxtemplater 渲染 "undefined"。
     await ensureAllDocxTagsFromBuffer(flat, arrayBuffer);
     const PizZip = (await import("pizzip")).default;
@@ -256,7 +263,9 @@ export function ReportPreviewModal({ open, receipt, onClose }: Props) {
       `}</style>
       <div className="bg-white rounded-lg shadow-xl w-full max-w-5xl max-h-[94vh] flex flex-col">
         <header className="flex items-center justify-between px-5 py-3 border-b">
-          <h2 className="text-base font-semibold">报告预览{receipt.commissionCode ? ` — ${receipt.commissionCode}` : ''}</h2>
+          <h2 className="text-base font-semibold">
+            报告预览{receipt.commissionCode ? ` — ${receipt.commissionCode}` : ""}
+          </h2>
           <button
             type="button"
             onClick={onClose}

@@ -5,13 +5,13 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type RequirementVerificationStatus = typeof RequirementVerificationStatus[keyof typeof RequirementVerificationStatus];
-
+export type RequirementVerificationStatus =
+  (typeof RequirementVerificationStatus)[keyof typeof RequirementVerificationStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RequirementVerificationStatus = {
-  draft: 'draft',
-  reviewed: 'reviewed',
-  verified: 'verified',
-  rejected: 'rejected',
+  draft: "draft",
+  reviewed: "reviewed",
+  verified: "verified",
+  rejected: "rejected",
 } as const;

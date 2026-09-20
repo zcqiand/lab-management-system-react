@@ -72,57 +72,126 @@ export default function App() {
           {/* 基础数据（Batch 1：models/specifications/grades/brands） */}
           <Route
             path="models"
-            element={<RouteSuspense><ModelsPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <ModelsPage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="specifications"
-            element={<RouteSuspense><SpecificationsPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <SpecificationsPage />
+              </RouteSuspense>
+            }
           />
-          <Route path="grades" element={<RouteSuspense><GradesPage /></RouteSuspense>} />
-          <Route path="brands" element={<RouteSuspense><BrandsPage /></RouteSuspense>} />
+          <Route
+            path="grades"
+            element={
+              <RouteSuspense>
+                <GradesPage />
+              </RouteSuspense>
+            }
+          />
+          <Route
+            path="brands"
+            element={
+              <RouteSuspense>
+                <BrandsPage />
+              </RouteSuspense>
+            }
+          />
           {/* 基础数据（Batch 2/3：contracts / report-names / param-interfaces） */}
           <Route
             path="contracts"
-            element={<RouteSuspense><ContractsPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <ContractsPage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="report-names"
-            element={<RouteSuspense><ReportNamesPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <ReportNamesPage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="param-interfaces"
-            element={<RouteSuspense><ParamInterfacesPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <ParamInterfacesPage />
+              </RouteSuspense>
+            }
           />
           {/* 试验过程（Batch 2） */}
-          <Route path="receipts" element={<RouteSuspense><ReceiptsPage /></RouteSuspense>} />
+          <Route
+            path="receipts"
+            element={
+              <RouteSuspense>
+                <ReceiptsPage />
+              </RouteSuspense>
+            }
+          />
           <Route
             path="receipts/:id"
-            element={<RouteSuspense><ReceiptDetailPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <ReceiptDetailPage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="task-assignment"
-            element={<RouteSuspense><TaskAssignmentPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <TaskAssignmentPage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="data-entry"
-            element={<RouteSuspense><DataEntryPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <DataEntryPage />
+              </RouteSuspense>
+            }
           />
           {/* 检测能力（Batch 4：M06.F01-F06 6 薄页） */}
           <Route
             path="inspection-specialties"
-            element={<RouteSuspense><SpecialtiesPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <SpecialtiesPage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="inspection-standards"
-            element={<RouteSuspense><StandardsPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <StandardsPage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="inspection-parameters"
-            element={<RouteSuspense><ParametersPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <ParametersPage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="inspection-objects"
-            element={<RouteSuspense><ObjectsPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <ObjectsPage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="inspection-technical-requirements"
@@ -153,29 +222,46 @@ export default function App() {
           {/* 报告 + 统计（Batch 4） */}
           <Route
             path="report-issue"
-            element={<RouteSuspense><ReportIssuePage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <ReportIssuePage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="report-review"
-            element={<RouteSuspense><ReportReviewPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <ReportReviewPage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="report-approve"
-            element={<RouteSuspense><ReportApprovePage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <ReportApprovePage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="report-archive"
-            element={<RouteSuspense><ReportArchivePage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <ReportArchivePage />
+              </RouteSuspense>
+            }
           />
           <Route
             path="summary"
-            element={<RouteSuspense><SummaryPage /></RouteSuspense>}
+            element={
+              <RouteSuspense>
+                <SummaryPage />
+              </RouteSuspense>
+            }
           />
         </Route>
-        <Route
-          path="*"
-          element={<BadPathRedirect />}
-        />
+        <Route path="*" element={<BadPathRedirect />} />
       </Routes>
     </BrowserRouter>
   );

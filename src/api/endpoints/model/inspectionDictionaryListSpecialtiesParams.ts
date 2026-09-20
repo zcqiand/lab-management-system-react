@@ -6,7 +6,7 @@
  */
 
 export type InspectionDictionaryListSpecialtiesParams = {
-page?: number;
-pageSize?: number;
-keyword?: string;
+  page?: number;
+  pageSize?: number;
+  keyword?: string;
 };

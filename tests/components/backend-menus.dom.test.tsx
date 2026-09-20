@@ -50,9 +50,7 @@ const CONTRACT_MENUS = [
     id: "overview",
     label: "总览",
     icon: "layout-dashboard",
-    children: [
-      { id: "dashboard", label: "仪表盘", path: "/dashboard", icon: "gauge" },
-    ],
+    children: [{ id: "dashboard", label: "仪表盘", path: "/dashboard", icon: "gauge" }],
   },
   { id: "standalone", label: "独立页", path: "/solo" },
 ];
@@ -113,36 +111,46 @@ beforeEach(() => {
 });
 
 describe("M01.F04.I01 useBackendMenus", () => {
-  fnTest(["M01.F04.I01"], "成功：/api/auth/menus 契约树适配为本地渲染树（有子节点=group）", async () => {
-    queue.push({ status: 200, data: CONTRACT_MENUS });
-    renderHarness();
+  fnTest(
+    ["M01.F04.I01"],
+    "成功：/api/auth/menus 契约树适配为本地渲染树（有子节点=group）",
+    async () => {
+      queue.push({ status: 200, data: CONTRACT_MENUS });
+      renderHarness();
 
-    await waitFor(() => {
-      // 顶层 group：type 由 children 推导，name 取 label
-      const group = screen.getByTestId("group-overview");
-      expect(group.getAttribute("data-type")).toBe("group");
-      expect(screen.getByText("总览")).toBeTruthy();
-    });
-    // 叶子 page：带 path，type=page
-    const leaf = screen.getByTestId("item-dashboard");
-    expect(leaf.getAttribute("data-type")).toBe("page");
-    expect(screen.getByText("仪表盘")).toBeTruthy();
-    // 无子节点的顶层节点也是 page
-    expect(screen.getByTestId("group-standalone").getAttribute("data-type")).toBe("page");
-    // 端点正确（防回退到旧 saas 路径）
-    expect(calls).toEqual([{ method: "GET", url: "/api/auth/menus" }]);
-  });
+      await waitFor(() => {
+        // 顶层 group：type 由 children 推导，name 取 label
+        const group = screen.getByTestId("group-overview");
+        expect(group.getAttribute("data-type")).toBe("group");
+        expect(screen.getByText("总览")).toBeTruthy();
+      });
+      // 叶子 page：带 path，type=page
+      const leaf = screen.getByTestId("item-dashboard");
+      expect(leaf.getAttribute("data-type")).toBe("page");
+      expect(screen.getByText("仪表盘")).toBeTruthy();
+      // 无子节点的顶层节点也是 page
+      expect(screen.getByTestId("group-standalone").getAttribute("data-type")).toBe(
+        "page",
+      );
+      // 端点正确（防回退到旧 saas 路径）
+      expect(calls).toEqual([{ method: "GET", url: "/api/auth/menus" }]);
+    },
+  );
 
-  fnTest(["M01.F04.I01"], "失败：抛错上抛，不静默回退静态 MENU_TREE（demo 兜底已删）", async () => {
-    queue.push({ status: 500, data: { message: "boom" } });
-    renderHarness();
+  fnTest(
+    ["M01.F04.I01"],
+    "失败：抛错上抛，不静默回退静态 MENU_TREE（demo 兜底已删）",
+    async () => {
+      queue.push({ status: 500, data: { message: "boom" } });
+      renderHarness();
 
-    await waitFor(() => {
-      // 错误边界接住抛错，渲染错误态（不再是 menus-null 或静态树）
-      const errNode = screen.getByTestId("menus-error");
-      expect(errNode.textContent).toMatch(/HTTP 500/);
-    });
-    // 静态 MENU_TREE 不应渲染（无 g-overview 等 saas code 标签）
-    expect(screen.queryByTestId("group-g-overview")).toBeNull();
-  });
+      await waitFor(() => {
+        // 错误边界接住抛错，渲染错误态（不再是 menus-null 或静态树）
+        const errNode = screen.getByTestId("menus-error");
+        expect(errNode.textContent).toMatch(/HTTP 500/);
+      });
+      // 静态 MENU_TREE 不应渲染（无 g-overview 等 saas code 标签）
+      expect(screen.queryByTestId("group-g-overview")).toBeNull();
+    },
+  );
 });

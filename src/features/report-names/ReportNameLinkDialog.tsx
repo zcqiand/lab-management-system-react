@@ -68,9 +68,7 @@ export function ReportNameLinkDialog({
       setParameters(paramResp.data?.items ?? []);
       setStdLinks(stdLinkResp.data?.items ?? []);
       setParamLinks(
-        new Set(
-          (paramLinkResp.data?.items ?? []).map((l) => l.inspectionParameterCode),
-        ),
+        new Set((paramLinkResp.data?.items ?? []).map((l) => l.inspectionParameterCode)),
       );
     } catch (err) {
       toast.error(`加载关联失败：${(err as Error).message}`);
@@ -159,8 +157,8 @@ export function ReportNameLinkDialog({
         <DialogHeader>
           <DialogTitle>关联维护 — {reportNameLabel}</DialogTitle>
           <DialogDescription>
-            报告名称 {reportNameCode}；标准 {stdLinks.length} 项 / 参数 {paramLinks.size} 项
-            （toggle 即时保存）
+            报告名称 {reportNameCode}；标准 {stdLinks.length} 项 / 参数 {paramLinks.size}{" "}
+            项 （toggle 即时保存）
           </DialogDescription>
         </DialogHeader>
         {loading ? (

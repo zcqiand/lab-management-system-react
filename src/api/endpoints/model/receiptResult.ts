@@ -5,12 +5,11 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type ReceiptResult = typeof ReceiptResult[keyof typeof ReceiptResult];
-
+export type ReceiptResult = (typeof ReceiptResult)[keyof typeof ReceiptResult];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ReceiptResult = {
-  pass: 'pass',
-  fail: 'fail',
-  '': '',
+  pass: "pass",
+  fail: "fail",
+  "": "",
 } as const;

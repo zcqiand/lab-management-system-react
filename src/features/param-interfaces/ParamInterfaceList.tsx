@@ -109,9 +109,7 @@ export function ParamInterfaceList() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>新建参数界面</DialogTitle>
-            <DialogDescription>
-              创建一条参数界面记录（录入卡片模型）。
-            </DialogDescription>
+            <DialogDescription>创建一条参数界面记录（录入卡片模型）。</DialogDescription>
           </DialogHeader>
           <ParamInterfaceFormBody
             onSubmit={async (body) => {
@@ -162,7 +160,9 @@ export function ParamInterfaceList() {
       <ConfirmModal
         open={deleteTarget !== null}
         title="删除参数界面"
-        message={deleteTarget ? `确认删除参数界面 ${deleteTarget.code}？此操作不可撤销。` : ""}
+        message={
+          deleteTarget ? `确认删除参数界面 ${deleteTarget.code}？此操作不可撤销。` : ""
+        }
         onConfirm={async () => {
           if (!deleteTarget) return;
           const target = deleteTarget;
@@ -180,9 +180,7 @@ export function ParamInterfaceList() {
 
       <Card className="mt-4">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-base">
-            参数界面列表（{total || "…"}）
-          </CardTitle>
+          <CardTitle className="text-base">参数界面列表（{total || "…"}）</CardTitle>
           {loading && <span className="text-xs text-slate-400">加载中…</span>}
         </CardHeader>
         <CardContent className="p-0">
@@ -204,7 +202,11 @@ export function ParamInterfaceList() {
                 </tr>
               )}
               {items.map((r) => (
-                <tr key={r.code} data-fn="M06.F08.I01" className="border-t hover:bg-slate-50">
+                <tr
+                  key={r.code}
+                  data-fn="M06.F08.I01"
+                  className="border-t hover:bg-slate-50"
+                >
                   <td className="px-4 py-2 font-mono text-xs">{r.code}</td>
                   <td className="px-4 py-2 font-mono text-xs">{r.componentPath}</td>
                   <td className="px-4 py-2 text-xs text-slate-500">{r.sortOrder}</td>
@@ -247,9 +249,7 @@ function Header({ onNew }: { onNew: () => void }) {
     <div className="mb-4 flex items-center justify-between">
       <div>
         <h1 className="text-2xl font-semibold">参数界面维护</h1>
-        <p className="text-sm text-slate-500">
-          M06.F08 参数界面（录入卡片模型）
-        </p>
+        <p className="text-sm text-slate-500">M06.F08 参数界面（录入卡片模型）</p>
       </div>
       {/* @entry M06.F08.I01 新建按钮 */}
       <Button onClick={onNew} data-fn="M06.F08.I01">

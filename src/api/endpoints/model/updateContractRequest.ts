@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { ContractStatus } from './contractStatus';
+import type { ContractStatus } from "./contractStatus";
 
 export interface UpdateContractRequest {
   contractCode?: string;

@@ -4,8 +4,8 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { FlowAction } from './flowAction';
-import type { FlowStatus } from './flowStatus';
+import type { FlowAction } from "./flowAction";
+import type { FlowStatus } from "./flowStatus";
 
 export interface FlowHistoryEntry {
   action: FlowAction;

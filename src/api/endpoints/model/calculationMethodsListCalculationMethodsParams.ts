@@ -6,6 +6,6 @@
  */
 
 export type CalculationMethodsListCalculationMethodsParams = {
-inspectionObjectCode?: string;
-inspectionParameterCode?: string;
+  inspectionObjectCode?: string;
+  inspectionParameterCode?: string;
 };

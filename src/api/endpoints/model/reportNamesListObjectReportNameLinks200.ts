@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { ObjectReportNameLink } from './objectReportNameLink';
+import type { ObjectReportNameLink } from "./objectReportNameLink";
 
 export type ReportNamesListObjectReportNameLinks200 = {
   items: ObjectReportNameLink[];

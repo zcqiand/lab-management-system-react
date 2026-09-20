@@ -5,12 +5,12 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type InspectionStandardStatus = typeof InspectionStandardStatus[keyof typeof InspectionStandardStatus];
-
+export type InspectionStandardStatus =
+  (typeof InspectionStandardStatus)[keyof typeof InspectionStandardStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const InspectionStandardStatus = {
-  active: 'active',
-  superseded: 'superseded',
-  draft: 'draft',
+  active: "active",
+  superseded: "superseded",
+  draft: "draft",
 } as const;

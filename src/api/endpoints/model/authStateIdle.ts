@@ -4,8 +4,8 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { AuthStateIdleKind } from './authStateIdleKind';
-import type { AuthStateIdleValue } from './authStateIdleValue';
+import type { AuthStateIdleKind } from "./authStateIdleKind";
+import type { AuthStateIdleValue } from "./authStateIdleValue";
 
 export interface AuthStateIdle {
   kind: AuthStateIdleKind;

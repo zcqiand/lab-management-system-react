@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { AuthState } from './authState';
+import type { AuthState } from "./authState";
 
 /**
  * AuthContext 数据契约。方法(login/logout/refresh/switchTenant/hasPermission/onChange)由消费方实现,TS 签名见 .state/decision-log.md §2.2

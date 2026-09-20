@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { FlowStatus } from './flowStatus';
+import type { FlowStatus } from "./flowStatus";
 
 export interface FlowActionResult {
   id: string;

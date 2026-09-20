@@ -6,8 +6,8 @@
  */
 
 export type SamplesListSamplesParams = {
-page?: number;
-pageSize?: number;
-receiptId?: string;
-keyword?: string;
+  page?: number;
+  pageSize?: number;
+  receiptId?: string;
+  keyword?: string;
 };

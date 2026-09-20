@@ -271,7 +271,9 @@ export function CalculationMethodList() {
               </TableHeader>
               <TableBody>
                 {items.filter(matchesKeyword).map((row) => (
-                  <TableRow key={`${row.inspectionObjectCode}/${row.inspectionParameterCode}`}>
+                  <TableRow
+                    key={`${row.inspectionObjectCode}/${row.inspectionParameterCode}`}
+                  >
                     <TableCell>
                       <div className="font-mono text-xs">{row.inspectionObjectCode}</div>
                       {objectNameByCode.get(row.inspectionObjectCode) && (

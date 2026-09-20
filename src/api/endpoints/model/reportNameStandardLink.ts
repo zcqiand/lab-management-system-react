@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { InspectionStandardRole } from './inspectionStandardRole';
+import type { InspectionStandardRole } from "./inspectionStandardRole";
 
 export interface ReportNameStandardLink {
   reportNameCode: string;

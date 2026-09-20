@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { ParamInterfaceLinkConfig } from './paramInterfaceLinkConfig';
+import type { ParamInterfaceLinkConfig } from "./paramInterfaceLinkConfig";
 
 export interface ParamInterfaceLink {
   inspectionParameterCode: string;

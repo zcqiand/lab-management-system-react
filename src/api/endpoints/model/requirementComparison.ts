@@ -5,14 +5,14 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type RequirementComparison = typeof RequirementComparison[keyof typeof RequirementComparison];
-
+export type RequirementComparison =
+  (typeof RequirementComparison)[keyof typeof RequirementComparison];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RequirementComparison = {
-  '≥': '≥',
-  '≤': '≤',
-  '=': '=',
-  range: 'range',
-  eq: 'eq',
+  "≥": "≥",
+  "≤": "≤",
+  "=": "=",
+  range: "range",
+  eq: "eq",
 } as const;

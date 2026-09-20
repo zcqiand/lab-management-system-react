@@ -4,8 +4,8 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { AuthStateAuthenticatedKind } from './authStateAuthenticatedKind';
-import type { AuthStateAuthenticatedValue } from './authStateAuthenticatedValue';
+import type { AuthStateAuthenticatedKind } from "./authStateAuthenticatedKind";
+import type { AuthStateAuthenticatedValue } from "./authStateAuthenticatedValue";
 
 export interface AuthStateAuthenticated {
   kind: AuthStateAuthenticatedKind;

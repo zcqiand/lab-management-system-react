@@ -6,6 +6,6 @@
  */
 
 export type ParamInterfacesListParamInterfaceLinksParams = {
-inspectionParameterCode?: string;
-paramInterfaceCode?: string;
+  inspectionParameterCode?: string;
+  paramInterfaceCode?: string;
 };

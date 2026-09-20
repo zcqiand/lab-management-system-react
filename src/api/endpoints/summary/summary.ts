@@ -4,9 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import {
-  useQuery
-} from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -16,194 +14,258 @@ import type {
   QueryKey,
   UndefinedInitialDataOptions,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
-import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
+import * as axios from "axios";
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 import type {
   DashboardStats,
   ErrorResponse,
   SummaryData,
-  SummaryGetReportSummaryParams
-} from '.././model';
-
-
-
-
+  SummaryGetReportSummaryParams,
+} from ".././model";
 
 export const summaryGetReportSummary = (
-    params?: SummaryGetReportSummaryParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<SummaryData>> => {
-    
-    
-    return axios.default.get(
-      `/api/summary`,{
+  params?: SummaryGetReportSummaryParams,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<SummaryData>> => {
+  return axios.default.get(`/api/summary`, {
     ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
+    params: { ...params, ...options?.params },
+  });
+};
 
-
-
-
-export const getSummaryGetReportSummaryQueryKey = (params?: SummaryGetReportSummaryParams,) => {
-    return [
-    `/api/summary`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getSummaryGetReportSummaryQueryOptions = <TData = Awaited<ReturnType<typeof summaryGetReportSummary>>, TError = AxiosError<ErrorResponse>>(params?: SummaryGetReportSummaryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof summaryGetReportSummary>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getSummaryGetReportSummaryQueryKey = (
+  params?: SummaryGetReportSummaryParams,
 ) => {
+  return [`/api/summary`, ...(params ? [params] : [])] as const;
+};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+export const getSummaryGetReportSummaryQueryOptions = <
+  TData = Awaited<ReturnType<typeof summaryGetReportSummary>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: SummaryGetReportSummaryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof summaryGetReportSummary>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getSummaryGetReportSummaryQueryKey(params);
+  const queryKey = queryOptions?.queryKey ?? getSummaryGetReportSummaryQueryKey(params);
 
-  
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof summaryGetReportSummary>>> = ({
+    signal,
+  }) => summaryGetReportSummary(params, { signal, ...axiosOptions });
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof summaryGetReportSummary>>> = ({ signal }) => summaryGetReportSummary(params, { signal, ...axiosOptions });
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof summaryGetReportSummary>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-      
+export type SummaryGetReportSummaryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof summaryGetReportSummary>>
+>;
+export type SummaryGetReportSummaryQueryError = AxiosError<ErrorResponse>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof summaryGetReportSummary>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type SummaryGetReportSummaryQueryResult = NonNullable<Awaited<ReturnType<typeof summaryGetReportSummary>>>
-export type SummaryGetReportSummaryQueryError = AxiosError<ErrorResponse>
-
-
-export function useSummaryGetReportSummary<TData = Awaited<ReturnType<typeof summaryGetReportSummary>>, TError = AxiosError<ErrorResponse>>(
- params: undefined |  SummaryGetReportSummaryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof summaryGetReportSummary>>, TError, TData>> & Pick<
+export function useSummaryGetReportSummary<
+  TData = Awaited<ReturnType<typeof summaryGetReportSummary>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params: undefined | SummaryGetReportSummaryParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof summaryGetReportSummary>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof summaryGetReportSummary>>,
           TError,
           Awaited<ReturnType<typeof summaryGetReportSummary>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSummaryGetReportSummary<TData = Awaited<ReturnType<typeof summaryGetReportSummary>>, TError = AxiosError<ErrorResponse>>(
- params?: SummaryGetReportSummaryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof summaryGetReportSummary>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useSummaryGetReportSummary<
+  TData = Awaited<ReturnType<typeof summaryGetReportSummary>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: SummaryGetReportSummaryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof summaryGetReportSummary>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof summaryGetReportSummary>>,
           TError,
           Awaited<ReturnType<typeof summaryGetReportSummary>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSummaryGetReportSummary<TData = Awaited<ReturnType<typeof summaryGetReportSummary>>, TError = AxiosError<ErrorResponse>>(
- params?: SummaryGetReportSummaryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof summaryGetReportSummary>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useSummaryGetReportSummary<
+  TData = Awaited<ReturnType<typeof summaryGetReportSummary>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: SummaryGetReportSummaryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof summaryGetReportSummary>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useSummaryGetReportSummary<TData = Awaited<ReturnType<typeof summaryGetReportSummary>>, TError = AxiosError<ErrorResponse>>(
- params?: SummaryGetReportSummaryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof summaryGetReportSummary>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useSummaryGetReportSummary<
+  TData = Awaited<ReturnType<typeof summaryGetReportSummary>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  params?: SummaryGetReportSummaryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof summaryGetReportSummary>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getSummaryGetReportSummaryQueryOptions(params, options);
 
-  const queryOptions = getSummaryGetReportSummaryQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const summaryGetDashboardStats = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<DashboardStats>> => {
-    
-    
-    return axios.default.get(
-      `/api/summary/stats`,options
-    );
-  }
-
-
-
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<DashboardStats>> => {
+  return axios.default.get(`/api/summary/stats`, options);
+};
 
 export const getSummaryGetDashboardStatsQueryKey = () => {
-    return [
-    `/api/summary/stats`
-    ] as const;
-    }
+  return [`/api/summary/stats`] as const;
+};
 
-    
-export const getSummaryGetDashboardStatsQueryOptions = <TData = Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError = AxiosError<ErrorResponse>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
+export const getSummaryGetDashboardStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof summaryGetDashboardStats>>,
+  TError = AxiosError<ErrorResponse>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError, TData>
+  >;
+  axios?: AxiosRequestConfig;
+}) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getSummaryGetDashboardStatsQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getSummaryGetDashboardStatsQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof summaryGetDashboardStats>>> = ({
+    signal,
+  }) => summaryGetDashboardStats({ signal, ...axiosOptions });
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof summaryGetDashboardStats>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof summaryGetDashboardStats>>> = ({ signal }) => summaryGetDashboardStats({ signal, ...axiosOptions });
+export type SummaryGetDashboardStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof summaryGetDashboardStats>>
+>;
+export type SummaryGetDashboardStatsQueryError = AxiosError<ErrorResponse>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type SummaryGetDashboardStatsQueryResult = NonNullable<Awaited<ReturnType<typeof summaryGetDashboardStats>>>
-export type SummaryGetDashboardStatsQueryError = AxiosError<ErrorResponse>
-
-
-export function useSummaryGetDashboardStats<TData = Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError = AxiosError<ErrorResponse>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError, TData>> & Pick<
+export function useSummaryGetDashboardStats<
+  TData = Awaited<ReturnType<typeof summaryGetDashboardStats>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof summaryGetDashboardStats>>,
           TError,
           Awaited<ReturnType<typeof summaryGetDashboardStats>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSummaryGetDashboardStats<TData = Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError = AxiosError<ErrorResponse>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useSummaryGetDashboardStats<
+  TData = Awaited<ReturnType<typeof summaryGetDashboardStats>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof summaryGetDashboardStats>>,
           TError,
           Awaited<ReturnType<typeof summaryGetDashboardStats>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useSummaryGetDashboardStats<TData = Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError = AxiosError<ErrorResponse>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useSummaryGetDashboardStats<
+  TData = Awaited<ReturnType<typeof summaryGetDashboardStats>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useSummaryGetDashboardStats<TData = Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError = AxiosError<ErrorResponse>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useSummaryGetDashboardStats<
+  TData = Awaited<ReturnType<typeof summaryGetDashboardStats>>,
+  TError = AxiosError<ErrorResponse>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof summaryGetDashboardStats>>, TError, TData>
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getSummaryGetDashboardStatsQueryOptions(options);
 
-  const queryOptions = getSummaryGetDashboardStatsQueryOptions(options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
-

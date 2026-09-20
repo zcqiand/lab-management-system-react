@@ -63,7 +63,9 @@ export function ReceiptDetail() {
       {/* @entry M03.F09.I01 接样单详情页 */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-base">接样单详情 — {receipt.commissionCode}</CardTitle>
+          <CardTitle className="text-base">
+            接样单详情 — {receipt.commissionCode}
+          </CardTitle>
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -80,22 +82,70 @@ export function ReceiptDetail() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-2 text-sm">
-            <div><span className="text-slate-500">委托书编号：</span>{receipt.commissionCode}</div>
-            <div><span className="text-slate-500">委托日期：</span>{receipt.commissionDate}</div>
-            <div><span className="text-slate-500">工程名称：</span>{receipt.projectName ?? "—"}</div>
-            <div><span className="text-slate-500">委托单位：</span>{receipt.clientUnit ?? "—"}</div>
-            <div><span className="text-slate-500">建设单位：</span>{receipt.buildingUnit ?? "—"}</div>
-            <div><span className="text-slate-500">监理单位：</span>{receipt.supervisorUnit ?? "—"}</div>
-            <div><span className="text-slate-500">施工单位：</span>{receipt.constructionUnit ?? "—"}</div>
-            <div><span className="text-slate-500">见证单位：</span>{receipt.witnessUnit ?? "—"}</div>
-            <div><span className="text-slate-500">见证人：</span>{receipt.witness ?? "—"}</div>
-            <div><span className="text-slate-500">送检人：</span>{receipt.inspector ?? "—"}</div>
-            <div><span className="text-slate-500">取样地点：</span>{receipt.samplingLocation ?? "—"}</div>
-            <div><span className="text-slate-500">接样人：</span>{receipt.receivedBy}</div>
-            <div><span className="text-slate-500">报告类别：</span>{receipt.categoryCode}</div>
-            <div><span className="text-slate-500">检测类别：</span>{receipt.testCategory}</div>
-            <div><span className="text-slate-500">样品来源：</span>{receipt.sampleSource}</div>
-            <div><span className="text-slate-500">合同 ID：</span>{receipt.contractId}</div>
+            <div>
+              <span className="text-slate-500">委托书编号：</span>
+              {receipt.commissionCode}
+            </div>
+            <div>
+              <span className="text-slate-500">委托日期：</span>
+              {receipt.commissionDate}
+            </div>
+            <div>
+              <span className="text-slate-500">工程名称：</span>
+              {receipt.projectName ?? "—"}
+            </div>
+            <div>
+              <span className="text-slate-500">委托单位：</span>
+              {receipt.clientUnit ?? "—"}
+            </div>
+            <div>
+              <span className="text-slate-500">建设单位：</span>
+              {receipt.buildingUnit ?? "—"}
+            </div>
+            <div>
+              <span className="text-slate-500">监理单位：</span>
+              {receipt.supervisorUnit ?? "—"}
+            </div>
+            <div>
+              <span className="text-slate-500">施工单位：</span>
+              {receipt.constructionUnit ?? "—"}
+            </div>
+            <div>
+              <span className="text-slate-500">见证单位：</span>
+              {receipt.witnessUnit ?? "—"}
+            </div>
+            <div>
+              <span className="text-slate-500">见证人：</span>
+              {receipt.witness ?? "—"}
+            </div>
+            <div>
+              <span className="text-slate-500">送检人：</span>
+              {receipt.inspector ?? "—"}
+            </div>
+            <div>
+              <span className="text-slate-500">取样地点：</span>
+              {receipt.samplingLocation ?? "—"}
+            </div>
+            <div>
+              <span className="text-slate-500">接样人：</span>
+              {receipt.receivedBy}
+            </div>
+            <div>
+              <span className="text-slate-500">报告类别：</span>
+              {receipt.categoryCode}
+            </div>
+            <div>
+              <span className="text-slate-500">检测类别：</span>
+              {receipt.testCategory}
+            </div>
+            <div>
+              <span className="text-slate-500">样品来源：</span>
+              {receipt.sampleSource}
+            </div>
+            <div>
+              <span className="text-slate-500">合同 ID：</span>
+              {receipt.contractId}
+            </div>
             <div>
               <span className="text-slate-500">流程状态：</span>
               {FLOW_STAGE_LABELS[receipt.flowStatus] ?? receipt.flowStatus}
@@ -109,13 +159,22 @@ export function ReceiptDetail() {
                   : "—"}
             </div>
             {receipt.assigneeName && (
-              <div><span className="text-slate-500">检测负责人：</span>{receipt.assigneeName}</div>
+              <div>
+                <span className="text-slate-500">检测负责人：</span>
+                {receipt.assigneeName}
+              </div>
             )}
             {receipt.plannedTestDate && (
-              <div><span className="text-slate-500">计划检测日期：</span>{receipt.plannedTestDate}</div>
+              <div>
+                <span className="text-slate-500">计划检测日期：</span>
+                {receipt.plannedTestDate}
+              </div>
             )}
             {receipt.reportCode && (
-              <div><span className="text-slate-500">报告编号：</span>{receipt.reportCode}</div>
+              <div>
+                <span className="text-slate-500">报告编号：</span>
+                {receipt.reportCode}
+              </div>
             )}
           </div>
         </CardContent>
@@ -141,7 +200,10 @@ export function ReceiptDetail() {
                       ? "退回"
                       : "撤回";
                 return (
-                  <li key={i} className="flex items-center gap-3 border-l-2 border-slate-200 pl-3">
+                  <li
+                    key={i}
+                    className="flex items-center gap-3 border-l-2 border-slate-200 pl-3"
+                  >
                     <span className="text-xs text-slate-400">{h.at}</span>
                     <span className="font-medium">{actionLabel}</span>
                     <span className="text-sm text-slate-600">

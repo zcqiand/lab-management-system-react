@@ -208,7 +208,9 @@ function EntryModal({
         // 样品到齐后按 sampleId 归集。
         const [sItems, pItems] = await Promise.all([
           samplesListSamples({ receiptId: receipt.id, page: 1, pageSize: 50 })
-            .then((r) => (r.data?.items ?? []) as Array<{ id: string; sampleCode: string }>)
+            .then(
+              (r) => (r.data?.items ?? []) as Array<{ id: string; sampleCode: string }>,
+            )
             .catch(() => [] as Array<{ id: string; sampleCode: string }>),
           inspectionDictionaryListParameters({ page: 1, pageSize: 200 })
             .then((r) => (r.data?.items ?? []) as InspectionParameter[])
@@ -240,9 +242,10 @@ function EntryModal({
   if (!receipt) return null;
 
   const activeParam = parameters.find((p) => p.code === activeParamCode);
-  const rec = selectedSampleId && activeParamCode
-    ? records[`${selectedSampleId}#${activeParamCode}`]
-    : undefined;
+  const rec =
+    selectedSampleId && activeParamCode
+      ? records[`${selectedSampleId}#${activeParamCode}`]
+      : undefined;
   const ModelComponent = resolveParamInterfaceModel(
     receipt.categoryCode === "cement" ? "cement-compress" : "default",
   );
@@ -357,9 +360,7 @@ function EntryModal({
           {/* @entry M03.F03.I02 保存检测记录按钮 */}
           <Button
             onClick={() => void handleSave()}
-            disabled={
-              submitting || !selectedSampleId || !activeParamCode
-            }
+            disabled={submitting || !selectedSampleId || !activeParamCode}
             data-fn="M03.F03.I02"
           >
             保存

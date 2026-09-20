@@ -6,7 +6,7 @@
  */
 
 export type SummaryGetReportSummaryParams = {
-categoryCode?: string;
-dateFrom?: string;
-dateTo?: string;
+  categoryCode?: string;
+  dateFrom?: string;
+  dateTo?: string;
 };

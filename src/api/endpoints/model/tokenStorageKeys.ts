@@ -4,10 +4,10 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { TokenStorageKeysAccessToken } from './tokenStorageKeysAccessToken';
-import type { TokenStorageKeysRefreshToken } from './tokenStorageKeysRefreshToken';
-import type { TokenStorageKeysActiveTenantId } from './tokenStorageKeysActiveTenantId';
-import type { TokenStorageKeysPermissionsCache } from './tokenStorageKeysPermissionsCache';
+import type { TokenStorageKeysAccessToken } from "./tokenStorageKeysAccessToken";
+import type { TokenStorageKeysRefreshToken } from "./tokenStorageKeysRefreshToken";
+import type { TokenStorageKeysActiveTenantId } from "./tokenStorageKeysActiveTenantId";
+import type { TokenStorageKeysPermissionsCache } from "./tokenStorageKeysPermissionsCache";
 
 /**
  * 前端持久化 key 命名约定;后端契约不感知,但前端实现必须遵守

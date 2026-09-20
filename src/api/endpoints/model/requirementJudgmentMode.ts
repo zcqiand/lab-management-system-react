@@ -5,11 +5,11 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type RequirementJudgmentMode = typeof RequirementJudgmentMode[keyof typeof RequirementJudgmentMode];
-
+export type RequirementJudgmentMode =
+  (typeof RequirementJudgmentMode)[keyof typeof RequirementJudgmentMode];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RequirementJudgmentMode = {
-  automatic: 'automatic',
-  manual: 'manual',
+  automatic: "automatic",
+  manual: "manual",
 } as const;

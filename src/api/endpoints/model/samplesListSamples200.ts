@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { Sample } from './sample';
+import type { Sample } from "./sample";
 
 export type SamplesListSamples200 = {
   items: Sample[];

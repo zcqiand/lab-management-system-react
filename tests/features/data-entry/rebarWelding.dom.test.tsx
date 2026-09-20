@@ -18,11 +18,7 @@ import { RebarWeldingBendCard } from "@/features/data-entry/models/RebarWeldingB
 import type { ParamModelProps } from "@/features/data-entry/models/types";
 import type { InspectionParameter } from "@/api/endpoints/model/inspectionParameter";
 
-const param = (
-  code: string,
-  name: string,
-  unit?: string,
-): InspectionParameter =>
+const param = (code: string, name: string, unit?: string): InspectionParameter =>
   ({
     code,
     name,
@@ -104,24 +100,31 @@ describe("RebarWeldingTensileCard 渲染", () => {
     const { container } = render(<RebarWeldingTensileCard {...makeProps()} />);
     expect(container.textContent).toContain("Φ22");
     expect(
-      container.querySelectorAll('input[aria-label^="试件"][aria-label$="最大荷重"]').length,
+      container.querySelectorAll('input[aria-label^="试件"][aria-label$="最大荷重"]')
+        .length,
     ).toBe(3);
   });
 
-  fnTest(["M03.F03.I02"], "RebarWeldingTensileCard 录入最大荷重 → 抗拉强度自动算出（只读）", () => {
-    const { container } = render(<RebarWeldingTensileCard {...makeProps()} />);
-    const inputs = container.querySelectorAll<HTMLInputElement>(
-      'input[aria-label^="试件"][aria-label$="最大荷重"]',
-    );
-    act(() => {
-      fireEvent.change(inputs[0]!, { target: { value: "100" } });
-    });
-    // 100 kN → Rm = 4000·100/(π·22²) ≈ 263.16 → 圆整 0.1 → "263.2"
-    expect(container.textContent).toContain("263.1");
-  });
+  fnTest(
+    ["M03.F03.I02"],
+    "RebarWeldingTensileCard 录入最大荷重 → 抗拉强度自动算出（只读）",
+    () => {
+      const { container } = render(<RebarWeldingTensileCard {...makeProps()} />);
+      const inputs = container.querySelectorAll<HTMLInputElement>(
+        'input[aria-label^="试件"][aria-label$="最大荷重"]',
+      );
+      act(() => {
+        fireEvent.change(inputs[0]!, { target: { value: "100" } });
+      });
+      // 100 kN → Rm = 4000·100/(π·22²) ≈ 263.16 → 圆整 0.1 → "263.2"
+      expect(container.textContent).toContain("263.1");
+    },
+  );
 
   fnTest(["M03.F03.I01"], "RebarWeldingTensileCard readOnly：输入禁用", () => {
-    const { container } = render(<RebarWeldingTensileCard {...makeProps({ readOnly: true })} />);
+    const { container } = render(
+      <RebarWeldingTensileCard {...makeProps({ readOnly: true })} />,
+    );
     const input = container.querySelector<HTMLInputElement>(
       'input[aria-label="试件 1 最大荷重"]',
     );
@@ -135,7 +138,8 @@ describe("RebarWeldingBendCard 渲染", () => {
   fnTest(["M03.F03.I01"], "RebarWeldingBendCard 渲染 3 行弯曲角度 + 整体评定", () => {
     const { container } = render(<RebarWeldingBendCard {...makeProps()} />);
     expect(
-      container.querySelectorAll('input[aria-label^="试件"][aria-label$="弯曲角度"]').length,
+      container.querySelectorAll('input[aria-label^="试件"][aria-label$="弯曲角度"]')
+        .length,
     ).toBe(3);
     expect(screen.getByText(/JGJ\/T 27-2014/)).toBeInTheDocument();
   });

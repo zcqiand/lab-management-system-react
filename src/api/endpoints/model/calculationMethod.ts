@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { CalculationAlgorithmType } from './calculationAlgorithmType';
+import type { CalculationAlgorithmType } from "./calculationAlgorithmType";
 
 export interface CalculationMethod {
   inspectionObjectCode: string;

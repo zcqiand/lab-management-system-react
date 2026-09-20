@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { InspectionReportName } from './inspectionReportName';
+import type { InspectionReportName } from "./inspectionReportName";
 
 export type ReportNamesListReportNames200 = {
   items: InspectionReportName[];

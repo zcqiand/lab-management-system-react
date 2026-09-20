@@ -4,8 +4,8 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { AuthStateAnonymousKind } from './authStateAnonymousKind';
-import type { AuthStateAnonymousValue } from './authStateAnonymousValue';
+import type { AuthStateAnonymousKind } from "./authStateAnonymousKind";
+import type { AuthStateAnonymousValue } from "./authStateAnonymousValue";
 
 export interface AuthStateAnonymous {
   kind: AuthStateAnonymousKind;

@@ -8,11 +8,7 @@ import { ParticleGradationCard } from "@/features/data-entry/models/ParticleGrad
 import type { ParamModelProps } from "@/features/data-entry/models/types";
 import type { InspectionParameter } from "@/api/endpoints/model/inspectionParameter";
 
-const param = (
-  code: string,
-  name: string,
-  unit?: string,
-): InspectionParameter =>
+const param = (code: string, name: string, unit?: string): InspectionParameter =>
   ({
     code,
     name,
@@ -59,25 +55,33 @@ describe("ParticleGradationCard 渲染（砂）", () => {
     expect(container.textContent).toContain("2.36mm");
   });
 
-  fnTest(["M03.F03.I02"], "ParticleGradationCard 录入分计筛余 → onChange 上报累计筛余 JSON", () => {
-    const onChange = vi.fn();
-    const { container } = render(<ParticleGradationCard {...makeProps({ onChange })} />);
-    const input = container.querySelector<HTMLInputElement>(
-      'input[aria-label="第 1 行 4.75mm 分计筛余"]',
-    )!;
-    act(() => {
-      fireEvent.change(input, { target: { value: "5" } });
-      fireEvent.blur(input);
-    });
-    expect(onChange).toHaveBeenCalled();
-    const last = onChange.mock.calls.at(-1)![0];
-    const parsed = JSON.parse(last.result);
-    expect(parsed.rows[0].retainedPct[0]).toBe(5);
-    expect(parsed.rows[0].cumulativePct[0]).toBe(5);
-  });
+  fnTest(
+    ["M03.F03.I02"],
+    "ParticleGradationCard 录入分计筛余 → onChange 上报累计筛余 JSON",
+    () => {
+      const onChange = vi.fn();
+      const { container } = render(
+        <ParticleGradationCard {...makeProps({ onChange })} />,
+      );
+      const input = container.querySelector<HTMLInputElement>(
+        'input[aria-label="第 1 行 4.75mm 分计筛余"]',
+      )!;
+      act(() => {
+        fireEvent.change(input, { target: { value: "5" } });
+        fireEvent.blur(input);
+      });
+      expect(onChange).toHaveBeenCalled();
+      const last = onChange.mock.calls.at(-1)![0];
+      const parsed = JSON.parse(last.result);
+      expect(parsed.rows[0].retainedPct[0]).toBe(5);
+      expect(parsed.rows[0].cumulativePct[0]).toBe(5);
+    },
+  );
 
   fnTest(["M03.F03.I01"], "ParticleGradationCard readOnly：禁用输入", () => {
-    const { container } = render(<ParticleGradationCard {...makeProps({ readOnly: true })} />);
+    const { container } = render(
+      <ParticleGradationCard {...makeProps({ readOnly: true })} />,
+    );
     const input = container.querySelector<HTMLInputElement>(
       'input[aria-label="第 1 行 4.75mm 分计筛余"]',
     )!;

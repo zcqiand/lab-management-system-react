@@ -8,10 +8,10 @@
 /**
  * refresh token(与 accessToken 分存,便于隔离 XSS 影响面)
  */
-export type TokenStorageKeysRefreshToken = typeof TokenStorageKeysRefreshToken[keyof typeof TokenStorageKeysRefreshToken];
-
+export type TokenStorageKeysRefreshToken =
+  (typeof TokenStorageKeysRefreshToken)[keyof typeof TokenStorageKeysRefreshToken];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TokenStorageKeysRefreshToken = {
-  labrefreshToken: 'lab.refreshToken',
+  labrefreshToken: "lab.refreshToken",
 } as const;

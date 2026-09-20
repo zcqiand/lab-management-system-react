@@ -6,8 +6,8 @@
  */
 
 export type CatalogListModelsParams = {
-page?: number;
-pageSize?: number;
-inspectionObjectCode?: string;
-keyword?: string;
+  page?: number;
+  pageSize?: number;
+  inspectionObjectCode?: string;
+  keyword?: string;
 };

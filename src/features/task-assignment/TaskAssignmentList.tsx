@@ -129,9 +129,7 @@ export function TaskAssignmentList() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-base">
-            待安排接样单（{total || "…"}）
-          </CardTitle>
+          <CardTitle className="text-base">待安排接样单（{total || "…"}）</CardTitle>
           {loading && <span className="text-xs text-slate-400">加载中…</span>}
         </CardHeader>
         <CardContent className="p-0">
@@ -166,9 +164,7 @@ export function TaskAssignmentList() {
                   </td>
                   <td className="px-4 py-2">{r.projectName ?? "—"}</td>
                   <td className="px-4 py-2">
-                    {r.assigneeName ?? (
-                      <span className="text-slate-400">待安排</span>
-                    )}
+                    {r.assigneeName ?? <span className="text-slate-400">待安排</span>}
                   </td>
                   <td className="px-4 py-2">{r.plannedTestDate ?? "—"}</td>
                   <td className="px-4 py-2 text-xs">

@@ -4,9 +4,9 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { FlowStatus } from './flowStatus';
-import type { FlowHistoryEntry } from './flowHistoryEntry';
-import type { ReceiptResult } from './receiptResult';
+import type { FlowStatus } from "./flowStatus";
+import type { FlowHistoryEntry } from "./flowHistoryEntry";
+import type { ReceiptResult } from "./receiptResult";
 
 export interface SampleReceipt {
   id: string;

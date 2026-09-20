@@ -4,8 +4,8 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { BackendId } from './backendId';
-import type { BackendConfig } from './backendConfig';
+import type { BackendId } from "./backendId";
+import type { BackendConfig } from "./backendConfig";
 
 /**
  * 已废弃 (ADR-0014);运行时注册表:当前激活 + 可切列表

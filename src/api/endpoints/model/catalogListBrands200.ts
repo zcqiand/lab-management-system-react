@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { InspectionBrand } from './inspectionBrand';
+import type { InspectionBrand } from "./inspectionBrand";
 
 export type CatalogListBrands200 = {
   items: InspectionBrand[];

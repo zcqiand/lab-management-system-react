@@ -8,10 +8,10 @@
 /**
  * Bearer token
  */
-export type TokenStorageKeysAccessToken = typeof TokenStorageKeysAccessToken[keyof typeof TokenStorageKeysAccessToken];
-
+export type TokenStorageKeysAccessToken =
+  (typeof TokenStorageKeysAccessToken)[keyof typeof TokenStorageKeysAccessToken];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TokenStorageKeysAccessToken = {
-  labaccessToken: 'lab.accessToken',
+  labaccessToken: "lab.accessToken",
 } as const;

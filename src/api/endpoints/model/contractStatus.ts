@@ -5,11 +5,10 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type ContractStatus = typeof ContractStatus[keyof typeof ContractStatus];
-
+export type ContractStatus = (typeof ContractStatus)[keyof typeof ContractStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ContractStatus = {
-  active: 'active',
-  archived: 'archived',
+  active: "active",
+  archived: "archived",
 } as const;

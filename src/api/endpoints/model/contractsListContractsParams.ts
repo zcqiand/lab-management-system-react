@@ -4,11 +4,11 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { ContractStatus } from './contractStatus';
+import type { ContractStatus } from "./contractStatus";
 
 export type ContractsListContractsParams = {
-page?: number;
-pageSize?: number;
-keyword?: string;
-status?: ContractStatus;
+  page?: number;
+  pageSize?: number;
+  keyword?: string;
+  status?: ContractStatus;
 };

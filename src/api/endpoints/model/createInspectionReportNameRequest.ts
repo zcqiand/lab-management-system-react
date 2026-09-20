@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { ExtFieldDef } from './extFieldDef';
+import type { ExtFieldDef } from "./extFieldDef";
 
 export interface CreateInspectionReportNameRequest {
   code: string;

@@ -6,6 +6,6 @@
  */
 
 export type InspectionDictionaryListStandardParameterLinksParams = {
-inspectionStandardCode?: string;
-inspectionParameterCode?: string;
+  inspectionStandardCode?: string;
+  inspectionParameterCode?: string;
 };

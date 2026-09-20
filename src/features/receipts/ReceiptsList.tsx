@@ -221,7 +221,11 @@ export function ReceiptsList() {
       <ConfirmModal
         open={deleteTarget !== null}
         title="删除接样"
-        message={deleteTarget ? `确认删除接样单 ${deleteTarget.commissionCode}？其下样品与检测记录将一并删除。` : ""}
+        message={
+          deleteTarget
+            ? `确认删除接样单 ${deleteTarget.commissionCode}？其下样品与检测记录将一并删除。`
+            : ""
+        }
         onConfirm={async () => {
           if (!deleteTarget) return;
           const target = deleteTarget;
@@ -239,9 +243,7 @@ export function ReceiptsList() {
 
       <Card className="mt-4">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-base">
-            接样列表（{total || "…"}）
-          </CardTitle>
+          <CardTitle className="text-base">接样列表（{total || "…"}）</CardTitle>
           {loading && <span className="text-xs text-slate-400">加载中…</span>}
         </CardHeader>
         <CardContent className="p-0">
@@ -266,7 +268,11 @@ export function ReceiptsList() {
                 </tr>
               )}
               {items.map((r) => (
-                <tr key={r.id} data-fn="M03.F01.I01" className="border-t hover:bg-slate-50">
+                <tr
+                  key={r.id}
+                  data-fn="M03.F01.I01"
+                  className="border-t hover:bg-slate-50"
+                >
                   <td className="px-4 py-2 font-mono text-xs">
                     <Link
                       to={`/receipts/${r.id}`}
@@ -402,9 +408,7 @@ function FlowStatusBadge({ status }: { status: SampleReceipt["flowStatus"] }) {
         ? "bg-green-100 text-green-700"
         : "bg-slate-200 text-slate-600";
   return (
-    <span className={`inline-block rounded px-2 py-0.5 text-xs ${color}`}>
-      {label}
-    </span>
+    <span className={`inline-block rounded px-2 py-0.5 text-xs ${color}`}>{label}</span>
   );
 }
 
@@ -424,10 +428,26 @@ function ReceiptFormBody({
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto">
-        <Field label="委托书编号 *" value={body.commissionCode} onChange={(v) => patch("commissionCode", v)} />
-        <Field label="委托日期 *" value={body.commissionDate} onChange={(v) => patch("commissionDate", v)} />
-        <Field label="工程名称 *" value={body.projectName} onChange={(v) => patch("projectName", v)} />
-        <Field label="委托单位 *" value={body.clientUnit} onChange={(v) => patch("clientUnit", v)} />
+        <Field
+          label="委托书编号 *"
+          value={body.commissionCode}
+          onChange={(v) => patch("commissionCode", v)}
+        />
+        <Field
+          label="委托日期 *"
+          value={body.commissionDate}
+          onChange={(v) => patch("commissionDate", v)}
+        />
+        <Field
+          label="工程名称 *"
+          value={body.projectName}
+          onChange={(v) => patch("projectName", v)}
+        />
+        <Field
+          label="委托单位 *"
+          value={body.clientUnit}
+          onChange={(v) => patch("clientUnit", v)}
+        />
         <div className="flex flex-col gap-1">
           <Label className="text-xs">检测类别 *</Label>
           <select
@@ -452,7 +472,11 @@ function ReceiptFormBody({
             <option value="委托送样">委托送样</option>
           </select>
         </div>
-        <Field label="报告类别编码 *" value={body.categoryCode} onChange={(v) => patch("categoryCode", v)} />
+        <Field
+          label="报告类别编码 *"
+          value={body.categoryCode}
+          onChange={(v) => patch("categoryCode", v)}
+        />
       </div>
       <DialogFooter className="mt-4">
         <Button onClick={() => void onSubmit(body)}>保存</Button>

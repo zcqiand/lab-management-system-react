@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { InspectionParameter } from './inspectionParameter';
+import type { InspectionParameter } from "./inspectionParameter";
 
 export type InspectionDictionaryListParameters200 = {
   items: InspectionParameter[];

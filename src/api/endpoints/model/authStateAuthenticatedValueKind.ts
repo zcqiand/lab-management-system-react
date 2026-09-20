@@ -5,10 +5,10 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type AuthStateAuthenticatedValueKind = typeof AuthStateAuthenticatedValueKind[keyof typeof AuthStateAuthenticatedValueKind];
-
+export type AuthStateAuthenticatedValueKind =
+  (typeof AuthStateAuthenticatedValueKind)[keyof typeof AuthStateAuthenticatedValueKind];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateAuthenticatedValueKind = {
-  authenticated: 'authenticated',
+  authenticated: "authenticated",
 } as const;

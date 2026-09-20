@@ -4,7 +4,7 @@
  * (title)
  * OpenAPI spec version: 0.0.0
  */
-import type { QualificationLevel } from './qualificationLevel';
+import type { QualificationLevel } from "./qualificationLevel";
 
 export interface ObjectParameterLink {
   inspectionObjectCode: string;

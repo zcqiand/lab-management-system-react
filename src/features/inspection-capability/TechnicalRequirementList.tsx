@@ -199,8 +199,8 @@ export function TechnicalRequirementList() {
       load();
     } catch (err: unknown) {
       const msg =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "保存失败";
+        (err as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message ?? "保存失败";
       setSaveError(msg);
     }
   };
@@ -220,8 +220,8 @@ export function TechnicalRequirementList() {
       load();
     } catch (err: unknown) {
       const msg =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "删除失败";
+        (err as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message ?? "删除失败";
       setDeleteError(msg);
     } finally {
       setDeletingBusy(false);
@@ -237,7 +237,8 @@ export function TechnicalRequirementList() {
         <CardHeader>
           <CardTitle>技术要求维护</CardTitle>
           <CardDescription>
-            M06.F06 技术要求 — 四维度匹配：牌号 / 型号 / 等级 / 规格（brand × model × grade × spec）
+            M06.F06 技术要求 — 四维度匹配：牌号 / 型号 / 等级 / 规格（brand × model ×
+            grade × spec）
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -427,7 +428,9 @@ export function TechnicalRequirementList() {
               <Input
                 id="tr-standard"
                 value={form.judgmentStandardCode}
-                onChange={(e) => setForm({ ...form, judgmentStandardCode: e.target.value })}
+                onChange={(e) =>
+                  setForm({ ...form, judgmentStandardCode: e.target.value })
+                }
                 placeholder="如 GB 175-2023"
                 className="font-mono"
               />
