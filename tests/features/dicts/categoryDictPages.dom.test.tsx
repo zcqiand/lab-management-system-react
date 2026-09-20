@@ -41,19 +41,30 @@ describe("M04.F06-F09 码表维护 4 页", () => {
 
   /** 点左侧树「钢筋（含焊接与机械连接）」节点，等右侧列表行渲染。
    *  B6 加载态：树与列表随门控一起出现，节点查找进 waitFor 轮询（真链路
-   *  下标题/树/行的提交与断言之间有响应乱序窗口，锚不变）。 */
+   *  下标题/树/行的提交与断言之间有响应乱序窗口，锚不变）。
+   *  5.74 收口实证的点击空打竞态：树首现与选中变化 refetch 的 PageLoading
+   *  重门控之间有毫秒级瞬窗，waitFor 在瞬窗里拿到的按钮随树卸载成游离
+   *  节点——fireEvent 打在游离节点上，React 根委托收不到，选中原地不动
+   *  （真浏览器用户点不到瞬窗里的按钮，非组件 bug，测试侧吸收）。修法：
+   *  点击进轮询并验效——每轮看「钢筋」是否已带 active 态（bg-blue-50），
+   *  没带就（重）点，点生效才放行走行断言。 */
   async function selectRebarAndAwaitRows() {
-    const treeBtn = await waitFor(
+    await waitFor(
       () => {
         const btn = [...document.querySelectorAll("aside ul li button")].find((b) =>
           b.textContent?.includes("钢筋"),
         );
         expect(btn).toBeTruthy();
-        return btn;
+        if (!btn?.className.includes("bg-blue-50")) {
+          fireEvent.click(btn as HTMLElement);
+        }
+        const active = [...document.querySelectorAll("aside ul li button")].some(
+          (b) => b.className.includes("bg-blue-50") && b.textContent?.includes("钢筋"),
+        );
+        expect(active).toBe(true);
       },
-      { timeout: 30_000 },
+      { timeout: 60_000 },
     );
-    fireEvent.click(treeBtn as HTMLElement);
     await waitFor(
       () => {
         expect(screen.getAllByRole("button", { name: "删除" }).length).toBeGreaterThan(0);
