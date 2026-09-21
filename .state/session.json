@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "批次 2 功能树变更全链路收口——门已绿，全部改动未提交",
+  "current_task": "5.73② 终审 B1 修复：eslint --fix 占位空行 prettier 归位（a15561c）；批尾 unit gate r3 EXIT=0（r2 真链路 500=并发假红）",
   "done": [
     "docs/functions/function-tree.md 批次 1+2 落盘（编号错位收敛 + act-merge）",
     "悬空锚点迁移 18 处（CategoryDictList @entry M04.F06/F07/F08.I03→I04、3 个列表页 deleteDataFn→I04、TechnicalRequirementList ×3→M06.F06.I05、测试 7 处、design/flow map 各 4 行）；M04.F09.I03 本树仍在线未动",
@@ -23,5 +23,6 @@
     "规划行不得标已上线——L5 会要求 UI 入口"
   ],
   "active_branch": "master",
-  "last_session_at": "2026-09-18"
+  "last_session_at": "2026-09-21",
+  "last_session_summary": "终审 M1 勘误：directive 实移除 32 条（账面 35 系警告计数口径漂移）"
 }
