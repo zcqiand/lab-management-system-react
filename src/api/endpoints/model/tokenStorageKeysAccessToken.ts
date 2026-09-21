@@ -11,7 +11,6 @@
 export type TokenStorageKeysAccessToken =
   (typeof TokenStorageKeysAccessToken)[keyof typeof TokenStorageKeysAccessToken];
 
- 
 export const TokenStorageKeysAccessToken = {
   labaccessToken: "lab.accessToken",
 } as const;

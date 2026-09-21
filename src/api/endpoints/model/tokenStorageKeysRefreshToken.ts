@@ -11,7 +11,6 @@
 export type TokenStorageKeysRefreshToken =
   (typeof TokenStorageKeysRefreshToken)[keyof typeof TokenStorageKeysRefreshToken];
 
- 
 export const TokenStorageKeysRefreshToken = {
   labrefreshToken: "lab.refreshToken",
 } as const;

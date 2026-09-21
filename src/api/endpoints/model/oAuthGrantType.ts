@@ -7,7 +7,6 @@
 
 export type OAuthGrantType = (typeof OAuthGrantType)[keyof typeof OAuthGrantType];
 
- 
 export const OAuthGrantType = {
   authorization_code: "authorization_code",
 } as const;

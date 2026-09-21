@@ -8,7 +8,6 @@
 export type OAuthResponseType =
   (typeof OAuthResponseType)[keyof typeof OAuthResponseType];
 
- 
 export const OAuthResponseType = {
   code: "code",
 } as const;

@@ -8,7 +8,6 @@
 export type InspectionStandardStatus =
   (typeof InspectionStandardStatus)[keyof typeof InspectionStandardStatus];
 
- 
 export const InspectionStandardStatus = {
   active: "active",
   superseded: "superseded",

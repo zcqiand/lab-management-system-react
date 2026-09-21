@@ -11,7 +11,6 @@
 export type TokenStorageKeysPermissionsCache =
   (typeof TokenStorageKeysPermissionsCache)[keyof typeof TokenStorageKeysPermissionsCache];
 
- 
 export const TokenStorageKeysPermissionsCache = {
   labpermissions: "lab.permissions",
 } as const;

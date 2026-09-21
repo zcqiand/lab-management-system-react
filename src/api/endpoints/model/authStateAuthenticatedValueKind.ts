@@ -8,7 +8,6 @@
 export type AuthStateAuthenticatedValueKind =
   (typeof AuthStateAuthenticatedValueKind)[keyof typeof AuthStateAuthenticatedValueKind];
 
- 
 export const AuthStateAuthenticatedValueKind = {
   authenticated: "authenticated",
 } as const;

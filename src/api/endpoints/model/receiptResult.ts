@@ -7,7 +7,6 @@
 
 export type ReceiptResult = (typeof ReceiptResult)[keyof typeof ReceiptResult];
 
- 
 export const ReceiptResult = {
   pass: "pass",
   fail: "fail",

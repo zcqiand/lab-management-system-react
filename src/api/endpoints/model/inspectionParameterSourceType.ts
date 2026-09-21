@@ -8,7 +8,6 @@
 export type InspectionParameterSourceType =
   (typeof InspectionParameterSourceType)[keyof typeof InspectionParameterSourceType];
 
- 
 export const InspectionParameterSourceType = {
   official: "official",
   custom: "custom",

@@ -7,7 +7,6 @@
 
 export type FlowAction = (typeof FlowAction)[keyof typeof FlowAction];
 
- 
 export const FlowAction = {
   submit: "submit",
   return: "return",

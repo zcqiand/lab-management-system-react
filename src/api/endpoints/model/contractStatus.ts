@@ -7,7 +7,6 @@
 
 export type ContractStatus = (typeof ContractStatus)[keyof typeof ContractStatus];
 
- 
 export const ContractStatus = {
   active: "active",
   archived: "archived",

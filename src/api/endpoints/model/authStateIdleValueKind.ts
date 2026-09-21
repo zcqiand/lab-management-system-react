@@ -8,7 +8,6 @@
 export type AuthStateIdleValueKind =
   (typeof AuthStateIdleValueKind)[keyof typeof AuthStateIdleValueKind];
 
- 
 export const AuthStateIdleValueKind = {
   idle: "idle",
 } as const;

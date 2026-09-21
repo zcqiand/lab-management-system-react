@@ -8,7 +8,6 @@
 export type RequirementValueType =
   (typeof RequirementValueType)[keyof typeof RequirementValueType];
 
- 
 export const RequirementValueType = {
   numeric: "numeric",
   string: "string",

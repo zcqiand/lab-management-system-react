@@ -10,7 +10,6 @@
  */
 export type BackendId = (typeof BackendId)[keyof typeof BackendId];
 
- 
 export const BackendId = {
   nextjs: "nextjs",
   springboot: "springboot",

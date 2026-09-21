@@ -11,7 +11,6 @@
 export type TokenStorageKeysActiveTenantId =
   (typeof TokenStorageKeysActiveTenantId)[keyof typeof TokenStorageKeysActiveTenantId];
 
- 
 export const TokenStorageKeysActiveTenantId = {
   labactiveTenantId: "lab.activeTenantId",
 } as const;

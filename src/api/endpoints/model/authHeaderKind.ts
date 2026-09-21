@@ -10,7 +10,6 @@
  */
 export type AuthHeaderKind = (typeof AuthHeaderKind)[keyof typeof AuthHeaderKind];
 
- 
 export const AuthHeaderKind = {
   Authorization: "Authorization",
   "X-Auth-Token": "X-Auth-Token",

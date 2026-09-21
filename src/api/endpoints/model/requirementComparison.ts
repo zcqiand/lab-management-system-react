@@ -8,7 +8,6 @@
 export type RequirementComparison =
   (typeof RequirementComparison)[keyof typeof RequirementComparison];
 
- 
 export const RequirementComparison = {
   "≥": "≥",
   "≤": "≤",

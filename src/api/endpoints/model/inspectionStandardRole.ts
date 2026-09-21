@@ -8,7 +8,6 @@
 export type InspectionStandardRole =
   (typeof InspectionStandardRole)[keyof typeof InspectionStandardRole];
 
- 
 export const InspectionStandardRole = {
   TESTING: "TESTING",
   JUDGMENT: "JUDGMENT",

@@ -8,7 +8,6 @@
 export type RequirementVerificationStatus =
   (typeof RequirementVerificationStatus)[keyof typeof RequirementVerificationStatus];
 
- 
 export const RequirementVerificationStatus = {
   draft: "draft",
   reviewed: "reviewed",

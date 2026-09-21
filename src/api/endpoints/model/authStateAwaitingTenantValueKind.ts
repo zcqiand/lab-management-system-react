@@ -8,7 +8,6 @@
 export type AuthStateAwaitingTenantValueKind =
   (typeof AuthStateAwaitingTenantValueKind)[keyof typeof AuthStateAwaitingTenantValueKind];
 
- 
 export const AuthStateAwaitingTenantValueKind = {
   awaiting_tenant: "awaiting_tenant",
 } as const;

@@ -8,7 +8,6 @@
 export type AuthStateAnonymousKind =
   (typeof AuthStateAnonymousKind)[keyof typeof AuthStateAnonymousKind];
 
- 
 export const AuthStateAnonymousKind = {
   anonymous: "anonymous",
 } as const;

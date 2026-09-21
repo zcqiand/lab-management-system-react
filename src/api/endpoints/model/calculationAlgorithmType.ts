@@ -8,7 +8,6 @@
 export type CalculationAlgorithmType =
   (typeof CalculationAlgorithmType)[keyof typeof CalculationAlgorithmType];
 
- 
 export const CalculationAlgorithmType = {
   simple_avg: "simple_avg",
   compressive_strength: "compressive_strength",

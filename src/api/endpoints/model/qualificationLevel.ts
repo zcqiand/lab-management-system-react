@@ -8,7 +8,6 @@
 export type QualificationLevel =
   (typeof QualificationLevel)[keyof typeof QualificationLevel];
 
- 
 export const QualificationLevel = {
   QUALIFIED: "QUALIFIED",
   RESTRICTED: "RESTRICTED",

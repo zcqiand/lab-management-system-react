@@ -8,7 +8,6 @@
 export type ExtFieldDefSource =
   (typeof ExtFieldDefSource)[keyof typeof ExtFieldDefSource];
 
- 
 export const ExtFieldDefSource = {
   sample: "sample",
   receipt: "receipt",

@@ -8,7 +8,6 @@
 export type RequirementJudgmentMode =
   (typeof RequirementJudgmentMode)[keyof typeof RequirementJudgmentMode];
 
- 
 export const RequirementJudgmentMode = {
   automatic: "automatic",
   manual: "manual",

@@ -7,7 +7,6 @@
 
 export type ExtFieldDefType = (typeof ExtFieldDefType)[keyof typeof ExtFieldDefType];
 
- 
 export const ExtFieldDefType = {
   text: "text",
   number: "number",
