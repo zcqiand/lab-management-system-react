@@ -8,7 +8,7 @@
 export type ExtFieldDefSource =
   (typeof ExtFieldDefSource)[keyof typeof ExtFieldDefSource];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const ExtFieldDefSource = {
   sample: "sample",
   receipt: "receipt",

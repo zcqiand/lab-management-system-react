@@ -8,7 +8,7 @@
 export type AuthStateIdleKind =
   (typeof AuthStateIdleKind)[keyof typeof AuthStateIdleKind];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const AuthStateIdleKind = {
   idle: "idle",
 } as const;

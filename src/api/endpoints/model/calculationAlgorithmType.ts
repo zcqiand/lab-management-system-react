@@ -8,7 +8,7 @@
 export type CalculationAlgorithmType =
   (typeof CalculationAlgorithmType)[keyof typeof CalculationAlgorithmType];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const CalculationAlgorithmType = {
   simple_avg: "simple_avg",
   compressive_strength: "compressive_strength",

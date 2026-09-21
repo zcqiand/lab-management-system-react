@@ -11,7 +11,7 @@
 export type TokenStorageKeysAccessToken =
   (typeof TokenStorageKeysAccessToken)[keyof typeof TokenStorageKeysAccessToken];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const TokenStorageKeysAccessToken = {
   labaccessToken: "lab.accessToken",
 } as const;

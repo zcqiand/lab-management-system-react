@@ -8,7 +8,7 @@
 export type AuthStateAuthenticatedKind =
   (typeof AuthStateAuthenticatedKind)[keyof typeof AuthStateAuthenticatedKind];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const AuthStateAuthenticatedKind = {
   authenticated: "authenticated",
 } as const;

@@ -7,7 +7,7 @@
 
 export type OAuthGrantType = (typeof OAuthGrantType)[keyof typeof OAuthGrantType];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const OAuthGrantType = {
   authorization_code: "authorization_code",
 } as const;

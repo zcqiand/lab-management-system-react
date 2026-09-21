@@ -8,7 +8,7 @@
 export type InspectionStandardRole =
   (typeof InspectionStandardRole)[keyof typeof InspectionStandardRole];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const InspectionStandardRole = {
   TESTING: "TESTING",
   JUDGMENT: "JUDGMENT",

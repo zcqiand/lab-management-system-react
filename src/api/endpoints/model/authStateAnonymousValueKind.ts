@@ -8,7 +8,7 @@
 export type AuthStateAnonymousValueKind =
   (typeof AuthStateAnonymousValueKind)[keyof typeof AuthStateAnonymousValueKind];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const AuthStateAnonymousValueKind = {
   anonymous: "anonymous",
 } as const;

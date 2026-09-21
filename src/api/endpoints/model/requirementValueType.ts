@@ -8,7 +8,7 @@
 export type RequirementValueType =
   (typeof RequirementValueType)[keyof typeof RequirementValueType];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const RequirementValueType = {
   numeric: "numeric",
   string: "string",

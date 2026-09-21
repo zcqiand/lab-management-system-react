@@ -8,7 +8,7 @@
 export type QualificationLevel =
   (typeof QualificationLevel)[keyof typeof QualificationLevel];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const QualificationLevel = {
   QUALIFIED: "QUALIFIED",
   RESTRICTED: "RESTRICTED",

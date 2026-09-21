@@ -8,7 +8,7 @@
 export type RequirementJudgmentMode =
   (typeof RequirementJudgmentMode)[keyof typeof RequirementJudgmentMode];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const RequirementJudgmentMode = {
   automatic: "automatic",
   manual: "manual",

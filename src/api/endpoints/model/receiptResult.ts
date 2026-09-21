@@ -7,7 +7,7 @@
 
 export type ReceiptResult = (typeof ReceiptResult)[keyof typeof ReceiptResult];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const ReceiptResult = {
   pass: "pass",
   fail: "fail",

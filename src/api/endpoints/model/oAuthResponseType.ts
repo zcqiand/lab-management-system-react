@@ -8,7 +8,7 @@
 export type OAuthResponseType =
   (typeof OAuthResponseType)[keyof typeof OAuthResponseType];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const OAuthResponseType = {
   code: "code",
 } as const;

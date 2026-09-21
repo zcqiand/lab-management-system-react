@@ -7,7 +7,7 @@
 
 export type FlowStatus = (typeof FlowStatus)[keyof typeof FlowStatus];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const FlowStatus = {
   receiving: "receiving",
   task_assignment: "task_assignment",
