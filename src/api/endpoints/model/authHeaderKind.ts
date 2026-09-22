@@ -10,6 +10,7 @@
  */
 export type AuthHeaderKind = (typeof AuthHeaderKind)[keyof typeof AuthHeaderKind];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthHeaderKind = {
   Authorization: "Authorization",
   "X-Auth-Token": "X-Auth-Token",

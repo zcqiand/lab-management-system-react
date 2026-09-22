@@ -8,6 +8,7 @@
 export type InspectionParameterSourceType =
   (typeof InspectionParameterSourceType)[keyof typeof InspectionParameterSourceType];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const InspectionParameterSourceType = {
   official: "official",
   custom: "custom",

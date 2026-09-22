@@ -7,6 +7,7 @@
 
 export type ContractStatus = (typeof ContractStatus)[keyof typeof ContractStatus];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ContractStatus = {
   active: "active",
   archived: "archived",

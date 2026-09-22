@@ -11,6 +11,7 @@
 export type TokenStorageKeysPermissionsCache =
   (typeof TokenStorageKeysPermissionsCache)[keyof typeof TokenStorageKeysPermissionsCache];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TokenStorageKeysPermissionsCache = {
   labpermissions: "lab.permissions",
 } as const;

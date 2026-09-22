@@ -10,6 +10,7 @@
  */
 export type BackendId = (typeof BackendId)[keyof typeof BackendId];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const BackendId = {
   nextjs: "nextjs",
   springboot: "springboot",

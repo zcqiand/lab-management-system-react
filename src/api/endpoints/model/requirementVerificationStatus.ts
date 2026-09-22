@@ -8,6 +8,7 @@
 export type RequirementVerificationStatus =
   (typeof RequirementVerificationStatus)[keyof typeof RequirementVerificationStatus];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RequirementVerificationStatus = {
   draft: "draft",
   reviewed: "reviewed",

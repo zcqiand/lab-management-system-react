@@ -7,6 +7,7 @@
 
 export type ExtFieldDefType = (typeof ExtFieldDefType)[keyof typeof ExtFieldDefType];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ExtFieldDefType = {
   text: "text",
   number: "number",

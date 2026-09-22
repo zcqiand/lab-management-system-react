@@ -8,6 +8,7 @@
 export type InspectionStandardStatus =
   (typeof InspectionStandardStatus)[keyof typeof InspectionStandardStatus];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const InspectionStandardStatus = {
   active: "active",
   superseded: "superseded",

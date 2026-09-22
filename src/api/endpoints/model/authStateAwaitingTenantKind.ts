@@ -8,6 +8,7 @@
 export type AuthStateAwaitingTenantKind =
   (typeof AuthStateAwaitingTenantKind)[keyof typeof AuthStateAwaitingTenantKind];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthStateAwaitingTenantKind = {
   awaiting_tenant: "awaiting_tenant",
 } as const;

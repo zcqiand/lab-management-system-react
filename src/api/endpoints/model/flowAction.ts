@@ -7,6 +7,7 @@
 
 export type FlowAction = (typeof FlowAction)[keyof typeof FlowAction];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const FlowAction = {
   submit: "submit",
   return: "return",

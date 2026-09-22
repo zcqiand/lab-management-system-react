@@ -11,6 +11,7 @@
 export type TokenStorageKeysRefreshToken =
   (typeof TokenStorageKeysRefreshToken)[keyof typeof TokenStorageKeysRefreshToken];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TokenStorageKeysRefreshToken = {
   labrefreshToken: "lab.refreshToken",
 } as const;

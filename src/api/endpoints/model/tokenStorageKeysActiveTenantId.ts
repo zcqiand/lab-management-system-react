@@ -11,6 +11,7 @@
 export type TokenStorageKeysActiveTenantId =
   (typeof TokenStorageKeysActiveTenantId)[keyof typeof TokenStorageKeysActiveTenantId];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TokenStorageKeysActiveTenantId = {
   labactiveTenantId: "lab.activeTenantId",
 } as const;

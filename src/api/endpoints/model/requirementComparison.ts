@@ -8,6 +8,7 @@
 export type RequirementComparison =
   (typeof RequirementComparison)[keyof typeof RequirementComparison];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RequirementComparison = {
   "≥": "≥",
   "≤": "≤",
