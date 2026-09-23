@@ -11,7 +11,7 @@
 //     onChange 契约不依赖 React 生命周期，测试里可以脱离 <AuthProvider> 直接用。
 //   - FSM 转移（decision-log open_questions 留白，这里落成可测的显式表）：
 //       idle        --hydrate()-->            anonymous | authenticated
-//       anonymous   --login() 成功-->          awaiting_tenant（多租户）| authenticated（单租户）
+//       anonymous   --login() 成功-->          authenticated（单租户/多租户无记忆自动选第一个，2026-09-23）| awaiting_tenant（空租户列表）
 //       awaiting_tenant --switchTenant()-->    authenticated
 //       authenticated --switchTenant()-->      awaiting_tenant（换租户走契约同路径）
 //       *           --logout()-->              anonymous
@@ -147,14 +147,19 @@ function isErrorResponse(v: unknown): v is ErrorResponse {
   return typeof v === "object" && v !== null && "code" in v && "message" in v;
 }
 
-/** login 成功后的共同落位：单租户直进 authenticated，多租户进 awaiting_tenant */
+/**
+ * login 成功后的共同落位：remembered ?? single，多租户无记忆时自动选第一个
+ *（2026-09-23 用户裁定，修 SSO 回调冻结：此前落 awaiting_tenant 死等已移除的
+ * 选租户页，全新浏览器多租户登录必卡死；现与 hydrateAuth 的 currentTenantId
+ * 兜底对称）。awaiting_tenant 仅剩空租户列表可达；switchTenant 换租户路径保留。
+ */
 async function settleLogin(resp: LoginResponse): Promise<void> {
   persistTokens(resp);
   const tenantId = readKey(TOKEN_STORAGE_KEYS.activeTenantId);
   const tenants: MyTenant[] = resp.tenants ?? [];
   const remembered = tenants.find((t) => t.tenantId === tenantId);
   const single = tenants.length === 1 ? tenants[0] : undefined;
-  const target = remembered ?? single;
+  const target = remembered ?? single ?? tenants[0];
   if (target) {
     writeKey(TOKEN_STORAGE_KEYS.activeTenantId, target.tenantId);
     const permissions = await fetchPermissions(resp.token).catch(() => [] as string[]);

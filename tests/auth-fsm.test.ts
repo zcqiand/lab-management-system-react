@@ -81,6 +81,7 @@ const LOGIN_2T = {
   user: USER,
   tenants: [TENANT_A, TENANT_B],
 };
+const LOGIN_0T = { token: "tok-0", refreshToken: "rt-0", user: USER, tenants: [] };
 
 /** 状态回到 idle 后以无 token hydrate → anonymous（各 case 统一起点） */
 async function toAnonymous(): Promise<void> {
@@ -170,16 +171,23 @@ describe("AuthContext FSM", () => {
     expect((await state()).kind).toBe("anonymous");
   });
 
-  fnTest(["M00.F02"], "login 多租户 → awaiting_tenant 携带 tenants 候选", async () => {
-    await toAnonymous();
-    enqueue(ok(LOGIN_2T));
-    await auth.login({ username: "admin", password: "x" });
-    const s = await state();
-    expect(s.kind).toBe("awaiting_tenant");
-    if (s.kind === "awaiting_tenant") {
-      expect(s.value.tenants.map((t) => t.tenantId)).toEqual(["t-a", "t-b"]);
-    }
-  });
+  fnTest(
+    ["M00.F02"],
+    "login 多租户无记忆 → 自动选第一个租户直进 authenticated",
+    async () => {
+      // 2026-09-23 用户裁定修 SSO 回调冻结：多租户无记忆不再落 awaiting_tenant
+      //（此前 awaiting_tenant 死等已移除的选租户页，全新浏览器登录必卡死）。
+      await toAnonymous();
+      enqueue(ok(LOGIN_2T), ok({ permissions: [] }));
+      await auth.login({ username: "admin", password: "x" });
+      const s = await state();
+      expect(s.kind).toBe("authenticated");
+      if (s.kind === "authenticated") {
+        expect(s.value.tenant.tenantId).toBe("t-a");
+      }
+      expect(localStorage.getItem(TOKEN_STORAGE_KEYS.activeTenantId)).toBe("t-a");
+    },
+  );
 
   fnTest(["M00.F02"], "switchTenant 在 anonymous 态调用 → WRONG_STATE", async () => {
     await toAnonymous();
@@ -193,8 +201,10 @@ describe("AuthContext FSM", () => {
     "awaiting_tenant --switchTenant--> authenticated + activeTenantId 记忆",
     async () => {
       await toAnonymous();
-      enqueue(ok(LOGIN_2T), ok(LOGIN_1T), ok({ permissions: [] }));
+      // 空租户列表是 awaiting_tenant 仅存入口（多租户已改为自动选第一个）
+      enqueue(ok(LOGIN_0T), ok(LOGIN_1T), ok({ permissions: [] }));
       await auth.login({ username: "admin", password: "x" }); // → awaiting_tenant
+      expect((await state()).kind).toBe("awaiting_tenant");
       const resp = await auth.switchTenant({ tenantId: "t-a" });
       expect(isErrorResponse(resp)).toBe(false);
       expect((await state()).kind).toBe("authenticated");
