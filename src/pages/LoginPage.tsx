@@ -17,6 +17,7 @@ import { FlaskConical } from "lucide-react";
 import { AxiosError } from "axios";
 import { useAuth } from "@/state/auth-context";
 import { getApiBaseUrl, getApiMode } from "@/api/backend-config";
+import { env } from "@/lib/env";
 import { authSsoAuthorize, authSsoCallback } from "@/api/endpoints/auth/auth";
 import { sanitizeRedirect } from "@/lib/sanitize-redirect";
 import { clearSsoBroken } from "@/components/app/bad-path-redirect";
@@ -239,7 +240,7 @@ export function LoginPage() {
           后端 换 token
         </p>
         <p className="text-muted-foreground/70 text-xs">
-          demo 后端：{apiMode} · saas 端口：3000
+          demo 后端：{apiMode} · saas 身份平台：{env.saasBaseUrl}
         </p>
       </div>
     </div>
