@@ -77,6 +77,13 @@ jobs:
       - name: Migrate DB
         run: node scripts/migrate-db.mjs
         working-directory: ../lab-management-system-shared
+        # drizzle.config.ts 强制读 PG_* 五件套(即便 DATABASE_URL 已设)—— 显式注入
+        env:
+          PG_HOST: localhost
+          PG_PORT: "5432"
+          PG_USER: postgres
+          PG_PASSWORD: postgres
+          PG_DATABASE: lab_p2_test
       - name: Seed DB
         run: node scripts/seed-db.mjs
         working-directory: ../lab-management-system-shared
