@@ -40,6 +40,18 @@ jobs:
       # 换 ${{ secrets.LAB_JWT_SECRET }} 即可（缺配置会 fail-fast 而非静默兜底）。
       LAB_JWT_SECRET: ci-lab-jwt-secret-phase2-0123456789abcdef
       LAB_JWT_ISSUER: lab-management-system
+      # ADR-0019/CLAUDE.md §2：lab-nextjs src/lib/auth/factory.ts:48 readLabConfig
+      # 走 requireKey 缺即 throw（commit 04228e1 2026-09-XX 加 LAB_AUTH_DEV_PASSWORD +
+      # JWT_REFRESH_TTL_SECONDS 必填 key）。CI job env 缺这些 nextjs 进程收到的
+      # env 与 .env.local 不全时,任何 lazy import 命中 requireKey 即崩。
+      # 单后端独红 / 端口对照 saas-react 同步镜像:saas-reacct L4 test 9/10/11
+      # 因 JWT_TTL_SECONDS 缺失假红,L4 test step exit 1 —— lab-react 同根因。
+      # 镜像 saas-reacct 的根因 + 修复:
+      # JWT_TTL_SECONDS / JWT_REFRESH_TTL_SECONDS / LAB_AUTH_DEV_PASSWORD
+      # 三 key 本就是家族契约值(env.production / .env.test 都收齐),CI 同步即可。
+      LAB_JWT_TTL_SECONDS: "3600"
+      LAB_JWT_REFRESH_TTL_SECONDS: "604800"
+      LAB_AUTH_DEV_PASSWORD: "dev123456"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
