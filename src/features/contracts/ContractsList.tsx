@@ -269,9 +269,7 @@ function ContractsHeader({ onNew }: { onNew: () => void }) {
     <div className="mb-4 flex items-center justify-between">
       <div>
         <h1 className="text-2xl font-semibold">合同管理</h1>
-        <p className="text-sm text-slate-500">
-          M02.F01 合同 CRUD 与工程信息维护（数据来自 lab-msw fixtures）
-        </p>
+        <p className="text-sm text-slate-500">M02.F01 合同 CRUD 与工程信息维护</p>
       </div>
       {/* @entry M02.F01.I02 新建合同按钮 */}
       <Button onClick={onNew} data-fn="M02.F01.I02">

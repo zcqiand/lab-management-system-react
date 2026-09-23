@@ -1,12 +1,14 @@
-// Smoke test: backend-config env-driven 单 URL（ADR-0014 + ADR-0012 v0.3.0）。验证：
+// Smoke test: backend-config（ADR-0012 v0.3.0 + 2026-09-23 用户裁定收窄 ADR-0014）。
+// 验证：
 //   - getApiBaseUrl / getApiMode 行为正确
-//   - 单 URL 模式不再有 4-backend 切换
-//   - isMswEnabled / VITE_ENABLE_MSW 已删除（msw-http 是默认；dev 走独立 HTTP server）
+//   - mode 命中注册表（三真后端）→ URL 取注册表：mode 是切换把手，registry 是
+//     该后端的 URL SSOT；原「baseUrl 直通 env」语义随 ADR-0014 收窄一并退役
+//   - 注册表外 mode 原样透传 env（部署期权威缺省保留）
 //
 // 不启 React、不触 axios；只看 backend-config 模块导出。
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
-describe("backend-config (env-driven 单 URL — ADR-0014)", () => {
+describe("backend-config (收窄 ADR-0014 — 注册表 + env 缺省)", () => {
   beforeEach(() => {
     // 每个 case 前清 stub env
     for (const k of Object.keys(import.meta.env)) {
@@ -34,31 +36,33 @@ describe("backend-config (env-driven 单 URL — ADR-0014)", () => {
     expect(getApiMode()).toBe("nextjs");
   });
 
-  it("VITE_API_BASE_URL=http://localhost:3001 → getApiBaseUrl 切到 nextjs 仓", async () => {
+  it("mode=nextjs 命中注册表 → URL 取注册表 :5201（env.baseUrl 不再直通）", async () => {
     stubEnvs({
       VITE_API_BASE_URL: "http://localhost:3001",
       VITE_API_MODE: "nextjs",
     });
     const { getApiBaseUrl, getApiMode } = await import("@/api/backend-config");
-    expect(getApiBaseUrl()).toBe("http://localhost:3001");
+    expect(getApiBaseUrl()).toBe("http://localhost:5201");
     expect(getApiMode()).toBe("nextjs");
   });
 
-  it("VITE_API_BASE_URL=http://localhost:8080 → 切到 springboot 真后端", async () => {
+  it("mode=springboot 命中注册表 → URL 取注册表 :5205", async () => {
     stubEnvs({
       VITE_API_BASE_URL: "http://localhost:8080",
       VITE_API_MODE: "springboot",
     });
     const { getApiBaseUrl, getApiMode } = await import("@/api/backend-config");
-    expect(getApiBaseUrl()).toBe("http://localhost:8080");
+    expect(getApiBaseUrl()).toBe("http://localhost:5205");
     expect(getApiMode()).toBe("springboot");
   });
 
-  it("VITE_API_BASE_URL=空串 → 显式空，URL 走相对（@mswjs/node setupServer 拦截）", async () => {
-    // .env.test 模式：显式设空串 → readEnv 不走 fallback → 返回 ""。
-    // fetch 走相对 URL → setupServer handler（/api/...）匹配。
-    stubEnvs({ VITE_API_BASE_URL: "" });
-    const { getApiBaseUrl } = await import("@/api/backend-config");
-    expect(getApiBaseUrl()).toBe("");
+  it("注册表外 mode 原样透传 env（部署期权威缺省保留）", async () => {
+    stubEnvs({
+      VITE_API_BASE_URL: "http://example.internal:9000",
+      VITE_API_MODE: "custom-proxy",
+    });
+    const { getApiBaseUrl, getApiMode } = await import("@/api/backend-config");
+    expect(getApiBaseUrl()).toBe("http://example.internal:9000");
+    expect(getApiMode()).toBe("custom-proxy");
   });
 });

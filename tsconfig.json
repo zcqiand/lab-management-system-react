@@ -15,6 +15,7 @@
     "noEmit": true,
     "types": ["vitest/globals", "node"],
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "paths": { "@/*": ["./src/*"] }
   },
   "include": ["src", "tests", "vite.config.ts", "vitest.config.ts"],

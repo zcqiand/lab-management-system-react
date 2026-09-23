@@ -5,12 +5,13 @@
 // 数据链（useBackendMenus 拉后端 /api/auth/menus + 失败回退 MENU_TREE）
 // 由 backend-menus.dom.test.tsx 覆盖。jsdom + RTL，无需 msw。
 
-import { describe, beforeEach, expect } from "vitest";
+import { describe, it, beforeEach, expect } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { fnTest } from "../fn";
 import { SidebarNav } from "@/components/app/sidebar-nav";
 import { MENU_TREE } from "@/components/app/menus";
+import { APP_VERSION } from "@/lib/app-meta";
 
 beforeEach(() => {
   cleanup();
@@ -50,5 +51,20 @@ describe("M01.F04.I01 动态菜单", () => {
     expect(item.getAttribute("data-fn")).toBe("m-m-dashboard");
     fireEvent.click(item);
     // MemoryRouter 内 navigate("/") 不报错即通过（导航行为由 router 测）
+  });
+});
+
+describe("品牌头版本行（2026-09-23 用户裁定：appCode 行换版本号）", () => {
+  it("品牌头第二行显示 v<package.json version>，带 sidebar-app-version 锚点", () => {
+    renderSidebar();
+    const versionLine = screen.getByTestId("sidebar-app-version");
+    expect(versionLine.textContent).toBe(`v${APP_VERSION}`);
+  });
+
+  it("品牌头不再渲染 appCode 字面（appCode 仅作为 localStorage 持久化 key 参与区分）", () => {
+    renderSidebar();
+    expect(screen.getByTestId("sidebar-nav").textContent).not.toContain(
+      "appCode = lab-management",
+    );
   });
 });

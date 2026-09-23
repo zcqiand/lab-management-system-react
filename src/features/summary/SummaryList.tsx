@@ -89,7 +89,7 @@ export function SummaryList() {
         <CardHeader>
           <CardTitle>报告汇总</CardTitle>
           <CardDescription>
-            M05.F01 报告汇总表（按报告类别 categoryCode 过滤）——数据来自 lab-msw fixtures
+            M05.F01 报告汇总表（按报告类别 categoryCode 过滤）
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">

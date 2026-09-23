@@ -1,0 +1,27 @@
+
+> gen:shared
+> tsx scripts/gen-shared.ts
+
+[gen-shared] step 1/2 — shared: emit OpenAPI.yaml...
+
+> @lab/management-system-shared@0.1.0 emit:openapi
+> tsx scripts/codegen/emit-openapi.ts
+
+[emit-openapi] compiling TypeSpec → OpenAPI 3.1...
+TypeSpec compiler v1.15.0
+
+- Compiling...
+[32m✔[39m Compiling
+- Running @typespec/openapi3...
+[32m✔[39m @typespec/openapi3 [32m155ms[39m [2mgenerated/openapi/[22m
+
+Compilation completed successfully.
+
+[emit-openapi] OK
+[emit-fuzz] injected x-fuzz on 1 paths, 0 missing
+[gen-shared] step 2/2 — react: orval → src/api/endpoints/...
+🍻 orval v7.21.0 - A swagger client generator for typescript
+lab: Cleaning output folder
+🎉 lab - Your OpenAPI spec has been converted into ready to use orval!
+[gen-shared] OK
+[gen-shared]    ADR-0026 marker sha 未变，零写入（5.77 同 sha 不刷时间戳）: D:\qiand-life\1-projects\xr-code-suite\output\lab-management-system-react\.state\last-gen-shared.json

@@ -347,9 +347,7 @@ function ReceiptsHeader({ onNew }: { onNew: () => void }) {
       <div>
         {/* @entry M03.F01.I01 接样管理列表页 */}
         <h1 className="text-2xl font-semibold">接样管理</h1>
-        <p className="text-sm text-slate-500">
-          M03.F01 接样单 CRUD 与提交（数据来自 lab-msw fixtures）
-        </p>
+        <p className="text-sm text-slate-500">M03.F01 接样单 CRUD 与提交</p>
       </div>
       {/* @entry M03.F01.I02 新建接样按钮 */}
       <Button onClick={onNew} data-fn="M03.F01.I02">

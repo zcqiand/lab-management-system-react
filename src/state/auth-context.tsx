@@ -106,6 +106,27 @@ function writeKey(key: string, value: string | null): void {
   }
 }
 
+/**
+ * 清本机会话（BackendSwitcher 切后端用）：跨后端 token 不通用，带着旧后端的
+ * token 打新后端必 401（lab 跨后端陈旧 token 401 教训）。清完由调用方整页刷新。
+ */
+export function clearPersistedSession(): void {
+  for (const key of Object.values(TOKEN_STORAGE_KEYS)) {
+    writeKey(key, null);
+  }
+  sessionTenants = [];
+}
+
+// -- 会话租户清单（TenantSwitcher 候选数据源）----------------------------------
+// authenticated 态的 value 只带当前 tenant；候选清单（全部 memberships）模块级
+// 同步于 settleLogin / hydrateAuth，镜像 vue state/auth.ts sessionTenantsList。
+let sessionTenants: MyTenant[] = [];
+
+/** 当前会话的租户候选清单（仅认证后有值；非响应式，切换组件读一次） */
+export function sessionTenantsList(): MyTenant[] {
+  return sessionTenants;
+}
+
 function persistTokens(resp: LoginResponse): void {
   writeKey(TOKEN_STORAGE_KEYS.accessToken, resp.token);
   if (resp.refreshToken) writeKey(TOKEN_STORAGE_KEYS.refreshToken, resp.refreshToken);
@@ -157,6 +178,7 @@ async function settleLogin(resp: LoginResponse): Promise<void> {
   persistTokens(resp);
   const tenantId = readKey(TOKEN_STORAGE_KEYS.activeTenantId);
   const tenants: MyTenant[] = resp.tenants ?? [];
+  sessionTenants = tenants;
   const remembered = tenants.find((t) => t.tenantId === tenantId);
   const single = tenants.length === 1 ? tenants[0] : undefined;
   const target = remembered ?? single ?? tenants[0];
@@ -294,6 +316,7 @@ export async function hydrateAuth(): Promise<void> {
       headers: { Authorization: `Bearer ${token}` },
     });
     const session = resp.data;
+    sessionTenants = session.tenants ?? [];
     const tenantId =
       readKey(TOKEN_STORAGE_KEYS.activeTenantId) ?? session.currentTenantId ?? undefined;
     const tenant = session.tenants.find((t) => t.tenantId === tenantId);
@@ -398,6 +421,16 @@ export const __testActions = {
 
 export function __testState(): AuthState {
   return store.state;
+}
+
+/** 测试专用：直写任意 FSM 态（dom 测试驱动 authenticated 态，镜像 vue __testReset） */
+export function __testSetState(next: AuthState): void {
+  setState(next);
+}
+
+/** 测试专用：注入会话租户清单（生产同步点在 settleLogin/hydrateAuth） */
+export function __testSetTenants(tenants: MyTenant[]): void {
+  sessionTenants = tenants;
 }
 
 export function __testReset(): void {

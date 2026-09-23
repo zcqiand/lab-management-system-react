@@ -32,6 +32,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { APP_VERSION } from "@/lib/app-meta";
 import { Separator } from "@/components/ui/separator";
 import { authGetMenus } from "@/api/endpoints/auth/auth";
 import type { MenuNode as ContractMenuNode } from "@/api/endpoints/model";
@@ -83,9 +84,8 @@ interface SidebarNavProps {
   appName?: string | null;
   /** Sidebar 底部主操作（如登出按钮） */
   footerAction?: React.ReactNode;
-  /** 次要操作（如后端模式切换器） */
+  /** 次要操作（BackendSwitcher 落这里） */
   footerExtras?: React.ReactNode;
-  version?: string;
 }
 
 export function SidebarNav({
@@ -94,7 +94,6 @@ export function SidebarNav({
   appName,
   footerAction,
   footerExtras,
-  version = "lab-management-system-react",
 }: SidebarNavProps) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -217,7 +216,14 @@ export function SidebarNav({
               >
                 {appName ?? "Lab-Management"}
               </h1>
-              <p className="text-xs text-white/50 truncate">appCode = {appCode}</p>
+              {/* 2026-09-23 用户裁定：appCode 行换版本号（appCode 仍作为 prop
+                  参与本地持久化 key，与 vue SidebarNav 同构） */}
+              <p
+                className="text-xs text-white/50 truncate"
+                data-testid="sidebar-app-version"
+              >
+                v{APP_VERSION}
+              </p>
             </div>
           )}
         </div>
@@ -288,16 +294,6 @@ export function SidebarNav({
       >
         {footerAction}
         {footerExtras}
-        {version && (
-          <div
-            className={cn(
-              "text-xs text-white/40 truncate",
-              effectiveCollapsed ? "text-[10px] text-center" : "px-2",
-            )}
-          >
-            {effectiveCollapsed ? "v" : version}
-          </div>
-        )}
       </div>
     </aside>
   );

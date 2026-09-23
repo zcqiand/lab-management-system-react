@@ -5,7 +5,8 @@
 //     2026-08-27 起 demo 兜底删除，miss 503 上抛错误，AppShell 由 ErrorBoundary 兜）
 //   - 守卫：nextjs 在 (console)/layout.tsx 做 !token → /login；react 仓把
 //     useRequireAuth 提升到这里（包 Outlet），22 条业务子路由不再各自守卫
-//   - header 的 token 显示走 auth FSM（lab.accessToken 契约 key）
+//   - header 用户区（2026-09-23 用户裁定）：登录用户显示名 + TenantSwitcher
+//     （切换成功整页刷新，组件默认行为）；authenticated 状态徽标已退役
 // 内容是 <Outlet />（react-router layout route），切页只换 Outlet 子树，
 // 侧栏稳定不重挂（等价 nextjs 把 AppShell 收敛到 route group layout）。
 
@@ -15,7 +16,8 @@ import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarNav, useBackendMenus } from "@/components/app/sidebar-nav";
 import { APP_CODE, APP_NAME } from "@/components/app/menus";
-import { BackendBadge } from "@/components/app/backend-badge";
+import { BackendSwitcher } from "@/components/app/backend-switcher";
+import { TenantSwitcher } from "@/components/app/tenant-switcher";
 import { useAuth } from "@/state/auth-context";
 import { useRequireAuth } from "@/state/require-auth";
 
@@ -64,15 +66,12 @@ export function AppShell() {
   // 菜单从 lab 后端 /api/auth/menus 拉：失败上抛（demo 兜底删除），由
   // AppShellErrorBoundary 渲染错误态而非静默回退静态树。
   const { data: backendMenus, loading: menusLoading } = useBackendMenus();
-  const token =
-    state.kind === "authenticated"
-      ? state.value.tokenExpiresAt > 0
-        ? "ok"
-        : null
-      : null;
   const displayName =
     state.kind === "authenticated" || state.kind === "awaiting_tenant"
-      ? (state.value.user.displayName ?? state.value.user.username)
+      ? // || 而非 ??：saas 无显示名 → aspnetcore SSO 落地 displayName=""，
+        // ?? 对空串不回退 → header 用户名整个消失（2026-09-23 回归锁
+        // app-shell-display-name.dom.test.tsx；镜像 lab-nextjs 同修）
+        state.value.user.displayName || state.value.user.username
       : "";
 
   if (checking) return null; // guard effect 已触发跳转，渲染空避免闪烁
@@ -91,8 +90,7 @@ export function AppShell() {
           menus={backendMenus ?? []}
           appCode={APP_CODE}
           appName={APP_NAME}
-          footerExtras={<BackendBadge />}
-          version={`lab-management-system-react · appCode=${APP_CODE}`}
+          footerExtras={<BackendSwitcher />}
         />
       )}
       <main className="flex-1 flex flex-col min-w-0">
@@ -101,12 +99,14 @@ export function AppShell() {
             {APP_NAME}
           </h1>
           <div className="ml-auto flex items-center gap-3 text-xs text-slate-500">
+            {/* 2026-09-23 用户裁定：用户区 = 登录用户显示名 + 租户切换器；
+                「authenticated 状态徽标」（纯诊断）与「用户=」前缀一并退役 */}
             {displayName && (
-              <span className="font-mono">
-                用户=<span className="text-slate-900 font-medium">{displayName}</span>
+              <span className="font-mono" data-testid="appshell-user-name">
+                {displayName}
               </span>
             )}
-            <span data-testid="appshell-auth-state">{state.kind}</span>
+            {state.kind === "authenticated" ? <TenantSwitcher /> : null}
             {state.kind === "authenticated" ? (
               <Button
                 variant="outline"
@@ -122,7 +122,6 @@ export function AppShell() {
                 登出
               </Button>
             ) : null}
-            {token === null && state.kind !== "authenticated" ? null : null}
           </div>
         </header>
         <section className="flex-1 overflow-auto p-6">

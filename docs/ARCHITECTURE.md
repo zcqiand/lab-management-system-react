@@ -70,7 +70,7 @@ lab-management-system-nextjs/   ← nextjs App Router + 兼 schema emit infra（
 | 类别 | 禁令 | 后果 |
 |---|---|---|
 | 数据获取 | 禁组件里直接 fetch | 走 `src/api/` 层（orval 具名函数或 legacy-client） |
-| 数据获取 | 禁运行时切后端 / 禁 BackendSwitcher | ADR-0014；只走 env |
+| 数据获取 | 禁运行时切后端 / 禁 BackendSwitcher | ~~ADR-0014~~ 2026-09-23 用户裁定收窄：侧栏 footer 恢复 BackendSwitcher（三真后端运行时切换），见 `backend-switcher.tsx` + `backend-config.ts` |
 | 类型 | 禁 `any` / `@ts-ignore`（除非附 ADR） | L2 失败 |
 | 样式 | 禁内联样式对象承载布局 / 禁裸颜色 | L2 失败 |
 | UI | 禁手写 button/input/table/modal | 必须用 `src/components/ui/` 原语 |
@@ -186,7 +186,7 @@ lab-management-system-react/
 
 - 禁手写 button/input/table/modal 样式 → 一律用 `ui/` 原语；
 - 禁各业务页各写标题栏/分页/空态 → 一律用 `app/` 复合原语；
-- 禁运行时切后端 → `BackendBadge` 只显示 `apiMode` + `baseUrl`（无切换交互）；
+- 禁运行时切后端 → ~~`BackendBadge` 只显示 `apiMode` + `baseUrl`（无切换交互）~~ 2026-09-23 收窄：`BackendSwitcher` 侧栏 footer 运行时切换（写覆盖 + 清会话 + 整页刷新）；
 - 禁裸颜色 → `bg-[#..]` / 原始 hex 一律禁；只用 `index.css` 语义 token。
 
 ### 3.4 src/pages/ — 路由层（26 个 F.I 入口）
@@ -407,7 +407,7 @@ exit 0 = 全绿；1 = 按 fix 提示回代码改；2 = 契约/环境问题（停
 | 旧形态 | 废止原因 | 现行替代 |
 |---|---|---|
 | `BackendProvider`（Context） | runtime 切后端 + localStorage 持久化 + 模块单例 | env-driven 单 URL |
-| `BackendSwitcher`（运行时 UI） | 同上 | `BackendBadge` 只读显示（`apiMode` + `baseUrl`） |
+| `BackendSwitcher`（运行时 UI） | 同上 | 2026-09-23 收窄恢复：`BackendSwitcher` 侧栏 footer（`BackendBadge` 退役） |
 | `useBackend()` | 同上 | 删除；`getApiBaseUrl()` / `getApiMode()` 直接读 env |
 | `localStorage["lab.backend"]` | 持久化 baseUrl 已废弃 | `.env.local` 部署期覆盖 |
 
@@ -453,7 +453,7 @@ exit 0 = 全绿；1 = 按 fix 提示回代码改；2 = 契约/环境问题（停
 | **SSOT** | Single Source of Truth | 单一真理源；shared 仓承担双 SSOT（API + DB） |
 | **BASE tree** | 契约仓的功能清单 | 只到 F 级；消费仓在 F 镜像后加 I |
 | **codegen** | orval 读 openapi.yaml 生成 TS 具名函数 | 见 `orval.config.ts` |
-| **env-driven 单 URL** | ADR-0014：后端 URL 走 env，不走 runtime Context | 替代旧 BackendSwitcher |
+| **env-driven 单 URL** | ADR-0014：后端 URL 走 env，不走 runtime Context | 替代旧 BackendSwitcher（2026-09-23 收窄：env 仍是部署期权威缺省，localStorage `lab.backend.override` 运行时覆盖） |
 | **msw-http** | ADR-0012：msw 仓作独立 HTTP server 起 :5200 | 替代旧 Service Worker 模式 |
 | **FSM（4 态）** | `idle → anonymous → awaiting_tenant → authenticated` | `state/auth-context.tsx` |
 | **fnTest** | 测试 ID 嵌入 it 名称的模式 | `fnTest(["M01.F05.I01"], "...", () => {...})` |

@@ -307,9 +307,7 @@ function Header({ onNew }: { onNew: () => void }) {
     <div className="mb-4 flex items-center justify-between">
       <div>
         <h1 className="text-2xl font-semibold">报告名称维护</h1>
-        <p className="text-sm text-slate-500">
-          M06.F07 报告名称 + extFields 模板（数据来自 lab-msw fixtures）
-        </p>
+        <p className="text-sm text-slate-500">M06.F07 报告名称 + extFields 模板</p>
       </div>
       {/* @entry M06.F07.I01 新建按钮（按报告名称主入口） */}
       <Button onClick={onNew} data-fn="M06.F07.I01">
