@@ -44,14 +44,18 @@ function readOverride(): BackendMode | null {
   }
 }
 
-/** 当前活动后端：localStorage 覆盖优先，否则 env 派生（注册表外 env 值原样透传） */
+/** 当前活动后端：localStorage 覆盖（dev 切后端）优先，否则 env 派生。
+ *  注意 2026-09-25 修复：删除 `byEnv = KNOWN_BACKENDS.find(...)` 兜底 —— KNOWN_BACKENDS
+ *  全是 localhost dev URL（5201/5204/5205），与 prod 镜像 env.apiBaseUrl 不一致。
+ *  prod 命中此分支会让 bundle 永远指向 localhost:5204，前端跨公网 fetch 必然失败。
+ *  修正后：localStorage 没 override → 总是用 env.apiBaseUrl（dev=用户选的真后端 / prod=域名）；
+ *         override 才有 → 切到 KNOWN_BACKENDS[override].baseUrl（仅 dev 用）。
+ *  镜像 lab-management-system-vue src/api/backend-config.ts 同款修法（两边同日同裁定）。 */
 export function getActiveBackend(): BackendEntry {
   const override = readOverride();
   if (override) {
     return KNOWN_BACKENDS.find((b) => b.mode === override)!;
   }
-  const byEnv = KNOWN_BACKENDS.find((b) => b.mode === env.apiMode);
-  if (byEnv) return byEnv;
   return {
     mode: env.apiMode as BackendMode,
     label: env.apiMode,
