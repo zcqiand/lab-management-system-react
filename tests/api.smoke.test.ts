@@ -23,10 +23,10 @@ describe("backend-config (env 直通 + override 走 KNOWN_BACKENDS)", () => {
     // localStorage jsdom 兜底（node 档 localStorage 是 jsdom globalThis 注入，
     // 每个 case beforeEach 清防串扰）
     try {
-        (globalThis as { localStorage?: Storage }).localStorage?.clear?.();
-      } catch {
-        /* node 无 localStorage 时 swallow */
-      }
+      (globalThis as { localStorage?: Storage }).localStorage?.clear?.();
+    } catch {
+      /* node 无 localStorage 时 swallow */
+    }
   });
 
   function stubEnvs(values: Record<string, string>) {
