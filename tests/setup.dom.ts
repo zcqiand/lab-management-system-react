@@ -10,9 +10,14 @@
  */
 import "@testing-library/jest-dom/vitest";
 import { afterEach } from "vitest";
-import { cleanup } from "@testing-library/react";
+import { cleanup, configure } from "@testing-library/react";
 
 if (typeof window !== "undefined") {
+  // RTL 默认 asyncUtilTimeout=1s：waitFor/getBy 的隐式等待窗口。全量并发
+  // 负载下真链路请求实测远超 1s（categoryDictPages 标题断言在 PageLoading
+  // 门控 + 两轮远程 PG 后才出现），是 L4 flake 的系统性来源 —— 统一抬高到
+  // 20s；各测试显式传的 timeout（45s/60s/90s）不受影响。
+  configure({ asyncUtilTimeout: 20_000 });
   afterEach(() => {
     localStorage.clear();
     cleanup();

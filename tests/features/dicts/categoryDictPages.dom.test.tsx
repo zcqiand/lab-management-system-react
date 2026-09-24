@@ -73,6 +73,26 @@ describe("M04.F06-F09 码表维护 4 页", () => {
     );
   }
 
+  /** 行内「删除」按钮点击验效：重门控瞬窗里 selectRebarAndAwaitRows 放行后的
+   *  二次 getAllByRole（waitFor 之外）拿到的按钮可能随列表 refetch 卸载成
+   *  游离节点——fireEvent 打在游离节点上 React 根委托收不到，确认弹窗原地
+   *  不开（真浏览器用户点不到瞬窗里的按钮，非组件 bug，测试侧吸收）。修法
+   *  同 selectRebarAndAwaitRows 的验效点击：按钮获取、点击、弹窗 h3 验效
+   *  进同一轮询，弹窗出现才算点击生效；弹窗已开则不重复点。 */
+  async function clickDeleteAndAwaitDialog() {
+    await waitFor(
+      () => {
+        const delBtn = screen.queryAllByRole("button", { name: "删除" })[0];
+        if (document.querySelector("h3")?.textContent !== "删除确认") {
+          expect(delBtn).toBeTruthy();
+          fireEvent.click(delBtn as HTMLElement);
+        }
+        expect(document.querySelector("h3")?.textContent).toBe("删除确认");
+      },
+      { timeout: 45_000 },
+    );
+  }
+
   fnTest(
     ["M04.F06.I01"],
     "型号维护：渲染标题 + 检测项目树 + 默认选中项目下列表（真库穿透）",
@@ -177,11 +197,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
         />,
       );
       await selectRebarAndAwaitRows();
-      const delBtn = screen.getAllByRole("button", { name: "删除" })[0]!;
-      fireEvent.click(delBtn);
-      await waitFor(() => {
-        expect(document.querySelector("h3")?.textContent).toBe("删除确认");
-      });
+      await clickDeleteAndAwaitDialog();
     },
   );
 
@@ -214,11 +230,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
         />,
       );
       await selectRebarAndAwaitRows();
-      const delBtn = screen.getAllByRole("button", { name: "删除" })[0]!;
-      fireEvent.click(delBtn);
-      await waitFor(() => {
-        expect(document.querySelector("h3")?.textContent).toBe("删除确认");
-      });
+      await clickDeleteAndAwaitDialog();
     },
   );
 
@@ -247,11 +259,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
         />,
       );
       await selectRebarAndAwaitRows();
-      const delBtn = screen.getAllByRole("button", { name: "删除" })[0]!;
-      fireEvent.click(delBtn);
-      await waitFor(() => {
-        expect(document.querySelector("h3")?.textContent).toBe("删除确认");
-      });
+      await clickDeleteAndAwaitDialog();
     },
   );
 
@@ -280,11 +288,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
         />,
       );
       await selectRebarAndAwaitRows();
-      const delBtn = screen.getAllByRole("button", { name: "删除" })[0]!;
-      fireEvent.click(delBtn);
-      await waitFor(() => {
-        expect(document.querySelector("h3")?.textContent).toBe("删除确认");
-      });
+      await clickDeleteAndAwaitDialog();
     },
   );
 });
