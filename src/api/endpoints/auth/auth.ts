@@ -409,6 +409,81 @@ export function useAuthGetMenus<
   return query;
 }
 
+export const authNativeLogin = (
+  loginRequest: LoginRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<LoginResponse>> => {
+  return axios.default.post(`/api/auth/native-login`, loginRequest, options);
+};
+
+export const getAuthNativeLoginMutationOptions = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authNativeLogin>>,
+    TError,
+    { data: LoginRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authNativeLogin>>,
+  TError,
+  { data: LoginRequest },
+  TContext
+> => {
+  const mutationKey = ["authNativeLogin"];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authNativeLogin>>,
+    { data: LoginRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return authNativeLogin(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AuthNativeLoginMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authNativeLogin>>
+>;
+export type AuthNativeLoginMutationBody = LoginRequest;
+export type AuthNativeLoginMutationError = AxiosError<ErrorResponse>;
+
+export const useAuthNativeLogin = <
+  TError = AxiosError<ErrorResponse>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof authNativeLogin>>,
+      TError,
+      { data: LoginRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof authNativeLogin>>,
+  TError,
+  { data: LoginRequest },
+  TContext
+> => {
+  const mutationOptions = getAuthNativeLoginMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
 export const authGetPermissions = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<PermissionSet>> => {
