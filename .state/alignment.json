@@ -97,7 +97,7 @@
       "designs": [],
       "tests": [],
       "entry": [
-        "src\\components\\app\\tenant-switcher.tsx"
+        "src/components/app/tenant-switcher.tsx"
       ]
     },
     "M01.F04.I01": {
@@ -123,7 +123,7 @@
         "output\\lab-management-system-contract-test\\tests\\test-records-write.test.ts:2177 (annot)"
       ],
       "entry": [
-        "src\\components\\app\\sidebar-nav.tsx"
+        "src/components/app/sidebar-nav.tsx"
       ]
     },
     "M01.F04.I02": {
@@ -149,7 +149,7 @@
         "output\\lab-management-system-contract-test\\tests\\samples-write.test.ts:759 (annot)"
       ],
       "entry": [
-        "src\\state\\auth-context.tsx"
+        "src/state/auth-context.tsx"
       ]
     },
     "M01.F04.I03": {
@@ -163,7 +163,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\state\\require-auth.ts"
+        "src/state/require-auth.ts"
       ]
     },
     "M01.F04.I04": {
@@ -249,7 +249,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\components\\app\\app-shell.tsx"
+        "src/components/app/app-shell.tsx"
       ]
     },
     "M01.F05.I05": {
@@ -275,7 +275,7 @@
         "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:90 (annot)"
       ],
       "entry": [
-        "src\\features\\contracts\\ContractsList.tsx"
+        "src/features/contracts/ContractsList.tsx"
       ]
     },
     "M02.F01.I02": {
@@ -291,7 +291,7 @@
         "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:111 (annot)"
       ],
       "entry": [
-        "src\\features\\contracts\\ContractsList.tsx"
+        "src/features/contracts/ContractsList.tsx"
       ]
     },
     "M02.F01.I03": {
@@ -307,7 +307,7 @@
         "output\\lab-management-system-contract-test\\tests\\contracts.test.ts:134 (annot)"
       ],
       "entry": [
-        "src\\features\\contracts\\ContractsList.tsx"
+        "src/features/contracts/ContractsList.tsx"
       ]
     },
     "M03.F01.I01": {
@@ -324,7 +324,7 @@
         "output\\lab-management-system-contract-test\\tests\\sample-receipts.test.ts:5189 (annot)"
       ],
       "entry": [
-        "src\\features\\receipts\\ReceiptsList.tsx"
+        "src/features/receipts/ReceiptsList.tsx"
       ]
     },
     "M03.F01.I02": {
@@ -338,7 +338,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\receipts\\ReceiptsList.tsx"
+        "src/features/receipts/ReceiptsList.tsx"
       ]
     },
     "M03.F01.I03": {
@@ -352,7 +352,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\receipts\\ReceiptsList.tsx"
+        "src/features/receipts/ReceiptsList.tsx"
       ]
     },
     "M03.F01.I04": {
@@ -366,7 +366,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\receipts\\ReceiptsList.tsx"
+        "src/features/receipts/ReceiptsList.tsx"
       ]
     },
     "M03.F01.I06": {
@@ -396,7 +396,7 @@
         "output\\lab-management-system-contract-test\\tests\\samples-write.test.ts:3849 (annot)"
       ],
       "entry": [
-        "src\\features\\data-entry\\SampleExtFieldsModal.tsx"
+        "src/features/data-entry/SampleExtFieldsModal.tsx"
       ]
     },
     "M03.F01.I08": {
@@ -443,7 +443,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\task-assignment\\TaskAssignmentList.tsx"
+        "src/features/task-assignment/TaskAssignmentList.tsx"
       ]
     },
     "M03.F02.I02": {
@@ -457,7 +457,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\task-assignment\\TaskAssignmentList.tsx"
+        "src/features/task-assignment/TaskAssignmentList.tsx"
       ]
     },
     "M03.F02.I03": {
@@ -521,7 +521,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\data-entry\\DataEntryPage.tsx"
+        "src/features/data-entry/DataEntryPage.tsx"
       ]
     },
     "M03.F03.I02": {
@@ -535,7 +535,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\data-entry\\DataEntryPage.tsx"
+        "src/features/data-entry/DataEntryPage.tsx"
       ]
     },
     "M03.F03.I03": {
@@ -549,10 +549,10 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\data-entry\\DataEntryPage.tsx",
-        "src\\features\\data-entry\\models\\ParticleGradationCard.tsx",
-        "src\\features\\data-entry\\models\\SoilCompactionCard.tsx",
-        "src\\features\\data-entry\\models\\SoilCompactionDegreeCard.tsx"
+        "src/features/data-entry/DataEntryPage.tsx",
+        "src/features/data-entry/models/ParticleGradationCard.tsx",
+        "src/features/data-entry/models/SoilCompactionCard.tsx",
+        "src/features/data-entry/models/SoilCompactionDegreeCard.tsx"
       ]
     },
     "M03.F03.I04": {
@@ -660,7 +660,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\pages\\ReportReviewPage.tsx"
+        "src/pages/ReportReviewPage.tsx"
       ]
     },
     "M03.F05.I02": {
@@ -674,7 +674,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\pages\\ReportReviewPage.tsx"
+        "src/pages/ReportReviewPage.tsx"
       ]
     },
     "M03.F05.I03": {
@@ -758,7 +758,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\pages\\ReportApprovePage.tsx"
+        "src/pages/ReportApprovePage.tsx"
       ]
     },
     "M03.F06.I02": {
@@ -772,7 +772,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\pages\\ReportApprovePage.tsx"
+        "src/pages/ReportApprovePage.tsx"
       ]
     },
     "M03.F06.I03": {
@@ -836,7 +836,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\pages\\ReportIssuePage.tsx"
+        "src/pages/ReportIssuePage.tsx"
       ]
     },
     "M03.F07.I02": {
@@ -850,7 +850,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\pages\\ReportIssuePage.tsx"
+        "src/pages/ReportIssuePage.tsx"
       ]
     },
     "M03.F07.I03": {
@@ -914,7 +914,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\pages\\ReportArchivePage.tsx"
+        "src/pages/ReportArchivePage.tsx"
       ]
     },
     "M03.F08.I02": {
@@ -928,7 +928,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\pages\\ReportArchivePage.tsx"
+        "src/pages/ReportArchivePage.tsx"
       ]
     },
     "M03.F08.I03": {
@@ -992,7 +992,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\receipts\\ReceiptDetail.tsx"
+        "src/features/receipts/ReceiptDetail.tsx"
       ]
     },
     "M03.F09.I02": {
@@ -1006,7 +1006,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\receipts\\ReceiptDetail.tsx"
+        "src/features/receipts/ReceiptDetail.tsx"
       ]
     },
     "M03.F09.I03": {
@@ -1020,7 +1020,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\receipts\\ReceiptDetail.tsx"
+        "src/features/receipts/ReceiptDetail.tsx"
       ]
     },
     "M04.F06.I01": {
@@ -1034,7 +1034,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\dicts\\CategoryDictList.tsx"
+        "src/features/dicts/CategoryDictList.tsx"
       ]
     },
     "M04.F06.I02": {
@@ -1055,7 +1055,7 @@
         "output\\lab-management-system-contract-test\\tests\\test-records-write.test.ts:3427 (annot)"
       ],
       "entry": [
-        "src\\features\\dicts\\CategoryDictList.tsx"
+        "src/features/dicts/CategoryDictList.tsx"
       ]
     },
     "M04.F06.I03": {
@@ -1089,7 +1089,7 @@
         "output\\lab-management-system-contract-test\\tests\\report-names.test.ts:5800 (annot)"
       ],
       "entry": [
-        "src\\features\\dicts\\CategoryDictList.tsx"
+        "src/features/dicts/CategoryDictList.tsx"
       ]
     },
     "M04.F07.I01": {
@@ -1103,7 +1103,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\dicts\\CategoryDictList.tsx"
+        "src/features/dicts/CategoryDictList.tsx"
       ]
     },
     "M04.F07.I02": {
@@ -1121,7 +1121,7 @@
         "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:4612 (annot)"
       ],
       "entry": [
-        "src\\features\\dicts\\CategoryDictList.tsx"
+        "src/features/dicts/CategoryDictList.tsx"
       ]
     },
     "M04.F07.I03": {
@@ -1152,7 +1152,7 @@
         "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:7985 (annot)"
       ],
       "entry": [
-        "src\\features\\dicts\\CategoryDictList.tsx"
+        "src/features/dicts/CategoryDictList.tsx"
       ]
     },
     "M04.F08.I01": {
@@ -1166,7 +1166,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\dicts\\CategoryDictList.tsx"
+        "src/features/dicts/CategoryDictList.tsx"
       ]
     },
     "M04.F08.I02": {
@@ -1184,7 +1184,7 @@
         "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:6606 (annot)"
       ],
       "entry": [
-        "src\\features\\dicts\\CategoryDictList.tsx"
+        "src/features/dicts/CategoryDictList.tsx"
       ]
     },
     "M04.F08.I03": {
@@ -1215,7 +1215,7 @@
         "output\\lab-management-system-contract-test\\tests\\inspection-dictionary-write.test.ts:9328 (annot)"
       ],
       "entry": [
-        "src\\features\\dicts\\CategoryDictList.tsx"
+        "src/features/dicts/CategoryDictList.tsx"
       ]
     },
     "M04.F09.I01": {
@@ -1229,7 +1229,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\dicts\\CategoryDictList.tsx"
+        "src/features/dicts/CategoryDictList.tsx"
       ]
     },
     "M04.F09.I02": {
@@ -1243,7 +1243,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\dicts\\CategoryDictList.tsx"
+        "src/features/dicts/CategoryDictList.tsx"
       ]
     },
     "M04.F09.I03": {
@@ -1257,7 +1257,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\dicts\\CategoryDictList.tsx"
+        "src/features/dicts/CategoryDictList.tsx"
       ]
     },
     "M05.F01.I01": {
@@ -1271,7 +1271,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\summary\\SummaryList.tsx"
+        "src/features/summary/SummaryList.tsx"
       ]
     },
     "M05.F01.I02": {
@@ -1285,7 +1285,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\summary\\SummaryList.tsx"
+        "src/features/summary/SummaryList.tsx"
       ]
     },
     "M05.F01.I03": {
@@ -1336,7 +1336,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\summary\\SummaryList.tsx"
+        "src/features/summary/SummaryList.tsx"
       ]
     },
     "M06.F01.I01": {
@@ -1350,7 +1350,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
+        "src/features/inspection-capability/InspectionCapabilityList.tsx"
       ]
     },
     "M06.F01.I02": {
@@ -1384,7 +1384,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
+        "src/features/inspection-capability/InspectionCapabilityList.tsx"
       ]
     },
     "M06.F02.I02": {
@@ -1402,7 +1402,7 @@
         "output\\lab-management-system-contract-test\\tests\\report-names-write.test.ts:8874 (annot)"
       ],
       "entry": [
-        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
+        "src/features/inspection-capability/InspectionCapabilityList.tsx"
       ]
     },
     "M06.F02.I03": {
@@ -1474,7 +1474,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
+        "src/features/inspection-capability/InspectionCapabilityList.tsx"
       ]
     },
     "M06.F03.I02": {
@@ -1490,8 +1490,8 @@
         "output\\lab-management-system-contract-test\\tests\\inspection-dictionary.test.ts:4994 (annot)"
       ],
       "entry": [
-        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx",
-        "src\\features\\inspection-capability\\ParameterStandardLinkDialog.tsx"
+        "src/features/inspection-capability/InspectionCapabilityList.tsx",
+        "src/features/inspection-capability/ParameterStandardLinkDialog.tsx"
       ]
     },
     "M06.F03.I03": {
@@ -1515,7 +1515,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
+        "src/features/inspection-capability/InspectionCapabilityList.tsx"
       ]
     },
     "M06.F04.I02": {
@@ -1531,7 +1531,7 @@
         "output\\lab-management-system-contract-test\\tests\\inspection-dictionary.test.ts:5532 (annot)"
       ],
       "entry": [
-        "src\\features\\inspection-capability\\InspectionCapabilityList.tsx"
+        "src/features/inspection-capability/InspectionCapabilityList.tsx"
       ]
     },
     "M06.F04.I03": {
@@ -1565,7 +1565,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\inspection-capability\\CalculationMethodList.tsx"
+        "src/features/inspection-capability/CalculationMethodList.tsx"
       ]
     },
     "M06.F05.I02": {
@@ -1601,7 +1601,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\inspection-capability\\TechnicalRequirementList.tsx"
+        "src/features/inspection-capability/TechnicalRequirementList.tsx"
       ]
     },
     "M06.F06.I02": {
@@ -1615,7 +1615,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\inspection-capability\\TechnicalRequirementList.tsx"
+        "src/features/inspection-capability/TechnicalRequirementList.tsx"
       ]
     },
     "M06.F06.I03": {
@@ -1639,7 +1639,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\inspection-capability\\TechnicalRequirementList.tsx"
+        "src/features/inspection-capability/TechnicalRequirementList.tsx"
       ]
     },
     "M06.F07.I01": {
@@ -1653,7 +1653,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\report-names\\ReportNameList.tsx"
+        "src/features/report-names/ReportNameList.tsx"
       ]
     },
     "M06.F07.I02": {
@@ -1667,8 +1667,8 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\report-names\\ReportNameLinkDialog.tsx",
-        "src\\features\\report-names\\ReportNameList.tsx"
+        "src/features/report-names/ReportNameLinkDialog.tsx",
+        "src/features/report-names/ReportNameList.tsx"
       ]
     },
     "M06.F07.I03": {
@@ -1746,7 +1746,7 @@
       ],
       "tests": [],
       "entry": [
-        "src\\features\\param-interfaces\\ParamInterfaceList.tsx"
+        "src/features/param-interfaces/ParamInterfaceList.tsx"
       ]
     },
     "M06.F08.I02": {
