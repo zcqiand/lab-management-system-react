@@ -100,12 +100,77 @@ describe("M05.F01 报告汇总", () => {
     { timeout: 45_000 },
     async () => {
       render(<SummaryList />);
-      // B6 加载态：整页 PageLoading 门控后，筛选区随数据一起出现 → waitFor 断言
-      await waitFor(() => {
-        const select = screen.getByLabelText("报告类别");
-        expect(select).toBeTruthy();
-        expect(select.textContent).toContain("全部");
+      // B6 加载态：整页 PageLoading 门控后，筛选区随数据一起出现 → waitFor
+      const select = await screen.findByLabelText("报告类别");
+      expect(select).toBeTruthy();
+      expect(select.textContent).toContain("全部");
+    },
+  );
+
+  // REQ-2026-017：I03 核心指标卡 + I04 任务状态漏斗（真链路穿透，镜像
+  // nextjs SummaryPage 同名已上线区块的断言形状：锚 data-fn 区块 + 标签，
+  // 不锚易变计数值）。
+  fnTest(
+    ["M05.F01.I03"],
+    "I03 核心指标卡三卡（今日试验/报告产出/合格率）穿透渲染",
+    { timeout: 45_000 },
+    async () => {
+      render(<SummaryList />);
+      const section = await waitFor(() => {
+        const el = document.querySelector('[data-fn="M05.F01.I03"]');
+        expect(el).not.toBeNull();
+        return el as HTMLElement;
       });
+      expect(section.textContent).toContain("核心指标");
+      // 3 张卡片
+      expect(screen.getByTestId("metric-today-tests")).toBeTruthy();
+      expect(screen.getByTestId("metric-output")).toBeTruthy();
+      expect(screen.getByTestId("metric-qualified-rate")).toBeTruthy();
+      // stats 拉回后 detail 子节点出现（数值形状，不锚易变计数值）
+      await waitFor(() => {
+        expect(screen.getByTestId("metric-output-detail")).toBeTruthy();
+      });
+      const output = screen.getByTestId("metric-output-detail").textContent ?? "";
+      expect(output).toContain("已生成");
+      expect(output).toContain("待审核");
+      expect(output).toContain("已签发");
+      const qualified = screen.getByTestId("metric-qualified-detail").textContent ?? "";
+      for (const m of ["混凝土", "钢筋", "砂石"]) {
+        expect(qualified).toContain(m);
+      }
+      expect(qualified).toMatch(/\d+\.\d%/); // 合格率百分比形状
+    },
+  );
+
+  fnTest(
+    ["M05.F01.I04"],
+    "I04 六段任务状态漏斗穿透渲染",
+    { timeout: 45_000 },
+    async () => {
+      render(<SummaryList />);
+      const section = await waitFor(() => {
+        const el = document.querySelector('[data-fn="M05.F01.I04"]');
+        expect(el).not.toBeNull();
+        return el as HTMLElement;
+      });
+      expect(section.textContent).toContain("试验任务状态");
+      // stats 拉回后漏斗条渲染，6 段全部在场 + 各段计数 + 合计
+      await waitFor(() => {
+        expect(screen.getByTestId("funnel-bars")).toBeTruthy();
+      });
+      for (const key of [
+        "pending_collect",
+        "received",
+        "testing",
+        "reporting",
+        "reviewing",
+        "issued",
+      ]) {
+        const stage = screen.getByTestId(`funnel-stage-${key}`);
+        expect(stage).toBeTruthy();
+        expect(stage.textContent).toMatch(/\d+ 项/);
+      }
+      expect(screen.getByTestId("funnel-bars").textContent).toContain("合计");
     },
   );
 });

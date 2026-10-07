@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "approved": true,
+  "base_sha": "ff241984582d3c5a",
+  "mirror": true,
+  "summary": "REQ-2026-017：M05.F01.I03 核心指标卡 + M05.F01.I04 任务状态漏斗 推进开发中（SummaryList 仪表盘区块补齐，镜像 nextjs 同名已上线区块；契约字段已在生成物，真链路 :5201 已产出）",
+  "changes": [
+    {
+      "id": "M05.F01.I03",
+      "action": "变更",
+      "name": "核心指标卡",
+      "reason": "REQ-2026-017 T-1：随已批需求推进开发中——GET /api/summary/stats 扩展字段契约面与生成物俱在（dashboardStats.ts todayTestCount/qualifiedRateByMaterial/reportOutputByStatus），nextjs 同名行已上线产出数据，react 侧 SummaryList 补 UI 区块"
+    },
+    {
+      "id": "M05.F01.I04",
+      "action": "变更",
+      "name": "任务状态漏斗",
+      "reason": "REQ-2026-017 T-1：随已批需求推进开发中——funnelByStage 六段契约面与生成物俱在，nextjs 同名行已上线产出数据，react 侧 SummaryList 补漏斗区块"
+    }
+  ],
+  "sync_files": [
+    "docs/design/design-function-map.md",
+    "docs/requirements/README.md"
+  ]
+}

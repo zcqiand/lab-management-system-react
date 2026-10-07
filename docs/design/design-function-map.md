@@ -53,6 +53,8 @@
 | M05.F01.I01 | src/features/summary/SummaryList.tsx (汇总表 root) | GET /api/summary?categoryCode=... ; GET /api/report-names (下拉) | sample_receipts | M05.F01.I01 | – | 已上线 |
 | M05.F01.I02 | src/features/summary/SummaryList.tsx (仪表盘卡片 grid) | GET /api/summary/stats | – (跨 sample_receipts/contracts 聚合) | M05.F01.I02 | – | 已上线 |
 | M05.F01.I06 | src/features/summary/SummaryList.tsx (仪表盘卡片 grid：stats 基础字段消费) | GET /api/summary/stats（contractCount/receiptCount/sampleCount + 报告状态 3 桶 + pendingTaskCount） | – (跨 sample_receipts/contracts 聚合) | M05.F01.I06 | ADR-0033 阶段二自后端仓改挂 F01（BASE 下沉对齐） | 已上线 |
+| M05.F01.I03 | src/features/summary/SummaryList.tsx (核心指标 section：三卡 今日试验总数/报告产出量/检测合格率) | GET /api/summary/stats（todayTestCount + reportOutputByStatus + qualifiedRateByMaterial） | – (跨 sample_receipts 聚合) | M05.F01.I03 | REQ-2026-017，镜像 nextjs SummaryPage 同名区块 | 开发中 |
+| M05.F01.I04 | src/features/summary/SummaryList.tsx (任务状态漏斗 section：六段水平条) | GET /api/summary/stats（funnelByStage 六段） | – (跨 sample_receipts 聚合) | M05.F01.I04 | REQ-2026-017，镜像 nextjs SummaryPage 同名区块 | 开发中 |
 | M06.F01.I01 | src/features/inspection-capability/InspectionCapabilityList.tsx (via src/pages/SpecialtiesPage.tsx) | GET /api/inspection-specialties | inspection_specialty | M06.F01.I01 | – | 已上线 |
 | M06.F02.I01 | src/features/inspection-capability/InspectionCapabilityList.tsx (via src/pages/ObjectsPage.tsx) | GET /api/inspection-objects?inspectionSpecialtyCode=... | inspection_object | M06.F02.I01 | – | 已上线 |
 | M06.F02.I02 | src/features/inspection-capability/InspectionCapabilityList.tsx (via ObjectsPage; 新建 + 编辑，form 选专项/参数) | POST /api/inspection-objects ; PUT /api/inspection-objects/:id | inspection_object | M06.F02.I02 | – | 已上线 |
