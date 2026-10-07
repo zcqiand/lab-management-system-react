@@ -1,16 +1,15 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "5.73② 终审 B1 修复：eslint --fix 占位空行 prettier 归位（a15561c）；批尾 unit gate r3 EXIT=0（r2 真链路 500=并发假红）",
+  "current_task": "REQ-2026-017 M05.F01 仪表盘 I03/I04 已上线待人工验收（015e376 已推）；REQ-2026-018 M00.F01.I01 镜像登记修 L5 悬空（tree_change 正门 sha=ee29f80bf2f70284）",
   "done": [
-    "docs/functions/function-tree.md 批次 1+2 落盘（编号错位收敛 + act-merge）",
-    "悬空锚点迁移 18 处（CategoryDictList @entry M04.F06/F07/F08.I03→I04、3 个列表页 deleteDataFn→I04、TechnicalRequirementList ×3→M06.F06.I05、测试 7 处、design/flow map 各 4 行）；M04.F09.I03 本树仍在线未动",
-    ".state/trace.json 再生成：193 tests / 61 fn ids / 废弃 ID 0 命中（按状态列精确反查）/ 新 ID 全在场 / 失败测试 fns 不丢",
-    "gate.py exit 0 全绿（L0-L5，165 条目引用完整；L4 首跑 3 个真链路测试轮换假红，探活定性为到 PG VPS 链路丢包 10-40%，干净窗口复跑即绿）"
+    "T1 d1ee15d：REQ-2026-017 + 树 I03/I04 推进开发中（mirror --apply sha=ff241984582d3c5a）+ 设计映射 2 行 + 台账 + 测试先行（red：2 failed|5 passed，I03/I04 data-fn 锚缺失）",
+    "T2/T3 015e376：SummaryList 补 I03 核心指标三卡 + I04 六段漏斗（testid 对齐 nextjs，shadcn Card 习语）；pageLoading fixture 按契约补齐 DashboardStats 全形（旧双键 fixture 取属性崩）；全门绿 prettier/eslint/tsc + vitest 216/216 + trace 216/inert 0/I03×1/I04×1 + gate EXIT=0",
+    "REQ-2026-018 M00.F01.I01 镜像登记（shared SSOT 已上线、nextjs 已镜像，d7fadb3 测试先于镜像行入库致 L5 悬空）——不写新码纯文档对齐"
   ],
   "next": [
-    "提交：树 + 锚点 + tests + vitest.config.ts（此前遗留）+ .state 一批",
-    "真链路 dom 测试（categoryDictPages/receiptsList 等）直连 :5201→远程 PG，30-90s 等待窗；跑 gate 前先 ping PG VPS 确认丢包 ~0%"
+    "REQ-2026-017/018 人工验收后 GA 翻转 I03/I04（开发中→已上线，凭 REQ 内人工验收通过记录）",
+    "机器侧规划推进下一仓：vue M05.F01.I03+I04 同形状 slice（REQ + 树正门 + red→green→gate→push）"
   ],
   "open_questions": [
     "gate.py --all exit 2：saas family-env.json members 仍列 msw 但本地无仓——删 member 还是建仓，需人裁",
@@ -20,9 +19,19 @@
     "真链路 dom 测试批量 30s 超时且每轮挂的测试不重样 = 环境假红（链路丢包），隔离复跑同批全绿即证——别改 selector",
     "隔离复跑带 TRACE_MAP=1 会把 trace.json 覆盖成部分版",
     "it() 标题禁写 Mxx.Fxx.Ixx 字面",
-    "规划行不得标已上线——L5 会要求 UI 入口"
+    "规划行不得标已上线——L5 会要求 UI 入口",
+    "tree_change mirror reason 必须引用 REQ-YYYY-NNN 锚点（免批也要留需求锚）",
+    "markdown 表格单元格内禁裸管道符（|| 会被当列分隔，MD056 多列）——用转义或文字表述"
   ],
   "active_branch": "master",
   "last_session_at": "2026-09-21",
-  "last_session_summary": "终审 M1 勘误：directive 实移除 32 条（账面 35 系警告计数口径漂移）"
+  "last_session_summary": "终审 M1 勘误：directive 实移除 32 条（账面 35 系警告计数口径漂移）",
+  "last_gate": {
+    "result": "EXIT=0 全绿",
+    "tests": 216,
+    "trace_tests": 216,
+    "trace_ids": 10,
+    "inert": 0,
+    "note": "软告警 8+9+2 项不阻断（已上线无测试引用/不在流程），人裁量"
+  }
 }
