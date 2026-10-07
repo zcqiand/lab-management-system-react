@@ -97,9 +97,31 @@ describe("页面级加载态（PageLoading 门控）", () => {
     expect(screen.queryByText("报告汇总")).toBeNull();
 
     // 只到 stats（1/2 源）——仍整页加载
+    // （REQ-2026-017 起 I03/I04 消费 stats 扩展字段，fixture 按契约补齐全形）
     await act(async () => {
       dashboardStats.resolve({
-        data: { contractCount: 1, reportCountByStatus: {} },
+        data: {
+          contractCount: 1,
+          receiptCount: 0,
+          sampleCount: 0,
+          reportCountByStatus: { draft: 0, reviewing: 0, issued: 0 },
+          pendingTaskCount: 0,
+          todayTestCount: 0,
+          qualifiedRateByMaterial: {
+            concrete: { total: 0, pass: 0, rate: 0 },
+            rebar: { total: 0, pass: 0, rate: 0 },
+            sand: { total: 0, pass: 0, rate: 0 },
+          },
+          reportOutputByStatus: { generated: 0, pending: 0, issued: 0 },
+          funnelByStage: {
+            pending_collect: 0,
+            received: 0,
+            testing: 0,
+            reporting: 0,
+            reviewing: 0,
+            issued: 0,
+          },
+        },
       } as never);
     });
     expect(screen.getByTestId("page-loading")).toBeTruthy();

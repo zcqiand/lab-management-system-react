@@ -1,25 +1,18 @@
 {
   "schema": 1,
   "approved": true,
-  "base_sha": "ff241984582d3c5a",
   "mirror": true,
-  "summary": "REQ-2026-017：M05.F01.I03 核心指标卡 + M05.F01.I04 任务状态漏斗 推进开发中（SummaryList 仪表盘区块补齐，镜像 nextjs 同名已上线区块；契约字段已在生成物，真链路 :5201 已产出）",
+  "summary": "REQ-2026-018：M00.F01.I01 当前会话（顶栏登录用户显示名）镜像登记——shared SSOT 已上线、nextjs 已镜像同名行，react 树漏登记而 app-shell 实现与回归锁测试（d7fadb3）俱在，L5 悬空引用由此起",
   "changes": [
     {
-      "id": "M05.F01.I03",
-      "action": "变更",
-      "name": "核心指标卡",
-      "reason": "REQ-2026-017 T-1：随已批需求推进开发中——GET /api/summary/stats 扩展字段契约面与生成物俱在（dashboardStats.ts todayTestCount/qualifiedRateByMaterial/reportOutputByStatus），nextjs 同名行已上线产出数据，react 侧 SummaryList 补 UI 区块"
-    },
-    {
-      "id": "M05.F01.I04",
-      "action": "变更",
-      "name": "任务状态漏斗",
-      "reason": "REQ-2026-017 T-1：随已批需求推进开发中——funnelByStage 六段契约面与生成物俱在，nextjs 同名行已上线产出数据，react 侧 SummaryList 补漏斗区块"
+      "id": "M00.F01.I01",
+      "action": "新增",
+      "name": "当前会话（顶栏登录用户显示名）",
+      "reason": "REQ-2026-018 镜像登记：shared 树 M00.F01.I01 当前会话已上线（GET /auth/me hydrate user/tenants/currentTenantId），nextjs 同名行已上线；react 侧 src/components/app/app-shell.tsx 顶栏 displayName（空串回退 username，data-testid=appshell-user-name）与 tests/app-shell-display-name.dom.test.tsx 回归锁已入库（d7fadb3），仅镜像行漏登记"
     }
   ],
   "sync_files": [
-    "docs/design/design-function-map.md",
-    "docs/requirements/README.md"
-  ]
+    "docs/design/design-function-map.md"
+  ],
+  "base_sha": "ee29f80bf2f70284"
 }

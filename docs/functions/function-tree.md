@@ -29,6 +29,12 @@
 | M00.F01 | 当前用户会话 | （说明待补） | 已上线 |
 | M00.F02 | 登录选租户 | （说明待补） | 已上线 |
 
+### M00.F01 当前用户会话
+
+| 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
+|---|---|---|---|---|---|
+| M00.F01.I01 | 当前会话（顶栏登录用户显示名） | 接口 | 前端+后端 | GET /auth/me hydrate user/tenants/currentTenantId；顶栏显示登录用户 displayName（空串回退 username，短路或写法不兜空串，data-testid=appshell-user-name） | 已上线 |
+
 ### M00.F02 登录选租户
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |

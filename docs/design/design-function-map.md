@@ -8,6 +8,7 @@
 
 | 功能子项 ID | 页面/组件 | 接口 | 数据表 | 权限码 | 设计稿 | 状态 |
 |---|---|---|---|---|---|---|
+| M00.F01.I01 | src/components/app/app-shell.tsx (顶栏 user name) | GET /api/auth/me | – | M00.F01.I01 | – | 已上线 |
 | M01.F04.I01 | src/components/app/sidebar-nav.tsx | static MENU_TREE (legacy: GET /api/auth/menus) | – | M01.F04.I01 | – | 已上线 |
 | M01.F04.I02 | src/state/auth-context.tsx (fetchPermissions) | GET /api/auth/permissions | – | M01.F04.I02 | – | 已上线 |
 | M01.F04.I03 | src/state/require-auth.ts (useRequireAuth) | – (客户端守卫，无 API) | – | M01.F04.I03 | – | 已上线 |
