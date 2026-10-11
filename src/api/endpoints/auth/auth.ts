@@ -671,6 +671,14 @@ export const useAuthRefresh = <TError = AxiosError<ErrorResponse>, TContext = un
 
   return useMutation(mutationOptions, queryClient);
 };
+/**
+ *   SSO 跳转端点（RFC 6749 §4.1.1 授权码流）。返回跳板 URL 而非 302：客户端取
+  authorizeUrl 做 top-level navigation。
+
+  state 由前端生成并原样透传，回跳时前端比对，防 CSRF；redirect_uri 须在后端
+  白名单内（https 域名之外，原生客户端允许自定义 scheme），白名单配置随部署
+  env，不入契约；client_secret 仅后端持有，不出现在本契约。
+ */
 export const authSsoAuthorize = (
   params: AuthSsoAuthorizeParams,
   options?: AxiosRequestConfig,
