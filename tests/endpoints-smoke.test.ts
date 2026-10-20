@@ -18,6 +18,12 @@ describe("shared contract client smoke", () => {
     expect(typeof auth.authLogin).toBe("function");
   });
 
+  // REQ-2026-023：原生登录代理通道，orval 自 shared 契约生成（I06 与 I01 同源生成层）
+  fnTest(["M01.F05.I06"], "auth native-login endpoint generated", () => {
+    expect(typeof auth.authNativeLogin).toBe("function");
+    expect(typeof auth.getAuthNativeLoginMutationOptions).toBe("function");
+  });
+
   fnTest(["M02.F01.I01"], "contract list endpoint generated", () => {
     expect(typeof contracts.contractsListContracts).toBe("function");
   });

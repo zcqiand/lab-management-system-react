@@ -68,6 +68,7 @@
 | M01.F05.I03 | SSO OAuth 2.0 授权码流（client_secret + lab 自家 token mint） | 接口 | 前端+后端 |  | 已上线 |
 | M01.F05.I04 | 登出 | 按钮 | 前端+后端 |  | 已上线 |
 | M01.F05.I05 | 登出 | 接口 | 前端+后端 | POST /api/auth/logout：无状态 JWT 服务端无 session，前端清存储 | 规划 |
+| M01.F05.I06 | 原生登录 | 接口 | 前端+后端 | POST /api/auth/native-login：非浏览器客户端密码通道；校验代理 saas IdP——请求体账密调 saas /api/v1/auth/login（clientId=lab-management），saas 4xx→401 INVALID_CREDENTIALS 不透传、5xx/不可达→502 SAAS_UNAVAILABLE；lab 自家 JWT 重签（HS256），LoginResponse 契约形状不变（REQ-2026-023；shared 树已上线，本仓 auth.ts 已挂端点绑定、仓内锚定未补） | 开发中 |
 
 ---
 
