@@ -40,7 +40,7 @@ npm run build      # 生产构建
 
 > 同一案例仓后续接入其他书籍时，在此节下新增书籍小节。
 
-### 《React从入门到项目实践》（亚马逊电子书）
+### 书一《React从入门到项目实践》（亚马逊电子书）
 
 - 书稿基线：tag `v0.3.29-20260924`（冻结，正文代码清单以此为准）
 - 书稿定位：案例一「实验室管理系统」，覆盖第 34-38 章
@@ -53,6 +53,14 @@ npm run build      # 生产构建
 | 37 | 案例一：流程引擎——从任务分配到归档的七阶段流水线 | `src/features/task-assignment/TaskAssignmentList.tsx`、`src/features/reports/ReportPhasePage.tsx` |
 | 38 | 案例一：测试与交付 | — |
 
+### 书二《ASP.NET Core 从入门到项目实践》
+
+- 书稿定位：xr-know-016，第 36 章正文代码块挂本仓 `source=` 锚点
+- 配套版本：`v0.3.29-20260924`（registry 冻结 tag，代码以此为准）
+
+| 章 | 章题 | 对应源文件 |
+| :--- | :--- | :--- |
+| 36 | 前后端协作：REST 契约与前端对接 | `orval.config.ts` + `src/api/endpoints` + `src/api/contracts.ts` |
 ## 快速链接
 
 - [CLAUDE.md](CLAUDE.md) — 开发约定与编码规范
