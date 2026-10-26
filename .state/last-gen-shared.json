@@ -1,7 +1,7 @@
 {
-  "api_synced_sha": "8eabf303cb9b2dd619dd14d5500cf94fd89c58ad",
-  "api_synced_at": "2026-10-20T12:27:07.597Z",
+  "api_synced_sha": "7de29fd8fa679500e17248fb77997c9b22c60403",
+  "api_synced_at": "2026-10-26T18:30:14.687Z",
   "api_synced_cmd": "gen-shared.ts",
-  "shared_sha": "8eabf303cb9b2dd619dd14d5500cf94fd89c58ad",
+  "shared_sha": "7de29fd8fa679500e17248fb77997c9b22c60403",
   "consumer_repo": "lab-management-system-react"
 }
