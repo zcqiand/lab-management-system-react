@@ -8,7 +8,9 @@ import type { TestRecord } from "./testRecord";
 
 export type TestRecordsListTestRecords200 = {
   items: TestRecord[];
+  /** 当前实现仅回显，不切片：参照实现返回全量，无分页语义。 */
   page: number;
+  /** 当前实现仅回显，不切片。 */
   pageSize: number;
   total: number;
 };

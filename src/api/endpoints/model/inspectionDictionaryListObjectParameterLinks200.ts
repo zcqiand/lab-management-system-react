@@ -8,7 +8,9 @@ import type { ObjectParameterLink } from "./objectParameterLink";
 
 export type InspectionDictionaryListObjectParameterLinks200 = {
   items: ObjectParameterLink[];
+  /** 当前实现仅回显，不切片：参照实现返回全量，无分页语义。 */
   page: number;
+  /** 当前实现仅回显，不切片。 */
   pageSize: number;
   total: number;
 };

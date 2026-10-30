@@ -32,6 +32,9 @@ import type {
   UpdateContractRequest,
 } from ".././model";
 
+/**
+ * 分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。
+ */
 export const contractsListContracts = (
   params?: ContractsListContractsParams,
   options?: AxiosRequestConfig,

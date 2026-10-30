@@ -44,6 +44,9 @@ import type {
   UpdateInspectionReportNameRequest,
 } from ".././model";
 
+/**
+ * 分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。
+ */
 export const reportNamesListReportNames = (
   params?: ReportNamesListReportNamesParams,
   options?: AxiosRequestConfig,

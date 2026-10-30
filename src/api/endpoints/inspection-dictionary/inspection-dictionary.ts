@@ -1331,6 +1331,9 @@ export function useInspectionDictionaryListStandardParameterLinks<
   return query;
 }
 
+/**
+ * 分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。
+ */
 export const inspectionDictionaryListObjects = (
   params?: InspectionDictionaryListObjectsParams,
   options?: AxiosRequestConfig,
@@ -1715,6 +1718,9 @@ export const useInspectionDictionaryDeleteObject = <
 
   return useMutation(mutationOptions, queryClient);
 };
+/**
+ * 分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。
+ */
 export const inspectionDictionaryListParameters = (
   params?: InspectionDictionaryListParametersParams,
   options?: AxiosRequestConfig,
@@ -2101,6 +2107,9 @@ export const useInspectionDictionaryDeleteParameter = <
 
   return useMutation(mutationOptions, queryClient);
 };
+/**
+ * 分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。
+ */
 export const inspectionDictionaryListSpecialties = (
   params?: InspectionDictionaryListSpecialtiesParams,
   options?: AxiosRequestConfig,
@@ -2490,6 +2499,9 @@ export const useInspectionDictionaryDeleteSpecialty = <
 
   return useMutation(mutationOptions, queryClient);
 };
+/**
+ * 分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。
+ */
 export const inspectionDictionaryListStandards = (
   params?: InspectionDictionaryListStandardsParams,
   options?: AxiosRequestConfig,

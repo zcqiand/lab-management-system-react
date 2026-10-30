@@ -8,7 +8,9 @@ import type { InspectionObject } from "./inspectionObject";
 
 export type InspectionDictionaryListObjects200 = {
   items: InspectionObject[];
+  /** 当前实现仅回显，不切片：参照实现返回全量，无分页语义。 */
   page: number;
+  /** 当前实现仅回显，不切片。 */
   pageSize: number;
   total: number;
 };

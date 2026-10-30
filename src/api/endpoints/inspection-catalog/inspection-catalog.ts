@@ -41,6 +41,9 @@ import type {
   UpdateCatalogEntryRequest,
 } from ".././model";
 
+/**
+ * 分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。
+ */
 export const catalogListBrands = (
   params?: CatalogListBrandsParams,
   options?: AxiosRequestConfig,
@@ -397,6 +400,9 @@ export const useCatalogDeleteBrand = <
 
   return useMutation(mutationOptions, queryClient);
 };
+/**
+ * 分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。
+ */
 export const catalogListGrades = (
   params?: CatalogListGradesParams,
   options?: AxiosRequestConfig,
@@ -753,6 +759,9 @@ export const useCatalogDeleteGrade = <
 
   return useMutation(mutationOptions, queryClient);
 };
+/**
+ * 分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。
+ */
 export const catalogListModels = (
   params?: CatalogListModelsParams,
   options?: AxiosRequestConfig,
@@ -1109,6 +1118,9 @@ export const useCatalogDeleteModel = <
 
   return useMutation(mutationOptions, queryClient);
 };
+/**
+ * 分页：当前实现仅回显不切片，参照实现返回全量，无分页语义（pageSize 同）。
+ */
 export const catalogListSpecs = (
   params?: CatalogListSpecsParams,
   options?: AxiosRequestConfig,
