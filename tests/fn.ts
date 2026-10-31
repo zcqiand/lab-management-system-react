@@ -21,6 +21,10 @@ declare module "vitest" {
  *   - 间接受益不挂
  *   - 工程设施的测试不挂任何业务 ID
  *   - 一个测试挂 3 个以上 ID，通常说明它测得太宽
+ *
+ * 不要为「这个测试在 CI 上跳过了」找借口写注册 ID 的 helper（曾有 fnTestIf，
+ * 已撤：fake coverage 比 skip 不报的危害更大 —— 真正的事实是「该 ID 没有运行过的测试」，
+ * 那是真实的覆盖缺口，应通过补真实断言（源码级 / beforeAll emit）解决，不是绕过机制）。
  */
 /** 重载 1：无 options 的常规形态。 */
 export function fnTest(
