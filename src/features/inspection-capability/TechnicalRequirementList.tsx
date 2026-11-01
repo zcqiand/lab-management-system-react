@@ -1,4 +1,5 @@
 // M06.F06 技术要求维护 — 列表 + 多维筛选 + Dialog 弹窗。
+// 锚对齐功能树（2026-11-02）：I01=列表、I03=创建、I04=更新、I05=删除（I02=详情 GET 无 UI）。
 //
 // 复合主键：(inspectionObjectCode, inspectionParameterCode, judgmentStandardCode)——
 // 契约 PUT/DELETE /api/technical-requirements/{o}/{p}/{j}（orval 三段组合键寻址，无 id 列）；
@@ -271,7 +272,7 @@ export function TechnicalRequirementList() {
               placeholder="规格"
               className="w-32"
             />
-            <Button onClick={openCreate} data-fn="M06.F06.I02">
+            <Button onClick={openCreate} data-fn="M06.F06.I03">
               <Plus className="mr-1 h-4 w-4" /> 新建技术要求
             </Button>
           </div>
@@ -331,7 +332,7 @@ export function TechnicalRequirementList() {
                         variant="link"
                         size="sm"
                         onClick={() => openEdit(row)}
-                        data-fn="M06.F06.I02"
+                        data-fn="M06.F06.I04"
                         aria-label={`编辑 ${row.inspectionObjectCode}/${row.inspectionParameterCode}/${row.judgmentStandardCode}`}
                       >
                         编辑
@@ -520,7 +521,9 @@ export function TechnicalRequirementList() {
             <Button variant="outline" onClick={() => setOpen(false)}>
               取消
             </Button>
-            <Button onClick={save}>保存</Button>
+            <Button onClick={save} data-fn="M06.F06.I02">
+              保存
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

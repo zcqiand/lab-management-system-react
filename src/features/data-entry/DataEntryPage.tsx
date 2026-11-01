@@ -199,9 +199,15 @@ function EntryModal({
   const [records, setRecords] = useState<Record<string, TestRecord>>({});
   const [selectedSampleId, setSelectedSampleId] = useState<string>("");
   const [activeParamCode, setActiveParamCode] = useState<string>("");
+  // 脏键：弹窗内用户已输入但尚未保存的 `${sampleId}#${paramCode}`。
+  // refetch 与用户输入存在竞态（输入框先于 refetch 落定渲染）——refetch 回填
+  // 若无条件覆盖 records，会把用户刚敲的字静默冲回旧值（e2e AC-4 实证：
+  // PUT 已发、GET 旧值后到反杀客户端态）。脏键 refetch 不覆盖（vue 仓同修）。
+  const dirtyKeys = useRef(new Set<string>());
 
   useEffect(() => {
     if (!open || !receipt) return;
+    dirtyKeys.current.clear();
     (async () => {
       try {
         // 样品 + 参数并发；检测记录契约只支持 sampleId 过滤（无 receiptId 参数），
@@ -228,9 +234,20 @@ function EntryModal({
         setParameters(pItems);
         const map: Record<string, TestRecord> = {};
         for (const t of tItems) {
-          map[`${t.sampleId}#${t.parameterCode}`] = t;
+          const key = `${t.sampleId}#${t.parameterCode}`;
+          // refetch 期间用户已输入的脏键不覆盖（见 dirtyKeys 注释）
+          if (!dirtyKeys.current.has(key)) map[key] = t;
         }
-        setRecords(map);
+        // setRecords 是整体替换：被守卫跳过的脏键若不从旧 state 合并回来，
+        // 用户在途编辑会被整个冲掉（records[key] 变 undefined，save 读空走
+        // POST 建全空记录——e2e react AC-4 实证）。vue 仓逐键赋值无此问题。
+        setRecords((prev) => {
+          const merged = { ...map };
+          for (const key of dirtyKeys.current) {
+            if (prev[key]) merged[key] = prev[key];
+          }
+          return merged;
+        });
         if (sItems.length > 0) setSelectedSampleId(sItems[0]!.id);
         if (pItems.length > 0) setActiveParamCode(pItems[0]!.code);
       } catch (e) {
@@ -268,6 +285,7 @@ function EntryModal({
         await testRecordsCreateTestRecord(body);
       }
       toast.success("检测记录已保存");
+      dirtyKeys.current.clear();
       onSaved();
     } catch (e) {
       toast.error((e as Error).message);
@@ -337,6 +355,7 @@ function EntryModal({
               onChange={(patch) => {
                 if (!selectedSampleId || !activeParamCode) return;
                 const key = `${selectedSampleId}#${activeParamCode}`;
+                dirtyKeys.current.add(key);
                 setRecords((prev) => ({
                   ...prev,
                   [key]: {

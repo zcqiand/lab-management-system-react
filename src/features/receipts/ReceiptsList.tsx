@@ -38,7 +38,11 @@ import {
   receiptsListReceipts,
   receiptsUpdateReceipt,
 } from "@/api/endpoints/receipts/receipts";
+import { contractsListContracts } from "@/api/endpoints/contracts/contracts";
+import { reportNamesListReportNames } from "@/api/endpoints/report-names/report-names";
 import type { SampleReceipt } from "@/api/endpoints/model/sampleReceipt";
+import type { Contract } from "@/api/endpoints/model/contract";
+import type { InspectionReportName } from "@/api/endpoints/model/inspectionReportName";
 import { FLOW_STAGE_LABELS } from "@/lib/flow-labels";
 import { ConfirmModal } from "@/components/ConfirmModal";
 import { PageLoading } from "@/components/app/page-loading";
@@ -47,6 +51,7 @@ type Mode = { kind: "idle" } | { kind: "create" } | { kind: "edit"; id: string }
 type FlowFilter = "" | "receiving" | "submitted";
 
 type ReceiptBody = {
+  contractId: string;
   commissionCode: string;
   commissionDate: string;
   projectName: string;
@@ -57,13 +62,14 @@ type ReceiptBody = {
 };
 
 const EMPTY_BODY: ReceiptBody = {
+  contractId: "",
   commissionCode: "",
   commissionDate: "",
   projectName: "",
   clientUnit: "",
   testCategory: "委托检验",
   sampleSource: "施工送检",
-  categoryCode: "cement",
+  categoryCode: "",
 };
 
 export function ReceiptsList() {
@@ -76,6 +82,10 @@ export function ReceiptsList() {
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<SampleReceipt | null>(null);
   const [submitting, setSubmitting] = useState<string | null>(null);
+  // 合同下拉选项（创建接样必选合同——契约 contractId FK 校验，占位字面量必 400）
+  const [contracts, setContracts] = useState<Contract[]>([]);
+  // 报告名称下拉（categoryCode FK→inspection_report_names.code，自由文本必 400）
+  const [reportNames, setReportNames] = useState<InspectionReportName[]>([]);
   const mounted = useRef(false);
 
   const load = async () => {
@@ -107,6 +117,15 @@ export function ReceiptsList() {
       void load();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    contractsListContracts({ page: 1, pageSize: 200 })
+      .then((r) => setContracts(Array.isArray(r.data?.items) ? r.data.items : []))
+      .catch(() => setContracts([]));
+    reportNamesListReportNames({ page: 1, pageSize: 200 })
+      .then((r) => setReportNames(Array.isArray(r.data?.items) ? r.data.items : []))
+      .catch(() => setReportNames([]));
   }, []);
 
   const editing =
@@ -161,11 +180,20 @@ export function ReceiptsList() {
             <DialogDescription>录入委托书基础信息（带 * 字段必填）。</DialogDescription>
           </DialogHeader>
           <ReceiptFormBody
+            contracts={contracts}
+            reportNames={reportNames}
             onSubmit={async (body) => {
+              if (!body.contractId) {
+                toast.error("请选择合同");
+                return;
+              }
+              if (!body.categoryCode) {
+                toast.error("请选择报告名称");
+                return;
+              }
               try {
                 await receiptsCreateReceipt({
                   ...body,
-                  contractId: "placeholder-contract",
                   receivedBy: "current-user",
                 });
                 toast.success("接样单已创建");
@@ -194,7 +222,10 @@ export function ReceiptsList() {
           </DialogHeader>
           {editing && (
             <ReceiptFormBody
+              contracts={contracts}
+              reportNames={reportNames}
               initial={{
+                contractId: editing.contractId,
                 commissionCode: editing.commissionCode,
                 commissionDate: editing.commissionDate,
                 projectName: editing.projectName ?? "",
@@ -203,6 +234,7 @@ export function ReceiptsList() {
                 sampleSource: editing.sampleSource,
                 categoryCode: editing.categoryCode,
               }}
+              contractLocked
               onSubmit={async (body) => {
                 try {
                   await receiptsUpdateReceipt(editing.id, body);
@@ -411,10 +443,17 @@ function FlowStatusBadge({ status }: { status: SampleReceipt["flowStatus"] }) {
 }
 
 function ReceiptFormBody({
+  contracts,
+  reportNames,
   initial,
+  contractLocked = false,
   onSubmit,
 }: {
+  contracts: Contract[];
+  reportNames: InspectionReportName[];
   initial?: ReceiptBody;
+  /** 编辑态锁合同（nextjs 同款：合同绑定后不可改） */
+  contractLocked?: boolean;
   onSubmit: (body: ReceiptBody) => Promise<void> | void;
 }) {
   const [body, setBody] = useState<ReceiptBody>(initial ?? EMPTY_BODY);
@@ -426,6 +465,22 @@ function ReceiptFormBody({
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto">
+        <div className="flex flex-col gap-1">
+          <Label className="text-xs">所属合同 *</Label>
+          <select
+            className="border rounded h-9 px-2 text-sm bg-white disabled:bg-slate-100"
+            value={body.contractId}
+            disabled={contractLocked}
+            onChange={(e) => patch("contractId", e.target.value)}
+          >
+            <option value="">请选择合同</option>
+            {contracts.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.contractCode}　{c.projectName}
+              </option>
+            ))}
+          </select>
+        </div>
         <Field
           label="委托书编号 *"
           value={body.commissionCode}
@@ -470,11 +525,21 @@ function ReceiptFormBody({
             <option value="委托送样">委托送样</option>
           </select>
         </div>
-        <Field
-          label="报告类别编码 *"
-          value={body.categoryCode}
-          onChange={(v) => patch("categoryCode", v)}
-        />
+        <div className="flex flex-col gap-1">
+          <Label className="text-xs">报告名称 *</Label>
+          <select
+            className="border rounded h-9 px-2 text-sm bg-white"
+            value={body.categoryCode}
+            onChange={(e) => patch("categoryCode", e.target.value)}
+          >
+            <option value="">请选择报告名称</option>
+            {reportNames.map((r) => (
+              <option key={r.code} value={r.code}>
+                {r.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <DialogFooter className="mt-4">
         <Button onClick={() => void onSubmit(body)}>保存</Button>

@@ -1,16 +1,16 @@
 {
   "schema": 1,
   "approved": true,
+  "base_sha": "8ca855af64e87757",
   "mirror": true,
-  "summary": "REQ-2026-023：M01.F05.I06 原生登录 镜像登记（免批类①；shared 树已上线；react auth.ts 已挂端点绑定、仓内无测试锚定，登记 开发中）",
+  "summary": "REQ-2026-034（扩展）：码表族 BASE 编号对齐镜像补漏——M04.F09.I04 删除牌号（免批类①；F06/F07/F08 三树 2026-09-18 已收敛，F09 漏网）。四码表页 edit=I03/delete=I04 对齐后本仓树 F09 缺 I04 行 → L5 悬空引用实证（vue 同款）。",
   "changes": [
     {
-      "id": "M01.F05.I06",
+      "id": "M04.F09.I04",
       "action": "新增",
-      "name": "原生登录",
-      "reason": "REQ-2026-023：镜像 shared 树 M01.F05.I06（免批类①）——POST /api/auth/native-login 非浏览器客户端密码通道，校验代理 saas IdP（clientId=lab-management），saas 4xx→401 不透传、5xx/不可达→502 SAAS_UNAVAILABLE，lab 自家 JWT 重签，LoginResponse 契约形状不变；react src/api/endpoints/auth/auth.ts 已挂 native-login 端点绑定，仓内无测试锚定，登记 开发中"
+      "name": "删除牌号（引用保护）",
+      "reason": "REQ-2026-034 扩展：BASE 编号对齐镜像——DELETE /api/catalog/brands/{code}（实现即原 M04.F09.I03，与 F06/F07/F08 同款收敛）；BrandsPage deleteDataFn 挂本 ID"
     }
   ],
-  "sync_files": [],
-  "base_sha": "8943bec6d4e1022d"
+  "sync_files": []
 }

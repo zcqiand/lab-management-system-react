@@ -222,7 +222,8 @@ export function CategoryDictList({
 
   const handleSave = async () => {
     if (!formObject || !formName.trim()) return;
-    if (!editing && !formCode.trim()) return;
+    // code 留空走后端 coerce 生成（nextjs 同款；契约 CreateCatalogEntryRequest
+    // 的 code 必填由 coerce 兜住，弹窗不设前置守卫——三端 spec 不填代码字段）
     setSaving(true);
     setError(null);
     try {
@@ -254,6 +255,7 @@ export function CategoryDictList({
   // @entry M04.F07.I04
   // @entry M04.F08.I04
   // @entry M04.F09.I03
+  // @entry M04.F09.I04
   const handleDelete = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
