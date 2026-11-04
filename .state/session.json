@@ -1,37 +1,37 @@
 {
   "schema": 1,
   "project": "lab-management-system-react",
-  "current_task": "REQ-2026-017 M05.F01 仪表盘 I03/I04 已上线待人工验收（015e376 已推）；REQ-2026-018 M00.F01.I01 镜像登记修 L5 悬空（tree_change 正门 sha=ee29f80bf2f70284）",
+  "current_task": "lab-react v0.3.33 CI 红×2 专项定谳收官（tracker 5.134③，2026-11-04）：双叠加根因当批根治，v0.3.34-20261104 部署上线，28/28 全量部署波闭环",
   "done": [
-    "T1 d1ee15d：REQ-2026-017 + 树 I03/I04 推进开发中（mirror --apply sha=ff241984582d3c5a）+ 设计映射 2 行 + 台账 + 测试先行（red：2 failed|5 passed，I03/I04 data-fn 锚缺失）",
-    "T2/T3 015e376：SummaryList 补 I03 核心指标三卡 + I04 六段漏斗（testid 对齐 nextjs，shadcn Card 习语）；pageLoading fixture 按契约补齐 DashboardStats 全形（旧双键 fixture 取属性崩）；全门绿 prettier/eslint/tsc + vitest 216/216 + trace 216/inert 0/I03×1/I04×1 + gate EXIT=0",
-    "REQ-2026-018 M00.F01.I01 镜像登记（shared SSOT 已上线、nextjs 已镜像，d7fadb3 测试先于镜像行入库致 L5 悬空）——不写新码纯文档对齐"
+    "根因①shared seeds acme 化未进 commit（CI clone@master=TENANT-001 × 本地工作区=acme 分叉）——shared 仓 e122299 补提交 9 表 1243 行纯 tenant_id 改名，rerun 6红→1红实锤（联动手笔，非本仓 commit）",
+    "根因②测试预算算术缺陷：dict 删除 fnTest 外层 45s < 内层 waitFor 链上限 150s、牌号渲染 90s < 105s——react 2471ff0 预热步反证冷编译假设（CI 实测 150-200ms/路由）后，react 99e0013 只抬天花板（45s→180s×4 / 90s→150s，断言零改动），run 41800078433 SUCCESS 217/217",
+    "tag v0.3.34-20261104 push → CI test+deploy 全绿（run 41800587817）→ prod https://lab-react.xiangru.uk 探活 200；v0.3.33 红 run 在案无害",
+    "此前在批（2026-11-02，5.131）：BASE 编号锚对齐 react 15b3d3a（I02 保存键承接 + F09.I04 镜像登记 + F06-F08 @entry 双锚）随全量部署波 v0.3.33 上线（该 tag CI 红×2 即本次定谳对象）"
   ],
   "next": [
-    "REQ-2026-017/018 人工验收后 GA 翻转 I03/I04（开发中→已上线，凭 REQ 内人工验收通过记录）",
-    "机器侧规划推进下一仓：vue M05.F01.I03+I04 同形状 slice（REQ + 树正门 + red→green→gate→push）"
+    "无本仓挂账。人批候选：contract-test 仓 src/seed.ts 仍硬编码 TENANT-001（其 CI 红 10-27 起在案，同族暴露面）——tracker 5.134 收官条已列",
+    "池内既有：lab M01.F04 菜单/权限消费面另片、native 工程面——均待人裁立项，勿自启"
   ],
   "open_questions": [
-    "gate.py --all exit 2：saas family-env.json members 仍列 msw 但本地无仓——删 member 还是建仓，需人裁",
-    "批次 1+2 改动何时提交、按什么粒度分组"
+    "contract-test TENANT-001 种子硬编码是否当批清偿（人裁）",
+    "5.131 人批候选（react/vue 树 F09.I03 + M06.F06 I02/I03 BASE 柔性漂移）仍挂"
   ],
   "dont": [
-    "真链路 dom 测试批量 30s 超时且每轮挂的测试不重样 = 环境假红（链路丢包），隔离复跑同批全绿即证——别改 selector",
+    "CI 红、失败面是「租户过滤列表全空」时，第一步看 shared 仓 git diff seeds/ 有没有未提交漂移——别先怀疑时序/负载；本地 gate 绿证明不了 CI 绿（本地=工作区态，CI=committed 态）",
+    "外层 fnTest timeout 必须 > 内层 waitFor 链上限之和（预算算术）；CI 2核×4 worker 争抢下单测数十秒常态——谁预算紧谁中签，失败集漂移≠竞态",
+    "stats 卡等无过滤计数恒亮≠数据链路活，判活要看经过租户过滤的那条链",
+    "真链路 dom 测试批量超时且每轮挂的不重样=环境假红——隔离复跑同批全绿即证，别改 selector",
     "隔离复跑带 TRACE_MAP=1 会把 trace.json 覆盖成部分版",
-    "it() 标题禁写 Mxx.Fxx.Ixx 字面",
-    "规划行不得标已上线——L5 会要求 UI 入口",
-    "tree_change mirror reason 必须引用 REQ-YYYY-NNN 锚点（免批也要留需求锚）",
-    "markdown 表格单元格内禁裸管道符（|| 会被当列分隔，MD056 多列）——用转义或文字表述"
+    "it() 标题禁写 Mxx.Fxx.Ixx 字面；规划行不得标已上线——L5 会要求 UI 入口",
+    "tree_change mirror reason 必须引用 REQ-YYYY-NNN 锚点；markdown 表格单元格内禁裸管道符",
+    "收官提交禁 git add -A（圈定文件清单）"
   ],
   "active_branch": "master",
-  "last_session_at": "2026-09-21",
-  "last_session_summary": "终审 M1 勘误：directive 实移除 32 条（账面 35 系警告计数口径漂移）",
+  "last_session_at": "2026-11-04",
+  "last_session_summary": "CI 红×2 定谳收官：shared seeds 补提交 + 预算天花板抬升，v0.3.34 部署上线（217/217）",
   "last_gate": {
-    "result": "EXIT=0 全绿",
-    "tests": 216,
-    "trace_tests": 216,
-    "trace_ids": 10,
-    "inert": 0,
-    "note": "软告警 8+9+2 项不阻断（已上线无测试引用/不在流程），人裁量"
+    "result": "EXIT=0 全绿（本地）；CI run 41800078433 SUCCESS 217/217",
+    "tests": 217,
+    "note": "CI test+deploy 双 job 绿（run 41800587817，tag v0.3.34-20261104）"
   }
 }
