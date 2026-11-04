@@ -128,11 +128,16 @@ describe("M06.F05 计算方法维护", () => {
     { timeout: 45_000 },
     async () => {
       render(<CalculationMethodList />);
-      await waitFor(() => {
-        expect(screen.getByText("计算方法维护")).toBeTruthy();
-        const rows = screen.getAllByRole("row");
-        expect(rows.length).toBeGreaterThan(1);
-      });
+      // waitFor 窗口须 ≥ fnTest timeout（asyncUtilTimeout=20s 全局默认下，
+      // 5201 冷编译 /api/calculation-methods 路由可超窗——2026-11-04 --all 实证）
+      await waitFor(
+        () => {
+          expect(screen.getByText("计算方法维护")).toBeTruthy();
+          const rows = screen.getAllByRole("row");
+          expect(rows.length).toBeGreaterThan(1);
+        },
+        { timeout: 45_000 },
+      );
     },
   );
 
