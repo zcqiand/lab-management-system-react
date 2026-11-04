@@ -143,7 +143,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
     "牌号维护：牌号种子行渲染（真库 OBJ-SP01-P2 种子穿透）",
     // 检测项目树（111 行）+ 牌号列表（35 行）两轮远程 PG 请求，全量并发下
     // 实测 24-26s，当晚 PG 抖动余量不足 —— 与 receiptsList 同档放宽到 90s。
-    { timeout: 90_000 },
+    { timeout: 150_000 },
     async () => {
       render(
         <CategoryDictList endpoint="/brands" title="牌号维护" dataFn="M04.F09.I01" />,
@@ -187,7 +187,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
   fnTest(
     ["M04.F06.I04"],
     "型号维护：行内删除按钮开确认弹窗",
-    { timeout: 45_000 },
+    { timeout: 180_000 },
     async () => {
       render(
         <CategoryDictList
@@ -220,7 +220,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
   fnTest(
     ["M04.F07.I04"],
     "规格维护：行内删除按钮开确认弹窗",
-    { timeout: 45_000 },
+    { timeout: 180_000 },
     async () => {
       render(
         <CategoryDictList
@@ -249,7 +249,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
   fnTest(
     ["M04.F08.I04"],
     "等级维护：行内删除按钮开确认弹窗",
-    { timeout: 45_000 },
+    { timeout: 180_000 },
     async () => {
       render(
         <CategoryDictList
@@ -278,7 +278,7 @@ describe("M04.F06-F09 码表维护 4 页", () => {
   fnTest(
     ["M04.F09.I03"],
     "牌号维护：行内删除按钮开确认弹窗",
-    { timeout: 45_000 },
+    { timeout: 180_000 },
     async () => {
       render(
         <CategoryDictList

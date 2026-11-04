@@ -112,11 +112,11 @@ jobs:
             sleep 2
           done
           echo "nextjs :5201 探活超时"; tail -50 /tmp/nextjs-dev.log; exit 1
-      # dev 模式按路由冷编译 × CI 2 核多 worker 争抢：vitest 首轮请求排队可超
-      # 测试内 waitFor 窗口（v0.3.33 CI 红定谳 2026-11-04：tenant 种子错位修后
-      # 仍剩 /api/catalog/brands 恒红，F05 45s 预算同类第三处）。L4 前把全部
-      # GET 路由打一遍（无 Bearer 401 即达目的——编译发生在 handler 执行前），
-      # 消除冷编译变量；测试断言零改动。
+      # 路由预热（廉价保险，非本轮红因——实证 CI 冷编译仅 150-200ms/路由）：
+      # L4 前把全部 GET 路由打一遍（无 Bearer 401 即达目的——编译发生在
+      # handler 执行前），消除跨 nextjs 版本/打包器的编译时变量；
+      # 测试断言零改动。真正红因是测试预算算术（外层 fnTest < 内层 waitFor
+      # 链上限），修复在 categoryDictPages.dom.test.tsx 预算对齐批。
       - name: Warm dev routes (cold-compile ahead of L4)
         working-directory: ../lab-management-system-nextjs
         run: |
