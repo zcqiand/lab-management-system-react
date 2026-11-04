@@ -112,6 +112,20 @@ jobs:
             sleep 2
           done
           echo "nextjs :5201 探活超时"; tail -50 /tmp/nextjs-dev.log; exit 1
+      # dev 模式按路由冷编译 × CI 2 核多 worker 争抢：vitest 首轮请求排队可超
+      # 测试内 waitFor 窗口（v0.3.33 CI 红定谳 2026-11-04：tenant 种子错位修后
+      # 仍剩 /api/catalog/brands 恒红，F05 45s 预算同类第三处）。L4 前把全部
+      # GET 路由打一遍（无 Bearer 401 即达目的——编译发生在 handler 执行前），
+      # 消除冷编译变量；测试断言零改动。
+      - name: Warm dev routes (cold-compile ahead of L4)
+        working-directory: ../lab-management-system-nextjs
+        run: |
+          routes=$(grep -rlE "export (async function|const) GET" src/app/api --include=route.ts \
+            | sed -e 's|^src/app/api||' -e 's|/route\.ts$||' | grep -v '\[' )
+          for r in $routes; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:5201/api$r")
+            echo "warm /api$r -> $code"
+          done
       - name: Build
         run: npm run build
       - name: L1 format
